@@ -1,9 +1,11 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 
-/**
- * Initializes the Gemini client with the API key from environment variables.
- * @returns {GoogleGenerativeAI} Configured Gemini client instance.
- */
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+const genAI = new GoogleGenAI({
+  apiKey: '_DUMMY_API_KEY_',
+  httpOptions: {
+    apiVersion: '',
+    baseUrl: window.location.origin + '/gemini-proxy',
+  },
+});
 
 export default genAI;

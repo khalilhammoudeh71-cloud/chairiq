@@ -150,8 +150,6 @@ Provide an adapted version that matches the patient's learning profile.`;
     } = params;
 
     try {
-      const model = genAI?.getGenerativeModel({ model: 'gemini-2.5-flash' });
-
       const prompt = `You are a dental education specialist adapting procedure complexity levels based on patient learning history.
 
 Patient Learning Profile:
@@ -190,9 +188,11 @@ Return a JSON array of adapted steps with this structure:
 
 Provide ONLY the JSON array, no additional text.`;
 
-      const result = await model?.generateContent(prompt);
-      const response = await result?.response;
-      const text = response?.text();
+      const result = await genAI?.models?.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+      });
+      const text = result?.text;
 
       // Extract JSON from response
       const jsonMatch = text?.match(/\[\s*\{[\s\S]*\}\s*\]/);

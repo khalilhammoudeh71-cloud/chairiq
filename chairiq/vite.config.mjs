@@ -21,6 +21,11 @@ export default defineConfig({
         target: 'http://localhost:1106/modelfarm/openai',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/openai-proxy/, ''),
+      },
+      '/gemini-proxy': {
+        target: 'http://localhost:1106/modelfarm/gemini',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/gemini-proxy/, ''),
       }
     }
   }
