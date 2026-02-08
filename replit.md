@@ -29,8 +29,17 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - `VITE_SUPABASE_URL` - Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` - Supabase anonymous key
 - `VITE_GEMINI_API_KEY` - Google Gemini API key
+- `AI_INTEGRATIONS_OPENAI_BASE_URL` - Auto-set by Replit AI Integration
+- `AI_INTEGRATIONS_OPENAI_API_KEY` - Auto-set by Replit AI Integration (dummy key)
+
+## OpenAI Integration
+- Uses Replit AI Integrations (no separate API key needed, billed to Replit credits)
+- Frontend accesses OpenAI via Vite proxy: `/openai-proxy` -> `http://localhost:1106/modelfarm/openai`
+- Client configured in `chairiq/src/services/openaiClient.js`
+- Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
 ## Recent Changes (2026-02-08)
+- Connected OpenAI via Replit AI Integrations with Vite proxy
 - Fixed Vite config: port changed from 4028 to 5000, allowedHosts set to true for Replit
 - Fixed unprotected admin route `/admin/procedure-library` - now wrapped in ProtectedRoute
 - Fixed duplicate login route - `/dentist-login-authentication` now redirects to `/login`
