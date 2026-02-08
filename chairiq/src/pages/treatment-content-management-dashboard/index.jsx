@@ -1,0 +1,237 @@
+import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Book, Clock, TrendingUp, Filter, Languages, BarChart3, X } from 'lucide-react';
+import { getAllProcedures } from '../../data/procedures';
+import TreatmentCard from './components/TreatmentCard';
+import ContentViewerModal from './components/ContentViewerModal';
+import DentistNavigation from '../../components/DentistNavigation';
+
+const TreatmentContentManagementDashboard = () => {
+  const navigate = useNavigate();
+  const [selectedTreatment, setSelectedTreatment] = useState(null);
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [languageFilter, setLanguageFilter] = useState('both');
+
+  // Get all procedures from data
+  const allProcedures = useMemo(() => getAllProcedures(), []);
+
+  // Filter procedures based on selected filters
+  const filteredProcedures = useMemo(() => {
+    return allProcedures?.filter((procedure) => {
+      const matchesCategory = filterCategory === 'all' || procedure?.category === filterCategory;
+      const matchesSearch = !searchQuery || 
+        procedure?.name_en?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+        procedure?.name_es?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+      
+      return matchesCategory && matchesSearch;
+    });
+  }, [allProcedures, filterCategory, searchQuery]);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    return {
+      totalTreatments: allProcedures?.length || 0,
+      totalSteps: allProcedures?.reduce((sum, proc) => sum + (proc?.visualGuideSteps?.length || 0), 0),
+      averageSteps: Math.round(allProcedures?.reduce((sum, proc) => sum + (proc?.visualGuideSteps?.length || 0), 0) / (allProcedures?.length || 1)),
+      categories: [...new Set(allProcedures?.map(p => p?.category))]?.length
+    };
+  }, [allProcedures]);
+
+  const categories = [
+    { value: 'all', label: 'All Treatments' },
+    { value: 'restorative', label: 'Restorative' },
+    { value: 'periodontal', label: 'Periodontal' },
+    { value: 'surgery', label: 'Surgery' },
+    { value: 'pediatric', label: 'Pediatric' },
+    { value: 'prosthetics', label: 'Prosthetics' },
+    { value: 'orthodontics', label: 'Orthodontics' },
+    { value: 'education', label: 'Educational' }
+  ];
+
+  const handleViewContent = (procedure) => {
+    setSelectedTreatment(procedure);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTreatment(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-bg-0">
+      <DentistNavigation />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-text-1">
+                Treatment Content Library
+              </h1>
+              <p className="text-text-3 mt-2">
+                Comprehensive overview of all educational materials patients receive
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/dentist-admin-analytics-dashboard')}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <BarChart3 className="w-5 h-5" />
+              <span>View Analytics</span>
+            </button>
+          </div>
+
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="card p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-text-3">Total Treatments</p>
+                  <p className="text-2xl font-bold text-text-1">{stats?.totalTreatments}</p>
+                </div>
+                <Book className="w-8 h-8 text-blue-600" />
+              </div>
+            </div>
+
+            <div className="card p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-text-3">Total Steps</p>
+                  <p className="text-2xl font-bold text-text-1">{stats?.totalSteps}</p>
+                </div>
+                <TrendingUp className="w-8 h-8 text-green-600" />
+              </div>
+            </div>
+
+            <div className="card p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-text-3">Avg Steps/Treatment</p>
+                  <p className="text-2xl font-bold text-text-1">{stats?.averageSteps}</p>
+                </div>
+                <Clock className="w-8 h-8 text-purple-600" />
+              </div>
+            </div>
+
+            <div className="card p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-text-3">Categories</p>
+                  <p className="text-2xl font-bold text-text-1">{stats?.categories}</p>
+                </div>
+                <Filter className="w-8 h-8 text-orange-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="card p-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Search */}
+              <div className="flex-1">
+                <input
+                  type="text"
+                  placeholder="Search treatments..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e?.target?.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              {/* Category Filter */}
+              <div className="sm:w-48">
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e?.target?.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                >
+                  {categories?.map((cat) => (
+                    <option key={cat?.value} value={cat?.value}>
+                      {cat?.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Language Filter */}
+              <div className="sm:w-48">
+                <select
+                  value={languageFilter}
+                  onChange={(e) => setLanguageFilter(e?.target?.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="both">Both Languages</option>
+                  <option value="en">English Only</option>
+                  <option value="es">Spanish Only</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Active Filters Display */}
+            {(filterCategory !== 'all' || searchQuery) && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {filterCategory !== 'all' && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                    {categories?.find(c => c?.value === filterCategory)?.label}
+                    <button
+                      onClick={() => setFilterCategory('all')}
+                      className="ml-2 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </span>
+                )}
+                {searchQuery && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                    Search: {searchQuery}
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="ml-2 hover:text-green-600 dark:hover:text-green-400"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Treatment Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProcedures?.map((procedure) => (
+            <TreatmentCard
+              key={procedure?.id}
+              procedure={procedure}
+              onViewContent={handleViewContent}
+              languageFilter={languageFilter}
+            />
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {filteredProcedures?.length === 0 && (
+          <div className="text-center py-12">
+            <Book className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No treatments found
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Try adjusting your filters or search query
+            </p>
+          </div>
+        )}
+      </div>
+      {/* Content Viewer Modal */}
+      {selectedTreatment && (
+        <ContentViewerModal
+          treatment={selectedTreatment}
+          onClose={handleCloseModal}
+          languageFilter={languageFilter}
+        />
+      )}
+    </div>
+  );
+};
+
+export default TreatmentContentManagementDashboard;

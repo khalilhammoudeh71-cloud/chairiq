@@ -1,0 +1,200 @@
+/* ChairIQ Premium Dark Theme - Apple-Inspired Design System */
+/* Single source of truth for design tokens */
+
+:root {
+  /* Background layers - calm, deep, professional */
+  --bg0: #0a0e1a;
+  --bg1: #0f1420;
+  --bg2: #161c2e;
+  --bg3: #1c2538;
+  
+  /* Text hierarchy - high contrast, readable */
+  --t1: #f5f7fb;
+  --t2: #c9d1e6;
+  --t3: #8b95b0;
+  
+  /* Border - subtle, refined */
+  --bd: rgba(255, 255, 255, 0.06);
+  
+  /* Accent - Apple blue, measured usage */
+  --accent: #0a84ff;
+  --accent2: #0070d4;
+  --accent-hover: rgba(10, 132, 255, 0.12);
+  
+  /* Status colors */
+  --success: #30d158;
+  --warning: #ff9f0a;
+  --danger: #ff453a;
+  
+  /* Focus ring */
+  --ring: rgba(10, 132, 255, 0.4);
+  
+  /* Overlay */
+  --overlay: rgba(0, 0, 0, 0.6);
+
+  /* Logo and Branding Variables - Easy swap for future SVG logo */
+  --logo-size: 2.25rem; /* 36px - can be changed to accommodate SVG dimensions */
+  --logo-size-mobile: 2rem; /* 32px - responsive sizing for mobile */
+  
+  /* Brand text sizing - relative to logo */
+  --brand-text-size: 1.25rem; /* 20px - scales with logo */
+  --brand-text-size-mobile: 1.125rem; /* 18px - mobile text size */
+  --brand-letter-spacing: 0.08em; /* Spacing for text branding */
+  
+  /* Logo container spacing - maintains consistent gaps */
+  --logo-gap: 0.75rem; /* 12px - space between logo and text */
+}
+
+/* Responsive logo sizing for mobile devices */
+@media (max-width: 640px) {
+  :root {
+    --logo-size: var(--logo-size-mobile);
+    --brand-text-size: var(--brand-text-size-mobile);
+  }
+}
+
+/* === BASE STYLES === */
+* {
+  border-color: var(--bd);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  background-color: var(--bg0);
+  color: var(--t1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+}
+
+/* Typography refinements */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+/* === MICRO-INTERACTIONS & ANIMATIONS === */
+
+/* Spinner rotation - essential for loading states only */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === UTILITY CLASSES === */
+
+/* Animation utilities - minimal essential only */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* === SCROLLBAR STYLING === */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* === SELECTION STYLING === */
+::selection {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* === CUSTOM UTILITIES === */
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Text utilities */
+.text-balance {
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === RESPONSIVE UTILITIES === */
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* === ACCESSIBILITY === */
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
