@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -549,23 +549,7 @@
 }
 
 .hero-demo-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-}
-.hero-demo-glow-1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%);
-  top: -20%;
-  right: -10%;
-}
-.hero-demo-glow-2 {
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
-  bottom: -15%;
-  left: -5%;
+  display: none;
 }
 
 .hero-demo-scene {
@@ -583,7 +567,6 @@
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px;
   padding: 14px 16px;
-  backdrop-filter: blur(12px);
   box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 }
 

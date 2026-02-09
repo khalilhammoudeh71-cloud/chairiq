@@ -57,11 +57,11 @@ const Landing = () => {
         <HeroAnimation />
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-24 lg:py-32 flex items-center">
           <div className="max-w-xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-[-0.03em] leading-[1.1] mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-5" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
               Create. Send. Understood.
             </h1>
-            <p className="text-lg leading-relaxed max-w-lg mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              Build visual treatment plans, send them via SMS, and help patients understand their next steps — all from one place.
+            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-8" style={{ color: 'rgba(255,255,255,0.55)', letterSpacing: '-0.01em' }}>
+              Present treatment plans patients actually read. Less chair time explaining, fewer follow-up calls.
             </p>
             <div className="flex flex-wrap gap-3">
               <button
