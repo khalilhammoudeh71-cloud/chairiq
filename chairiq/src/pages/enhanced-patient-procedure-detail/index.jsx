@@ -61,10 +61,10 @@ const EnhancedPatientProcedureDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-0 flex items-center justify-center">
+      <div className="min-h-screen bg-bg0 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4"></div>
-          <p className="text-text-2">Loading procedure details...</p>
+          <p className="text-t2">Loading procedure details...</p>
         </div>
       </div>
     );
@@ -72,18 +72,18 @@ const EnhancedPatientProcedureDetail = () => {
 
   if (error || !procedure) {
     return (
-      <div className="min-h-screen bg-bg-0 flex items-center justify-center">
+      <div className="min-h-screen bg-bg0 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
           <AlertCircle className="w-16 h-16 text-danger mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-text-1 mb-2">
+          <h2 className="text-2xl font-bold text-t1 mb-2">
             Procedure Not Found
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-t2 mb-6">
             We could not find the procedure you are looking for. It may have been removed or the link is incorrect.
           </p>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mx-auto"
+            className="flex items-center space-x-2 px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors mx-auto"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Go Back</span>
@@ -94,24 +94,24 @@ const EnhancedPatientProcedureDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg-0">
+    <div className="min-h-screen bg-bg0">
       {/* Language Toggle */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-bg1 border-b border-bd">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="flex items-center space-x-2 text-t2 hover:text-t1 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back</span>
           </button>
 
           <div className="flex items-center space-x-2">
-            <Languages className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <Languages className="w-5 h-5 text-t2" />
             <button
               onClick={() => setLanguage('EN')}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                language === 'EN' ?'bg-blue-600 text-white' :'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                language === 'EN' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
               }`}
             >
               English
@@ -119,7 +119,7 @@ const EnhancedPatientProcedureDetail = () => {
             <button
               onClick={() => setLanguage('ES')}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                language === 'ES' ?'bg-blue-600 text-white' :'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                language === 'ES' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
               }`}
             >
               Español
@@ -186,16 +186,16 @@ const EnhancedPatientProcedureDetail = () => {
 
           {content?.faqs && content?.faqs?.length > 0 && (
             <div className="card p-6">
-              <h2 className="text-2xl font-bold text-text-1 mb-4">
+              <h2 className="text-2xl font-bold text-t1 mb-4">
                 {language === 'EN' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
               </h2>
               <div className="space-y-4">
                 {content?.faqs?.map((faq, index) => (
-                  <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  <div key={index} className="border-b border-bd pb-4 last:border-0">
+                    <h3 className="font-semibold text-t1 mb-2">
                       {faq?.q}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-t2">
                       {faq?.a}
                     </p>
                   </div>

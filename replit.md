@@ -39,10 +39,14 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
 ## Recent Changes (2026-02-09)
+- Polished dark mode: warm charcoal backgrounds (#111215 base), comfortable text contrast (#e3e4e8 primary), desaturated accent (#6b8aee)
+- Dark mode status colors muted: success #3ecf8e, warning #e0a54a, danger #e06060
+- Removed ALL inline dark: Tailwind classes from 5 page/component files — now 0 hardcoded dark mode overrides
+- Migrated admin-procedure-library, enhanced-patient-procedure-detail, treatment-content-management-dashboard (+ TreatmentCard, ContentViewerModal) to use design system tokens exclusively
+- Refined button/input components: brightness hover instead of ring glow, focus:border-accent instead of focus:ring
 - Refactored global styling to premium Stripe/Apple SaaS theme
 - Consolidated all CSS variables into tailwind.css as single source of truth
-- Light mode: clean white (#ffffff), high-contrast text (#111827), blue accent (#2563eb)
-- Dark mode: deep slate (#0f1117), crisp text (#f1f5f9), bright blue accent (#3b82f6)
+- Light mode: clean white (#ffffff), high-contrast text (#1a1f36), blue accent (#2563eb)
 - Typography hierarchy: 700 h1, 600 h2-h4, distinct sizes with tight letter-spacing
 - Added proper shadow scale (xs/card/md/lg), refined radius tokens, and status colors
 - Removed conflicting :root variables from globals.css

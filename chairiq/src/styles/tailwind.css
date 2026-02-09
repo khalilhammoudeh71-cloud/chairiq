@@ -73,48 +73,48 @@
   }
 
   /* ═══════════════════════════════════════════
-     DARK MODE — Calm, Layered, Quiet Depth
+     DARK MODE — Deep Charcoal, Warm, Restful
      ═══════════════════════════════════════════ */
   .dark {
-    /* Surface layers — close together, depth from spacing not color */
-    --bg0: #0c0e14;
-    --bg1: #12141c;
-    --bg2: #191c26;
-    --bg3: #222633;
+    /* Surface layers — warm charcoal, no blue cast, tight progression */
+    --bg0: #111215;
+    --bg1: #1a1b1f;
+    --bg2: #222328;
+    --bg3: #2c2d33;
 
-    /* Text hierarchy — warm white, not clinical */
-    --t1: #eceff4;
-    --t2: #8b95a8;
-    --t3: #5c6577;
+    /* Text hierarchy — warm off-white, easy on eyes for long sessions */
+    --t1: #e3e4e8;
+    --t2: #8b8f9a;
+    --t3: #5c5f69;
 
-    /* Borders — barely there */
-    --bd: rgba(255, 255, 255, 0.06);
+    /* Borders — soft dividers, barely perceptible */
+    --bd: rgba(255, 255, 255, 0.07);
 
-    /* Accent — gently brighter for dark bg */
-    --accent: #3b82f6;
-    --accent2: #2563eb;
-    --accent-soft: rgba(59, 130, 246, 0.08);
-    --accent-hover: rgba(59, 130, 246, 0.1);
+    /* Accent — desaturated blue, calm not neon */
+    --accent: #6b8aee;
+    --accent2: #5a78d8;
+    --accent-soft: rgba(107, 138, 238, 0.08);
+    --accent-hover: rgba(107, 138, 238, 0.12);
 
-    /* Status — vivid enough on dark surfaces */
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
+    /* Status — muted, legible, not alarming */
+    --success: #3ecf8e;
+    --warning: #e0a54a;
+    --danger: #e06060;
 
-    /* Shadows — subtle glow instead of harsh drop */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 1px rgba(255, 255, 255, 0.03);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.03);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.04);
-    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.2);
-    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.15);
+    /* Shadows — near-invisible, layer separation through bg steps */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.24), 0 0 1px rgba(255, 255, 255, 0.03);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.03);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 255, 255, 0.04);
+    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.25);
+    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.2);
 
-    /* Focus ring */
-    --ring: rgba(59, 130, 246, 0.5);
-    --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    /* Focus ring — subtle, accent-tinted */
+    --ring: rgba(107, 138, 238, 0.4);
+    --focus-ring: 0 0 0 3px rgba(107, 138, 238, 0.12);
 
     /* Overlay */
-    --overlay: rgba(0, 0, 0, 0.6);
+    --overlay: rgba(0, 0, 0, 0.65);
   }
 
   /* Responsive logo sizing */
