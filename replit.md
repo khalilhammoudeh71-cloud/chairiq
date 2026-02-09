@@ -39,6 +39,8 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
 ## Recent Changes (2026-02-09)
+- Aligned landing page with dashboard theme: matched typography scale, spacing rhythm, colors, and token usage
+- Landing page: removed hardcoded dark header bg, reduced hero from 10rem to 4-6xl, sections from py-48 to py-20/24, features left-aligned with inline icons
 - Polished dark mode: warm charcoal backgrounds (#111215 base), comfortable text contrast (#e3e4e8 primary), desaturated accent (#6b8aee)
 - Dark mode status colors muted: success #3ecf8e, warning #e0a54a, danger #e06060
 - Removed ALL inline dark: Tailwind classes from 5 page/component files — now 0 hardcoded dark mode overrides
