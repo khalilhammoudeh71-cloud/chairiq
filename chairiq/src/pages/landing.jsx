@@ -61,7 +61,7 @@ const Landing = () => {
               Patients get it.<br />You move on.
             </h1>
             <p className="text-base sm:text-lg leading-relaxed max-w-md mb-8" style={{ color: 'rgba(255,255,255,0.55)', letterSpacing: '-0.01em' }}>
-              Send treatment plans patients understand the first time. Less chair time repeating yourself, fewer callbacks, faster acceptance.
+              Treatment plans patients actually read. Fewer callbacks, faster case acceptance.
             </p>
             <div className="flex flex-wrap gap-3">
               <button
