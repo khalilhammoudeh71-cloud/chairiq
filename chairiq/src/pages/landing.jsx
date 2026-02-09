@@ -58,10 +58,10 @@ const Landing = () => {
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-24 lg:py-32 flex items-center">
           <div className="max-w-xl">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-5" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
-              Create. Send. Understood.
+              Patients get it.<br />You move on.
             </h1>
             <p className="text-base sm:text-lg leading-relaxed max-w-md mb-8" style={{ color: 'rgba(255,255,255,0.55)', letterSpacing: '-0.01em' }}>
-              Present treatment plans patients actually read. Less chair time explaining, fewer follow-up calls.
+              Send treatment plans patients understand the first time. Less chair time repeating yourself, fewer callbacks, faster acceptance.
             </p>
             <div className="flex flex-wrap gap-3">
               <button
