@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, ArrowRight, Monitor, Link2, MessageSquare, ShieldCheck } from 'lucide-react';
+import HeroAnimation from '../components/HeroAnimation';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -51,8 +52,9 @@ const Landing = () => {
         </div>
       </header>
 
-      <section className="py-24 lg:py-32">
-        <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+      <section className="relative py-24 lg:py-32">
+        <HeroAnimation />
+        <div className="relative z-10 max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-t1 tracking-[-0.03em] leading-[1.1] mb-6">
             Create. Send. Understood.
           </h1>
