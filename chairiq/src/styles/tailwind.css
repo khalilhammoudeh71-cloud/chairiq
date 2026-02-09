@@ -547,126 +547,130 @@
 .hero-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(60px);
   will-change: transform, opacity;
 }
 
 .hero-orb-1 {
-  width: 420px;
-  height: 420px;
+  width: 500px;
+  height: 500px;
   background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.07;
-  top: -10%;
-  right: -5%;
+  opacity: 0.18;
+  top: -5%;
+  right: 5%;
   animation: hero-drift-1 24s ease-in-out infinite;
 }
 
 .hero-orb-2 {
-  width: 340px;
-  height: 340px;
+  width: 450px;
+  height: 450px;
   background: radial-gradient(circle, var(--accent2) 0%, transparent 70%);
-  opacity: 0.05;
-  bottom: -15%;
-  left: -8%;
+  opacity: 0.12;
+  bottom: -5%;
+  left: 0%;
   animation: hero-drift-2 28s ease-in-out infinite;
 }
 
 .hero-orb-3 {
-  width: 260px;
-  height: 260px;
+  width: 350px;
+  height: 350px;
   background: radial-gradient(circle, var(--success) 0%, transparent 70%);
-  opacity: 0.04;
-  top: 20%;
-  left: 50%;
+  opacity: 0.08;
+  top: 15%;
+  left: 45%;
   transform: translateX(-50%);
   animation: hero-drift-3 32s ease-in-out infinite;
 }
 
 .hero-orb-4 {
-  width: 180px;
-  height: 180px;
+  width: 280px;
+  height: 280px;
   background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.06;
-  bottom: 10%;
-  right: 15%;
+  opacity: 0.14;
+  bottom: 15%;
+  right: 20%;
   animation: hero-drift-4 20s ease-in-out infinite;
 }
 
 .hero-line {
   position: absolute;
-  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-  opacity: 0.04;
+  height: 1px;
   will-change: transform, opacity;
 }
 
 .hero-line-1 {
-  width: 60%;
-  height: 1px;
-  top: 30%;
-  left: 20%;
+  width: 55%;
+  top: 28%;
+  left: 22%;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.08;
   animation: hero-line-fade 18s ease-in-out infinite;
 }
 
 .hero-line-2 {
-  width: 40%;
-  height: 1px;
-  top: 55%;
-  left: 35%;
+  width: 35%;
+  top: 58%;
+  left: 38%;
+  background: linear-gradient(90deg, transparent 0%, var(--accent2) 50%, transparent 100%);
+  opacity: 0.06;
   animation: hero-line-fade 22s ease-in-out infinite 6s;
 }
 
 .hero-line-3 {
-  width: 50%;
-  height: 1px;
-  top: 75%;
-  left: 10%;
+  width: 45%;
+  top: 78%;
+  left: 12%;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.07;
   animation: hero-line-fade 20s ease-in-out infinite 12s;
 }
 
-.dark .hero-orb-1 { opacity: 0.10; }
-.dark .hero-orb-2 { opacity: 0.07; }
-.dark .hero-orb-3 { opacity: 0.06; }
-.dark .hero-orb-4 { opacity: 0.08; }
-.dark .hero-line { opacity: 0.06; }
+.dark .hero-orb-1 { opacity: 0.22; }
+.dark .hero-orb-2 { opacity: 0.15; }
+.dark .hero-orb-3 { opacity: 0.10; }
+.dark .hero-orb-4 { opacity: 0.18; }
+.dark .hero-line-1 { opacity: 0.12; }
+.dark .hero-line-2 { opacity: 0.09; }
+.dark .hero-line-3 { opacity: 0.10; }
 
 @keyframes hero-drift-1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-30px, 20px) scale(1.05); }
-  50% { transform: translate(-15px, 40px) scale(0.97); }
-  75% { transform: translate(20px, 15px) scale(1.03); }
+  25% { transform: translate(-40px, 25px) scale(1.06); }
+  50% { transform: translate(-20px, 50px) scale(0.96); }
+  75% { transform: translate(30px, 20px) scale(1.04); }
 }
 
 @keyframes hero-drift-2 {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(25px, -15px) scale(1.04); }
-  50% { transform: translate(40px, -30px) scale(0.96); }
-  75% { transform: translate(10px, -20px) scale(1.02); }
+  25% { transform: translate(35px, -20px) scale(1.05); }
+  50% { transform: translate(50px, -35px) scale(0.95); }
+  75% { transform: translate(15px, -25px) scale(1.03); }
 }
 
 @keyframes hero-drift-3 {
   0%, 100% { transform: translateX(-50%) translate(0, 0) scale(1); }
-  33% { transform: translateX(-50%) translate(20px, -25px) scale(1.06); }
-  66% { transform: translateX(-50%) translate(-25px, 15px) scale(0.95); }
+  33% { transform: translateX(-50%) translate(25px, -30px) scale(1.08); }
+  66% { transform: translateX(-50%) translate(-30px, 20px) scale(0.94); }
 }
 
 @keyframes hero-drift-4 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.06; }
-  30% { transform: translate(-20px, -15px) scale(1.08); opacity: 0.04; }
-  60% { transform: translate(15px, 20px) scale(0.94); opacity: 0.07; }
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.14; }
+  30% { transform: translate(-25px, -20px) scale(1.1); opacity: 0.10; }
+  60% { transform: translate(20px, 25px) scale(0.92); opacity: 0.16; }
 }
 
 @keyframes hero-line-fade {
-  0%, 100% { opacity: 0; transform: scaleX(0.6); }
-  15% { opacity: 0.04; transform: scaleX(0.8); }
-  50% { opacity: 0.06; transform: scaleX(1); }
-  85% { opacity: 0.04; transform: scaleX(0.8); }
+  0%, 100% { opacity: 0; transform: scaleX(0.5); }
+  20% { opacity: 0.08; transform: scaleX(0.75); }
+  50% { opacity: 0.12; transform: scaleX(1); }
+  80% { opacity: 0.08; transform: scaleX(0.75); }
 }
 
 @media (max-width: 768px) {
-  .hero-orb-1 { width: 280px; height: 280px; }
-  .hero-orb-2 { width: 220px; height: 220px; }
-  .hero-orb-3 { width: 180px; height: 180px; }
-  .hero-orb-4 { width: 120px; height: 120px; }
+  .hero-orb-1 { width: 320px; height: 320px; }
+  .hero-orb-2 { width: 260px; height: 260px; }
+  .hero-orb-3 { width: 220px; height: 220px; }
+  .hero-orb-4 { width: 160px; height: 160px; }
   .hero-line { display: none; }
 }
 
