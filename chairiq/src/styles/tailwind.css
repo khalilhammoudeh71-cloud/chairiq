@@ -574,14 +574,14 @@
   width: 200px;
   top: 10px;
   left: 0;
-  animation: hero-float-1 8s ease-in-out infinite;
+  animation: hero-card1-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
 }
 
 .hero-card-2 {
   width: 190px;
   top: 80px;
   left: 60px;
-  animation: hero-float-2 10s ease-in-out infinite;
+  animation: hero-card2-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
 }
 
 .hero-card-header {
@@ -669,7 +669,6 @@
   border-radius: 22px;
   padding: 8px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-  animation: hero-float-3 12s ease-in-out infinite;
 }
 
 .hero-phone-notch {
@@ -694,6 +693,16 @@
 .hero-sms-bubble {
   border-radius: 10px;
   padding: 8px 10px;
+}
+
+.hero-sms-bubble-1 {
+  animation: hero-sms1-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+}
+.hero-sms-bubble-2 {
+  animation: hero-sms2-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+}
+.hero-sms-bubble-3 {
+  animation: hero-sms3-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
 }
 
 .hero-sms-incoming {
@@ -764,20 +773,56 @@
 }
 .hero-sms-preview-dot-green { background: rgba(52,211,153,0.4); }
 
-/* Animations — gentle persistent float */
-@keyframes hero-float-1 {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+/* Animations — sequenced story over 8s cycle */
+/* Elements slide in fast (first 2s), hold visible (4s), fade out, reset */
+
+/* Card 1: slides up immediately, visible by 0.3s */
+@keyframes hero-card1-seq {
+  0%   { opacity: 0; transform: translateY(20px); }
+  4%   { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; transform: translateY(0); }
+  88%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
-@keyframes hero-float-2 {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+/* Card 2: waits 0.4s, slides up, visible by 0.8s */
+@keyframes hero-card2-seq {
+  0%   { opacity: 0; transform: translateY(24px); }
+  5%   { opacity: 0; transform: translateY(24px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; transform: translateY(0); }
+  88%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
-@keyframes hero-float-3 {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+/* SMS 1: waits 1s, slides up into phone by 1.4s */
+@keyframes hero-sms1-seq {
+  0%   { opacity: 0; transform: translateY(14px); }
+  12%  { opacity: 0; transform: translateY(14px); }
+  18%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; transform: translateY(0); }
+  88%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+/* SMS 2: waits 1.5s, slides up by 1.9s */
+@keyframes hero-sms2-seq {
+  0%   { opacity: 0; transform: translateY(14px); }
+  18%  { opacity: 0; transform: translateY(14px); }
+  24%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; transform: translateY(0); }
+  88%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+/* SMS 3: waits 2s, slides up by 2.4s */
+@keyframes hero-sms3-seq {
+  0%   { opacity: 0; transform: translateY(14px); }
+  24%  { opacity: 0; transform: translateY(14px); }
+  30%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; transform: translateY(0); }
+  88%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
 }
 
 @media (max-width: 1024px) {
@@ -797,7 +842,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-card, .hero-phone {
+  .hero-card, .hero-phone, .hero-sms-bubble {
     animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -45,16 +45,16 @@ const HeroAnimation = () => {
         <div className="hero-phone">
           <div className="hero-phone-notch" />
           <div className="hero-phone-screen">
-            <div className="hero-sms-bubble hero-sms-incoming">
+            <div className="hero-sms-bubble hero-sms-bubble-1 hero-sms-incoming">
               <div className="hero-sms-label">ChairIQ</div>
               <div className="hero-sms-text-line" />
               <div className="hero-sms-text-line hero-sms-text-short" />
             </div>
-            <div className="hero-sms-bubble hero-sms-link">
+            <div className="hero-sms-bubble hero-sms-bubble-2 hero-sms-link">
               <div className="hero-sms-link-icon" />
               <div className="hero-sms-text-line hero-sms-text-med" />
             </div>
-            <div className="hero-sms-bubble hero-sms-preview">
+            <div className="hero-sms-bubble hero-sms-bubble-3 hero-sms-preview">
               <div className="hero-sms-preview-bar" />
               <div className="hero-sms-preview-row">
                 <div className="hero-sms-preview-dot" />
