@@ -8,7 +8,7 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-bg0">
-      <header className="bg-bg1 border-b border-bd sticky top-0 z-50">
+      <header className="sticky top-0 z-50 border-b" style={{ background: '#0c0e14', borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div
@@ -28,7 +28,7 @@ const Landing = () => {
                 }} />
             </div>
             <span
-              className="font-semibold text-t1"
+              className="font-semibold text-white"
               style={{
                 fontSize: 'var(--brand-text-size, 1.25rem)',
                 letterSpacing: 'var(--brand-letter-spacing, 0.04em)',
@@ -40,7 +40,8 @@ const Landing = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/login')}
-              className="px-5 py-2.5 text-t2 hover:text-t1 font-medium transition-colors text-sm">
+              className="px-5 py-2.5 font-medium transition-colors text-sm"
+              style={{ color: 'rgba(255,255,255,0.6)' }}>
               Dentist Login
             </button>
             <button
@@ -52,15 +53,31 @@ const Landing = () => {
         </div>
       </header>
 
-      <section className="relative py-24 lg:py-32">
+      <section className="relative overflow-hidden" style={{ background: '#0c0e14' }}>
         <HeroAnimation />
-        <div className="relative z-10 max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-t1 tracking-[-0.03em] leading-[1.1] mb-6">
-            Create. Send. Understood.
-          </h1>
-          <p className="text-lg text-t2 leading-relaxed max-w-2xl mx-auto">
-            Build visual treatment plans, send them via SMS, and help patients understand their next steps — all from one place.
-          </p>
+        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-24 lg:py-32 flex items-center">
+          <div className="max-w-xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-[-0.03em] leading-[1.1] mb-6">
+              Create. Send. Understood.
+            </h1>
+            <p className="text-lg leading-relaxed max-w-lg mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              Build visual treatment plans, send them via SMS, and help patients understand their next steps — all from one place.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => navigate('/signup')}
+                className="px-6 py-3 bg-accent text-white text-sm rounded-md hover:brightness-110 font-medium transition-all inline-flex items-center gap-2">
+                Request Access
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => navigate('/login')}
+                className="px-6 py-3 text-sm rounded-md font-medium transition-all inline-flex items-center gap-2"
+                style={{ color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                Dentist Login
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
