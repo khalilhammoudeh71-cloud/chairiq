@@ -38,7 +38,18 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Client configured in `chairiq/src/services/openaiClient.js`
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
-## Recent Changes (2026-02-08)
+## Recent Changes (2026-02-09)
+- Refactored global styling to premium Stripe/Apple SaaS theme
+- Consolidated all CSS variables into tailwind.css as single source of truth
+- Light mode: clean white (#ffffff), high-contrast text (#111827), blue accent (#2563eb)
+- Dark mode: deep slate (#0f1117), crisp text (#f1f5f9), bright blue accent (#3b82f6)
+- Typography hierarchy: 700 h1, 600 h2-h4, distinct sizes with tight letter-spacing
+- Added proper shadow scale (xs/card/md/lg), refined radius tokens, and status colors
+- Removed conflicting :root variables from globals.css
+- Added Gemini AI integration via Vite proxy (/gemini-proxy)
+- Connected Twilio SMS (credentials stored as Replit secrets + Supabase Edge Function secrets)
+
+## Previous Changes (2026-02-08)
 - Connected OpenAI via Replit AI Integrations with Vite proxy
 - Fixed Vite config: port changed from 4028 to 5000, allowedHosts set to true for Replit
 - Fixed unprotected admin route `/admin/procedure-library` - now wrapped in ProtectedRoute
