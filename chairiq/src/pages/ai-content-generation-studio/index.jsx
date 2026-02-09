@@ -24,7 +24,6 @@ const AIContentGenerationStudio = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  // Form state
   const [selectedProcedure, setSelectedProcedure] = useState('');
   const [procedures, setProcedures] = useState([]);
   const [clinicalSpecs, setClinicalSpecs] = useState('');
@@ -33,7 +32,6 @@ const AIContentGenerationStudio = () => {
   const [complexity, setComplexity] = useState('detailed');
   const [targetAudience, setTargetAudience] = useState('general');
 
-  // Content state
   const [generatedContent, setGeneratedContent] = useState({
     description: '',
     risks: '',
@@ -41,7 +39,6 @@ const AIContentGenerationStudio = () => {
     faqs: []
   });
 
-  // Loading state
   const [isGenerating, setIsGenerating] = useState({
     description: false,
     risks: false,
@@ -50,12 +47,10 @@ const AIContentGenerationStudio = () => {
     all: false
   });
 
-  // New batch processing state
   const [showBatchView, setShowBatchView] = useState(false);
   const [batchJobs, setBatchJobs] = useState([]);
   const [isCreatingBatch, setIsCreatingBatch] = useState(false);
 
-  // Load procedures
   useEffect(() => {
     loadProcedures();
   }, []);
@@ -69,7 +64,6 @@ const AIContentGenerationStudio = () => {
     }
   };
 
-  // Load procedure details when selected
   useEffect(() => {
     if (selectedProcedure) {
       const procedure = procedures?.find(p => p?.id === selectedProcedure);
@@ -86,7 +80,6 @@ const AIContentGenerationStudio = () => {
     }
   }, [selectedProcedure, language, procedures]);
 
-  // Load batch jobs when switching to batch view
   useEffect(() => {
     if (showBatchView) {
       loadBatchJobs();
@@ -108,7 +101,6 @@ const AIContentGenerationStudio = () => {
       const job = await createBatchJob(batchConfig);
       showToast('Batch job created successfully', 'success');
       
-      // Start processing if scheduled for now
       if (!batchConfig?.scheduledAt) {
         await startBatchJobProcessing(job?.id);
         showToast('Batch processing started', 'info');
@@ -116,7 +108,6 @@ const AIContentGenerationStudio = () => {
         showToast('Batch job scheduled successfully', 'info');
       }
       
-      // Reload batch jobs
       await loadBatchJobs();
     } catch (error) {
       showToast(error?.message || 'Failed to create batch job', 'error');
@@ -257,7 +248,6 @@ const AIContentGenerationStudio = () => {
       await updateProcedure(selectedProcedure, updates);
       showToast('Content saved to procedure library successfully', 'success');
       
-      // Reload procedures to reflect changes
       await loadProcedures();
     } catch (error) {
       showToast('Failed to save content', 'error');
@@ -271,24 +261,23 @@ const AIContentGenerationStudio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-0">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-bg0">
+      <div className="bg-bg1 border-b border-bd sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate('/admin/procedure-library')}
-                className="p-2 hover:bg-bg-1 rounded-lg"
+                className="p-2 hover:bg-bg2 rounded-lg"
               >
-                <ArrowLeft className="w-5 h-5 text-text-2" />
+                <ArrowLeft className="w-5 h-5 text-t2" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-text-1 flex items-center gap-2">
+                <h1 className="text-2xl font-bold text-t1 flex items-center gap-2">
                   <Wand2 className="w-7 h-7 text-accent" />
                   AI Content Generation Studio
                 </h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-t2 mt-1">
                   Auto-generate dentist-grade procedure content using OpenAI
                 </p>
               </div>
@@ -298,7 +287,7 @@ const AIContentGenerationStudio = () => {
                 onClick={() => setShowBatchView(!showBatchView)}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   showBatchView
-                    ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 <Layers className="w-4 h-4" />
@@ -310,7 +299,7 @@ const AIContentGenerationStudio = () => {
                   disabled={!selectedProcedure}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                     selectedProcedure
-                      ? 'bg-green-600 text-white hover:bg-green-700 active:scale-95' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      ? 'bg-success text-white hover:brightness-110' : 'bg-bg2 text-t3 cursor-not-allowed'
                   }`}
                 >
                   <Save className="w-4 h-4" />
@@ -321,10 +310,8 @@ const AIContentGenerationStudio = () => {
           </div>
         </div>
       </div>
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {showBatchView ? (
-          // Batch Processing View
           <div className="space-y-6">
             <BatchProcessingPanel
               procedures={procedures}
@@ -339,27 +326,23 @@ const AIContentGenerationStudio = () => {
             />
           </div>
         ) : (
-          // Single Generation View (keep existing content)
           <>
-            {/* Configuration Panel */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <div className="bg-bg1 rounded-xl shadow-sm border border-bd p-6 mb-8">
               <div className="flex items-center gap-2 mb-6">
-                <Settings className="w-5 h-5 text-gray-700" />
-                <h2 className="text-lg font-semibold text-gray-900">Configuration</h2>
+                <Settings className="w-5 h-5 text-t2" />
+                <h2 className="text-lg font-semibold text-t1">Configuration</h2>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Left Column */}
                 <div className="space-y-4">
-                  {/* Procedure Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-t2 mb-2">
                       Select Procedure *
                     </label>
                     <select
                       value={selectedProcedure}
                       onChange={(e) => setSelectedProcedure(e?.target?.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
                     >
                       <option value="">Choose a procedure...</option>
                       {procedures?.map((proc) => (
@@ -370,30 +353,28 @@ const AIContentGenerationStudio = () => {
                     </select>
                   </div>
 
-                  {/* Clinical Specifications */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-t2 mb-2">
                       Clinical Specifications *
                     </label>
                     <textarea
                       value={clinicalSpecs}
                       onChange={(e) => setClinicalSpecs(e?.target?.value)}
                       placeholder="Enter clinical specifications, indications, contraindications, and key details..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      className="w-full px-4 py-3 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none resize-none"
                       rows={4}
                     />
                   </div>
 
-                  {/* Language Selection */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-t2 mb-2">
                       Content Language
                     </label>
                     <div className="flex gap-3">
                       <button
                         onClick={() => setLanguage('en')}
                         className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
-                          language === 'en' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          language === 'en' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
                         }`}
                       >
                         English
@@ -401,7 +382,7 @@ const AIContentGenerationStudio = () => {
                       <button
                         onClick={() => setLanguage('es')}
                         className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
-                          language === 'es' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          language === 'es' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
                         }`}
                       >
                         Spanish
@@ -410,17 +391,15 @@ const AIContentGenerationStudio = () => {
                   </div>
                 </div>
 
-                {/* Right Column */}
                 <div className="space-y-4">
-                  {/* Tone */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-t2 mb-2">
                       Content Tone
                     </label>
                     <select
                       value={tone}
                       onChange={(e) => setTone(e?.target?.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
                     >
                       <option value="professional">Professional</option>
                       <option value="friendly">Friendly & Approachable</option>
@@ -429,15 +408,14 @@ const AIContentGenerationStudio = () => {
                     </select>
                   </div>
 
-                  {/* Complexity */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-t2 mb-2">
                       Complexity Level
                     </label>
                     <select
                       value={complexity}
                       onChange={(e) => setComplexity(e?.target?.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
                     >
                       <option value="basic">Basic - Simple explanations</option>
                       <option value="detailed">Detailed - Comprehensive information</option>
@@ -445,15 +423,14 @@ const AIContentGenerationStudio = () => {
                     </select>
                   </div>
 
-                  {/* Target Audience */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-t2 mb-2">
                       Target Audience
                     </label>
                     <select
                       value={targetAudience}
                       onChange={(e) => setTargetAudience(e?.target?.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
                     >
                       <option value="general">General Public</option>
                       <option value="anxious">Anxious Patients</option>
@@ -462,13 +439,12 @@ const AIContentGenerationStudio = () => {
                     </select>
                   </div>
 
-                  {/* Generate All Button */}
                   <button
                     onClick={handleGenerateAll}
                     disabled={isGenerating?.all || !selectedProcedure || !clinicalSpecs?.trim()}
                     className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
                       isGenerating?.all || !selectedProcedure || !clinicalSpecs?.trim()
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 active:scale-95 shadow-lg'
+                        ? 'bg-bg2 text-t3 cursor-not-allowed' : 'bg-accent text-white hover:brightness-110 shadow-md'
                     }`}
                   >
                     <Wand2 className="w-5 h-5" />
@@ -478,9 +454,7 @@ const AIContentGenerationStudio = () => {
               </div>
             </div>
 
-            {/* Content Generation Panels */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Procedure Description */}
               <ContentGenerationPanel
                 title="Procedure Description"
                 description="Patient-friendly explanation with clinical accuracy"
@@ -489,11 +463,10 @@ const AIContentGenerationStudio = () => {
                 onGenerate={() => handleGenerate('description')}
                 onCopy={() => handleCopyContent(generatedContent?.description)}
                 icon={FileText}
-                color="bg-blue-50"
+                color="bg-accent/10"
                 disabled={!selectedProcedure || !clinicalSpecs?.trim()}
               />
 
-              {/* Risk Assessment */}
               <ContentGenerationPanel
                 title="Risk Assessment"
                 description="Comprehensive risk factors and contraindications"
@@ -502,11 +475,10 @@ const AIContentGenerationStudio = () => {
                 onGenerate={() => handleGenerate('risks')}
                 onCopy={() => handleCopyContent(generatedContent?.risks)}
                 icon={AlertTriangle}
-                color="bg-orange-50"
+                color="bg-warning/10"
                 disabled={!selectedProcedure || !clinicalSpecs?.trim()}
               />
 
-              {/* Aftercare Instructions */}
               <ContentGenerationPanel
                 title="Aftercare Instructions"
                 description="Detailed post-treatment care protocols"
@@ -515,11 +487,10 @@ const AIContentGenerationStudio = () => {
                 onGenerate={() => handleGenerate('aftercare')}
                 onCopy={() => handleCopyContent(generatedContent?.aftercare)}
                 icon={Heart}
-                color="bg-green-50"
+                color="bg-success/10"
                 disabled={!selectedProcedure || !clinicalSpecs?.trim()}
               />
 
-              {/* FAQ Generation */}
               <ContentGenerationPanel
                 title="FAQ Generation"
                 description="Common patient questions with evidence-based answers"
@@ -528,18 +499,17 @@ const AIContentGenerationStudio = () => {
                 onGenerate={() => handleGenerate('faqs')}
                 onCopy={() => handleCopyContent(generatedContent?.faqs)}
                 icon={HelpCircle}
-                color="bg-purple-50"
+                color="bg-bg3"
                 disabled={!selectedProcedure || !clinicalSpecs?.trim()}
               />
             </div>
 
-            {/* Info Banner */}
-            <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="mt-8 bg-accent/10 border border-accent/20 rounded-lg p-4">
               <div className="flex gap-3">
-                <Wand2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-blue-900">
+                <Wand2 className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-t1">
                   <p className="font-medium mb-1">AI-Powered Content Generation</p>
-                  <p className="text-blue-700">
+                  <p className="text-t2">
                     Content is generated using OpenAI's GPT-5 model with clinical terminology validation.
                     Review and edit all generated content before saving to the procedure library.
                   </p>

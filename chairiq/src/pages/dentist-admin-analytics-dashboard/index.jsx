@@ -254,12 +254,12 @@ export default function DentistAdminAnalyticsDashboard() {
 
           {/* Success/Error Messages */}
           {successMessages && Object.keys(successMessages)?.length > 0 && (
-            <div className="mb-6 bg-green-900/20 border border-green-500 text-green-500 px-4 py-3 rounded-lg">
+            <div className="mb-6 bg-success/10 border border-success text-success px-4 py-3 rounded-lg">
               {Object.values(successMessages)?.join(', ')}
             </div>
           )}
           {errorMessage && (
-            <div className="mb-6 bg-red-900/20 border border-danger text-danger px-4 py-3 rounded-lg">
+            <div className="mb-6 bg-danger/10 border border-danger text-danger px-4 py-3 rounded-lg">
               {errorMessage}
             </div>
           )}
@@ -366,7 +366,7 @@ export default function DentistAdminAnalyticsDashboard() {
                               <button
                                 onClick={() => handleCopyLink(patient?.publicToken, patient?.patientName)}
                                 disabled={copyingToken === patient?.publicToken}
-                                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {copyingToken === patient?.publicToken ? (
                                   <>
@@ -382,7 +382,7 @@ export default function DentistAdminAnalyticsDashboard() {
                               </button>
                             </div>
                             {successMessages?.[patient?.publicToken] && (
-                              <div className="absolute left-0 top-full mt-2 text-green-500 text-sm animate-fadeIn whitespace-nowrap">
+                              <div className="absolute left-0 top-full mt-2 text-success text-sm animate-fadeIn whitespace-nowrap">
                                 {successMessages?.[patient?.publicToken]}
                               </div>
                             )}

@@ -92,12 +92,12 @@ const AccessibilityControls = ({ language = 'en' }) => {
   const t = labels?.[language] || labels?.en;
 
   return (
-    <div className="accessibility-controls bg-slate-800 border border-slate-700 rounded p-4">
+    <div className="accessibility-controls bg-bg2 border border-bd rounded p-4">
       {/* Text Size Controls */}
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
-          <Type className="w-5 h-5 text-teal-400" />
-          <label className="text-sm font-bold text-slate-200">
+          <Type className="w-5 h-5 text-success" />
+          <label className="text-sm font-bold text-t2">
             {t?.textSize}
           </label>
         </div>
@@ -108,7 +108,7 @@ const AccessibilityControls = ({ language = 'en' }) => {
               onClick={() => handleFontSizeChange(size)}
               className={`px-3 py-1.5 text-sm rounded border-2 ${
                 fontSize === size
-                  ? 'bg-teal-500 text-white border-teal-400' :'bg-slate-800/60 text-slate-300 border-slate-600/50 hover:border-teal-400/60 hover:bg-slate-700/60'
+                  ? 'bg-success text-white border-success' :'bg-bg2/60 text-t3 border-bd/50 hover:border-success/60 hover:bg-bg3/60'
               }`}
               aria-pressed={fontSize === size}
             >
@@ -125,11 +125,11 @@ const AccessibilityControls = ({ language = 'en' }) => {
         <div>
           <div className="flex items-center gap-2 mb-2">
             {isSpeaking ? (
-              <Volume2 className="w-5 h-5 text-teal-400" />
+              <Volume2 className="w-5 h-5 text-success" />
             ) : (
-              <VolumeX className="w-5 h-5 text-slate-400" />
+              <VolumeX className="w-5 h-5 text-t3" />
             )}
-            <label className="text-sm font-bold text-slate-200">
+            <label className="text-sm font-bold text-t2">
               {t?.audioDesc}
             </label>
           </div>
@@ -138,7 +138,7 @@ const AccessibilityControls = ({ language = 'en' }) => {
             disabled={!isSpeaking}
             className={`px-4 py-2 text-sm rounded border-2 ${
               isSpeaking
-                ? 'bg-red-500 text-white border-red-400 hover:bg-red-600' :'bg-slate-800/40 text-slate-500 border-slate-700/40 cursor-not-allowed'
+                ? 'bg-danger text-white border-danger hover:brightness-110' :'bg-bg2/40 text-t3 border-bd/40 cursor-not-allowed'
             }`}
             aria-label={t?.stopAudio}
           >

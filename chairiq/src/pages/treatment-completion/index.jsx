@@ -71,7 +71,7 @@ const TreatmentCompletion = () => {
         <meta name="description" content={content?.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-b from-success/5 to-background">
+      <div className="min-h-screen bg-bg0">
         <div className="max-w-4xl mx-auto px-4 py-6 md:py-8">
           <div className="flex justify-end mb-6">
             <LanguageToggle />

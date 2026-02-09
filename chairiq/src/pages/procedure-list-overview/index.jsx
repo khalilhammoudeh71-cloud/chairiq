@@ -15,7 +15,6 @@ const ProcedureListOverview = () => {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [activeFilter, setActiveFilter] = useState('all');
 
-  // Get all procedures from treatment plan
   const allProcedures = demoTreatmentPlan?.procedureIds?.map(id => getProcedureById(id));
 
   useEffect(() => {
@@ -32,7 +31,6 @@ const ProcedureListOverview = () => {
     return () => window.removeEventListener('languageChange', handleLanguageChange);
   }, []);
 
-  // Filter procedures by category
   const filteredProcedures = activeFilter === 'all' 
     ? allProcedures
     : allProcedures?.filter(p => p?.category === activeFilter);
@@ -60,9 +58,8 @@ const ProcedureListOverview = () => {
         <title>{content?.title}</title>
         <meta name="description" content={content?.description} />
       </Helmet>
-      <div className="min-h-screen bg-gray-900">
-        {/* Header */}
-        <header className="sticky top-0 z-40 bg-gray-800 border-b border-gray-700">
+      <div className="min-h-screen bg-bg0">
+        <header className="sticky top-0 z-40 bg-bg2 border-b border-bd">
           <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-6">
             <div className="flex items-center justify-between">
               <Button
@@ -71,7 +68,7 @@ const ProcedureListOverview = () => {
                 onClick={() => navigate('/treatment-plan-landing')}
                 iconName="ArrowLeft"
                 iconPosition="left"
-                className="text-gray-300 hover:text-white">
+                className="text-t3 hover:text-t1">
 
                 {currentLanguage === 'en' ? 'Back to Overview' : 'Volver a Vista General'}
               </Button>
@@ -80,33 +77,28 @@ const ProcedureListOverview = () => {
           </div>
         </header>
 
-        {/* Main Content */}
         <main className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-16">
-          {/* Page Header */}
           <div className="text-center mb-20">
-            <h1 className="text-5xl sm:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
+            <h1 className="text-5xl sm:text-6xl font-bold text-t1 mb-6 leading-tight tracking-tight">
               {content?.heading}
             </h1>
-            <p className="text-gray-300 text-2xl font-light leading-relaxed">
+            <p className="text-t3 text-2xl font-light leading-relaxed">
               {content?.subtitle}
             </p>
           </div>
 
-          {/* Stats */}
           <ProcedureStats 
             totalProcedures={allProcedures?.length}
             stats={allProcedures}
             language={currentLanguage} 
           />
 
-          {/* Filters */}
           <FilterTabs 
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
             language={currentLanguage}
           />
 
-          {/* Procedure Grid */}
           {filteredProcedures?.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProcedures?.map((procedure, index) => (

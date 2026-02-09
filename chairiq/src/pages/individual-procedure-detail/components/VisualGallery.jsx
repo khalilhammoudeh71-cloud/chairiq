@@ -19,14 +19,13 @@ const VisualGallery = ({ visuals, currentLanguage }) => {
           <button
             key={index}
             onClick={() => setSelectedImage(visual)}
-            className="group relative aspect-video rounded-xl overflow-hidden shadow-subtle focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="group relative aspect-video rounded-xl overflow-hidden shadow-subtle focus:border-accent focus:outline-none"
           >
             <Image
               src={visual?.image}
               alt={visual?.imageAlt}
               className="w-full h-full object-cover"
             />
-            {/* Removed hover overlays and animations for clinical stability */}
           </button>
         ))}
       </div>
@@ -43,7 +42,7 @@ const VisualGallery = ({ visuals, currentLanguage }) => {
             >
               <Icon name="X" size={24} />
             </button>
-            <div className="bg-card rounded-2xl overflow-hidden shadow-medium">
+            <div className="bg-card rounded-2xl overflow-hidden shadow-md">
               <Image
                 src={selectedImage?.image}
                 alt={selectedImage?.imageAlt}

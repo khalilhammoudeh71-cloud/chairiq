@@ -205,7 +205,7 @@ const TreatmentPlanLanding = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-bg0">
         <LoadingSpinner size="lg" />
       </div>
     );
@@ -213,16 +213,16 @@ const TreatmentPlanLanding = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-5 bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center px-5 bg-bg0">
         <div className="max-w-md text-center">
           <Icon name="AlertCircle" size={48} style={{ color: '#ffb74d', margin: '0 auto 1.5rem' }} />
-          <h1 className="text-3xl mb-6 text-white font-semibold">
+          <h1 className="text-3xl mb-6 text-t1 font-semibold">
             {text?.errorTitle}
           </h1>
-          <p className="mb-8 text-gray-300 text-xl leading-relaxed">
+          <p className="mb-8 text-t3 text-xl leading-relaxed">
             {error}
           </p>
-          <p className="text-gray-400 text-lg">
+          <p className="text-t3 text-lg">
             {text?.contactOffice}
           </p>
         </div>
@@ -240,7 +240,7 @@ const TreatmentPlanLanding = () => {
         <meta name="description" content={text?.reassurance} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </Helmet>
-      <div className="min-h-screen bg-gray-900">
+      <div className="min-h-screen bg-bg0">
         <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16 py-16 md:py-24">
           
           {/* Language Toggle */}
@@ -308,17 +308,17 @@ const TreatmentPlanLanding = () => {
           {/* HEADER */}
           <header className="mb-32">
             <h1 
-              className="text-5xl sm:text-6xl lg:text-7xl mb-8 text-white font-bold leading-tight tracking-tight"
+              className="text-5xl sm:text-6xl lg:text-7xl mb-8 text-t1 font-bold leading-tight tracking-tight"
             >
               {text?.title}
             </h1>
             <p 
-              className="mb-6 text-gray-300 text-2xl sm:text-3xl font-light leading-relaxed"
+              className="mb-6 text-t3 text-2xl sm:text-3xl font-light leading-relaxed"
             >
               {text?.subtitle}
             </p>
             <p 
-              className="text-gray-400 text-xl sm:text-2xl font-light leading-[1.7]"
+              className="text-t3 text-xl sm:text-2xl font-light leading-[1.7]"
             >
               {text?.reassurance}
             </p>
@@ -327,7 +327,7 @@ const TreatmentPlanLanding = () => {
           {/* OVERVIEW SUMMARY CARD */}
           <section className="mb-40">
             <h2 
-              className="text-2xl sm:text-3xl mb-12 text-gray-400 font-light"
+              className="text-2xl sm:text-3xl mb-12 text-t3 font-light"
             >
               {text?.overviewTitle}
             </h2>
@@ -341,24 +341,24 @@ const TreatmentPlanLanding = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-16">
                 <div>
                   <div 
-                    className="text-6xl sm:text-7xl mb-6 text-blue-400 font-semibold"
+                    className="text-6xl sm:text-7xl mb-6 text-accent font-semibold"
                   >
                     {procedureCount}
                   </div>
                   <div 
-                    className="text-gray-400 text-lg leading-relaxed"
+                    className="text-t3 text-lg leading-relaxed"
                   >
                     {text?.proceduresLabel}
                   </div>
                 </div>
                 <div>
                   <div 
-                    className="text-6xl sm:text-7xl mb-6 text-blue-400 font-semibold"
+                    className="text-6xl sm:text-7xl mb-6 text-accent font-semibold"
                   >
                     {calculateEstimatedVisits()}
                   </div>
                   <div 
-                    className="text-gray-400 text-lg leading-relaxed"
+                    className="text-t3 text-lg leading-relaxed"
                   >
                     {text?.visitsLabel}
                   </div>
@@ -370,7 +370,7 @@ const TreatmentPlanLanding = () => {
           {/* RECOMMENDED CARE LIST */}
           <section className="mb-40">
             <h2 
-              className="text-4xl sm:text-5xl mb-20 text-white font-semibold leading-snug"
+              className="text-4xl sm:text-5xl mb-20 text-t1 font-semibold leading-snug"
             >
               {text?.proceduresTitle}
             </h2>
@@ -424,7 +424,7 @@ const TreatmentPlanLanding = () => {
                           toggleProcedure(procedure?.id);
                         }
                       }}
-                      className="rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer hover:border-blue-400/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                      className="rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer hover:border-accent/30 focus:border-accent focus:outline-none"
                       style={{ 
                         backgroundColor: '#1A1F2E',
                         border: '1px solid #2D3748',
@@ -438,7 +438,7 @@ const TreatmentPlanLanding = () => {
                       <div className="p-10">
                         <div className="mb-6">
                           <h3 
-                            className="text-2xl sm:text-3xl mb-6 text-white font-semibold leading-snug"
+                            className="text-2xl sm:text-3xl mb-6 text-t1 font-semibold leading-snug"
                           >
                             {title}
                           </h3>
@@ -446,7 +446,7 @@ const TreatmentPlanLanding = () => {
                           {/* ADA Code */}
                           {procedure?.adaCode && (
                             <p 
-                              className="mb-3 text-gray-400 text-base font-mono"
+                              className="mb-3 text-t3 text-base font-mono"
                             >
                               {procedure?.adaCode}
                             </p>
@@ -455,7 +455,7 @@ const TreatmentPlanLanding = () => {
                           {/* Tooth Numbers */}
                           {procedure?.toothNumbers && (
                             <p 
-                              className="mb-5 text-gray-400 text-lg"
+                              className="mb-5 text-t3 text-lg"
                             >
                               {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
                             </p>
@@ -480,7 +480,7 @@ const TreatmentPlanLanding = () => {
                         {/* Preview Text - Always visible */}
                         {!isExpanded && (
                           <p 
-                            className="mb-0 text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                            className="mb-0 text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
                           >
                             {previewText}
                             {previewText?.length >= 180 && summary?.length > 180 ? '...' : ''}
@@ -493,7 +493,7 @@ const TreatmentPlanLanding = () => {
                           aria-hidden="true"
                         >
                           <span
-                            className="text-blue-400 text-lg font-medium"
+                            className="text-accent text-lg font-medium"
                           >
                             {isExpanded ? text?.seeLess : text?.seeMore}
                           </span>
@@ -657,12 +657,12 @@ const TreatmentPlanLanding = () => {
                           {summary && (
                             <div>
                               <h4 
-                                className="text-2xl mb-6 text-blue-400 font-semibold"
+                                className="text-2xl mb-6 text-accent font-semibold"
                               >
                                 {text?.sections?.whatThis}
                               </h4>
                               <div
-                                className="text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                                className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
                                 dangerouslySetInnerHTML={{ 
                                   __html: summary?.replace(/\n/g, '<br />') 
                                 }}
@@ -674,7 +674,7 @@ const TreatmentPlanLanding = () => {
                           {hasLibraryContent && (
                             <button
                               onClick={(e) => toggleFullDetails(procedure?.id, e)}
-                              className="w-full py-4 px-8 rounded-xl transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                              className="w-full py-4 px-8 rounded-xl transition-all duration-200 hover:brightness-110 focus:border-accent focus:outline-none"
                               style={{ 
                                 backgroundColor: '#4A6FA5',
                                 color: 'white',
@@ -698,7 +698,7 @@ const TreatmentPlanLanding = () => {
                               }}
                             >
                               <p 
-                                className="text-yellow-400 text-lg leading-relaxed"
+                                className="text-warning text-lg leading-relaxed"
                               >
                                 {text?.noContentAvailable}
                               </p>
@@ -794,12 +794,12 @@ const TreatmentPlanLanding = () => {
                               {why && (
                                 <div>
                                   <h4 
-                                    className="text-2xl mb-6 text-blue-400 font-semibold"
+                                    className="text-2xl mb-6 text-accent font-semibold"
                                   >
                                     {text?.sections?.whyNeed}
                                   </h4>
                                   <div
-                                    className="text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                                    className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
                                     dangerouslySetInnerHTML={{ 
                                       __html: why?.replace(/\n/g, '<br />') 
                                     }}
@@ -811,7 +811,7 @@ const TreatmentPlanLanding = () => {
                               {steps && steps?.length > 0 && (
                                 <div>
                                   <h4 
-                                    className="text-2xl mb-10 text-blue-400 font-semibold"
+                                    className="text-2xl mb-10 text-accent font-semibold"
                                   >
                                     {text?.sections?.howItWorks}
                                   </h4>
@@ -915,13 +915,13 @@ const TreatmentPlanLanding = () => {
                                         )}
                                         {step?.title && (
                                           <h5 
-                                            className="mb-5 text-white text-xl font-semibold"
+                                            className="mb-5 text-t1 text-xl font-semibold"
                                           >
                                             {step?.title}
                                           </h5>
                                         )}
                                         <p 
-                                          className="text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                                          className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
                                         >
                                           {step?.description || step?.content}
                                         </p>
@@ -942,20 +942,20 @@ const TreatmentPlanLanding = () => {
                                 >
                                   {procedure?.library?.timeEstimate && (
                                     <div className="mb-4">
-                                      <span className="text-blue-400 text-lg font-semibold">
+                                      <span className="text-accent text-lg font-semibold">
                                         {currentLanguage === 'es' ? 'Tiempo: ' : 'Time: '}
                                       </span>
-                                      <span className="text-gray-300 text-lg">
+                                      <span className="text-t3 text-lg">
                                         {procedure?.library?.timeEstimate}
                                       </span>
                                     </div>
                                   )}
                                   {procedure?.library?.visitsEstimate && (
                                     <div>
-                                      <span className="text-blue-400 text-lg font-semibold">
+                                      <span className="text-accent text-lg font-semibold">
                                         {currentLanguage === 'es' ? 'Visitas: ' : 'Visits: '}
                                       </span>
-                                      <span className="text-gray-300 text-lg">
+                                      <span className="text-t3 text-lg">
                                         {procedure?.library?.visitsEstimate}
                                       </span>
                                     </div>
@@ -967,12 +967,12 @@ const TreatmentPlanLanding = () => {
                               {whatIfNot && (
                                 <div>
                                   <h4 
-                                    className="text-2xl mb-6 text-yellow-400 font-semibold"
+                                    className="text-2xl mb-6 text-warning font-semibold"
                                   >
                                     {text?.sections?.ifDelay}
                                   </h4>
                                   <div
-                                    className="text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                                    className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
                                     dangerouslySetInnerHTML={{ 
                                       __html: whatIfNot?.replace(/\n/g, '<br />') 
                                     }}
@@ -984,12 +984,12 @@ const TreatmentPlanLanding = () => {
                               {aftercare && (
                                 <div>
                                   <h4 
-                                    className="text-2xl mb-6 text-blue-400 font-semibold"
+                                    className="text-2xl mb-6 text-accent font-semibold"
                                   >
                                     {text?.sections?.aftercare}
                                   </h4>
                                   <div
-                                    className="text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                                    className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
                                     dangerouslySetInnerHTML={{ 
                                       __html: aftercare?.replace(/\n/g, '<br />') 
                                     }}
@@ -1001,7 +1001,7 @@ const TreatmentPlanLanding = () => {
                               {faqs && faqs?.length > 0 && (
                                 <div>
                                   <h4 
-                                    className="text-2xl mb-10 text-blue-400 font-semibold"
+                                    className="text-2xl mb-10 text-accent font-semibold"
                                   >
                                     {text?.sections?.faqs}
                                   </h4>
@@ -1016,12 +1016,12 @@ const TreatmentPlanLanding = () => {
                                         }}
                                       >
                                         <p 
-                                          className="mb-5 text-white text-xl font-semibold"
+                                          className="mb-5 text-t1 text-xl font-semibold"
                                         >
                                           {faq?.q}
                                         </p>
                                         <p 
-                                          className="text-gray-400 text-lg leading-[1.8]"
+                                          className="text-t3 text-lg leading-[1.8]"
                                         >
                                           {faq?.a}
                                         </p>
@@ -1046,7 +1046,7 @@ const TreatmentPlanLanding = () => {
                     border: '1px solid #2D3748'
                   }}
                 >
-                  <p className="text-gray-400 text-xl">
+                  <p className="text-t3 text-xl">
                     {currentLanguage === 'es' ?'No se encontraron procedimientos en su plan de tratamiento.' :'No procedures found in your treatment plan.'}
                   </p>
                 </div>
@@ -1058,7 +1058,7 @@ const TreatmentPlanLanding = () => {
           <footer className="pt-16">
             <div className="text-center">
               <p 
-                className="mb-0 text-gray-400 text-xl sm:text-2xl font-light leading-[1.8]"
+                className="mb-0 text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
               >
                 {text?.footer}
               </p>

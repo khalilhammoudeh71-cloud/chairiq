@@ -135,7 +135,7 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
                     size="sm"
                     onClick={() => handleDeleteClick(plan)}
                     title="Delete Patient Profile"
-                    className="p-2 hover:bg-red-500/10 hover:text-red-400"
+                    className="p-2 hover:bg-danger/10 hover:text-danger"
                   >
                     <Trash2 size={18} />
                   </ButtonSecondary>

@@ -109,7 +109,7 @@ export default function ModifyTreatmentPlanModal({ treatmentPlanId, onClose, onS
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-[var(--overlay)] flex items-center justify-center z-50">
         <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
           <div className="flex items-center justify-center py-12">
             <Loader className="w-8 h-8 animate-spin text-accent" />
@@ -122,10 +122,10 @@ export default function ModifyTreatmentPlanModal({ treatmentPlanId, onClose, onS
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-[var(--overlay)] flex items-center justify-center z-50 p-4">
         <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-border-1">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-bd">
             <div>
               <h2 className="text-2xl font-bold text-t1">Modify Treatment Plan</h2>
               <p className="text-t2 text-sm mt-1">
@@ -142,8 +142,8 @@ export default function ModifyTreatmentPlanModal({ treatmentPlanId, onClose, onS
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-900/20 border border-red-500 rounded-lg">
-              <p className="text-red-200 text-sm">{error}</p>
+            <div className="mb-4 p-3 bg-danger/10 border border-danger rounded-lg">
+              <p className="text-danger text-sm">{error}</p>
             </div>
           )}
 
@@ -169,7 +169,7 @@ export default function ModifyTreatmentPlanModal({ treatmentPlanId, onClose, onS
                 {procedures?.map((proc) => (
                   <div
                     key={proc?.id}
-                    className="p-4 bg-bg-3 rounded-lg border border-border-1 flex items-center justify-between"
+                    className="p-4 bg-bg3 rounded-lg border border-bd flex items-center justify-between"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -203,7 +203,7 @@ export default function ModifyTreatmentPlanModal({ treatmentPlanId, onClose, onS
                     <button
                       onClick={() => handleRemoveProcedure(proc?.id)}
                       disabled={removing === proc?.id}
-                      className="ml-4 p-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
+                      className="ml-4 p-2 text-danger hover:text-danger hover:bg-danger/10 rounded-lg transition-colors disabled:opacity-50"
                     >
                       {removing === proc?.id ? (
                         <Loader className="w-5 h-5 animate-spin" />
@@ -218,7 +218,7 @@ export default function ModifyTreatmentPlanModal({ treatmentPlanId, onClose, onS
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-1">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-bd">
             <ButtonSecondary onClick={onClose}>
               Cancel
             </ButtonSecondary>

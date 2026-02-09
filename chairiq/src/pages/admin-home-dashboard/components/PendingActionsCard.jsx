@@ -11,13 +11,13 @@ export default function PendingActionsCard({ actions = [] }) {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'high':
-        return 'bg-red-500/20 text-red-200 border-red-500/30';
+        return 'bg-danger/10 text-danger border-danger/30';
       case 'medium':
-        return 'bg-yellow-500/20 text-yellow-200 border-yellow-500/30';
+        return 'bg-warning/10 text-warning border-warning/30';
       case 'low':
-        return 'bg-blue-500/20 text-blue-200 border-blue-500/30';
+        return 'bg-accent/10 text-accent border-accent/30';
       default:
-        return 'bg-gray-500/20 text-gray-200 border-gray-500/30';
+        return 'bg-bg3 text-t3 border-bd';
     }
   };
 

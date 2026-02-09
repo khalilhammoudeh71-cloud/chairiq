@@ -217,7 +217,7 @@ export default function AddProcedureDrawer({
   if (!isOpen) return null;
 
   const drawerClasses = isMobile
-    ? 'fixed inset-0 z-50 bg-slate-900' :'fixed right-0 top-0 h-full w-full md:w-[600px] z-50 bg-slate-800 border-l border-blue-400';
+    ? 'fixed inset-0 z-50 bg-bg0' :'fixed right-0 top-0 h-full w-full md:w-[600px] z-50 bg-bg1 border-l border-bd';
 
   const filteredProcedures = getFilteredProcedures();
 
@@ -225,18 +225,18 @@ export default function AddProcedureDrawer({
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+        className="fixed inset-0 bg-[var(--overlay)] z-40 transition-opacity"
         onClick={onClose}
       />
       {/* Drawer */}
       <div className={`${drawerClasses} overflow-y-auto animate-slide-in-right`}>
         {/* Header */}
-        <div className="sticky top-0 bg-slate-800 border-b border-blue-400/30 p-6 z-10">
+        <div className="sticky top-0 bg-bg1 border-b border-bd p-6 z-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-white">Add Procedure</h2>
+            <h2 className="text-2xl font-bold text-t1">Add Procedure</h2>
             <button
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+              className="p-2 text-t3 hover:text-t1 hover:bg-bg2 rounded-lg transition-colors"
             >
               <X size={24} />
             </button>
@@ -247,14 +247,14 @@ export default function AddProcedureDrawer({
         <div className="p-6 space-y-6">
           {/* Selection Method */}
           <div>
-            <label className="block text-blue-100 mb-3 text-base font-semibold">
+            <label className="block text-t2 mb-3 text-base font-semibold">
               Selection Method
             </label>
             <div className="grid grid-cols-3 gap-3">
               <button
                 onClick={() => setSelectionMethod('library')}
                 className={`px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
-                  selectionMethod === 'library' ?'bg-blue-600 text-white' :'bg-slate-700 text-blue-200 hover:bg-slate-600'
+                  selectionMethod === 'library' ?'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 Treatment Title
@@ -262,7 +262,7 @@ export default function AddProcedureDrawer({
               <button
                 onClick={() => setSelectionMethod('code')}
                 className={`px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
-                  selectionMethod === 'code' ?'bg-blue-600 text-white' :'bg-slate-700 text-blue-200 hover:bg-slate-600'
+                  selectionMethod === 'code' ?'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 ADA Code
@@ -270,7 +270,7 @@ export default function AddProcedureDrawer({
               <button
                 onClick={() => setSelectionMethod('manual')}
                 className={`px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
-                  selectionMethod === 'manual' ?'bg-blue-600 text-white' :'bg-slate-700 text-blue-200 hover:bg-slate-600'
+                  selectionMethod === 'manual' ?'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 Manual Entry
@@ -284,7 +284,7 @@ export default function AddProcedureDrawer({
               <button
                 onClick={() => setActiveTab('all')}
                 className={`px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                  activeTab === 'all' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-blue-200 hover:bg-slate-600'
+                  activeTab === 'all' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 All
@@ -292,7 +292,7 @@ export default function AddProcedureDrawer({
               <button
                 onClick={() => setActiveTab('favorites')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                  activeTab === 'favorites' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-blue-200 hover:bg-slate-600'
+                  activeTab === 'favorites' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 <Star size={14} />
@@ -301,7 +301,7 @@ export default function AddProcedureDrawer({
               <button
                 onClick={() => setActiveTab('recents')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                  activeTab === 'recents' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-blue-200 hover:bg-slate-600'
+                  activeTab === 'recents' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 <Clock size={14} />
@@ -313,35 +313,35 @@ export default function AddProcedureDrawer({
           {/* Search & Selection */}
           {(selectionMethod === 'library' || selectionMethod === 'code') && (
             <div>
-              <label className="block text-blue-100 mb-2 text-base font-semibold">
+              <label className="block text-t2 mb-2 text-base font-semibold">
                 {selectionMethod === 'library' ? 'Search Treatment Titles' : 'Search ADA Codes'}
               </label>
               <div className="relative mb-3">
-                <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+                <Search className="absolute left-3 top-3 text-t3" size={20} />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e?.target?.value)}
                   placeholder={selectionMethod === 'library' ? 'Search procedures...' : 'Search codes...'}
-                  className="w-full pl-10 pr-3 py-2 bg-slate-700 border-2 border-blue-400/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full pl-10 pr-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-accent"
                 />
               </div>
 
               {/* Procedure List */}
-              <div className="max-h-64 overflow-y-auto bg-slate-700 rounded-lg border border-blue-400/30">
+              <div className="max-h-64 overflow-y-auto bg-bg2 rounded-lg border border-bd">
                 {filteredProcedures?.length > 0 ? (
                   filteredProcedures?.map((item, index) => (
                     <button
                       key={index}
                       onClick={() => handleProcedureSelect(item)}
-                      className="w-full text-left px-4 py-3 text-white hover:bg-slate-600 transition-colors flex items-center justify-between border-b border-slate-600 last:border-b-0"
+                      className="w-full text-left px-4 py-3 text-t1 hover:bg-bg3 transition-colors flex items-center justify-between border-b border-bd last:border-b-0"
                     >
                       <div className="flex-1">
                         {item?.titleEn && <span className="font-medium">{item?.titleEn}</span>}
                         {item?.code && (
                           <div>
-                            <span className="font-semibold text-blue-300">{item?.code}</span>
-                            <span className="ml-2 text-gray-300">{item?.title}</span>
+                            <span className="font-semibold text-accent">{item?.code}</span>
+                            <span className="ml-2 text-t3">{item?.title}</span>
                           </div>
                         )}
                       </div>
@@ -350,7 +350,7 @@ export default function AddProcedureDrawer({
                           e?.stopPropagation();
                           handleToggleFavorite(item?.slug, item?.code);
                         }}
-                        className="ml-2 text-yellow-400 hover:text-yellow-300"
+                        className="ml-2 text-warning hover:text-warning"
                       >
                         <Star 
                           size={16} 
@@ -360,7 +360,7 @@ export default function AddProcedureDrawer({
                     </button>
                   ))
                 ) : (
-                  <div className="px-4 py-6 text-center text-gray-400">
+                  <div className="px-4 py-6 text-center text-t3">
                     No procedures found
                   </div>
                 )}
@@ -371,14 +371,14 @@ export default function AddProcedureDrawer({
           {/* Manual Entry or Display Title */}
           {selectionMethod === 'manual' && (
             <div>
-              <label className="block text-blue-100 mb-2 text-base font-semibold">
+              <label className="block text-t2 mb-2 text-base font-semibold">
                 Procedure Title *
               </label>
               <input
                 type="text"
                 value={formData?.displayTitle}
                 onChange={(e) => handleFieldChange('displayTitle', e?.target?.value)}
-                className="w-full px-3 py-2 bg-slate-700 border-2 border-blue-400/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-accent"
                 placeholder="Enter custom procedure title"
               />
             </div>
@@ -387,13 +387,13 @@ export default function AddProcedureDrawer({
           {/* Tooth Numbers */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-blue-100 text-base font-semibold">
+              <label className="block text-t2 text-base font-semibold">
                 Tooth Numbers
               </label>
               <button
                 type="button"
                 onClick={() => setShowToothPicker(!showToothPicker)}
-                className="text-sm text-blue-300 hover:text-blue-200 font-medium underline"
+                className="text-sm text-accent hover:text-accent font-medium underline"
               >
                 {showToothPicker ? 'Hide' : 'Show'} Quick Picker
               </button>
@@ -402,16 +402,16 @@ export default function AddProcedureDrawer({
               type="text"
               value={formData?.toothNumbers}
               onChange={(e) => handleFieldChange('toothNumbers', e?.target?.value)}
-              className="w-full px-3 py-2 bg-slate-700 border-2 border-blue-400/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-accent"
               placeholder="e.g., #3 or #3, #4 or Upper Left or All"
             />
-            <p className="text-blue-200 text-sm mt-1">
+            <p className="text-t3 text-sm mt-1">
               Examples: "#3" for single tooth, "#3, #4" for multiple, "Upper Left", or "All"
             </p>
 
             {showToothPicker && (
-              <div className="mt-3 p-4 bg-slate-700/50 rounded-lg border border-blue-400/30">
-                <p className="text-blue-100 text-sm font-semibold mb-3">
+              <div className="mt-3 p-4 bg-bg2 rounded-lg border border-bd">
+                <p className="text-t2 text-sm font-semibold mb-3">
                   Tap to select/deselect teeth (1-32):
                 </p>
                 <div className="grid grid-cols-8 gap-2">
@@ -425,7 +425,7 @@ export default function AddProcedureDrawer({
                         onClick={() => toggleToothNumber(toothNum)}
                         className={`px-3 py-2 rounded-lg font-semibold text-sm transition-all ${
                           isSelected
-                            ? 'bg-blue-600 text-white border-2 border-blue-400' :'bg-slate-600 text-blue-200 border-2 border-slate-500 hover:bg-slate-500'
+                            ? 'bg-accent text-white border-2 border-accent' :'bg-bg2 text-t2 border-2 border-bd hover:bg-bg3'
                         }`}
                       >
                         {toothNum}
@@ -439,43 +439,43 @@ export default function AddProcedureDrawer({
 
           {/* Priority */}
           <div>
-            <label className="block text-blue-100 mb-2 text-base font-semibold">
+            <label className="block text-t2 mb-2 text-base font-semibold">
               Priority
             </label>
             <select
               value={formData?.priority}
               onChange={(e) => handleFieldChange('priority', e?.target?.value)}
-              className="w-full px-3 py-2 bg-slate-700 border-2 border-blue-400/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 focus:outline-none focus:border-accent"
             >
-              <option value="Urgent" className="bg-slate-800">Urgent</option>
-              <option value="Soon" className="bg-slate-800">Soon</option>
-              <option value="Later" className="bg-slate-800">Later</option>
+              <option value="Urgent" className="bg-bg1">Urgent</option>
+              <option value="Soon" className="bg-bg1">Soon</option>
+              <option value="Later" className="bg-bg1">Later</option>
             </select>
           </div>
 
           {/* Estimated Time */}
           <div>
-            <label className="block text-blue-100 mb-2 text-base font-semibold">
+            <label className="block text-t2 mb-2 text-base font-semibold">
               Estimated Time
             </label>
             <input
               type="text"
               value={formData?.estTime}
               onChange={(e) => handleFieldChange('estTime', e?.target?.value)}
-              className="w-full px-3 py-2 bg-slate-700 border-2 border-blue-400/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-accent"
               placeholder="60 minutes"
             />
           </div>
 
           {/* Notes for Patient */}
           <div>
-            <label className="block text-blue-100 mb-2 text-base font-semibold">
+            <label className="block text-t2 mb-2 text-base font-semibold">
               Notes for Patient
             </label>
             <textarea
               value={formData?.notesForPatient}
               onChange={(e) => handleFieldChange('notesForPatient', e?.target?.value)}
-              className="w-full px-3 py-2 bg-slate-700 border-2 border-blue-400/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-accent"
               rows="3"
               placeholder="Additional information for the patient..."
             />
@@ -483,17 +483,17 @@ export default function AddProcedureDrawer({
         </div>
 
         {/* Footer Actions */}
-        <div className="sticky bottom-0 bg-slate-800 border-t border-blue-400/30 p-6">
+        <div className="sticky bottom-0 bg-bg1 border-t border-bd p-6">
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-colors"
+              className="flex-1 px-6 py-3 bg-bg2 hover:bg-bg3 text-t1 font-bold rounded-xl transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors"
+              className="flex-1 px-6 py-3 bg-accent hover:brightness-110 text-white font-bold rounded-xl transition-colors"
             >
               Add Procedure
             </button>

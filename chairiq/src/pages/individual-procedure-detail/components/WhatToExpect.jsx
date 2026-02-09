@@ -16,9 +16,9 @@ const WhatToExpect = ({ content, isPersonalized = false, adaptedFor = null, lang
             {content?.expectSubtitle}
           </p>
           {isPersonalized && adaptedFor && (
-            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full">
-              <Icon name="Sparkles" size={16} className="text-purple-500" />
-              <span className="text-xs font-medium text-purple-500">
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/30 rounded-full">
+              <Icon name="Sparkles" size={16} className="text-accent" />
+              <span className="text-xs font-medium text-accent">
                 {language === 'en' 
                   ? `Adapted for ${adaptedFor?.learningPace} learners` 
                   : `Adaptado para estudiantes ${adaptedFor?.learningPace === 'fast' ? 'rápidos' : adaptedFor?.learningPace === 'slow' ? 'lentos' : 'moderados'}`}

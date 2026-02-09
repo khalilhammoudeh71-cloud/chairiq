@@ -21,13 +21,13 @@ export default function DeletePatientModal({ patient, onClose, onConfirm }) {
   const isConfirmValid = confirmText === 'DELETE';
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="max-w-md w-full bg-bg-1 border-danger/30">
+    <div className="fixed inset-0 bg-[var(--overlay)] backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="max-w-md w-full bg-bg1 border-danger/30">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
-              <AlertTriangle className="w-6 h-6 text-red-400" />
+            <div className="w-12 h-12 rounded-full bg-danger/10 flex items-center justify-center">
+              <AlertTriangle className="w-6 h-6 text-danger" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-t1">Delete Patient Profile</h2>
@@ -45,8 +45,8 @@ export default function DeletePatientModal({ patient, onClose, onConfirm }) {
 
         {/* Warning Content */}
         <div className="mb-6 space-y-4">
-          <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
-            <p className="text-red-200 text-sm font-medium mb-2">
+          <div className="p-4 bg-danger/10 border border-danger/30 rounded-lg">
+            <p className="text-danger text-sm font-medium mb-2">
               ⚠️ You are about to permanently delete:
             </p>
             <p className="text-t1 font-semibold">
@@ -70,7 +70,7 @@ export default function DeletePatientModal({ patient, onClose, onConfirm }) {
           {/* Confirmation Input */}
           <div className="mt-6">
             <label className="block text-t2 text-sm font-medium mb-2">
-              Type <span className="text-red-400 font-bold">DELETE</span> to confirm:
+              Type <span className="text-danger font-bold">DELETE</span> to confirm:
             </label>
             <input
               type="text"
@@ -78,7 +78,7 @@ export default function DeletePatientModal({ patient, onClose, onConfirm }) {
               onChange={(e) => setConfirmText(e?.target?.value)}
               disabled={isDeleting}
               placeholder="Type DELETE here"
-              className="w-full px-4 py-3 bg-bg-3 border border-border-1 rounded-lg text-t1 placeholder-t3 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+              className="w-full px-4 py-3 bg-bg3 border border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-danger disabled:opacity-50"
             />
           </div>
         </div>
@@ -88,14 +88,14 @@ export default function DeletePatientModal({ patient, onClose, onConfirm }) {
           <button
             onClick={onClose}
             disabled={isDeleting}
-            className="flex-1 px-4 py-3 bg-bg-3 hover:bg-bg-2 text-t1 rounded-lg font-medium transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-3 bg-bg3 hover:bg-bg2 text-t1 rounded-lg font-medium transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             onClick={handleDelete}
             disabled={!isConfirmValid || isDeleting}
-            className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-3 bg-danger hover:brightness-110 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isDeleting ? (
               <>

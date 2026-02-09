@@ -24,9 +24,8 @@ const TreatmentOverviewCard = ({ procedureCount, estimatedTimeline, heroImage, h
   const text = content?.[currentLanguage];
 
   return (
-    <div className="treatment-overview-card bg-card border-2 border-border rounded-lg shadow-medium overflow-hidden mb-8">
+    <div className="treatment-overview-card bg-card border-2 border-border rounded-lg shadow-md overflow-hidden mb-8">
       <div className="relative h-[70vh] md:h-[75vh] overflow-hidden">
-        {/* Animated Image with Cinematic Effects */}
         <motion.div
           initial={{ scale: 1 }}
           animate={{ 
@@ -47,7 +46,6 @@ const TreatmentOverviewCard = ({ procedureCount, estimatedTimeline, heroImage, h
           />
         </motion.div>
 
-        {/* Animated Gradient Overlay */}
         <motion.div 
           className="absolute inset-0"
           initial={{ opacity: 0.6 }}
@@ -60,25 +58,9 @@ const TreatmentOverviewCard = ({ procedureCount, estimatedTimeline, heroImage, h
             ease: "easeInOut"
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-[var(--overlay)]" />
         </motion.div>
 
-        {/* Animated Light Rays Effect */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent"
-          initial={{ x: '-100%', y: '-100%' }}
-          animate={{ 
-            x: ['100%', '-100%'],
-            y: ['100%', '-100%']
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-
-        {/* Animated Text Content */}
         <div className="absolute bottom-8 left-4 right-4 md:bottom-12 md:left-8 md:right-8">
           <motion.h2 
             className="text-3xl md:text-5xl lg:text-6xl font-bold font-heading text-white mb-2"
@@ -97,9 +79,8 @@ const TreatmentOverviewCard = ({ procedureCount, estimatedTimeline, heroImage, h
             {text?.overview}
           </motion.h2>
           
-          {/* Animated Accent Bar */}
           <motion.div
-            className="h-1 bg-gradient-to-r from-primary to-secondary rounded-full"
+            className="h-1 bg-accent rounded-full"
             initial={{ width: '0%' }}
             animate={{ 
               width: ['0%', '60%', '60%', '0%']
@@ -112,28 +93,6 @@ const TreatmentOverviewCard = ({ procedureCount, estimatedTimeline, heroImage, h
             }}
           />
         </div>
-
-        {/* Floating Particles Effect */}
-        {[...Array(5)]?.map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-white/20 rounded-full"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${30 + i * 10}%`,
-            }}
-            animate={{
-              y: [-20, -40, -20],
-              opacity: [0.2, 0.6, 0.2],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            }}
-          />
-        ))}
       </div>
       <div className="p-6">
         <p className="text-base text-card-foreground leading-relaxed mb-6">

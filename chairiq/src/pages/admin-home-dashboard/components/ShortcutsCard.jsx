@@ -14,7 +14,6 @@ export default function ShortcutsCard() {
       description: 'Start a new treatment plan',
       icon: Plus,
       path: '/create-patient-plan',
-      gradient: 'from-purple-600 to-blue-600',
     },
     {
       id: 2,
@@ -22,7 +21,6 @@ export default function ShortcutsCard() {
       description: 'Check engagement metrics',
       icon: BarChart3,
       path: '/dentist-admin-analytics-dashboard',
-      gradient: 'from-blue-600 to-cyan-600',
     },
     {
       id: 3,
@@ -30,7 +28,6 @@ export default function ShortcutsCard() {
       description: 'View all treatment explanations',
       icon: BookOpen,
       path: '/treatment-content-management-dashboard',
-      gradient: 'from-cyan-600 to-teal-600',
     },
     {
       id: 4,
@@ -38,7 +35,6 @@ export default function ShortcutsCard() {
       description: 'Edit existing treatment plans',
       icon: Edit3,
       path: '/admin-home-dashboard',
-      gradient: 'from-teal-600 to-green-600',
     },
   ];
 

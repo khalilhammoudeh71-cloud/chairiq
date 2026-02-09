@@ -31,7 +31,7 @@ const CompletionBadge = ({ size = 'large', showText = true, currentLanguage = 'e
 
   return (
     <div className="flex flex-col items-center space-y-3">
-      <div className={`${sizeClasses?.[size]} rounded-full bg-success/10 border-4 border-success/20 flex items-center justify-center shadow-lg animate-pulse`}>
+      <div className={`${sizeClasses?.[size]} rounded-full bg-success/10 border-4 border-success/20 flex items-center justify-center shadow-lg`}>
         <Icon 
           name="CheckCircle2" 
           size={iconSizes?.[size]} 

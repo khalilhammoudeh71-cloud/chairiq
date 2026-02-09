@@ -83,14 +83,13 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
 
   return (
     <div className="space-y-6">
-      {/* Upload Area */}
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
           isDragging
-            ? 'border-blue-500 bg-blue-500/10' :'border-gray-700 hover:border-gray-600'
+            ? 'border-accent bg-accent/10' :'border-bd hover:border-t3'
         }`}
       >
         <input
@@ -102,31 +101,30 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
           className="hidden"
         />
         
-        <Upload className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+        <Upload className="w-12 h-12 text-t3 mx-auto mb-4" />
         
-        <h3 className="text-lg font-semibold text-white mb-2">
+        <h3 className="text-lg font-semibold text-t1 mb-2">
           Upload Treatment Images
         </h3>
         
-        <p className="text-gray-400 mb-4">
+        <p className="text-t3 mb-4">
           Drag and drop images here, or click to browse
         </p>
         
         <button
           onClick={() => fileInputRef?.current?.click()}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
         >
           Select Images
         </button>
         
-        <p className="text-sm text-gray-500 mt-4">
+        <p className="text-sm text-t3 mt-4">
           Supported: JPG, PNG, GIF • Max size: 5MB per image
         </p>
       </div>
-      {/* Image Grid */}
       {images?.length > 0 ? (
         <div>
-          <h3 className="text-lg font-semibold text-white mb-4">
+          <h3 className="text-lg font-semibold text-t1 mb-4">
             Uploaded Images ({images?.length})
           </h3>
           
@@ -134,17 +132,15 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
             {images?.map((image) => (
               <div
                 key={image?.id}
-                className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden"
+                className="bg-bg3 rounded-lg border border-bd overflow-hidden"
               >
-                {/* Image Preview */}
-                <div className="relative aspect-video bg-gray-800">
+                <div className="relative aspect-video bg-bg2">
                   <img
                     src={image?.url || image?.src}
                     alt={image?.alt || 'Treatment image'}
                     className="w-full h-full object-cover"
                   />
                   
-                  {/* Action Buttons */}
                   <div className="absolute top-2 right-2 flex gap-2">
                     <button
                       onClick={() => setSelectedImage(image)}
@@ -154,53 +150,49 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
                     </button>
                     <button
                       onClick={() => handleDelete(image?.id)}
-                      className="p-2 bg-black/50 backdrop-blur-sm text-white rounded-lg hover:bg-red-600 transition-colors"
+                      className="p-2 bg-black/50 backdrop-blur-sm text-white rounded-lg hover:bg-danger transition-colors"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                {/* Image Details */}
                 <div className="p-4 space-y-3">
-                  {/* Alt Text */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-1">
+                    <label className="block text-xs font-medium text-t3 mb-1">
                       Alt Text (Accessibility)
                     </label>
                     <input
                       type="text"
                       value={image?.alt || ''}
                       onChange={(e) => handleUpdateAlt(image?.id, e?.target?.value)}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-bg2 border border-bd rounded text-t1 text-sm focus:border-accent focus:outline-none"
                       placeholder="Describe the image for accessibility"
                     />
                   </div>
 
-                  {/* Caption English */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-1">
+                    <label className="block text-xs font-medium text-t3 mb-1">
                       Caption (English)
                     </label>
                     <input
                       type="text"
                       value={image?.caption?.en || ''}
                       onChange={(e) => handleUpdateCaption(image?.id, 'en', e?.target?.value)}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-bg2 border border-bd rounded text-t1 text-sm focus:border-accent focus:outline-none"
                       placeholder="Image caption in English"
                     />
                   </div>
 
-                  {/* Caption Spanish */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-1">
+                    <label className="block text-xs font-medium text-t3 mb-1">
                       Caption (Español)
                     </label>
                     <input
                       type="text"
                       value={image?.caption?.es || ''}
                       onChange={(e) => handleUpdateCaption(image?.id, 'es', e?.target?.value)}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-bg2 border border-bd rounded text-t1 text-sm focus:border-accent focus:outline-none"
                       placeholder="Descripción de la imagen en español"
                     />
                   </div>
@@ -210,29 +202,28 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
           </div>
         </div>
       ) : (
-        <div className="text-center py-12 bg-gray-900 rounded-lg border border-gray-700">
-          <ImageIcon className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <p className="text-gray-400">No images uploaded yet</p>
-          <p className="text-sm text-gray-500 mt-2">
+        <div className="text-center py-12 bg-bg3 rounded-lg border border-bd">
+          <ImageIcon className="w-16 h-16 text-t2 mx-auto mb-4" />
+          <p className="text-t3">No images uploaded yet</p>
+          <p className="text-sm text-t3 mt-2">
             Add images to enhance the treatment documentation
           </p>
         </div>
       )}
-      {/* Image Preview Modal */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-[var(--overlay)] backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
         >
           <div className="max-w-4xl w-full" onClick={(e) => e?.stopPropagation()}>
-            <div className="bg-gray-800 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b border-gray-700">
-                <h3 className="text-lg font-semibold text-white">Image Preview</h3>
+            <div className="bg-bg2 rounded-xl overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b border-bd">
+                <h3 className="text-lg font-semibold text-t1">Image Preview</h3>
                 <button
                   onClick={() => setSelectedImage(null)}
-                  className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                  className="p-2 hover:bg-bg3 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-white" />
+                  <X className="w-5 h-5 text-t1" />
                 </button>
               </div>
               
@@ -244,7 +235,7 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
                 />
                 
                 {selectedImage?.caption?.en && (
-                  <p className="text-gray-300 text-center mt-4">
+                  <p className="text-t3 text-center mt-4">
                     {selectedImage?.caption?.en}
                   </p>
                 )}

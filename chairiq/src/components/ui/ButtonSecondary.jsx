@@ -18,7 +18,7 @@ export default function ButtonSecondary({
       disabled={disabled || loading}
       className={`
         bg-bg0 hover:bg-bg2 text-t1 font-medium rounded-md border border-bd
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/20 focus-visible:ring-offset-2 focus-visible:ring-offset-bg0
+        focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent/20
         disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-bg0
         transition-colors duration-150
         flex items-center justify-center gap-2

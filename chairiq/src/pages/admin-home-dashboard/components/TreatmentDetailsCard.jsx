@@ -129,24 +129,24 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
 
   const getPriorityColor = (priority) => {
     const colors = {
-      Immediate: 'bg-red-500/20 text-red-200 border-red-500/30',
-      Soon: 'bg-yellow-500/20 text-yellow-200 border-yellow-500/30',
-      Future: 'bg-blue-500/20 text-blue-200 border-blue-500/30',
+      Immediate: 'bg-danger/10 text-danger border-danger/30',
+      Soon: 'bg-warning/10 text-warning border-warning/30',
+      Future: 'bg-accent/10 text-accent border-accent/30',
     };
     return colors?.[priority] || colors?.Soon;
   };
 
   const getCompletionStatus = (completion) => {
     if (!completion) {
-      return { text: 'Not Started', color: 'text-gray-400', icon: Clock };
+      return { text: 'Not Started', color: 'text-t3', icon: Clock };
     }
     if (completion?.completedAt) {
-      return { text: 'Completed', color: 'text-green-400', icon: CheckCircle };
+      return { text: 'Completed', color: 'text-success', icon: CheckCircle };
     }
     if (completion?.viewedAt) {
-      return { text: `${completion?.completionPercentage}% Complete`, color: 'text-yellow-400', icon: Clock };
+      return { text: `${completion?.completionPercentage}% Complete`, color: 'text-warning', icon: Clock };
     }
-    return { text: 'Not Started', color: 'text-gray-400', icon: Clock };
+    return { text: 'Not Started', color: 'text-t3', icon: Clock };
   };
 
   if (!selectedPatient) {
@@ -166,20 +166,20 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
         <h2 className="text-2xl font-bold text-t1 mb-6">Treatment Details</h2>
         
         {error && (
-          <div className="mb-4 p-3 bg-red-900/20 border border-red-500 rounded-lg">
-            <p className="text-red-200 text-sm">{error}</p>
+          <div className="mb-4 p-3 bg-danger/10 border border-danger rounded-lg">
+            <p className="text-danger text-sm">{error}</p>
           </div>
         )}
 
         {resendSuccess && (
-          <div className="mb-4 p-3 bg-green-900/20 border border-green-500 rounded-lg">
-            <p className="text-green-200 text-sm">✅ SMS link resent successfully!</p>
+          <div className="mb-4 p-3 bg-success/10 border border-success rounded-lg">
+            <p className="text-success text-sm">✅ SMS link resent successfully!</p>
           </div>
         )}
 
         {deleteSuccess && (
-          <div className="mb-4 p-3 bg-green-900/20 border border-green-500 rounded-lg">
-            <p className="text-green-200 text-sm">✅ Patient profile deleted successfully!</p>
+          <div className="mb-4 p-3 bg-success/10 border border-success rounded-lg">
+            <p className="text-success text-sm">✅ Patient profile deleted successfully!</p>
           </div>
         )}
 
@@ -199,7 +199,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
               </div>
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+                className="px-4 py-2 bg-danger hover:brightness-110 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                 title="Permanently delete patient profile and all associated data"
               >
                 <Trash2 className="w-4 h-4" />
@@ -210,7 +210,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
             {/* Treatment Plans List */}
             <div className="space-y-3">
               {patientDetails?.treatmentPlans?.map((plan) => (
-                <div key={plan?.id} className="p-4 bg-bg-3 rounded-lg border border-border-1">
+                <div key={plan?.id} className="p-4 bg-bg3 rounded-lg border border-bd">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <p className="text-t1 font-medium">{plan?.practiceName}</p>
@@ -222,7 +222,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleModifyPlan(plan?.id)}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+                        className="px-4 py-2 bg-accent hover:brightness-110 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                         title="Modify treatment plan by adding or removing procedures"
                       >
                         <Edit className="w-4 h-4" />
@@ -253,7 +253,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
 
                   {/* Procedures Summary */}
                   {plan?.procedures?.length > 0 && (
-                    <div className="space-y-2 mt-3 pt-3 border-t border-border-1">
+                    <div className="space-y-2 mt-3 pt-3 border-t border-bd">
                       {plan?.procedures?.slice(0, 3)?.map((proc) => (
                         <div key={proc?.id} className="flex items-center justify-between text-sm">
                           <span className="text-t2">{proc?.procedureName}</span>

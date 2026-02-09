@@ -170,13 +170,13 @@ const EnhancedImageViewer = ({
   return (
     <div className="enhanced-image-viewer-container">
       {/* Header with title and controls */}
-      <div className="flex items-center justify-between p-4 bg-slate-900 border-b border-slate-700">
+      <div className="flex items-center justify-between p-4 bg-bg3 border-b border-bd">
         <div className="flex items-center gap-4">
-          <h3 className="text-lg font-semibold text-slate-100 truncate max-w-md">
+          <h3 className="text-lg font-semibold text-t1 truncate max-w-md">
             {title}
           </h3>
           {!comparisonMode && hasMultipleImages && (
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-t3">
               {currentIndex + 1} / {images?.length}
             </span>
           )}
@@ -184,7 +184,7 @@ const EnhancedImageViewer = ({
         
         <div className="flex items-center gap-2">
           {/* Keyboard shortcuts hint */}
-          <div className="hidden md:block text-xs text-slate-400 mr-4">
+          <div className="hidden md:block text-xs text-t3 mr-4">
             {language === 'en' ? 'Keyboard: +/- zoom, R rotate, C compare, Esc close' : 'Teclado: +/- zoom, R rotar, C comparar, Esc cerrar'}
           </div>
           
@@ -193,7 +193,7 @@ const EnhancedImageViewer = ({
             size="icon"
             onClick={onClose}
             iconName="X"
-            className="text-slate-300 hover:text-white hover:bg-slate-800/80"
+            className="text-t3 hover:text-t1 hover:bg-bg2/80"
             aria-label={language === 'en' ? 'Close' : 'Cerrar'}
           />
         </div>
@@ -231,7 +231,7 @@ const EnhancedImageViewer = ({
           <div className="w-full h-full flex items-center justify-center gap-2 p-4">
             {comparisonImages?.map((imgIndex, position) => (
               <div key={position} className="flex-1 h-full flex flex-col items-center justify-center gap-2">
-                <div className="relative w-full h-full flex items-center justify-center bg-slate-900/40 rounded border border-slate-700">
+                <div className="relative w-full h-full flex items-center justify-center bg-bg3/40 rounded border border-bd">
                   <img
                     src={images?.[imgIndex]?.src}
                     alt={images?.[imgIndex]?.alt}
@@ -240,15 +240,15 @@ const EnhancedImageViewer = ({
                   />
                   
                   {/* Navigation buttons for comparison images */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-slate-900 rounded px-3 py-2 border border-slate-700">
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-bg3 rounded px-3 py-2 border border-bd">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleComparisonImageChange(position, -1)}
                       iconName="ChevronLeft"
-                      className="text-slate-300 hover:text-white hover:bg-slate-800/80"
+                      className="text-t3 hover:text-t1 hover:bg-bg2/80"
                     />
-                    <span className="text-sm text-slate-200 font-medium px-2">
+                    <span className="text-sm text-t2 font-medium px-2">
                       {imgIndex + 1} / {images?.length}
                     </span>
                     <Button
@@ -256,13 +256,13 @@ const EnhancedImageViewer = ({
                       size="sm"
                       onClick={() => handleComparisonImageChange(position, 1)}
                       iconName="ChevronRight"
-                      className="text-slate-300 hover:text-white hover:bg-slate-800/80"
+                      className="text-t3 hover:text-t1 hover:bg-bg2/80"
                     />
                   </div>
                 </div>
                 
                 {/* Image description */}
-                <p className="text-sm text-slate-300 text-center max-w-md line-clamp-2">
+                <p className="text-sm text-t3 text-center max-w-md line-clamp-2">
                   {images?.[imgIndex]?.alt}
                 </p>
               </div>
@@ -275,7 +275,7 @@ const EnhancedImageViewer = ({
           <>
             <button
               onClick={handlePrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 rounded p-3"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-bg3 hover:bg-bg2 text-t2 hover:text-t1 border border-bd rounded p-3"
               aria-label={language === 'en' ? 'Previous image' : 'Imagen anterior'}
             >
               <Icon name="ChevronLeft" size={24} />
@@ -283,7 +283,7 @@ const EnhancedImageViewer = ({
             
             <button
               onClick={handleNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 rounded p-3"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-bg3 hover:bg-bg2 text-t2 hover:text-t1 border border-bd rounded p-3"
               aria-label={language === 'en' ? 'Next image' : 'Siguiente imagen'}
             >
               <Icon name="ChevronRight" size={24} />
@@ -293,22 +293,22 @@ const EnhancedImageViewer = ({
       </div>
 
       {/* Bottom toolbar */}
-      <div className="bg-slate-900 border-t border-slate-700 p-4">
+      <div className="bg-bg3 border-t border-bd p-4">
         <div className="flex items-center justify-center gap-2 flex-wrap">
           {/* Zoom controls */}
           {!comparisonMode && (
             <>
-              <div className="flex items-center gap-1 bg-slate-800 rounded p-1 border border-slate-700">
+              <div className="flex items-center gap-1 bg-bg2 rounded p-1 border border-bd">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleZoomOut}
                   iconName="ZoomOut"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700/80"
+                  className="text-t3 hover:text-t1 hover:bg-bg3/80"
                   disabled={zoom <= 0.5}
                   aria-label={language === 'en' ? 'Zoom out' : 'Alejar'}
                 />
-                <span className="text-slate-200 text-sm font-medium px-3 min-w-[4rem] text-center">
+                <span className="text-t2 text-sm font-medium px-3 min-w-[4rem] text-center">
                   {Math.round(zoom * 100)}%
                 </span>
                 <Button
@@ -316,7 +316,7 @@ const EnhancedImageViewer = ({
                   size="sm"
                   onClick={handleZoomIn}
                   iconName="ZoomIn"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700/80"
+                  className="text-t3 hover:text-t1 hover:bg-bg3/80"
                   disabled={zoom >= 5}
                   aria-label={language === 'en' ? 'Zoom in' : 'Acercar'}
                 />
@@ -325,22 +325,22 @@ const EnhancedImageViewer = ({
                   size="sm"
                   onClick={handleResetZoom}
                   iconName="Maximize2"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700/80 ml-1"
+                  className="text-t3 hover:text-t1 hover:bg-bg3/80 ml-1"
                   aria-label={language === 'en' ? 'Reset zoom' : 'Restablecer zoom'}
                 />
               </div>
 
               {/* Rotation controls */}
-              <div className="flex items-center gap-1 bg-slate-800 rounded p-1 border border-slate-700">
+              <div className="flex items-center gap-1 bg-bg2 rounded p-1 border border-bd">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleRotateLeft}
                   iconName="RotateCcw"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700/80"
+                  className="text-t3 hover:text-t1 hover:bg-bg3/80"
                   aria-label={language === 'en' ? 'Rotate left' : 'Rotar izquierda'}
                 />
-                <span className="text-slate-200 text-sm font-medium px-3 min-w-[4rem] text-center">
+                <span className="text-t2 text-sm font-medium px-3 min-w-[4rem] text-center">
                   {rotation}°
                 </span>
                 <Button
@@ -348,7 +348,7 @@ const EnhancedImageViewer = ({
                   size="sm"
                   onClick={handleRotateRight}
                   iconName="RotateCw"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700/80"
+                  className="text-t3 hover:text-t1 hover:bg-bg3/80"
                   aria-label={language === 'en' ? 'Rotate right' : 'Rotar derecha'}
                 />
                 <Button
@@ -356,7 +356,7 @@ const EnhancedImageViewer = ({
                   size="sm"
                   onClick={handleResetRotation}
                   iconName="RefreshCw"
-                  className="text-slate-300 hover:text-white hover:bg-slate-700/80 ml-1"
+                  className="text-t3 hover:text-t1 hover:bg-bg3/80 ml-1"
                   aria-label={language === 'en' ? 'Reset rotation' : 'Restablecer rotación'}
                 />
               </div>
@@ -372,7 +372,7 @@ const EnhancedImageViewer = ({
               iconName="Columns2"
               iconPosition="left"
               className={comparisonMode 
-                ? 'bg-teal-600 hover:bg-teal-700 text-white border-0' :'text-slate-300 hover:text-white border-slate-600 hover:border-slate-500 bg-slate-800/50 hover:bg-slate-800/80'
+                ? 'bg-success hover:brightness-110 text-white border-0' :'text-t3 hover:text-t1 border-bd hover:border-bd bg-bg2/50 hover:bg-bg2/80'
               }
             >
               {language === 'en' ? 'Compare' : 'Comparar'}
@@ -381,7 +381,7 @@ const EnhancedImageViewer = ({
         </div>
         
         {/* Help text */}
-        <div className="text-center mt-3 text-xs text-slate-400">
+        <div className="text-center mt-3 text-xs text-t3">
           {!comparisonMode ? (
             language === 'en' ?'Zoom in to enable image panning • Use mouse wheel or pinch to zoom' :'Aumente el zoom para habilitar el desplazamiento • Use la rueda del mouse o pellizque para hacer zoom'
           ) : (

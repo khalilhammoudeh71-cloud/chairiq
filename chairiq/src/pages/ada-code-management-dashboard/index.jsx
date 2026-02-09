@@ -350,10 +350,10 @@ const AdaCodeManagementDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-t1 mb-2">
             ADA Code Management Dashboard
           </h1>
-          <p className="text-gray-600">
+          <p className="text-t2">
             Manage ADA procedure codes and their mappings to canonical procedures
           </p>
         </div>
@@ -361,7 +361,7 @@ const AdaCodeManagementDashboard = () => {
         {/* Notification */}
         {notification && (
           <div className={`mb-6 p-4 rounded-lg flex items-center justify-between ${
-            notification?.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+            notification?.type === 'success' ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
           }`}>
             <div className="flex items-center">
               {notification?.type === 'success' ? (
@@ -373,7 +373,7 @@ const AdaCodeManagementDashboard = () => {
             </div>
             <button
               onClick={() => setNotification(null)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-t3 hover:text-t2"
             >
               <X className="h-5 w-5" />
             </button>
@@ -383,67 +383,67 @@ const AdaCodeManagementDashboard = () => {
         {/* Statistics Cards */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-bg1 rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Codes</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats?.total}</p>
+                  <p className="text-sm text-t2">Total Codes</p>
+                  <p className="text-2xl font-bold text-t1">{stats?.total}</p>
                 </div>
-                <FileText className="h-8 w-8 text-blue-500" />
+                <FileText className="h-8 w-8 text-accent" />
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-bg1 rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Mapped</p>
-                  <p className="text-2xl font-bold text-green-600">{stats?.mapped}</p>
+                  <p className="text-sm text-t2">Mapped</p>
+                  <p className="text-2xl font-bold text-success">{stats?.mapped}</p>
                 </div>
-                <MapPin className="h-8 w-8 text-green-500" />
+                <MapPin className="h-8 w-8 text-success" />
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-bg1 rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Unmapped</p>
-                  <p className="text-2xl font-bold text-orange-600">{stats?.unmapped}</p>
+                  <p className="text-sm text-t2">Unmapped</p>
+                  <p className="text-2xl font-bold text-warning">{stats?.unmapped}</p>
                 </div>
-                <AlertCircle className="h-8 w-8 text-orange-500" />
+                <AlertCircle className="h-8 w-8 text-warning" />
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-bg1 rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Active</p>
-                  <p className="text-2xl font-bold text-green-600">{stats?.active}</p>
+                  <p className="text-sm text-t2">Active</p>
+                  <p className="text-2xl font-bold text-success">{stats?.active}</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-green-500" />
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-bg1 rounded-lg shadow p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Coverage</p>
-                  <p className="text-2xl font-bold text-blue-600">{stats?.mappingPercentage}%</p>
+                  <p className="text-sm text-t2">Coverage</p>
+                  <p className="text-2xl font-bold text-accent">{stats?.mappingPercentage}%</p>
                 </div>
-                <TrendingUp className="h-8 w-8 text-blue-500" />
+                <TrendingUp className="h-8 w-8 text-accent" />
               </div>
             </div>
           </div>
         )}
 
         {/* Toolbar */}
-        <div className="bg-white rounded-lg shadow mb-6 p-4">
+        <div className="bg-bg1 rounded-lg shadow mb-6 p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search */}
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-t3" />
                 <input
                   type="text"
                   placeholder="Search by code or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e?.target?.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
                 />
               </div>
             </div>
@@ -453,7 +453,7 @@ const AdaCodeManagementDashboard = () => {
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e?.target?.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
               >
                 <option value="all">All Categories</option>
                 {categories?.map(cat => (
@@ -464,7 +464,7 @@ const AdaCodeManagementDashboard = () => {
               <select
                 value={filterMappingStatus}
                 onChange={(e) => setFilterMappingStatus(e?.target?.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
               >
                 <option value="all">All Mappings</option>
                 <option value="mapped">Mapped</option>
@@ -474,7 +474,7 @@ const AdaCodeManagementDashboard = () => {
               <select
                 value={filterActiveStatus}
                 onChange={(e) => setFilterActiveStatus(e?.target?.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -486,7 +486,7 @@ const AdaCodeManagementDashboard = () => {
             <div className="flex gap-2">
               <button
                 onClick={handleRunAudit}
-                className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-warning text-white rounded-lg hover:brightness-110 transition-colors"
               >
                 <Shield className="h-5 w-5" />
                 Run Audit
@@ -494,7 +494,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
               >
                 <Plus className="h-5 w-5" />
                 Add Code
@@ -502,7 +502,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-lg hover:brightness-110 transition-colors"
               >
                 <Download className="h-5 w-5" />
                 Export
@@ -510,7 +510,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={() => setShowBulkImport(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
               >
                 <Upload className="h-5 w-5" />
                 Import
@@ -518,7 +518,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={loadData}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-bg3 text-t1 rounded-lg hover:brightness-110 transition-colors"
               >
                 <RefreshCw className="h-5 w-5" />
                 Refresh
@@ -528,48 +528,48 @@ const AdaCodeManagementDashboard = () => {
         </div>
 
         {/* ADA Codes Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-bg1 rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-bg1">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-t3 uppercase tracking-wider">
                       ADA Code
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-t3 uppercase tracking-wider">
                       Description
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-t3 uppercase tracking-wider">
                       Canonical Procedure
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-t3 uppercase tracking-wider">
                       Category
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-t3 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-t3 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-bg0 divide-y divide-bd">
                   {filteredCodes?.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan="6" className="px-6 py-8 text-center text-t3">
                         No ADA codes found matching your filters
                       </td>
                     </tr>
                   ) : (
                     filteredCodes?.map((code) => (
-                      <tr key={code?.code} className="hover:bg-gray-50">
+                      <tr key={code?.code} className="hover:bg-bg1">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-t1">
                             {code?.code}
                           </div>
                         </td>
@@ -579,10 +579,10 @@ const AdaCodeManagementDashboard = () => {
                               type="text"
                               value={formData?.description}
                               onChange={(e) => setFormData({ ...formData, description: e?.target?.value })}
-                              className="w-full px-2 py-1 border border-gray-300 rounded"
+                              className="w-full px-2 py-1 border border-bd rounded"
                             />
                           ) : (
-                            <div className="text-sm text-gray-900">{code?.description}</div>
+                            <div className="text-sm text-t1">{code?.description}</div>
                           )}
                         </td>
                         <td className="px-6 py-4">
@@ -590,7 +590,7 @@ const AdaCodeManagementDashboard = () => {
                             <select
                               value={formData?.canonicalSlug}
                               onChange={(e) => setFormData({ ...formData, canonicalSlug: e?.target?.value })}
-                              className="w-full px-2 py-1 border border-gray-300 rounded"
+                              className="w-full px-2 py-1 border border-bd rounded"
                             >
                               <option value="">-- No Mapping --</option>
                               {canonicalProcedures?.map(proc => (
@@ -603,7 +603,7 @@ const AdaCodeManagementDashboard = () => {
                             <select
                               value={code?.canonical_slug || ''}
                               onChange={(e) => handleMappingChange(code?.code, e?.target?.value)}
-                              className="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500"
+                              className="text-sm border border-bd rounded px-2 py-1 focus:border-accent focus:outline-none"
                             >
                               <option value="">-- No Mapping --</option>
                               {canonicalProcedures?.map(proc => (
@@ -615,7 +615,7 @@ const AdaCodeManagementDashboard = () => {
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-bg2 text-t1">
                             {code?.canonical_procedures?.category || 'N/A'}
                           </span>
                         </td>
@@ -624,7 +624,7 @@ const AdaCodeManagementDashboard = () => {
                             <select
                               value={formData?.isActive ? 'active' : 'inactive'}
                               onChange={(e) => setFormData({ ...formData, isActive: e?.target?.value === 'active' })}
-                              className="text-sm border border-gray-300 rounded px-2 py-1"
+                              className="text-sm border border-bd rounded px-2 py-1"
                             >
                               <option value="active">Active</option>
                               <option value="inactive">Inactive</option>
@@ -632,7 +632,7 @@ const AdaCodeManagementDashboard = () => {
                           ) : (
                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                               code?.is_active 
-                                ? 'bg-green-100 text-green-800' :'bg-gray-100 text-gray-800'
+                                ? 'bg-success/10 text-success' :'bg-bg2 text-t1'
                             }`}>
                               {code?.is_active ? 'Active' : 'Inactive'}
                             </span>
@@ -643,13 +643,13 @@ const AdaCodeManagementDashboard = () => {
                             <div className="flex gap-2">
                               <button
                                 onClick={handleSaveEdit}
-                                className="text-green-600 hover:text-green-900"
+                                className="text-success hover:brightness-110"
                               >
                                 <Save className="h-5 w-5" />
                               </button>
                               <button
                                 onClick={handleCancelEdit}
-                                className="text-gray-600 hover:text-gray-900"
+                                className="text-t2 hover:text-t1"
                               >
                                 <X className="h-5 w-5" />
                               </button>
@@ -658,13 +658,13 @@ const AdaCodeManagementDashboard = () => {
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleEditCode(code)}
-                                className="text-blue-600 hover:text-blue-900"
+                                className="text-accent hover:brightness-110"
                               >
                                 <Edit2 className="h-5 w-5" />
                               </button>
                               <button
                                 onClick={() => handleDeleteCode(code?.code)}
-                                className="text-red-600 hover:text-red-900"
+                                className="text-danger hover:brightness-110"
                               >
                                 <Trash2 className="h-5 w-5" />
                               </button>
@@ -681,19 +681,19 @@ const AdaCodeManagementDashboard = () => {
         </div>
 
         {/* Results count */}
-        <div className="mt-4 text-sm text-gray-600 text-center">
+        <div className="mt-4 text-sm text-t2 text-center">
           Showing {filteredCodes?.length} of {adaCodes?.length} ADA codes
         </div>
       </div>
       {/* Add Code Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-[var(--overlay)] flex items-center justify-center z-50 p-4">
+          <div className="bg-bg1 rounded-lg shadow-lg max-w-md w-full p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Add New ADA Code</h2>
+              <h2 className="text-xl font-bold text-t1">Add New ADA Code</h2>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-t3 hover:text-t2"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -701,7 +701,7 @@ const AdaCodeManagementDashboard = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-t2 mb-1">
                   ADA Code *
                 </label>
                 <input
@@ -709,12 +709,12 @@ const AdaCodeManagementDashboard = () => {
                   value={formData?.code}
                   onChange={(e) => setFormData({ ...formData, code: e?.target?.value })}
                   placeholder="e.g., D2740"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-t2 mb-1">
                   Description *
                 </label>
                 <textarea
@@ -722,18 +722,18 @@ const AdaCodeManagementDashboard = () => {
                   onChange={(e) => setFormData({ ...formData, description: e?.target?.value })}
                   placeholder="Enter procedure description"
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-t2 mb-1">
                   Canonical Procedure
                 </label>
                 <select
                   value={formData?.canonicalSlug}
                   onChange={(e) => setFormData({ ...formData, canonicalSlug: e?.target?.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-bd rounded-lg focus:border-accent focus:outline-none"
                 >
                   <option value="">-- No Mapping --</option>
                   {canonicalProcedures?.map(proc => (
@@ -750,9 +750,9 @@ const AdaCodeManagementDashboard = () => {
                   id="isActive"
                   checked={formData?.isActive}
                   onChange={(e) => setFormData({ ...formData, isActive: e?.target?.checked })}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-accent focus:border-accent border-bd rounded"
                 />
-                <label htmlFor="isActive" className="ml-2 text-sm text-gray-700">
+                <label htmlFor="isActive" className="ml-2 text-sm text-t2">
                   Active
                 </label>
               </div>
@@ -762,13 +762,13 @@ const AdaCodeManagementDashboard = () => {
               <button
                 onClick={handleAddCode}
                 disabled={!formData?.code || !formData?.description}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Add Code
               </button>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                className="flex-1 bg-bg2 text-t1 px-4 py-2 rounded-lg hover:bg-bg3 transition-colors"
               >
                 Cancel
               </button>
@@ -778,22 +778,22 @@ const AdaCodeManagementDashboard = () => {
       )}
       {/* Bulk Import Modal */}
       {showBulkImport && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+        <div className="fixed inset-0 bg-[var(--overlay)] flex items-center justify-center z-50 p-4">
+          <div className="bg-bg1 rounded-lg shadow-lg max-w-lg w-full p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Bulk Import ADA Codes</h2>
+              <h2 className="text-xl font-bold text-t1">Bulk Import ADA Codes</h2>
               <button
                 onClick={() => setShowBulkImport(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-t3 hover:text-t2"
               >
                 <X className="h-6 w-6" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">CSV Format Requirements:</h3>
-                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
+                <h3 className="font-semibold text-accent mb-2">CSV Format Requirements:</h3>
+                <ul className="text-sm text-accent space-y-1 list-disc list-inside">
                   <li>Required columns: Code, Description, Canonical Slug</li>
                   <li>Optional column: Is Active (Yes/No)</li>
                   <li>First row must contain column headers</li>
@@ -801,9 +801,9 @@ const AdaCodeManagementDashboard = () => {
                 </ul>
               </div>
 
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-sm text-gray-600 mb-4">
+              <div className="border-2 border-dashed border-bd rounded-lg p-8 text-center">
+                <Upload className="h-12 w-12 text-t3 mx-auto mb-3" />
+                <p className="text-sm text-t2 mb-4">
                   Click to select CSV file or drag and drop
                 </p>
                 <input
@@ -815,7 +815,7 @@ const AdaCodeManagementDashboard = () => {
                 />
                 <button
                   onClick={() => fileInputRef?.current?.click()}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="bg-accent text-white px-6 py-2 rounded-lg hover:brightness-110 transition-colors"
                 >
                   Select CSV File
                 </button>
@@ -825,7 +825,7 @@ const AdaCodeManagementDashboard = () => {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setShowBulkImport(false)}
-                className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                className="flex-1 bg-bg2 text-t1 px-4 py-2 rounded-lg hover:bg-bg3 transition-colors"
               >
                 Close
               </button>
@@ -836,13 +836,13 @@ const AdaCodeManagementDashboard = () => {
 
       {/* Audit Results Modal */}
       {showAuditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full p-6 my-8">
+        <div className="fixed inset-0 bg-[var(--overlay)] flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-bg1 rounded-lg shadow-lg max-w-6xl w-full p-6 my-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Bulk Audit Results</h2>
+              <h2 className="text-2xl font-bold text-t1">Bulk Audit Results</h2>
               <button
                 onClick={() => setShowAuditModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-t3 hover:text-t2"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -850,35 +850,35 @@ const AdaCodeManagementDashboard = () => {
 
             {auditLoading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warning"></div>
               </div>
             ) : auditResults ? (
               <div className="space-y-6">
                 {/* Summary Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                  <div className="bg-blue-50 rounded-lg p-4">
-                    <p className="text-sm text-blue-800 font-medium">Total ADA Codes</p>
-                    <p className="text-2xl font-bold text-blue-900">{auditResults?.summary?.total_ada_codes}</p>
+                  <div className="bg-accent/10 rounded-lg p-4">
+                    <p className="text-sm text-accent font-medium">Total ADA Codes</p>
+                    <p className="text-2xl font-bold text-accent">{auditResults?.summary?.total_ada_codes}</p>
                   </div>
-                  <div className="bg-orange-50 rounded-lg p-4">
-                    <p className="text-sm text-orange-800 font-medium">Unmapped Codes</p>
-                    <p className="text-2xl font-bold text-orange-900">{auditResults?.summary?.unmapped_ada_codes}</p>
+                  <div className="bg-warning/10 rounded-lg p-4">
+                    <p className="text-sm text-warning font-medium">Unmapped Codes</p>
+                    <p className="text-2xl font-bold text-warning">{auditResults?.summary?.unmapped_ada_codes}</p>
                   </div>
-                  <div className="bg-red-50 rounded-lg p-4">
-                    <p className="text-sm text-red-800 font-medium">Missing Visuals</p>
-                    <p className="text-2xl font-bold text-red-900">{auditResults?.summary?.procedures_missing_visuals}</p>
+                  <div className="bg-danger/10 rounded-lg p-4">
+                    <p className="text-sm text-danger font-medium">Missing Visuals</p>
+                    <p className="text-2xl font-bold text-danger">{auditResults?.summary?.procedures_missing_visuals}</p>
                   </div>
-                  <div className="bg-yellow-50 rounded-lg p-4">
-                    <p className="text-sm text-yellow-800 font-medium">Incomplete Bilingual</p>
-                    <p className="text-2xl font-bold text-yellow-900">{auditResults?.summary?.incomplete_bilingual_content}</p>
+                  <div className="bg-warning/10 rounded-lg p-4">
+                    <p className="text-sm text-warning font-medium">Incomplete Bilingual</p>
+                    <p className="text-2xl font-bold text-warning">{auditResults?.summary?.incomplete_bilingual_content}</p>
                   </div>
-                  <div className="bg-purple-50 rounded-lg p-4">
-                    <p className="text-sm text-purple-800 font-medium">Canonical Conflicts</p>
-                    <p className="text-2xl font-bold text-purple-900">{auditResults?.summary?.canonical_conflicts}</p>
+                  <div className="bg-bg3 rounded-lg p-4">
+                    <p className="text-sm text-accent font-medium">Canonical Conflicts</p>
+                    <p className="text-2xl font-bold text-accent">{auditResults?.summary?.canonical_conflicts}</p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-800 font-medium">Total Issues</p>
-                    <p className="text-2xl font-bold text-gray-900">{auditResults?.summary?.total_issues}</p>
+                  <div className="bg-bg1 rounded-lg p-4">
+                    <p className="text-sm text-t1 font-medium">Total Issues</p>
+                    <p className="text-2xl font-bold text-t1">{auditResults?.summary?.total_issues}</p>
                   </div>
                 </div>
 
@@ -886,27 +886,27 @@ const AdaCodeManagementDashboard = () => {
                 <div className="space-y-4">
                   {/* Unmapped ADA Codes */}
                   {auditResults?.details?.unmapped_ada_codes?.length > 0 && (
-                    <div className="bg-white border border-orange-200 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-orange-900 mb-3 flex items-center gap-2">
+                    <div className="bg-bg0 border border-warning/20 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-warning mb-3 flex items-center gap-2">
                         <AlertCircle className="h-5 w-5" />
                         Unmapped ADA Codes ({auditResults?.details?.unmapped_ada_codes?.length})
                       </h3>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
-                          <thead className="bg-orange-50">
+                          <thead className="bg-warning/10">
                             <tr>
-                              <th className="px-4 py-2 text-left font-medium text-orange-900">Code</th>
-                              <th className="px-4 py-2 text-left font-medium text-orange-900">Description</th>
-                              <th className="px-4 py-2 text-left font-medium text-orange-900">Severity</th>
+                              <th className="px-4 py-2 text-left font-medium text-warning">Code</th>
+                              <th className="px-4 py-2 text-left font-medium text-warning">Description</th>
+                              <th className="px-4 py-2 text-left font-medium text-warning">Severity</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-orange-100">
+                          <tbody className="divide-y divide-warning/10">
                             {auditResults?.details?.unmapped_ada_codes?.map((item, index) => (
-                              <tr key={index} className="hover:bg-orange-50">
+                              <tr key={index} className="hover:bg-warning/10">
                                 <td className="px-4 py-2 font-medium">{item?.code}</td>
                                 <td className="px-4 py-2">{item?.description}</td>
                                 <td className="px-4 py-2">
-                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800">
+                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-warning/10 text-warning">
                                     {item?.severity}
                                   </span>
                                 </td>
@@ -920,29 +920,29 @@ const AdaCodeManagementDashboard = () => {
 
                   {/* Procedures Missing Visuals */}
                   {auditResults?.details?.procedures_missing_visuals?.length > 0 && (
-                    <div className="bg-white border border-red-200 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-red-900 mb-3 flex items-center gap-2">
+                    <div className="bg-bg0 border border-danger/20 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-danger mb-3 flex items-center gap-2">
                         <AlertCircle className="h-5 w-5" />
                         Procedures Missing Visuals ({auditResults?.details?.procedures_missing_visuals?.length})
                       </h3>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
-                          <thead className="bg-red-50">
+                          <thead className="bg-danger/10">
                             <tr>
-                              <th className="px-4 py-2 text-left font-medium text-red-900">Slug</th>
-                              <th className="px-4 py-2 text-left font-medium text-red-900">Display Name</th>
-                              <th className="px-4 py-2 text-left font-medium text-red-900">Category</th>
-                              <th className="px-4 py-2 text-left font-medium text-red-900">Severity</th>
+                              <th className="px-4 py-2 text-left font-medium text-danger">Slug</th>
+                              <th className="px-4 py-2 text-left font-medium text-danger">Display Name</th>
+                              <th className="px-4 py-2 text-left font-medium text-danger">Category</th>
+                              <th className="px-4 py-2 text-left font-medium text-danger">Severity</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-red-100">
+                          <tbody className="divide-y divide-danger/10">
                             {auditResults?.details?.procedures_missing_visuals?.map((item, index) => (
-                              <tr key={index} className="hover:bg-red-50">
+                              <tr key={index} className="hover:bg-danger/10">
                                 <td className="px-4 py-2 font-medium">{item?.slug}</td>
                                 <td className="px-4 py-2">{item?.display_name}</td>
                                 <td className="px-4 py-2">{item?.category}</td>
                                 <td className="px-4 py-2">
-                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-danger/10 text-danger">
                                     {item?.severity}
                                   </span>
                                 </td>
@@ -956,27 +956,27 @@ const AdaCodeManagementDashboard = () => {
 
                   {/* Incomplete Bilingual Content */}
                   {auditResults?.details?.incomplete_bilingual_content?.length > 0 && (
-                    <div className="bg-white border border-yellow-200 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-yellow-900 mb-3 flex items-center gap-2">
+                    <div className="bg-bg0 border border-warning/20 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-warning mb-3 flex items-center gap-2">
                         <AlertCircle className="h-5 w-5" />
                         Incomplete Bilingual Content ({auditResults?.details?.incomplete_bilingual_content?.length})
                       </h3>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
-                          <thead className="bg-yellow-50">
+                          <thead className="bg-warning/10">
                             <tr>
-                              <th className="px-4 py-2 text-left font-medium text-yellow-900">Canonical Slug</th>
-                              <th className="px-4 py-2 text-left font-medium text-yellow-900">Missing Fields</th>
-                              <th className="px-4 py-2 text-left font-medium text-yellow-900">Severity</th>
+                              <th className="px-4 py-2 text-left font-medium text-warning">Canonical Slug</th>
+                              <th className="px-4 py-2 text-left font-medium text-warning">Missing Fields</th>
+                              <th className="px-4 py-2 text-left font-medium text-warning">Severity</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-yellow-100">
+                          <tbody className="divide-y divide-warning/10">
                             {auditResults?.details?.incomplete_bilingual_content?.map((item, index) => (
-                              <tr key={index} className="hover:bg-yellow-50">
+                              <tr key={index} className="hover:bg-warning/10">
                                 <td className="px-4 py-2 font-medium">{item?.canonical_slug}</td>
                                 <td className="px-4 py-2">{item?.missing_fields?.join(', ')}</td>
                                 <td className="px-4 py-2">
-                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-warning/10 text-warning">
                                     {item?.severity}
                                   </span>
                                 </td>
@@ -990,29 +990,29 @@ const AdaCodeManagementDashboard = () => {
 
                   {/* Canonical Conflicts */}
                   {auditResults?.details?.canonical_conflicts?.length > 0 && (
-                    <div className="bg-white border border-purple-200 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-purple-900 mb-3 flex items-center gap-2">
+                    <div className="bg-bg0 border border-accent/20 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-accent mb-3 flex items-center gap-2">
                         <AlertCircle className="h-5 w-5" />
                         Canonical-to-Procedure Conflicts ({auditResults?.details?.canonical_conflicts?.length})
                       </h3>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
-                          <thead className="bg-purple-50">
+                          <thead className="bg-accent/10">
                             <tr>
-                              <th className="px-4 py-2 text-left font-medium text-purple-900">Slug</th>
-                              <th className="px-4 py-2 text-left font-medium text-purple-900">Display Name</th>
-                              <th className="px-4 py-2 text-left font-medium text-purple-900">Affected ADA Codes</th>
-                              <th className="px-4 py-2 text-left font-medium text-purple-900">Severity</th>
+                              <th className="px-4 py-2 text-left font-medium text-accent">Slug</th>
+                              <th className="px-4 py-2 text-left font-medium text-accent">Display Name</th>
+                              <th className="px-4 py-2 text-left font-medium text-accent">Affected ADA Codes</th>
+                              <th className="px-4 py-2 text-left font-medium text-accent">Severity</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-purple-100">
+                          <tbody className="divide-y divide-accent/10">
                             {auditResults?.details?.canonical_conflicts?.map((item, index) => (
-                              <tr key={index} className="hover:bg-purple-50">
+                              <tr key={index} className="hover:bg-accent/10">
                                 <td className="px-4 py-2 font-medium">{item?.slug}</td>
                                 <td className="px-4 py-2">{item?.display_name}</td>
                                 <td className="px-4 py-2">{item?.affected_ada_codes?.join(', ')}</td>
                                 <td className="px-4 py-2">
-                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-accent/10 text-accent">
                                     {item?.severity}
                                   </span>
                                 </td>
@@ -1026,27 +1026,27 @@ const AdaCodeManagementDashboard = () => {
 
                   {/* Unpublished with Mappings */}
                   {auditResults?.details?.unpublished_with_mappings?.length > 0 && (
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <div className="bg-bg0 border border-bd rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-t1 mb-3 flex items-center gap-2">
                         <AlertCircle className="h-5 w-5" />
                         Unpublished Procedures with Mappings ({auditResults?.details?.unpublished_with_mappings?.length})
                       </h3>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
-                          <thead className="bg-gray-50">
+                          <thead className="bg-bg1">
                             <tr>
-                              <th className="px-4 py-2 text-left font-medium text-gray-900">Canonical Slug</th>
-                              <th className="px-4 py-2 text-left font-medium text-gray-900">Affected ADA Codes</th>
-                              <th className="px-4 py-2 text-left font-medium text-gray-900">Severity</th>
+                              <th className="px-4 py-2 text-left font-medium text-t1">Canonical Slug</th>
+                              <th className="px-4 py-2 text-left font-medium text-t1">Affected ADA Codes</th>
+                              <th className="px-4 py-2 text-left font-medium text-t1">Severity</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-gray-100">
+                          <tbody className="divide-y divide-bd">
                             {auditResults?.details?.unpublished_with_mappings?.map((item, index) => (
-                              <tr key={index} className="hover:bg-gray-50">
+                              <tr key={index} className="hover:bg-bg1">
                                 <td className="px-4 py-2 font-medium">{item?.canonical_slug}</td>
                                 <td className="px-4 py-2">{item?.affected_ada_codes?.join(', ')}</td>
                                 <td className="px-4 py-2">
-                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
+                                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-bg2 text-t1">
                                     {item?.severity}
                                   </span>
                                 </td>
@@ -1060,10 +1060,10 @@ const AdaCodeManagementDashboard = () => {
 
                   {/* No Issues Found */}
                   {auditResults?.summary?.total_issues === 0 && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
-                      <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />
-                      <h3 className="text-lg font-semibold text-green-900 mb-2">All Clear!</h3>
-                      <p className="text-green-800">No issues found during the audit check.</p>
+                    <div className="bg-success/10 border border-success/20 rounded-lg p-8 text-center">
+                      <CheckCircle className="h-12 w-12 text-success mx-auto mb-3" />
+                      <h3 className="text-lg font-semibold text-success mb-2">All Clear!</h3>
+                      <p className="text-success">No issues found during the audit check.</p>
                     </div>
                   )}
                 </div>
@@ -1073,14 +1073,14 @@ const AdaCodeManagementDashboard = () => {
                   <div className="flex justify-end gap-3 pt-4 border-t">
                     <button
                       onClick={handleExportAuditResults}
-                      className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      className="flex items-center gap-2 px-6 py-2 bg-success text-white rounded-lg hover:brightness-110 transition-colors"
                     >
                       <Download className="h-5 w-5" />
                       Export Audit Report
                     </button>
                     <button
                       onClick={() => setShowAuditModal(false)}
-                      className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
+                      className="px-6 py-2 bg-bg2 text-t1 rounded-lg hover:bg-bg3 transition-colors"
                     >
                       Close
                     </button>

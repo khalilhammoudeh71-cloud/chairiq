@@ -575,12 +575,12 @@ export default function CreatePatientPlan() {
   // Get status badge styling
   const getStatusBadge = (status) => {
     const styles = {
-      sent: 'bg-blue-100 text-blue-800',
-      delivered: 'bg-green-100 text-green-800',
-      failed: 'bg-red-100 text-red-800',
-      undelivered: 'bg-yellow-100 text-yellow-800'
+      sent: 'bg-accent/10 text-accent',
+      delivered: 'bg-success/10 text-success',
+      failed: 'bg-danger/10 text-danger',
+      undelivered: 'bg-warning/10 text-warning'
     };
-    return styles?.[status] || 'bg-gray-100 text-gray-800';
+    return styles?.[status] || 'bg-bg2 text-t1';
   };
 
   // Format timestamp
@@ -703,16 +703,16 @@ export default function CreatePatientPlan() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="card mb-8">
-          <h1 className="text-4xl font-bold text-text-1 mb-2">Create Patient Plan</h1>
-          <p className="text-text-2 text-lg">Generate treatment plans and share with patients via SMS</p>
+          <h1 className="text-4xl font-bold text-t1 mb-2">Create Patient Plan</h1>
+          <p className="text-t2 text-lg">Generate treatment plans and share with patients via SMS</p>
         </div>
 
         {/* Patient Information Section */}
         <div className="card mb-6">
-          <h2 className="text-2xl font-bold text-text-1 mb-6">Patient Information</h2>
+          <h2 className="text-2xl font-bold text-t1 mb-6">Patient Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-text-2 mb-2 font-semibold text-base">First Name *</label>
+              <label className="block text-t2 mb-2 font-semibold text-base">First Name *</label>
               <input
                 type="text"
                 value={patientInfo?.firstName}
@@ -722,7 +722,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="block text-text-2 mb-2 font-semibold text-base">Last Name *</label>
+              <label className="block text-t2 mb-2 font-semibold text-base">Last Name *</label>
               <input
                 type="text"
                 value={patientInfo?.lastName}
@@ -732,7 +732,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="block text-text-2 mb-2 font-semibold text-base">Phone Number *</label>
+              <label className="block text-t2 mb-2 font-semibold text-base">Phone Number *</label>
               <input
                 type="tel"
                 value={patientInfo?.phone}
@@ -742,14 +742,14 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="block text-text-2 mb-2 font-semibold text-base">Preferred Language</label>
+              <label className="block text-t2 mb-2 font-semibold text-base">Preferred Language</label>
               <select
                 value={patientInfo?.preferredLanguage}
                 onChange={(e) => handlePatientChange('preferredLanguage', e?.target?.value)}
                 className="input-field w-full"
               >
-                <option value="EN" className="bg-bg-2">English</option>
-                <option value="ES" className="bg-bg-2">Spanish</option>
+                <option value="EN" className="bg-bg2">English</option>
+                <option value="ES" className="bg-bg2">Spanish</option>
               </select>
             </div>
           </div>
@@ -757,10 +757,10 @@ export default function CreatePatientPlan() {
 
         {/* Plan Information Section */}
         <div className="card mb-6">
-          <h2 className="text-2xl font-bold text-text-1 mb-6">Plan Information</h2>
+          <h2 className="text-2xl font-bold text-t1 mb-6">Plan Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-text-2 mb-2 font-semibold text-base">Dentist Name *</label>
+              <label className="block text-t2 mb-2 font-semibold text-base">Dentist Name *</label>
               <input
                 type="text"
                 value={planInfo?.dentistName}
@@ -770,7 +770,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="block text-text-2 mb-2 font-semibold text-base">Practice Name *</label>
+              <label className="block text-t2 mb-2 font-semibold text-base">Practice Name *</label>
               <input
                 type="text"
                 value={planInfo?.practiceName}
@@ -788,7 +788,7 @@ export default function CreatePatientPlan() {
         {/* Redesigned Procedures Section */}
         <div className="card mb-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-text-1">Added Procedures</h2>
+            <h2 className="text-2xl font-bold text-t1">Added Procedures</h2>
             
             <div className="flex flex-wrap items-center gap-3">
               {/* Priority Filter Tabs */}
@@ -796,7 +796,7 @@ export default function CreatePatientPlan() {
                 <button
                   onClick={() => setPriorityFilter('all')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                    priorityFilter === 'all' ? 'bg-accent text-bg-0' : 'bg-bg-3 text-text-2 hover:bg-bg-2'
+                    priorityFilter === 'all' ? 'bg-accent text-bg0' : 'bg-bg3 text-t2 hover:bg-bg2'
                   }`}
                 >
                   All ({procedures?.length})
@@ -804,7 +804,7 @@ export default function CreatePatientPlan() {
                 <button
                   onClick={() => setPriorityFilter('Urgent')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                    priorityFilter === 'Urgent' ? 'bg-danger text-bg-0' : 'bg-bg-3 text-text-2 hover:bg-bg-2'
+                    priorityFilter === 'Urgent' ? 'bg-danger text-bg0' : 'bg-bg3 text-t2 hover:bg-bg2'
                   }`}
                 >
                   Urgent ({procedures?.filter(p => p?.priority === 'Urgent')?.length})
@@ -812,7 +812,7 @@ export default function CreatePatientPlan() {
                 <button
                   onClick={() => setPriorityFilter('Soon')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                    priorityFilter === 'Soon' ? 'bg-warning text-bg-0' : 'bg-bg-3 text-text-2 hover:bg-bg-2'
+                    priorityFilter === 'Soon' ? 'bg-warning text-bg0' : 'bg-bg3 text-t2 hover:bg-bg2'
                   }`}
                 >
                   Soon ({procedures?.filter(p => p?.priority === 'Soon')?.length})
@@ -820,7 +820,7 @@ export default function CreatePatientPlan() {
                 <button
                   onClick={() => setPriorityFilter('Later')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                    priorityFilter === 'Later' ? 'bg-success text-bg-0' : 'bg-bg-3 text-text-2 hover:bg-bg-2'
+                    priorityFilter === 'Later' ? 'bg-success text-bg0' : 'bg-bg3 text-t2 hover:bg-bg2'
                   }`}
                 >
                   Later ({procedures?.filter(p => p?.priority === 'Later')?.length})
@@ -840,8 +840,8 @@ export default function CreatePatientPlan() {
 
           {/* Procedures Table/List */}
           {procedures?.length === 0 ? (
-            <div className="text-center py-12 bg-bg-3 rounded border-2 border-dashed border-border-1">
-              <p className="text-text-3 text-lg mb-4">No procedures added yet</p>
+            <div className="text-center py-12 bg-bg3 rounded border-2 border-dashed border-bd">
+              <p className="text-t3 text-lg mb-4">No procedures added yet</p>
               <button
                 onClick={openAddProcedureDrawer}
                 className="btn-primary inline-flex items-center gap-2"
@@ -860,29 +860,29 @@ export default function CreatePatientPlan() {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="table-header border-b-2 border-border-1">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                    <tr className="table-header border-b-2 border-bd">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         {/* Drag handle column */}
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         Priority
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         Tooth #
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         Treatment Title
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         ADA Code
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         Est. Time
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         Notes
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-text-2 uppercase tracking-wider">
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-t2 uppercase tracking-wider">
                         {/* Delete column */}
                       </th>
                     </tr>
@@ -949,7 +949,7 @@ export default function CreatePatientPlan() {
                 <h3 className="text-xl font-bold text-success mb-4">Plan Saved Successfully!</h3>
                 
                 <div className="mb-4">
-                  <label className="block text-text-2 mb-2 font-semibold text-base">Patient Link</label>
+                  <label className="block text-t2 mb-2 font-semibold text-base">Patient Link</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -999,7 +999,7 @@ export default function CreatePatientPlan() {
               {showSMSMessage && (
                 <div className="card bg-accent/10 border-accent">
                   <h3 className="text-xl font-bold text-accent mb-4">SMS Message Preview</h3>
-                  <p className="text-text-2 mb-2 text-base">
+                  <p className="text-t2 mb-2 text-base">
                     This message will be sent automatically when you click "Send SMS to Patient":
                   </p>
                   <div className="mb-4">
@@ -1033,7 +1033,7 @@ export default function CreatePatientPlan() {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <MessageSquare className="w-6 h-6 text-accent" />
-                <h2 className="text-2xl font-bold text-text-1">SMS Delivery Status</h2>
+                <h2 className="text-2xl font-bold text-t1">SMS Delivery Status</h2>
               </div>
               <button
                 onClick={() => fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id)}
@@ -1048,7 +1048,7 @@ export default function CreatePatientPlan() {
               {smsDeliveryLogs?.map((log) => (
                 <div
                   key={log?.id}
-                  className="card bg-bg-3"
+                  className="card bg-bg3"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -1061,7 +1061,7 @@ export default function CreatePatientPlan() {
                           {log?.delivery_status}
                         </span>
                         {log?.twilio_message_sid && (
-                          <span className="text-xs text-text-3 font-mono">
+                          <span className="text-xs text-t3 font-mono">
                             {log?.twilio_message_sid}
                           </span>
                         )}
@@ -1069,30 +1069,30 @@ export default function CreatePatientPlan() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
-                          <span className="text-text-3">Sent At:</span>
-                          <span className="ml-2 text-text-1 font-medium">
+                          <span className="text-t3">Sent At:</span>
+                          <span className="ml-2 text-t1 font-medium">
                             {formatTimestamp(log?.sent_at)}
                           </span>
                         </div>
                         {log?.delivered_at && (
                           <div>
-                            <span className="text-text-3">Delivered At:</span>
-                            <span className="ml-2 text-text-1 font-medium">
+                            <span className="text-t3">Delivered At:</span>
+                            <span className="ml-2 text-t1 font-medium">
                               {formatTimestamp(log?.delivered_at)}
                             </span>
                           </div>
                         )}
                         {log?.failed_at && (
                           <div>
-                            <span className="text-text-3">Failed At:</span>
-                            <span className="ml-2 text-text-1 font-medium">
+                            <span className="text-t3">Failed At:</span>
+                            <span className="ml-2 text-t1 font-medium">
                               {formatTimestamp(log?.failed_at)}
                             </span>
                           </div>
                         )}
                         <div>
-                          <span className="text-text-3">Phone:</span>
-                          <span className="ml-2 text-text-1 font-medium">
+                          <span className="text-t3">Phone:</span>
+                          <span className="ml-2 text-t1 font-medium">
                             {log?.phone_number}
                           </span>
                         </div>

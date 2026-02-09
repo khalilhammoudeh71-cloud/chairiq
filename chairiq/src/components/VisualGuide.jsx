@@ -154,7 +154,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
             <div
               key={index}
               onClick={() => handleStepClick(step)}
-              className="bg-slate-800 rounded p-5 hover:bg-slate-700 cursor-pointer border border-slate-700 group"
+              className="bg-bg2 rounded p-5 hover:bg-bg3 cursor-pointer border border-bd group"
               role="button"
               tabIndex={0}
               onKeyPress={(e) => {
@@ -165,19 +165,19 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
               aria-label={`${title}: ${description}`}
             >
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-teal-600/20 border border-teal-500/40 flex items-center justify-center">
-                  <span className="text-sm font-bold text-teal-400">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
+                  <span className="text-sm font-bold text-success">
                     {index + 1}
                   </span>
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-base font-bold text-slate-100">
+                    <h3 className="text-base font-bold text-t1">
                       {title}
                     </h3>
-                    <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0 ml-2" />
+                    <ChevronRight className="w-4 h-4 text-t3 flex-shrink-0 ml-2" />
                   </div>
-                  <p className="text-sm font-medium text-slate-300 line-clamp-2">
+                  <p className="text-sm font-medium text-t3 line-clamp-2">
                     {description}
                   </p>
                 </div>
@@ -190,7 +190,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
       {/* Modal */}
       {selectedStep && !showEnhancedViewer && (
         <div
-          className="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-[var(--overlay)] z-50 flex items-center justify-center p-4"
           onClick={handleBackdropClick}
           onKeyDown={handleKeyDown}
           role="dialog"
@@ -199,18 +199,18 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
           aria-describedby="modal-description"
         >
           <div
-            className="bg-slate-900 rounded max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700"
+            className="bg-bg3 rounded max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-bd"
             onClick={(e) => e?.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="sticky top-0 bg-slate-900 border-b border-slate-700 p-4 flex items-center justify-between z-10">
+            <div className="sticky top-0 bg-bg3 border-b border-bd p-4 flex items-center justify-between z-10">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-600/20 border border-teal-500/30 flex items-center justify-center">
-                  <span className="text-lg font-bold text-teal-400">
+                <div className="w-10 h-10 rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
+                  <span className="text-lg font-bold text-success">
                     {selectedStep?.number}
                   </span>
                 </div>
-                <h3 id="modal-title" className="text-xl font-bold text-slate-100">
+                <h3 id="modal-title" className="text-xl font-bold text-t1">
                   {currentTitle}
                 </h3>
               </div>
@@ -221,9 +221,9 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
                   disabled={isLoadingAudio}
                   className={`p-2 rounded-lg transition-colors ${
                     isSpeaking 
-                      ? 'bg-teal-600/20 text-teal-400 border border-teal-500/30' 
+                      ? 'bg-success/10 text-success border border-success/20' 
                       : isLoadingAudio
-                        ? 'bg-slate-800/50 text-slate-500 cursor-wait' :'hover:bg-slate-800/80 text-slate-300 hover:text-white'
+                        ? 'bg-bg2/50 text-t3 cursor-wait' :'hover:bg-bg2/80 text-t3 hover:text-t1'
                   }`}
                   aria-label={language === 'en' ? 'Play audio description' : 'Reproducir descripción de audio'}
                 >
@@ -231,7 +231,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
                 </button>
                 <button
                   onClick={handleCloseModal}
-                  className="p-2 hover:bg-slate-800/80 text-slate-300 hover:text-white rounded-lg transition-colors"
+                  className="p-2 hover:bg-bg2/80 text-t3 hover:text-t1 rounded-lg transition-colors"
                   aria-label={language === 'en' ? 'Close' : 'Cerrar'}
                 >
                   <X className="w-5 h-5" />
@@ -241,7 +241,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
 
             {/* FULL STEP IMAGE - LARGE, UNCROPPED, CENTERED with enhanced viewing */}
             {hasVisualSrc && (
-              <figure className="relative w-full bg-slate-800/30">
+              <figure className="relative w-full bg-bg2/30">
                 {isMultipleImages ? (
                   // Multiple images - side by side layout
                   <div 
@@ -253,7 +253,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
                         <img
                           src={imgObj?.src}
                           alt={imgObj?.alt || modalDescription}
-                          className="w-full h-auto max-h-[500px] object-contain rounded-lg border border-slate-700/30"
+                          className="w-full h-auto max-h-[500px] object-contain rounded-lg border border-bd/30"
                           loading="eager"
                         />
                       </div>
@@ -274,7 +274,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
                   </div>
                 )}
                 {/* Image Caption */}
-                <figcaption className="px-6 pb-4 text-sm text-slate-400 italic text-center border-t border-slate-700/50 bg-slate-800/30">
+                <figcaption className="px-6 pb-4 text-sm text-t3 italic text-center border-t border-bd/50 bg-bg2/30">
                   {selectedStep?.visualAlt || modalDescription}
                 </figcaption>
               </figure>
@@ -282,14 +282,14 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
 
             {/* Fallback for procedures without realistic illustrations yet */}
             {!hasVisualSrc && selectedStep?.diagramSvg && (
-              <figure className="w-full bg-slate-800/30">
+              <figure className="w-full bg-bg2/30">
                 <div 
                   className="p-4"
                   dangerouslySetInnerHTML={{ __html: selectedStep?.diagramSvg }}
                   role="img"
                   aria-label="Educational diagram showing the procedure steps"
                 />
-                <figcaption className="px-6 pb-4 text-sm text-slate-400 italic text-center border-t border-slate-700/50">
+                <figcaption className="px-6 pb-4 text-sm text-t3 italic text-center border-t border-bd/50">
                   Educational diagram showing the procedure steps
                 </figcaption>
               </figure>
@@ -298,25 +298,25 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
             {/* Educational explanation below image */}
             <div className="p-6" id="modal-description">
               <div className="prose prose-invert prose-teal max-w-none">
-                <p className="text-slate-300 text-base leading-relaxed">
+                <p className="text-t3 text-base leading-relaxed">
                   {currentDescription}
                 </p>
               </div>
             </div>
 
             {/* Close Button */}
-            <div className="p-6 border-t border-slate-700/50 flex justify-end gap-3">
+            <div className="p-6 border-t border-bd/50 flex justify-end gap-3">
               {isSpeaking && (
                 <button
                   onClick={stopSpeaking}
-                  className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors font-medium"
+                  className="px-6 py-2 bg-danger hover:brightness-110 text-white rounded transition-colors font-medium"
                 >
                   {language === 'en' ? 'Stop Audio' : 'Detener Audio'}
                 </button>
               )}
               <button
                 onClick={handleCloseModal}
-                className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded transition-colors font-medium"
+                className="px-6 py-2 bg-success hover:brightness-110 text-white rounded transition-colors font-medium"
               >
                 {language === 'en' ? 'Close' : 'Cerrar'}
               </button>

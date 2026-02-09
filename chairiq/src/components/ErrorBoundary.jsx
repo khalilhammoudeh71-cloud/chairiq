@@ -14,13 +14,12 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     error.__ErrorBoundary = true;
     window.__COMPONENT_ERROR__?.(error, errorInfo);
-    // console.log("Error caught by ErrorBoundary:", error, errorInfo);
   }
 
   render() {
     if (this.state?.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+        <div className="min-h-screen flex items-center justify-center bg-bg1">
           <div className="text-center p-8 max-w-md">
             <div className="flex justify-center items-center mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="42px" height="42px" viewBox="0 0 32 33" fill="none">
@@ -31,15 +30,15 @@ class ErrorBoundary extends React.Component {
               </svg>
             </div>
             <div className="flex flex-col gap-1 text-center">
-              <h1 className="text-2xl font-medium text-neutral-800">Something went wrong</h1>
-              <p className="text-neutral-600 text-base w w-8/12 mx-auto">We encountered an unexpected error while processing your request.</p>
+              <h1 className="text-2xl font-medium text-t1">Something went wrong</h1>
+              <p className="text-t2 text-base w w-8/12 mx-auto">We encountered an unexpected error while processing your request.</p>
             </div>
             <div className="flex justify-center items-center mt-6">
               <button
                 onClick={() => {
                   window.location.href = "/";
                 }}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
+                className="bg-accent hover:brightness-110 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
               >
                 <Icon name="ArrowLeft" size={18} color="#fff" />
                 Back

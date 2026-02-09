@@ -32,21 +32,21 @@ const PathwaySelection = ({ className = '' }) => {
           <button
             key={pathway?.id}
             onClick={() => navigate(pathway?.route)}
-            className="group relative flex flex-col items-start p-6 bg-card border-2 border-border rounded hover:border-primary text-left focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="group relative flex flex-col items-start p-6 bg-bg1 border border-bd rounded-md hover:border-accent text-left focus:border-accent focus:outline-none transition-colors duration-150"
           >
-            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-primary/10 text-primary">
+            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-accent/10 text-accent">
               <Icon name={pathway?.icon} size={24} />
             </div>
 
-            <h3 className="text-xl font-semibold font-heading text-card-foreground mb-2">
+            <h3 className="text-xl font-semibold text-t1 mb-2">
               {pathway?.title}
             </h3>
             
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+            <p className="text-sm text-t2 leading-relaxed mb-4">
               {pathway?.description}
             </p>
 
-            <div className="mt-auto flex items-center text-primary font-medium text-sm">
+            <div className="mt-auto flex items-center text-accent font-medium text-sm">
               <span>Get Started</span>
               <Icon name="ArrowRight" size={16} className="ml-2" />
             </div>

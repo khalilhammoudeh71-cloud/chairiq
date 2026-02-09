@@ -8,21 +8,21 @@ const ProcedureStats = ({ stats, language }) => {
       labelEn: 'Total Procedures',
       labelEs: 'Procedimientos Totales',
       value: stats?.total,
-      color: 'text-blue-400'
+      color: 'text-accent'
     },
     {
       icon: 'CheckCircle2',
       labelEn: 'Reviewed',
       labelEs: 'Revisados',
       value: stats?.reviewed,
-      color: 'text-green-400'
+      color: 'text-success'
     },
     {
       icon: 'Clock',
       labelEn: 'Pending',
       labelEs: 'Pendientes',
       value: stats?.pending,
-      color: 'text-yellow-400'
+      color: 'text-warning'
     }
   ];
 
@@ -31,15 +31,15 @@ const ProcedureStats = ({ stats, language }) => {
       {statItems?.map((item, index) => (
         <div 
           key={index}
-          className="flex flex-col items-center justify-center p-8 bg-gray-800 border border-gray-700 rounded-2xl"
+          className="flex flex-col items-center justify-center p-8 bg-bg2 border border-bd rounded-2xl"
         >
-          <div className={`flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-900 mb-4 ${item?.color}`}>
+          <div className={`flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-bg3 mb-4 ${item?.color}`}>
             <Icon name={item?.icon} size={24} />
           </div>
-          <div className="text-4xl sm:text-5xl font-bold text-white mb-3">
+          <div className="text-4xl sm:text-5xl font-bold text-t1 mb-3">
             {item?.value}
           </div>
-          <div className="text-base sm:text-lg text-gray-400 text-center font-light">
+          <div className="text-base sm:text-lg text-t3 text-center font-light">
             {language === 'en' ? item?.labelEn : item?.labelEs}
           </div>
         </div>

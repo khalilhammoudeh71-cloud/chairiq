@@ -13,9 +13,9 @@ const ProcedureExplanation = ({ content, isPersonalized = false, language = 'en'
             {content?.explanationTitle}
           </h2>
           {isPersonalized && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/30 rounded-full mb-2">
-              <Icon name="Sparkles" size={16} className="text-blue-500" />
-              <span className="text-xs font-medium text-blue-500">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/30 rounded-full mb-2">
+              <Icon name="Sparkles" size={16} className="text-accent" />
+              <span className="text-xs font-medium text-accent">
                 {language === 'en' ? 'Personalized for you' : 'Personalizado para ti'}
               </span>
             </div>

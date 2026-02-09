@@ -61,15 +61,15 @@ const BatchJobDetails = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-success" />;
       case 'failed':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-danger" />;
       case 'in_progress':
-        return <Clock className="w-5 h-5 text-blue-600 animate-pulse" />;
+        return <Clock className="w-5 h-5 text-accent animate-pulse" />;
       case 'pending':
-        return <Clock className="w-5 h-5 text-gray-400" />;
+        return <Clock className="w-5 h-5 text-t3" />;
       default:
-        return <AlertCircle className="w-5 h-5 text-gray-400" />;
+        return <AlertCircle className="w-5 h-5 text-t3" />;
     }
   };
 
@@ -77,21 +77,21 @@ const BatchJobDetails = () => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-medium";
     switch (status) {
       case 'completed':
-        return `${baseClasses} bg-green-100 text-green-800`;
+        return `${baseClasses} bg-success/10 text-success`;
       case 'failed':
-        return `${baseClasses} bg-red-100 text-red-800`;
+        return `${baseClasses} bg-danger/10 text-danger`;
       case 'in_progress':
-        return `${baseClasses} bg-blue-100 text-blue-800`;
+        return `${baseClasses} bg-accent/10 text-accent`;
       case 'pending':
-        return `${baseClasses} bg-gray-100 text-gray-800`;
+        return `${baseClasses} bg-bg2 text-t1`;
       default:
-        return `${baseClasses} bg-gray-100 text-gray-800`;
+        return `${baseClasses} bg-bg2 text-t1`;
     }
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-bg-0 flex items-center justify-center">
+      <div className="min-h-screen bg-bg0 flex items-center justify-center">
         <RefreshCw className="w-8 h-8 text-accent animate-spin" />
       </div>
     );
@@ -99,35 +99,34 @@ const BatchJobDetails = () => {
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-bg-0 flex items-center justify-center">
+      <div className="min-h-screen bg-bg0 flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-text-3 mx-auto mb-4" />
-          <p className="text-text-2">Batch job not found</p>
+          <AlertCircle className="w-12 h-12 text-t3 mx-auto mb-4" />
+          <p className="text-t2">Batch job not found</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-bg-0">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-bg0">
+      <div className="bg-bg1 border-b border-bd sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate('/admin/ai-content-generation')}
-                className="p-2 hover:bg-bg-1 rounded-lg"
+                className="p-2 hover:bg-bg2 rounded-lg"
               >
-                <ArrowLeft className="w-5 h-5 text-text-2" />
+                <ArrowLeft className="w-5 h-5 text-t2" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-text-1">{job?.name}</h1>
+                <h1 className="text-2xl font-bold text-t1">{job?.name}</h1>
                 <div className="flex items-center gap-3 mt-1">
                   <span className={getStatusBadge(job?.status)}>
                     {job?.status?.replace('_', ' ')}
                   </span>
-                  <span className="text-sm text-text-2">
+                  <span className="text-sm text-t2">
                     {job?.completed_items} of {job?.total_items} items completed
                   </span>
                 </div>
@@ -135,7 +134,7 @@ const BatchJobDetails = () => {
             </div>
             <button
               onClick={() => loadJobDetails()}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-bg1 border border-bd rounded-lg font-medium hover:bg-bg2 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               Refresh
@@ -146,16 +145,15 @@ const BatchJobDetails = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Job Items List */}
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Job Items</h2>
+            <h2 className="text-lg font-semibold text-t1 mb-4">Job Items</h2>
             {job?.items?.map((item) => (
               <div
                 key={item?.id}
-                className={`bg-white rounded-lg border-2 transition-all cursor-pointer ${
+                className={`bg-bg1 rounded-lg border-2 transition-all cursor-pointer ${
                   selectedItem?.id === item?.id
-                    ? 'border-blue-500 shadow-md'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-accent shadow-md'
+                    : 'border-bd hover:border-t3'
                 }`}
                 onClick={() => setSelectedItem(item)}
               >
@@ -164,10 +162,10 @@ const BatchJobDetails = () => {
                     <div className="flex items-center gap-3 flex-1">
                       {getStatusIcon(item?.status)}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 truncate">
+                        <h3 className="font-medium text-t1 truncate">
                           {item?.language === 'en' ? item?.procedure?.title_en : item?.procedure?.title_es}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-t2 mt-1">
                           {item?.content_types?.join(', ')}
                         </p>
                       </div>
@@ -184,7 +182,7 @@ const BatchJobDetails = () => {
                         handleApplyContent(item?.id);
                       }}
                       disabled={isApplying}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-success text-white rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50"
                     >
                       <Save className="w-4 h-4" />
                       Apply to Library
@@ -192,13 +190,13 @@ const BatchJobDetails = () => {
                   )}
 
                   {item?.error_message && (
-                    <div className="mt-3 bg-red-50 border border-red-200 rounded-lg p-3">
-                      <p className="text-sm text-red-900">{item?.error_message}</p>
+                    <div className="mt-3 bg-danger/10 border border-danger/20 rounded-lg p-3">
+                      <p className="text-sm text-danger">{item?.error_message}</p>
                     </div>
                   )}
 
                   {item?.processing_duration_seconds && (
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-t3 mt-2">
                       Processing time: {item?.processing_duration_seconds}s
                     </p>
                   )}
@@ -207,11 +205,10 @@ const BatchJobDetails = () => {
             ))}
           </div>
 
-          {/* Selected Item Details */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-24">
-              <div className="p-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
+            <div className="bg-bg1 rounded-lg shadow-sm border border-bd sticky top-24">
+              <div className="p-4 border-b border-bd">
+                <h2 className="text-lg font-semibold text-t1">
                   {selectedItem ? 'Item Details' : 'Select an Item'}
                 </h2>
               </div>
@@ -219,8 +216,8 @@ const BatchJobDetails = () => {
               {selectedItem ? (
                 <div className="p-4 space-y-4">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Procedure</h3>
-                    <p className="text-gray-900">
+                    <h3 className="text-sm font-medium text-t2 mb-2">Procedure</h3>
+                    <p className="text-t1">
                       {selectedItem?.language === 'en' 
                         ? selectedItem?.procedure?.title_en 
                         : selectedItem?.procedure?.title_es}
@@ -228,19 +225,19 @@ const BatchJobDetails = () => {
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Status</h3>
+                    <h3 className="text-sm font-medium text-t2 mb-2">Status</h3>
                     <span className={getStatusBadge(selectedItem?.status)}>
                       {selectedItem?.status?.replace('_', ' ')}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Content Types</h3>
+                    <h3 className="text-sm font-medium text-t2 mb-2">Content Types</h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedItem?.content_types?.map((type) => (
                         <span
                           key={type}
-                          className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                          className="px-2 py-1 bg-accent/10 text-accent rounded text-xs"
                         >
                           {type}
                         </span>
@@ -250,14 +247,14 @@ const BatchJobDetails = () => {
 
                   {selectedItem?.generated_content && Object?.keys(selectedItem?.generated_content)?.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-medium text-gray-700 mb-2">Generated Content</h3>
+                      <h3 className="text-sm font-medium text-t2 mb-2">Generated Content</h3>
                       <div className="space-y-2 max-h-96 overflow-y-auto">
                         {Object?.entries(selectedItem?.generated_content)?.map(([key, value]) => (
-                          <div key={key} className="border border-gray-200 rounded-lg p-3">
-                            <h4 className="text-xs font-medium text-gray-600 mb-1 uppercase">
+                          <div key={key} className="border border-bd rounded-lg p-3">
+                            <h4 className="text-xs font-medium text-t2 mb-1 uppercase">
                               {key}
                             </h4>
-                            <p className="text-sm text-gray-900 whitespace-pre-wrap">
+                            <p className="text-sm text-t1 whitespace-pre-wrap">
                               {typeof value === 'string' 
                                 ? value?.substring(0, 200) + (value?.length > 200 ? '...' : '')
                                 : JSON.stringify(value, null, 2)?.substring(0, 200) + '...'}
@@ -270,15 +267,15 @@ const BatchJobDetails = () => {
 
                   {selectedItem?.error_message && (
                     <div>
-                      <h3 className="text-sm font-medium text-gray-700 mb-2">Error</h3>
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                        <p className="text-sm text-red-900">{selectedItem?.error_message}</p>
+                      <h3 className="text-sm font-medium text-t2 mb-2">Error</h3>
+                      <div className="bg-danger/10 border border-danger/20 rounded-lg p-3">
+                        <p className="text-sm text-danger">{selectedItem?.error_message}</p>
                       </div>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="p-8 text-center text-gray-500">
+                <div className="p-8 text-center text-t3">
                   <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
                   <p>Select an item to view details</p>
                 </div>
@@ -287,24 +284,23 @@ const BatchJobDetails = () => {
           </div>
         </div>
 
-        {/* Logs Section */}
         {logs?.length > 0 && (
-          <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
-            <div className="p-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Activity Logs</h2>
+          <div className="mt-8 bg-bg1 rounded-lg shadow-sm border border-bd">
+            <div className="p-4 border-b border-bd">
+              <h2 className="text-lg font-semibold text-t1">Activity Logs</h2>
             </div>
             <div className="p-4 space-y-2 max-h-96 overflow-y-auto">
               {logs?.map((log) => (
                 <div
                   key={log?.id}
                   className={`p-3 rounded-lg border ${
-                    log?.log_level === 'error' ?'bg-red-50 border-red-200'
-                      : log?.log_level === 'warning' ?'bg-amber-50 border-amber-200' :'bg-gray-50 border-gray-200'
+                    log?.log_level === 'error' ?'bg-danger/10 border-danger/20'
+                      : log?.log_level === 'warning' ?'bg-warning/10 border-warning/20' :'bg-bg2 border-bd'
                   }`}
                 >
                   <div className="flex items-start justify-between">
-                    <p className="text-sm text-gray-900 flex-1">{log?.message}</p>
-                    <span className="text-xs text-gray-500 ml-4 whitespace-nowrap">
+                    <p className="text-sm text-t1 flex-1">{log?.message}</p>
+                    <span className="text-xs text-t3 ml-4 whitespace-nowrap">
                       {new Date(log?.created_at)?.toLocaleTimeString()}
                     </span>
                   </div>

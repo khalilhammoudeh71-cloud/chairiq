@@ -3,20 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, TrendingUp, Sparkles, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import { generateProcedureSummary } from '../../../services/learningJourneySummaryService';
 
-/**
- * LearningSummaryCard Component
- * Displays personalized OpenAI-generated learning journey summaries
- * for the current procedure based on Q&A history and progress
- */
 export default function LearningSummaryCard({ procedureId }) {
   const [summary, setSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  /**
-   * Loads the learning journey summary for the procedure
-   */
   const loadSummary = async () => {
     if (!procedureId) return;
 
@@ -35,31 +27,22 @@ export default function LearningSummaryCard({ procedureId }) {
     }
   };
 
-  /**
-   * Auto-load summary when component mounts
-   */
   useEffect(() => {
     loadSummary();
   }, [procedureId]);
 
-  /**
-   * Determines retention score color
-   */
   const getRetentionColor = (score) => {
-    if (score >= 80) return 'text-emerald-400';
-    if (score >= 60) return 'text-teal-400';
-    if (score >= 40) return 'text-yellow-400';
-    return 'text-orange-400';
+    if (score >= 80) return 'text-success';
+    if (score >= 60) return 'text-success';
+    if (score >= 40) return 'text-warning';
+    return 'text-warning';
   };
 
-  /**
-   * Determines retention score background
-   */
   const getRetentionBgColor = (score) => {
-    if (score >= 80) return 'bg-emerald-500/20';
-    if (score >= 60) return 'bg-teal-500/20';
-    if (score >= 40) return 'bg-yellow-500/20';
-    return 'bg-orange-500/20';
+    if (score >= 80) return 'bg-success/10';
+    if (score >= 60) return 'bg-success/10';
+    if (score >= 40) return 'bg-warning/10';
+    return 'bg-warning/10';
   };
 
   return (
@@ -67,20 +50,17 @@ export default function LearningSummaryCard({ procedureId }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 shadow-2xl"
+      className="relative overflow-hidden rounded-2xl bg-bg2 backdrop-blur-xl border border-bd shadow-lg"
     >
-      {/* Animated background glow */}
-      <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 via-purple-500/5 to-teal-500/5 animate-pulse" />
-      {/* Header */}
-      <div className="relative p-6 border-b border-slate-700/50">
+      <div className="relative p-6 border-b border-bd">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 shadow-lg">
+            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-accent shadow-md">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">Your Learning Journey</h3>
-              <p className="text-sm text-slate-400 mt-1">
+              <h3 className="text-xl font-bold text-t1">Your Learning Journey</h3>
+              <p className="text-sm text-t3 mt-1">
                 Personalized insights powered by AI
               </p>
             </div>
@@ -88,18 +68,17 @@ export default function LearningSummaryCard({ procedureId }) {
 
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 transition-all duration-200 border border-slate-600"
+            className="flex items-center justify-center w-10 h-10 rounded-lg bg-bg3 hover:brightness-110 transition-all duration-200 border border-bd"
             aria-label={isExpanded ? 'Collapse summary' : 'Expand summary'}
           >
             {isExpanded ? (
-              <ChevronUp className="w-5 h-5 text-slate-300" />
+              <ChevronUp className="w-5 h-5 text-t3" />
             ) : (
-              <ChevronDown className="w-5 h-5 text-slate-300" />
+              <ChevronDown className="w-5 h-5 text-t3" />
             )}
           </button>
         </div>
       </div>
-      {/* Content */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -111,19 +90,19 @@ export default function LearningSummaryCard({ procedureId }) {
           >
             {isLoading && (
               <div className="p-8 flex flex-col items-center justify-center gap-4">
-                <RefreshCw className="w-8 h-8 text-teal-400 animate-spin" />
-                <p className="text-slate-300 text-center">
+                <RefreshCw className="w-8 h-8 text-accent animate-spin" />
+                <p className="text-t3 text-center">
                   Analyzing your learning journey...
                 </p>
               </div>
             )}
 
             {error && (
-              <div className="p-6 m-6 rounded-xl bg-red-500/10 border border-red-500/30">
-                <p className="text-red-400 text-center">{error}</p>
+              <div className="p-6 m-6 rounded-xl bg-danger/10 border border-danger/30">
+                <p className="text-danger text-center">{error}</p>
                 <button
                   onClick={loadSummary}
-                  className="mt-4 w-full px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 font-medium transition-colors"
+                  className="mt-4 w-full px-4 py-2 rounded-lg bg-danger/10 hover:bg-danger/20 text-danger font-medium transition-colors"
                 >
                   Try Again
                 </button>
@@ -132,32 +111,29 @@ export default function LearningSummaryCard({ procedureId }) {
 
             {summary && !isLoading && (
               <div className="p-6 space-y-6">
-                {/* Retention Score */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-bg3 border border-bd">
                   <div className="flex items-center gap-3">
-                    <TrendingUp className="w-6 h-6 text-teal-400" />
-                    <span className="text-slate-300 font-medium">Retention Score</span>
+                    <TrendingUp className="w-6 h-6 text-accent" />
+                    <span className="text-t2 font-medium">Retention Score</span>
                   </div>
                   <div className={`px-4 py-2 rounded-lg ${getRetentionBgColor(summary?.retentionScore)} ${getRetentionColor(summary?.retentionScore)} font-bold text-lg`}>
                     {summary?.retentionScore}%
                   </div>
                 </div>
 
-                {/* Overall Progress */}
                 <div className="space-y-2">
-                  <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <BookOpen className="w-5 h-5 text-teal-400" />
+                  <h4 className="text-lg font-semibold text-t1 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-accent" />
                     Overall Progress
                   </h4>
-                  <p className="text-slate-300 leading-relaxed pl-7">
+                  <p className="text-t3 leading-relaxed pl-7">
                     {summary?.overallProgress}
                   </p>
                 </div>
 
-                {/* Key Insights */}
                 {summary?.keyInsights?.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-white">Key Insights</h4>
+                    <h4 className="text-lg font-semibold text-t1">Key Insights</h4>
                     <ul className="space-y-2">
                       {summary?.keyInsights?.map((insight, index) => (
                         <motion.li
@@ -165,14 +141,14 @@ export default function LearningSummaryCard({ procedureId }) {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className="flex items-start gap-3 p-3 rounded-lg bg-teal-500/10 border border-teal-500/20"
+                          className="flex items-start gap-3 p-3 rounded-lg bg-success/10 border border-success/20"
                         >
-                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5">
-                            <span className="text-teal-400 text-sm font-bold">
+                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-success/10 flex items-center justify-center mt-0.5">
+                            <span className="text-success text-sm font-bold">
                               {index + 1}
                             </span>
                           </div>
-                          <p className="text-slate-300 text-sm leading-relaxed flex-1">
+                          <p className="text-t3 text-sm leading-relaxed flex-1">
                             {insight}
                           </p>
                         </motion.li>
@@ -181,10 +157,9 @@ export default function LearningSummaryCard({ procedureId }) {
                   </div>
                 )}
 
-                {/* Areas of Focus */}
                 {summary?.areasOfFocus?.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-white">Areas of Focus</h4>
+                    <h4 className="text-lg font-semibold text-t1">Areas of Focus</h4>
                     <div className="space-y-3">
                       {summary?.areasOfFocus?.map((area, index) => (
                         <motion.div
@@ -192,12 +167,12 @@ export default function LearningSummaryCard({ procedureId }) {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50"
+                          className="p-4 rounded-lg bg-bg3 border border-bd"
                         >
-                          <h5 className="text-white font-semibold mb-2">
+                          <h5 className="text-t1 font-semibold mb-2">
                             {area?.topic}
                           </h5>
-                          <p className="text-slate-300 text-sm leading-relaxed">
+                          <p className="text-t3 text-sm leading-relaxed">
                             {area?.summary}
                           </p>
                         </motion.div>
@@ -206,10 +181,9 @@ export default function LearningSummaryCard({ procedureId }) {
                   </div>
                 )}
 
-                {/* Recommendations */}
                 {summary?.recommendations?.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-white">Recommendations</h4>
+                    <h4 className="text-lg font-semibold text-t1">Recommendations</h4>
                     <ul className="space-y-2">
                       {summary?.recommendations?.map((rec, index) => (
                         <motion.li
@@ -217,10 +191,10 @@ export default function LearningSummaryCard({ procedureId }) {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className="flex items-start gap-3 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20"
+                          className="flex items-start gap-3 p-3 rounded-lg bg-accent/10 border border-accent/20"
                         >
-                          <Sparkles className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                          <p className="text-slate-300 text-sm leading-relaxed flex-1">
+                          <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                          <p className="text-t3 text-sm leading-relaxed flex-1">
                             {rec}
                           </p>
                         </motion.li>
@@ -229,19 +203,17 @@ export default function LearningSummaryCard({ procedureId }) {
                   </div>
                 )}
 
-                {/* Encouragement */}
                 {summary?.encouragement && (
-                  <div className="p-4 rounded-xl bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/30">
-                    <p className="text-teal-300 text-center italic leading-relaxed">
+                  <div className="p-4 rounded-xl bg-accent/10 border border-accent/30">
+                    <p className="text-accent text-center italic leading-relaxed">
                       "{summary?.encouragement}"
                     </p>
                   </div>
                 )}
 
-                {/* Refresh Button */}
                 <button
                   onClick={loadSummary}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full py-3 px-4 rounded-xl bg-accent hover:brightness-110 text-white font-semibold flex items-center justify-center gap-2 shadow-md"
                 >
                   <RefreshCw className="w-5 h-5" />
                   Regenerate Summary

@@ -321,7 +321,7 @@ export default function ProcedureEducationModal({ procedure, language, onClose }
                 key={section?.id}
                 ref={(el) => (tabsRef.current[index] = el)}
                 onClick={() => handleSectionChange(section?.id)}
-                className="px-6 py-4 font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-offset-2"
+                className="px-6 py-4 font-medium whitespace-nowrap transition-all focus:border-accent focus:outline-none"
                 style={{
                   color: activeSection === section?.id ? '#8b9aec' : '#9ca3af',
                   backgroundColor: activeSection === section?.id ? 'rgba(107, 124, 232, 0.1)' : 'transparent',
@@ -376,11 +376,10 @@ export default function ProcedureEducationModal({ procedure, language, onClose }
                 }
               }}
               disabled={sections?.findIndex(s => s?.id === activeSection) === 0}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:border-accent focus:outline-none"
               style={{ 
                 backgroundColor: 'rgba(107, 124, 232, 0.15)', 
-                color: '#8b9aec',
-                outlineColor: '#8b9aec'
+                color: '#8b9aec'
               }}
               aria-label={language === 'EN' ? 'Go to previous section' : 'Ir a la sección anterior'}
             >
@@ -401,11 +400,10 @@ export default function ProcedureEducationModal({ procedure, language, onClose }
                 }
               }}
               disabled={sections?.findIndex(s => s?.id === activeSection) === sections?.length - 1}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed focus:border-accent focus:outline-none"
               style={{ 
                 backgroundColor: 'rgba(107, 124, 232, 0.15)', 
-                color: '#8b9aec',
-                outlineColor: '#8b9aec'
+                color: '#8b9aec'
               }}
               aria-label={language === 'EN' ? 'Go to next section' : 'Ir a la siguiente sección'}
             >

@@ -39,19 +39,16 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
 ## Recent Changes (2026-02-09)
-- Aligned landing page with dashboard theme: matched typography scale, spacing rhythm, colors, and token usage
-- Landing page: removed hardcoded dark header bg, reduced hero from 10rem to 4-6xl, sections from py-48 to py-20/24, features left-aligned with inline icons
-- Polished dark mode: warm charcoal backgrounds (#111215 base), comfortable text contrast (#e3e4e8 primary), desaturated accent (#6b8aee)
-- Dark mode status colors muted: success #3ecf8e, warning #e0a54a, danger #e06060
-- Removed ALL inline dark: Tailwind classes from 5 page/component files — now 0 hardcoded dark mode overrides
-- Migrated admin-procedure-library, enhanced-patient-procedure-detail, treatment-content-management-dashboard (+ TreatmentCard, ContentViewerModal) to use design system tokens exclusively
-- Refined button/input components: brightness hover instead of ring glow, focus:border-accent instead of focus:ring
-- Refactored global styling to premium Stripe/Apple SaaS theme
-- Consolidated all CSS variables into tailwind.css as single source of truth
-- Light mode: clean white (#ffffff), high-contrast text (#1a1f36), blue accent (#2563eb)
-- Typography hierarchy: 700 h1, 600 h2-h4, distinct sizes with tight letter-spacing
-- Added proper shadow scale (xs/card/md/lg), refined radius tokens, and status colors
-- Removed conflicting :root variables from globals.css
+- COMPLETE design token migration: 0 hardcoded Tailwind color classes remain across 71+ JSX files
+- Migrated ~750+ hardcoded color instances to design tokens (bg-bg0/bg1/bg2/bg3, text-t1/t2/t3, border-bd, accent, success, danger, warning)
+- 0 dark: classes, 0 focus:ring-* patterns, 0 shadow-xl/2xl, 0 animate-bounce, 0 hover:scale
+- Standardized all focus states to focus-visible:outline with accent token
+- Removed all gradient backgrounds, decorative animations, aggressive shadow transitions
+- Button hover: brightness-110 (not color swap), focus: outline-accent/30 (not ring glow)
+- Overlays standardized: bg-[var(--overlay)] replacing bg-black bg-opacity-*
+- CSS variables in tailwind.css as single source of truth
+- Light mode: white #ffffff, text #1a1f36, accent #2563eb
+- Dark mode: charcoal #111215, text #e3e4e8, accent #6b8aee
 - Added Gemini AI integration via Vite proxy (/gemini-proxy)
 - Connected Twilio SMS (credentials stored as Replit secrets + Supabase Edge Function secrets)
 

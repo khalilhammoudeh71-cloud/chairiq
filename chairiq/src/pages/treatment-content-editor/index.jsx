@@ -24,7 +24,6 @@ const TreatmentContentEditor = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
 
-  // Form state
   const [formData, setFormData] = useState({
     title: { en: '', es: '' },
     description: { en: '', es: '' },
@@ -93,7 +92,6 @@ const TreatmentContentEditor = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       showToast('Treatment content saved successfully', 'success');
@@ -117,16 +115,16 @@ const TreatmentContentEditor = () => {
 
   if (!selectedProcedure) {
     return (
-      <div className="min-h-screen bg-gray-900">
+      <div className="min-h-screen bg-bg3">
         <DentistNavigation />
         <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
           <div className="text-center">
-            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">Procedure Not Found</h2>
-            <p className="text-gray-400 mb-6">The requested procedure could not be found.</p>
+            <AlertCircle className="w-16 h-16 text-danger mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-t1 mb-2">Procedure Not Found</h2>
+            <p className="text-t3 mb-6">The requested procedure could not be found.</p>
             <button
               onClick={() => navigate('/treatment-content-management-dashboard')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
             >
               Back to Dashboard
             </button>
@@ -137,35 +135,33 @@ const TreatmentContentEditor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg-0">
+    <div className="min-h-screen bg-bg0">
       <DentistNavigation />
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="card mb-8 p-6">
           <div className="flex items-center gap-4">
             <button
               onClick={handleBack}
-              className="p-2 hover:bg-bg-1 rounded-lg"
+              className="p-2 hover:bg-bg1 rounded-lg"
             >
-              <ArrowLeft className="w-6 h-6 text-text-2" />
+              <ArrowLeft className="w-6 h-6 text-t2" />
             </button>
             <div>
-              <h1 className="text-3xl font-bold text-white">
+              <h1 className="text-3xl font-bold text-t1">
                 Edit Treatment Content
               </h1>
-              <p className="text-gray-400 mt-1">
+              <p className="text-t3 mt-1">
                 {selectedProcedure?.name} - Customize educational materials
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Language Toggle */}
-            <div className="flex bg-bg-1 rounded-lg p-1">
+            <div className="flex bg-bg1 rounded-lg p-1">
               <button
                 onClick={() => setLanguage('en')}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  language === 'en' ?'bg-blue-600 text-white' :'text-gray-400 hover:text-white'
+                  language === 'en' ?'bg-accent text-white' :'text-t3 hover:text-t1'
                 }`}
               >
                 English
@@ -173,29 +169,27 @@ const TreatmentContentEditor = () => {
               <button
                 onClick={() => setLanguage('es')}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  language === 'es' ?'bg-blue-600 text-white' :'text-gray-400 hover:text-white'
+                  language === 'es' ?'bg-accent text-white' :'text-t3 hover:text-t1'
                 }`}
               >
                 Español
               </button>
             </div>
 
-            {/* Preview Button */}
             <button
               onClick={() => setShowPreview(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-bg-1 text-text-1 rounded-lg hover:bg-bg-2"
+              className="flex items-center gap-2 px-4 py-2 bg-bg1 text-t1 rounded-lg hover:bg-bg2"
             >
               <Eye className="w-5 h-5" />
               Preview
             </button>
 
-            {/* Save Button */}
             <button
               onClick={handleSave}
               disabled={!hasUnsavedChanges || isSaving}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${
                 hasUnsavedChanges && !isSaving
-                  ? 'bg-blue-600 text-white hover:bg-blue-700' :'bg-gray-700 text-gray-400 cursor-not-allowed'
+                  ? 'bg-accent text-white hover:brightness-110' :'bg-bg2 text-t3 cursor-not-allowed'
               }`}
             >
               {isSaving ? (
@@ -213,22 +207,19 @@ const TreatmentContentEditor = () => {
           </div>
         </div>
 
-        {/* Unsaved Changes Indicator */}
         {hasUnsavedChanges && (
-          <div className="mb-6 p-4 bg-yellow-900/20 border border-yellow-600/30 rounded-lg flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-yellow-500" />
-            <p className="text-yellow-200 text-sm">
+          <div className="mb-6 p-4 bg-warning/10 border border-warning/30 rounded-lg flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-warning" />
+            <p className="text-warning text-sm">
               You have unsaved changes. Make sure to save before leaving this page.
             </p>
           </div>
         )}
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar - Procedure Selection */}
           <div className="lg:col-span-1">
             <div className="card p-6 sticky top-24">
-              <h3 className="text-lg font-semibold text-text-1 mb-4">
+              <h3 className="text-lg font-semibold text-t1 mb-4">
                 Select Procedure
               </h3>
               <div className="space-y-2">
@@ -246,7 +237,7 @@ const TreatmentContentEditor = () => {
                     }}
                     className={`w-full text-left p-3 rounded-lg transition-colors ${
                       proc?.id === selectedProcedure?.id
-                        ? 'bg-blue-600 text-white' :'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        ? 'bg-accent text-white' :'bg-bg2 text-t3 hover:bg-bg3'
                     }`}
                   >
                     <div className="font-medium text-sm">{proc?.name}</div>
@@ -257,10 +248,8 @@ const TreatmentContentEditor = () => {
             </div>
           </div>
 
-          {/* Main Editor Area */}
           <div className="lg:col-span-3">
-            {/* Tabs */}
-            <div className="card rounded-t-xl border-b border-gray-200">
+            <div className="card rounded-t-xl border-b border-bd">
               <div className="flex gap-1 p-1">
                 {[
                   { id: 'description', label: 'Description' },
@@ -273,7 +262,7 @@ const TreatmentContentEditor = () => {
                     onClick={() => setActiveTab(tab?.id)}
                     className={`px-6 py-3 rounded-lg text-sm font-medium ${
                       activeTab === tab?.id
-                        ? 'bg-bg-1 text-text-1' :'text-text-3 hover:text-text-1 hover:bg-bg-0'
+                        ? 'bg-bg1 text-t1' :'text-t3 hover:text-t1 hover:bg-bg0'
                     }`}
                   >
                     {tab?.label}
@@ -282,13 +271,11 @@ const TreatmentContentEditor = () => {
               </div>
             </div>
 
-            {/* Tab Content */}
             <div className="card rounded-b-xl p-6">
               {activeTab === 'description' && (
                 <div className="space-y-6">
-                  {/* Title */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-t3 mb-2">
                       Treatment Title ({language === 'en' ? 'English' : 'Spanish'})
                     </label>
                     <input
@@ -300,9 +287,8 @@ const TreatmentContentEditor = () => {
                     />
                   </div>
 
-                  {/* Description */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-t3 mb-2">
                       Main Description ({language === 'en' ? 'English' : 'Spanish'})
                     </label>
                     <RichTextEditor
@@ -332,9 +318,8 @@ const TreatmentContentEditor = () => {
 
               {activeTab === 'details' && (
                 <div className="space-y-6">
-                  {/* Why This Treatment */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-t3 mb-2">
                       Why This Treatment is Needed ({language === 'en' ? 'English' : 'Spanish'})
                     </label>
                     <RichTextEditor
@@ -344,9 +329,8 @@ const TreatmentContentEditor = () => {
                     />
                   </div>
 
-                  {/* What to Expect */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-t3 mb-2">
                       What to Expect ({language === 'en' ? 'English' : 'Spanish'})
                     </label>
                     <RichTextEditor
@@ -361,24 +345,22 @@ const TreatmentContentEditor = () => {
           </div>
         </div>
 
-        {/* Auto-save Indicator */}
         <div className="fixed bottom-6 right-6 card px-4 py-2">
           <div className="flex items-center gap-2">
             {hasUnsavedChanges ? (
               <>
-                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
-                <span className="text-sm text-gray-300">Unsaved changes</span>
+                <div className="w-2 h-2 bg-warning rounded-full animate-pulse" />
+                <span className="text-sm text-t3">Unsaved changes</span>
               </>
             ) : (
               <>
-                <Check className="w-4 h-4 text-green-500" />
-                <span className="text-sm text-gray-300">All changes saved</span>
+                <Check className="w-4 h-4 text-success" />
+                <span className="text-sm text-t3">All changes saved</span>
               </>
             )}
           </div>
         </div>
       </div>
-      {/* Preview Modal */}
       {showPreview && (
         <PreviewModal
           procedure={selectedProcedure}

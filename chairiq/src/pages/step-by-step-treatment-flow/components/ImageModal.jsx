@@ -26,14 +26,13 @@ const ImageModal = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--overlay)] p-4"
       onClick={onClose}
     >
       <div 
-        className="relative max-w-4xl w-full bg-card rounded-lg overflow-hidden shadow-2xl"
+        className="relative max-w-4xl w-full bg-card rounded-lg overflow-hidden shadow-lg"
         onClick={(e) => e?.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border bg-muted/50">
           <h3 className="text-lg font-semibold text-card-foreground truncate pr-4">
             {title}
@@ -49,7 +48,6 @@ const ImageModal = ({
           />
         </div>
 
-        {/* Image */}
         <div className="relative bg-muted">
           <Image
             src={image}
@@ -58,7 +56,6 @@ const ImageModal = ({
           />
         </div>
 
-        {/* Footer */}
         <div className="p-4 bg-muted/50 flex justify-end">
           <Button
             variant="outline"

@@ -12,7 +12,7 @@ export default function ButtonPrimary({
       disabled={disabled || loading}
       className={`
         bg-accent hover:brightness-110 text-white font-medium px-6 py-3 rounded-md
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:ring-offset-bg0
+        focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent/30
         disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100
         transition-colors duration-150
         flex items-center justify-center gap-2

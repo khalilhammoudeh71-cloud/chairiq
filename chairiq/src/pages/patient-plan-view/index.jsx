@@ -84,20 +84,20 @@ export default function PatientPlanView() {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'Immediate':
-        return 'bg-red-500/20 text-red-300 border-red-400/30';
+        return 'bg-danger/10 text-danger border-danger/30';
       case 'Soon':
-        return 'bg-yellow-500/20 text-yellow-300 border-yellow-400/30';
+        return 'bg-warning/10 text-warning border-warning/30';
       case 'Future':
-        return 'bg-blue-500/20 text-blue-300 border-blue-400/30';
+        return 'bg-accent/10 text-accent border-accent/30';
       default:
-        return 'bg-gray-500/20 text-gray-300 border-gray-400/30';
+        return 'bg-bg3 text-t3 border-bd';
     }
   };
 
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-0">
+      <div className="min-h-screen flex items-center justify-center bg-bg0">
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -113,7 +113,7 @@ export default function PatientPlanView() {
   // Error state
   if (error || !planData) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-bg-0">
+      <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -419,7 +419,7 @@ export default function PatientPlanView() {
   };
 
   return (
-    <div className="min-h-screen py-12 px-4 bg-bg-0">
+    <div className="min-h-screen py-12 px-4 bg-bg0">
       <div className="max-w-5xl mx-auto">
         {/* Header with iOS-style language toggle */}
         <div 

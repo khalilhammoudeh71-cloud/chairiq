@@ -69,15 +69,15 @@ export default function DentistLoginAuthentication() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-0 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-bg0 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
-            <Lock className="w-8 h-8 text-bg-0" />
+            <Lock className="w-8 h-8 text-bg0" />
           </div>
-          <h1 className="text-3xl font-bold text-text-1 mb-2">ChairIQ</h1>
-          <p className="text-xl text-text-2">Admin Access</p>
+          <h1 className="text-3xl font-bold text-t1 mb-2">ChairIQ</h1>
+          <p className="text-xl text-t2">Admin Access</p>
         </div>
 
         {/* Login Form Card */}
@@ -93,7 +93,7 @@ export default function DentistLoginAuthentication() {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-t2 mb-2">
                 Email Address
               </label>
               <input
@@ -109,7 +109,7 @@ export default function DentistLoginAuthentication() {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-t2 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -125,7 +125,7 @@ export default function DentistLoginAuthentication() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-3 hover:text-text-1 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-t3 hover:text-t1 transition-colors"
                   disabled={loading}
                 >
                   {showPassword ? (
@@ -156,7 +156,7 @@ export default function DentistLoginAuthentication() {
         </div>
 
         {/* Security Notice */}
-        <div className="mt-6 text-center text-sm text-text-3">
+        <div className="mt-6 text-center text-sm text-t3">
           <p>Protected admin area. Authorized dentist access only.</p>
         </div>
       </div>

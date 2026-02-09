@@ -26,19 +26,19 @@ const DentistSignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-0">
+    <div className="min-h-screen bg-bg0">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-bg0 border-b border-bd">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">C</span>
             </div>
-            <span className="text-2xl font-bold text-text-1">ChairIQ</span>
+            <span className="text-2xl font-bold text-t1">ChairIQ</span>
           </div>
           <button
             onClick={() => navigate('/')}
-            className="flex items-center space-x-2 px-4 py-2 text-text-2 hover:text-text-1"
+            className="flex items-center space-x-2 px-4 py-2 text-t2 hover:text-t1"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
@@ -49,13 +49,13 @@ const DentistSignUpPage = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
         {/* Page Title */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-text-1 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-t1 mb-4">
             ChairIQ – Dentist Sign Up
           </h1>
           <p className="text-xl text-accent font-semibold mb-6">
             Request Access to the Platform
           </p>
-          <p className="text-text-2 text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-t2 text-lg max-w-2xl mx-auto leading-relaxed">
             Join dental practices using ChairIQ to enhance patient understanding, reduce anxiety, and improve treatment acceptance through clear, visual communication.
           </p>
         </div>
@@ -65,7 +65,7 @@ const DentistSignUpPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Dentist Name */}
             <div>
-              <label htmlFor="dentistName" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="dentistName" className="block text-sm font-medium text-t2 mb-2">
                 Dentist Name *
               </label>
               <input
@@ -82,7 +82,7 @@ const DentistSignUpPage = () => {
 
             {/* Practice Name */}
             <div>
-              <label htmlFor="practiceName" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="practiceName" className="block text-sm font-medium text-t2 mb-2">
                 Practice Name *
               </label>
               <input
@@ -99,7 +99,7 @@ const DentistSignUpPage = () => {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-t2 mb-2">
                 Email Address *
               </label>
               <input
@@ -116,7 +116,7 @@ const DentistSignUpPage = () => {
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="phone" className="block text-sm font-medium text-t2 mb-2">
                 Phone Number *
               </label>
               <input
@@ -133,7 +133,7 @@ const DentistSignUpPage = () => {
 
             {/* Practice Location */}
             <div>
-              <label htmlFor="location" className="block text-sm font-medium text-text-2 mb-2">
+              <label htmlFor="location" className="block text-sm font-medium text-t2 mb-2">
                 Practice Location *
               </label>
               <input
@@ -164,8 +164,8 @@ const DentistSignUpPage = () => {
             <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
               <Shield className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-text-1 mb-2">HIPAA-Aware Design</h3>
-            <p className="text-text-3 text-sm">
+            <h3 className="text-lg font-semibold text-t1 mb-2">HIPAA-Aware Design</h3>
+            <p className="text-t3 text-sm">
               Built with healthcare compliance and patient privacy in mind
             </p>
           </div>
@@ -173,8 +173,8 @@ const DentistSignUpPage = () => {
             <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-text-1 mb-2">Enhanced Patient Understanding</h3>
-            <p className="text-text-3 text-sm">
+            <h3 className="text-lg font-semibold text-t1 mb-2">Enhanced Patient Understanding</h3>
+            <p className="text-t3 text-sm">
               Visual treatment plans that patients actually comprehend
             </p>
           </div>
@@ -182,8 +182,8 @@ const DentistSignUpPage = () => {
             <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-text-1 mb-2">Improved Treatment Acceptance</h3>
-            <p className="text-text-3 text-sm">
+            <h3 className="text-lg font-semibold text-t1 mb-2">Improved Treatment Acceptance</h3>
+            <p className="text-t3 text-sm">
               Clear communication leads to better case acceptance rates
             </p>
           </div>
@@ -191,38 +191,38 @@ const DentistSignUpPage = () => {
 
         {/* Testimonials */}
         <div className="mt-16 card p-8">
-          <h2 className="text-2xl font-bold text-text-1 text-center mb-8">What Dentists Are Saying</h2>
+          <h2 className="text-2xl font-bold text-t1 text-center mb-8">What Dentists Are Saying</h2>
           <div className="space-y-6">
             <div className="border-l-4 border-accent pl-6">
-              <p className="text-text-2 italic mb-3">
+              <p className="text-t2 italic mb-3">
                 "ChairIQ has transformed how we communicate with patients. Treatment acceptance has increased significantly."
               </p>
-              <p className="text-text-3 text-sm font-semibold">– Dr. Sarah Johnson, Family Dentistry</p>
+              <p className="text-t3 text-sm font-semibold">– Dr. Sarah Johnson, Family Dentistry</p>
             </div>
             <div className="border-l-4 border-accent pl-6">
-              <p className="text-text-2 italic mb-3">
+              <p className="text-t2 italic mb-3">
                 "Patients love the visual explanations. They feel more confident about their treatment decisions."
               </p>
-              <p className="text-text-3 text-sm font-semibold">– Dr. Michael Chen, Cosmetic Dentistry</p>
+              <p className="text-t3 text-sm font-semibold">– Dr. Michael Chen, Cosmetic Dentistry</p>
             </div>
           </div>
         </div>
       </div>
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8 mt-20">
+      <footer className="bg-bg0 border-t border-bd py-8 mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-text-3 text-sm">
+            <div className="text-t3 text-sm">
               © 2026 ChairIQ. All rights reserved.
             </div>
             <div className="flex space-x-6">
-              <a href="/privacy-policy" className="text-text-3 hover:text-text-1 text-sm">
+              <a href="/privacy-policy" className="text-t3 hover:text-t1 text-sm">
                 Privacy Policy
               </a>
-              <a href="/terms-of-service" className="text-text-3 hover:text-text-1 text-sm">
+              <a href="/terms-of-service" className="text-t3 hover:text-t1 text-sm">
                 Terms & Conditions
               </a>
-              <a href="mailto:support@chairiq.online" className="text-text-3 hover:text-text-1 text-sm">
+              <a href="mailto:support@chairiq.online" className="text-t3 hover:text-t1 text-sm">
                 support@chairiq.online
               </a>
             </div>

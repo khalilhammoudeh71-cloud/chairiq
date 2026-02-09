@@ -31,58 +31,58 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
         modules={modules}
         formats={formats}
         placeholder={placeholder}
-        className="bg-gray-900 text-white rounded-lg"
+        className="bg-bg3 text-t1 rounded-lg"
       />
       <style jsx global>{`
         .rich-text-editor .ql-container {
-          background-color: #111827;
-          border-color: #374151;
+          background-color: var(--bg3);
+          border-color: var(--bd);
           border-radius: 0 0 0.5rem 0.5rem;
           min-height: 200px;
           font-size: 15px;
         }
         
         .rich-text-editor .ql-toolbar {
-          background-color: #1f2937;
-          border-color: #374151;
+          background-color: var(--bg2);
+          border-color: var(--bd);
           border-radius: 0.5rem 0.5rem 0 0;
         }
         
         .rich-text-editor .ql-editor {
-          color: #ffffff;
+          color: var(--t1);
           min-height: 200px;
         }
         
         .rich-text-editor .ql-editor.ql-blank::before {
-          color: #6b7280;
+          color: var(--t3);
           font-style: normal;
         }
         
         .rich-text-editor .ql-stroke {
-          stroke: #9ca3af;
+          stroke: var(--t3);
         }
         
         .rich-text-editor .ql-fill {
-          fill: #9ca3af;
+          fill: var(--t3);
         }
         
         .rich-text-editor .ql-picker-label {
-          color: #9ca3af;
+          color: var(--t3);
         }
         
         .rich-text-editor .ql-toolbar button:hover,
         .rich-text-editor .ql-toolbar button.ql-active {
-          color: #60a5fa;
+          color: var(--accent);
         }
         
         .rich-text-editor .ql-toolbar button:hover .ql-stroke,
         .rich-text-editor .ql-toolbar button.ql-active .ql-stroke {
-          stroke: #60a5fa;
+          stroke: var(--accent);
         }
         
         .rich-text-editor .ql-toolbar button:hover .ql-fill,
         .rich-text-editor .ql-toolbar button.ql-active .ql-fill {
-          fill: #60a5fa;
+          fill: var(--accent);
         }
       `}</style>
     </div>

@@ -6,15 +6,15 @@ export default function AccessDenied() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-bg-0 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-bg0 flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
         {/* Icon and Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-danger/10 rounded-full mb-4">
             <ShieldAlert className="w-10 h-10 text-danger" />
           </div>
-          <h1 className="text-3xl font-bold text-text-1 mb-2">Access Restricted</h1>
-          <p className="text-lg text-text-2">Insufficient permissions for this resource</p>
+          <h1 className="text-3xl font-bold text-t1 mb-2">Access Restricted</h1>
+          <p className="text-lg text-t2">Insufficient permissions for this resource</p>
         </div>
 
         {/* Main Content Card */}
@@ -30,8 +30,8 @@ export default function AccessDenied() {
 
             {/* Why This Happened */}
             <div>
-              <h2 className="text-lg font-semibold text-text-1 mb-3">Why am I seeing this?</h2>
-              <ul className="space-y-2 text-sm text-text-2">
+              <h2 className="text-lg font-semibold text-t1 mb-3">Why am I seeing this?</h2>
+              <ul className="space-y-2 text-sm text-t2">
                 <li className="flex items-start gap-2">
                   <span className="text-danger mt-1">•</span>
                   <span>You are not signed in with a dentist administrator account</span>
@@ -67,11 +67,11 @@ export default function AccessDenied() {
             </div>
 
             {/* Contact Information */}
-            <div className="pt-4 border-t border-gray-200">
-              <p className="text-sm text-text-2 mb-2">
+            <div className="pt-4 border-t border-bd">
+              <p className="text-sm text-t2 mb-2">
                 <span className="font-medium">Need access?</span>
               </p>
-              <p className="text-sm text-text-3">
+              <p className="text-sm text-t3">
                 Contact your practice administrator to request dentist-level access to admin features.
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function AccessDenied() {
         </div>
 
         {/* Additional Help */}
-        <div className="mt-6 text-center text-sm text-text-3">
+        <div className="mt-6 text-center text-sm text-t3">
           <p>This security restriction protects sensitive patient and practice information.</p>
         </div>
       </div>
