@@ -7,61 +7,61 @@
 @layer base {
   :root {
     /* ═══════════════════════════════════════════
-       LIGHT MODE — Clean, Clinical, Stripe-style
+       LIGHT MODE — Expensive, Calm, Intentional
        ═══════════════════════════════════════════ */
 
-    /* Surface layers */
+    /* Surface layers — barely-there differences, depth through spacing */
     --bg0: #ffffff;
-    --bg1: #f9fafb;
-    --bg2: #f3f4f6;
-    --bg3: #e5e7eb;
+    --bg1: #fafbfc;
+    --bg2: #f5f6f8;
+    --bg3: #eef0f3;
 
-    /* Text hierarchy — high contrast, readable */
-    --t1: #111827;
-    --t2: #4b5563;
-    --t3: #9ca3af;
+    /* Text hierarchy — softer contrast, not harsh black */
+    --t1: #1a1f36;
+    --t2: #525f7f;
+    --t3: #8898aa;
 
-    /* Borders — crisp but restrained */
-    --bd: #e5e7eb;
+    /* Borders — whisper-thin, almost invisible */
+    --bd: rgba(0, 0, 0, 0.06);
 
     /* Accent — confident blue, used sparingly */
     --accent: #2563eb;
     --accent2: #1d4ed8;
-    --accent-soft: rgba(37, 99, 235, 0.06);
-    --accent-hover: rgba(37, 99, 235, 0.08);
+    --accent-soft: rgba(37, 99, 235, 0.05);
+    --accent-hover: rgba(37, 99, 235, 0.06);
 
     /* Status — clear, distinguishable */
     --success: #059669;
     --warning: #d97706;
     --danger: #dc2626;
 
-    /* Shadows — subtle depth, Apple/Stripe feel */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-    --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.04);
+    /* Shadows — soft, diffused, barely noticeable */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05), 0 0 1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.06);
+    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.04);
+    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.03);
 
     /* Focus ring */
     --ring: rgba(37, 99, 235, 0.4);
-    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.12);
 
     /* Overlay */
-    --overlay: rgba(0, 0, 0, 0.5);
+    --overlay: rgba(15, 23, 42, 0.4);
 
-    /* Spacing scale */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
+    /* Spacing scale — generous */
+    --spacing-xs: 0.375rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1.25rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+    --spacing-2xl: 4rem;
 
-    /* Radius — refined, modern */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
+    /* Radius — softer, rounded */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 1rem;
 
     /* Logo and Branding */
     --logo-size: 2.25rem;
@@ -73,48 +73,48 @@
   }
 
   /* ═══════════════════════════════════════════
-     DARK MODE — Calm, Professional, Not Flashy
+     DARK MODE — Calm, Layered, Quiet Depth
      ═══════════════════════════════════════════ */
   .dark {
-    /* Surface layers — deep slate, not pure black */
-    --bg0: #0f1117;
-    --bg1: #161922;
-    --bg2: #1e222d;
-    --bg3: #282d3a;
+    /* Surface layers — close together, depth from spacing not color */
+    --bg0: #0c0e14;
+    --bg1: #12141c;
+    --bg2: #191c26;
+    --bg3: #222633;
 
-    /* Text hierarchy — crisp on dark */
-    --t1: #f1f5f9;
-    --t2: #94a3b8;
-    --t3: #64748b;
+    /* Text hierarchy — warm white, not clinical */
+    --t1: #eceff4;
+    --t2: #8b95a8;
+    --t3: #5c6577;
 
-    /* Borders — visible but restrained */
-    --bd: rgba(255, 255, 255, 0.08);
+    /* Borders — barely there */
+    --bd: rgba(255, 255, 255, 0.06);
 
-    /* Accent — slightly brighter for dark bg */
+    /* Accent — gently brighter for dark bg */
     --accent: #3b82f6;
     --accent2: #2563eb;
-    --accent-soft: rgba(59, 130, 246, 0.1);
-    --accent-hover: rgba(59, 130, 246, 0.12);
+    --accent-soft: rgba(59, 130, 246, 0.08);
+    --accent-hover: rgba(59, 130, 246, 0.1);
 
     /* Status — vivid enough on dark surfaces */
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;
 
-    /* Shadows — deeper for dark context */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
-    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.25);
-    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.2);
+    /* Shadows — subtle glow instead of harsh drop */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 1px rgba(255, 255, 255, 0.03);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.03);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.04);
+    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.15);
 
     /* Focus ring */
     --ring: rgba(59, 130, 246, 0.5);
-    --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.15);
 
     /* Overlay */
-    --overlay: rgba(0, 0, 0, 0.7);
+    --overlay: rgba(0, 0, 0, 0.6);
   }
 
   /* Responsive logo sizing */
@@ -130,7 +130,7 @@
      ═══════════════════════════════ */
 
   * {
-    @apply border-bd;
+    border-color: var(--bd);
   }
 
   body {
@@ -139,40 +139,39 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.65;
     letter-spacing: -0.011em;
   }
 
   /* ═══════════════════════════════
-     TYPOGRAPHY — Medical-Grade, Premium
-     Confident headings, readable body
+     TYPOGRAPHY — Confident, Spacious, Readable
      ═══════════════════════════════ */
 
   h1 {
     @apply text-t1;
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    margin-bottom: 2rem;
   }
 
   h2 {
     @apply text-t1;
-    font-size: 1.75rem;
+    font-size: 1.875rem;
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     line-height: 1.2;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
   }
 
   h3 {
     @apply text-t1;
-    font-size: 1.25rem;
+    font-size: 1.375rem;
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.3;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   h4 {
@@ -181,7 +180,7 @@
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.35;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   h5, h6 {
@@ -190,15 +189,15 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 1.4;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
   p {
     @apply text-t2;
     font-weight: 400;
     font-size: 0.9375rem;
-    line-height: 1.7;
-    margin-bottom: 1rem;
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
   }
 
   a {
@@ -224,9 +223,11 @@
   }
 
   input, textarea, select {
-    @apply bg-bg1 border border-bd text-t1 placeholder:text-t3;
+    @apply bg-bg0 text-t1 placeholder:text-t3;
+    border: 1px solid var(--bd);
     border-radius: var(--radius-md);
     font-size: 0.9375rem;
+    padding: 0.75rem 1rem;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
@@ -236,40 +237,45 @@
   }
 
   label {
-    @apply text-t1;
-    font-size: 0.875rem;
+    @apply text-t2;
+    font-size: 0.8125rem;
     font-weight: 500;
     line-height: 1.5;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.5rem;
+    display: block;
   }
 
   code {
     font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
     font-size: 0.875em;
     @apply bg-bg2 text-accent2;
-    padding: 0.125rem 0.375rem;
+    padding: 0.125rem 0.5rem;
     border-radius: var(--radius-sm);
   }
 
   hr {
-    @apply border-bd;
-    margin: 1.5rem 0;
+    border: none;
+    border-top: 1px solid var(--bd);
+    margin: 2rem 0;
   }
 }
 
 @layer components {
   /* ═══════════════════════════════
-     BUTTONS — Stripe-style
+     BUTTONS — Calm, Confident
      ═══════════════════════════════ */
   .btn-primary {
-    @apply bg-accent text-white px-5 py-2.5 font-medium;
+    @apply bg-accent text-white px-6 py-3 font-medium;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-button);
+    border: none;
     transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   }
 
   .btn-primary:hover {
     @apply bg-accent2;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-card);
   }
 
   .btn-primary:active {
@@ -281,14 +287,15 @@
   }
 
   .btn-primary:disabled {
-    @apply opacity-50 cursor-not-allowed;
+    @apply opacity-40 cursor-not-allowed;
     transform: none;
   }
 
   .btn-secondary {
-    @apply bg-bg1 border border-bd text-t1 px-5 py-2.5 font-medium;
+    @apply bg-bg0 text-t1 px-6 py-3 font-medium;
+    border: 1px solid var(--bd);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-button);
+    box-shadow: var(--shadow-xs);
     transition: background-color 0.15s ease, box-shadow 0.15s ease;
   }
 
@@ -302,12 +309,13 @@
   }
 
   .btn-secondary:disabled {
-    @apply opacity-50 cursor-not-allowed;
+    @apply opacity-40 cursor-not-allowed;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-t2 px-4 py-2 font-medium;
+    @apply bg-transparent text-t2 px-5 py-2.5 font-medium;
     border-radius: var(--radius-md);
+    border: none;
     transition: background-color 0.15s ease, color 0.15s ease;
   }
 
@@ -316,78 +324,87 @@
   }
 
   .btn-ghost:disabled {
-    @apply opacity-50 cursor-not-allowed;
+    @apply opacity-40 cursor-not-allowed;
   }
 
   /* ═══════════════════════════════
-     CARDS — Elevated surfaces
+     CARDS — Layered through shadow, not borders
      ═══════════════════════════════ */
   .card {
-    @apply bg-bg1 border border-bd p-6;
+    @apply bg-bg0;
+    padding: 2rem;
+    border: 1px solid var(--bd);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
   }
 
   .card-hover {
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
   }
 
   .card-hover:hover {
     box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
 
   /* ═══════════════════════════════
-     LAYOUT
+     LAYOUT — Generous whitespace
      ═══════════════════════════════ */
   .page-container {
     @apply bg-bg0 min-h-screen;
-    padding: 2rem 2rem;
+    padding: 2.5rem 2rem;
   }
 
   @media (min-width: 640px) {
     .page-container {
-      padding: 2.5rem 3rem;
+      padding: 3.5rem 4rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-container {
+      padding: 4rem 5rem;
     }
   }
 
   /* ═══════════════════════════════
-     BADGES — Status indicators
+     BADGES — Soft, understated
      ═══════════════════════════════ */
   .badge-immediate {
-    @apply px-3 py-1 text-sm font-medium;
+    @apply px-3 py-1.5 text-xs font-medium;
     border-radius: var(--radius-sm);
-    background: rgba(220, 38, 38, 0.08);
+    background: rgba(220, 38, 38, 0.06);
     color: var(--danger);
   }
 
   .dark .badge-immediate {
-    background: rgba(239, 68, 68, 0.12);
+    background: rgba(239, 68, 68, 0.1);
   }
 
   .badge-soon {
-    @apply px-3 py-1 text-sm font-medium;
+    @apply px-3 py-1.5 text-xs font-medium;
     border-radius: var(--radius-sm);
-    background: rgba(217, 119, 6, 0.08);
+    background: rgba(217, 119, 6, 0.06);
     color: var(--warning);
   }
 
   .dark .badge-soon {
-    background: rgba(245, 158, 11, 0.12);
+    background: rgba(245, 158, 11, 0.1);
   }
 
   .badge-future {
-    @apply px-3 py-1 text-sm font-medium;
+    @apply px-3 py-1.5 text-xs font-medium;
     border-radius: var(--radius-sm);
     background: var(--accent-soft);
     color: var(--accent);
   }
 
   /* ═══════════════════════════════
-     INPUTS
+     INPUTS — Open, airy
      ═══════════════════════════════ */
   .input-field {
-    @apply bg-bg1 border border-bd text-t1 px-4 py-2.5;
+    @apply bg-bg0 text-t1 px-4 py-3;
+    border: 1px solid var(--bd);
     border-radius: var(--radius-md);
     font-size: 0.9375rem;
     @apply placeholder:text-t3;
@@ -436,39 +453,46 @@
   }
 
   /* ═══════════════════════════════
-     DIVIDER
+     DIVIDER — Almost invisible
      ═══════════════════════════════ */
   .divider {
-    @apply border-t border-bd my-6;
+    border: none;
+    border-top: 1px solid var(--bd);
+    margin: 2rem 0;
   }
 
   /* ═══════════════════════════════
-     MODALS & OVERLAYS
+     MODALS & OVERLAYS — Calm backdrop
      ═══════════════════════════════ */
   .overlay {
     @apply fixed inset-0 z-40;
     background: var(--overlay);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .modal-content {
-    @apply bg-bg1 border border-bd;
+    @apply bg-bg0;
+    border: 1px solid var(--bd);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
+    padding: 2rem;
   }
 
   /* ═══════════════════════════════
-     TABLES — Clean, scannable
+     TABLES — Airy, minimal lines
      ═══════════════════════════════ */
   .table-header {
-    @apply bg-bg2 text-t2 font-medium text-sm uppercase;
-    letter-spacing: 0.04em;
-    font-size: 0.75rem;
+    @apply text-t3 font-medium uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.6875rem;
+    padding: 1rem 1.25rem;
+    background: transparent;
   }
 
   .table-row {
-    @apply bg-bg1 border-b border-bd;
+    @apply bg-bg0;
+    border-bottom: 1px solid var(--bd);
     transition: background-color 0.1s ease;
   }
 
@@ -477,16 +501,17 @@
   }
 
   .table-cell {
-    @apply px-4 py-3.5 text-t2;
+    @apply text-t2;
+    padding: 1rem 1.25rem;
     font-size: 0.875rem;
   }
 
   /* ═══════════════════════════════
-     SCROLLBAR — Minimal, clean
+     SCROLLBAR — Invisible until hovered
      ═══════════════════════════════ */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -494,8 +519,12 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--bg3);
+    background: transparent;
     border-radius: 3px;
+  }
+
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: var(--bg3);
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -505,6 +534,6 @@
 
 @layer utilities {
   .transition-smooth {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
