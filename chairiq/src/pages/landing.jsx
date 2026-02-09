@@ -8,7 +8,7 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-bg0">
-      <header className="sticky top-0 z-50 border-b" style={{ background: '#0c0e14', borderColor: 'rgba(255,255,255,0.06)' }}>
+      <header className="sticky top-0 z-50 border-b" style={{ background: '#0a0c12', borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div
@@ -53,7 +53,7 @@ const Landing = () => {
         </div>
       </header>
 
-      <section className="relative overflow-hidden" style={{ background: '#0c0e14' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(170deg, #111827 0%, #0a0c12 40%, #080a0f 100%)' }}>
         <HeroAnimation />
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-24 lg:py-32 flex items-center">
           <div className="max-w-xl">
