@@ -263,49 +263,47 @@
 
 @layer components {
   /* ═══════════════════════════════
-     BUTTONS — Calm, Confident
+     BUTTONS — Enterprise, Solid, Restrained
      ═══════════════════════════════ */
   .btn-primary {
     @apply bg-accent text-white px-6 py-3 font-medium;
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-button);
     border: none;
-    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    transition: filter 0.15s ease;
   }
 
   .btn-primary:hover {
-    @apply bg-accent2;
-    box-shadow: var(--shadow-card);
+    filter: brightness(1.1);
   }
 
   .btn-primary:active {
-    transform: translateY(1px);
+    filter: brightness(0.95);
   }
 
   .btn-primary:focus-visible {
-    box-shadow: var(--focus-ring);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .btn-primary:disabled {
     @apply opacity-40 cursor-not-allowed;
-    transform: none;
+    filter: none;
   }
 
   .btn-secondary {
     @apply bg-bg0 text-t1 px-6 py-3 font-medium;
     border: 1px solid var(--bd);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-xs);
-    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    transition: background-color 0.15s ease;
   }
 
   .btn-secondary:hover {
     @apply bg-bg2;
-    box-shadow: var(--shadow-card);
   }
 
   .btn-secondary:focus-visible {
-    box-shadow: var(--focus-ring);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .btn-secondary:disabled {

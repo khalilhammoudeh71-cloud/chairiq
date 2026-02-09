@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default function ButtonSecondary({ 
   children, 
   className = '', 
@@ -18,12 +17,12 @@ export default function ButtonSecondary({
     <button
       disabled={disabled || loading}
       className={`
-        bg-bg1 hover:bg-bg3 text-t1 font-medium rounded border border-bd
-        hover:border-accent/30
-        focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-bg0
-        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-bg1
+        bg-bg0 hover:bg-bg2 text-t1 font-medium rounded-md border border-bd
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/20 focus-visible:ring-offset-2 focus-visible:ring-offset-bg0
+        disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-bg0
+        transition-colors duration-150
         flex items-center justify-center gap-2
-        ${sizeClasses}
+        ${sizeClasses[size] || sizeClasses.default}
         ${className}
       `}
       {...props}
