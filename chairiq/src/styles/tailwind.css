@@ -547,16 +547,16 @@
 .hero-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
+  filter: blur(40px);
   will-change: transform, opacity;
 }
 
 .hero-orb-1 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.18;
-  top: -5%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+  opacity: 0.20;
+  top: 0%;
   right: 5%;
   animation: hero-drift-1 24s ease-in-out infinite;
 }
@@ -564,9 +564,9 @@
 .hero-orb-2 {
   width: 450px;
   height: 450px;
-  background: radial-gradient(circle, var(--accent2) 0%, transparent 70%);
-  opacity: 0.12;
-  bottom: -5%;
+  background: radial-gradient(circle, var(--accent2) 0%, transparent 65%);
+  opacity: 0.15;
+  bottom: 0%;
   left: 0%;
   animation: hero-drift-2 28s ease-in-out infinite;
 }
@@ -574,8 +574,8 @@
 .hero-orb-3 {
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, var(--success) 0%, transparent 70%);
-  opacity: 0.08;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+  opacity: 0.10;
   top: 15%;
   left: 45%;
   transform: translateX(-50%);
@@ -585,8 +585,8 @@
 .hero-orb-4 {
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.14;
+  background: radial-gradient(circle, var(--accent2) 0%, transparent 65%);
+  opacity: 0.16;
   bottom: 15%;
   right: 20%;
   animation: hero-drift-4 20s ease-in-out infinite;
@@ -603,7 +603,7 @@
   top: 28%;
   left: 22%;
   background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-  opacity: 0.08;
+  opacity: 0.10;
   animation: hero-line-fade 18s ease-in-out infinite;
 }
 
@@ -612,7 +612,7 @@
   top: 58%;
   left: 38%;
   background: linear-gradient(90deg, transparent 0%, var(--accent2) 50%, transparent 100%);
-  opacity: 0.06;
+  opacity: 0.08;
   animation: hero-line-fade 22s ease-in-out infinite 6s;
 }
 
@@ -621,17 +621,18 @@
   top: 78%;
   left: 12%;
   background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-  opacity: 0.07;
+  opacity: 0.09;
   animation: hero-line-fade 20s ease-in-out infinite 12s;
 }
 
-.dark .hero-orb-1 { opacity: 0.22; }
-.dark .hero-orb-2 { opacity: 0.15; }
-.dark .hero-orb-3 { opacity: 0.10; }
-.dark .hero-orb-4 { opacity: 0.18; }
-.dark .hero-line-1 { opacity: 0.12; }
-.dark .hero-line-2 { opacity: 0.09; }
-.dark .hero-line-3 { opacity: 0.10; }
+.dark .hero-orb { filter: blur(50px); }
+.dark .hero-orb-1 { opacity: 0.35; }
+.dark .hero-orb-2 { opacity: 0.25; }
+.dark .hero-orb-3 { opacity: 0.18; }
+.dark .hero-orb-4 { opacity: 0.28; }
+.dark .hero-line-1 { opacity: 0.15; }
+.dark .hero-line-2 { opacity: 0.12; }
+.dark .hero-line-3 { opacity: 0.13; }
 
 @keyframes hero-drift-1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
