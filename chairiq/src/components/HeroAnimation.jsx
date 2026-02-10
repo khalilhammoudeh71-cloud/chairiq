@@ -2,18 +2,18 @@ import React from 'react';
 
 const HeroAnimation = () => {
   return (
-    <div className="hero-geo" aria-hidden="true">
-      <div className="hero-geo-glow" />
-      <div className="hero-geo-form">
-        <div className="hero-geo-facet hero-geo-f1" />
-        <div className="hero-geo-facet hero-geo-f2" />
-        <div className="hero-geo-facet hero-geo-f3" />
-        <div className="hero-geo-facet hero-geo-f4" />
-        <div className="hero-geo-facet hero-geo-f5" />
-        <div className="hero-geo-ridge hero-geo-r1" />
-        <div className="hero-geo-ridge hero-geo-r2" />
-        <div className="hero-geo-ridge hero-geo-r3" />
-        <div className="hero-geo-light" />
+    <div className="hero-scan" aria-hidden="true">
+      <div className="hero-scan-glow" />
+      <div className="hero-scan-form">
+        <div className="hero-scan-contour hsc-1" />
+        <div className="hero-scan-contour hsc-2" />
+        <div className="hero-scan-contour hsc-3" />
+        <div className="hero-scan-contour hsc-4" />
+        <div className="hero-scan-contour hsc-5" />
+        <div className="hero-scan-contour hsc-6" />
+        <div className="hero-scan-contour hsc-7" />
+        <div className="hero-scan-core" />
+        <div className="hero-scan-line" />
       </div>
     </div>
   );
