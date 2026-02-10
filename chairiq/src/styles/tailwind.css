@@ -563,21 +563,22 @@
 .hero-demo-glow {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.5;
 }
 .hero-demo-glow-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(30,58,138,0.25) 0%, transparent 70%);
-  top: -10%;
-  right: 5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse at 30% 20%, rgba(30,58,138,0.18) 0%, transparent 65%);
+  top: -20%;
+  left: -5%;
+  opacity: 0.7;
 }
 .hero-demo-glow-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(15,23,42,0.6) 0%, transparent 70%);
-  bottom: -10%;
-  left: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(15,23,42,0.5) 0%, transparent 70%);
+  bottom: -15%;
+  right: 0;
+  opacity: 0.5;
 }
 
 .hero-demo-scene {
@@ -591,14 +592,17 @@
 
 .hero-card {
   position: absolute;
-  background: rgba(255,255,255,0.09);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(145deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.06) 100%);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-top-color: rgba(255,255,255,0.18);
+  border-left-color: rgba(255,255,255,0.15);
   border-radius: 10px;
   padding: 14px 16px;
   box-shadow:
     0 2px 8px rgba(0,0,0,0.3),
-    0 8px 32px rgba(0,0,0,0.4),
-    0 0 1px rgba(255,255,255,0.06);
+    0 8px 32px rgba(0,0,0,0.45),
+    0 0 1px rgba(255,255,255,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 .hero-card-1 {
@@ -697,14 +701,17 @@
   top: 14px;
   width: 155px;
   height: 310px;
-  background: rgba(16,17,24,0.97);
-  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(155deg, rgba(22,23,32,0.98) 0%, rgba(14,15,22,0.98) 100%);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-top-color: rgba(255,255,255,0.16);
+  border-left-color: rgba(255,255,255,0.13);
   border-radius: 22px;
   padding: 8px;
   box-shadow:
     0 4px 12px rgba(0,0,0,0.3),
-    0 12px 48px rgba(0,0,0,0.5),
-    0 0 1px rgba(255,255,255,0.05);
+    0 16px 56px rgba(0,0,0,0.55),
+    0 0 1px rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .hero-phone-notch {
