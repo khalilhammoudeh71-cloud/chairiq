@@ -549,10 +549,12 @@
 }
 
 /* ═══════════════════════════════════════════
-   HERO PRODUCT DEMO ANIMATION
+   HERO MICRO-ANIMATION
+   9s cycle: 6s narrative + 1s fade + 2s pause
+   Story: Dentist sends plan → patient receives it
    ═══════════════════════════════════════════ */
 
-.hero-demo-container {
+.hero-container {
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -560,407 +562,377 @@
   z-index: 0;
 }
 
-.hero-demo-glow {
+.hero-ambient {
   position: absolute;
   border-radius: 50%;
 }
-.hero-demo-glow-1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(ellipse at 30% 20%, rgba(30,58,138,0.18) 0%, transparent 65%);
-  top: -20%;
-  left: -5%;
-  opacity: 0.7;
-}
-.hero-demo-glow-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(15,23,42,0.5) 0%, transparent 70%);
-  bottom: -15%;
+.hero-ambient-1 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(ellipse at 30% 25%, rgba(30,58,138,0.14) 0%, transparent 65%);
+  top: -15%;
   right: 0;
-  opacity: 0.5;
+  opacity: 0.6;
+}
+.hero-ambient-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(15,23,42,0.4) 0%, transparent 70%);
+  bottom: -10%;
+  right: 15%;
+  opacity: 0.4;
 }
 
-.hero-demo-scene {
+/* Scene layout: plan card on left, transit dots center, phone on right */
+.hero-scene {
   position: absolute;
-  right: 5%;
+  right: 4%;
   top: 50%;
-  transform: translateY(-50%) rotate(0.3deg);
-  width: 420px;
-  height: 360px;
-}
-
-.hero-card {
-  position: absolute;
-  background: linear-gradient(145deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.06) 100%);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-top-color: rgba(255,255,255,0.18);
-  border-left-color: rgba(255,255,255,0.15);
-  border-radius: 10px;
-  padding: 14px 16px;
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.3),
-    0 8px 32px rgba(0,0,0,0.45),
-    0 0 1px rgba(255,255,255,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-.hero-card-1 {
-  width: 200px;
-  top: 6px;
-  left: 0;
-  transform: rotate(-0.8deg);
-  animation: hero-card1-seq 12s ease-in-out infinite both;
-}
-
-.hero-card-2 {
-  width: 190px;
-  top: 68px;
-  left: 52px;
-  transform: rotate(0.5deg);
-  animation: hero-card2-seq 12s ease-in-out infinite both;
-}
-
-.hero-card-header {
+  transform: translateY(-50%);
+  width: 460px;
+  height: 320px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 0;
 }
 
-.hero-card-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+/* ── Dentist plan card (left side) ── */
+.hero-plan {
+  width: 180px;
   flex-shrink: 0;
-}
-.hero-card-dot-blue { background: rgba(96,165,250,0.8); }
-.hero-card-dot-green { background: rgba(52,211,153,0.8); }
-
-.hero-card-title-bar {
-  height: 8px;
-  width: 60%;
-  background: rgba(255,255,255,0.20);
-  border-radius: 4px;
-}
-.hero-card-title-bar-wide { width: 75%; }
-
-.hero-card-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.hero-card-icon-sm {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(96,165,250,0.5);
-  flex-shrink: 0;
-}
-.hero-card-icon-green { background: rgba(52,211,153,0.5); }
-
-.hero-card-line {
-  height: 5px;
-  background: rgba(255,255,255,0.14);
-  border-radius: 3px;
-}
-.hero-card-line-long { width: 85%; }
-.hero-card-line-med { width: 65%; }
-.hero-card-line-short { width: 45%; }
-
-.hero-card-body-block {
-  width: 100%;
-  height: 28px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 6px;
-  margin-bottom: 8px;
-}
-
-.hero-card-badge {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  background: rgba(96,165,250,0.15);
-  color: rgba(147,197,253,0.9);
-}
-.hero-card-badge-green {
-  background: rgba(52,211,153,0.15);
-  color: rgba(110,231,183,0.9);
-}
-
-/* Phone mockup */
-.hero-phone {
-  position: absolute;
-  right: -10px;
-  top: -6px;
-  width: 170px;
-  height: 350px;
-  z-index: 2;
-  background: linear-gradient(155deg, rgba(22,23,32,0.98) 0%, rgba(14,15,22,0.98) 100%);
+  background: linear-gradient(150deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 100%);
   border: 1px solid rgba(255,255,255,0.10);
   border-top-color: rgba(255,255,255,0.16);
   border-left-color: rgba(255,255,255,0.13);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.25),
+    0 8px 28px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  animation: hero-plan-in 9s ease-in-out infinite both;
+}
+
+.hero-plan-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+.hero-plan-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(96,165,250,0.7);
+  flex-shrink: 0;
+}
+.hero-plan-title {
+  height: 6px;
+  width: 65%;
+  background: rgba(255,255,255,0.18);
+  border-radius: 3px;
+}
+.hero-plan-sep {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 6px 0;
+}
+.hero-plan-line {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.hero-plan-bullet {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  flex-shrink: 0;
+}
+.hero-plan-bullet-b { background: rgba(96,165,250,0.45); }
+.hero-plan-bullet-g { background: rgba(52,211,153,0.45); }
+.hero-plan-text {
+  height: 4px;
+  background: rgba(255,255,255,0.13);
+  border-radius: 2px;
+}
+.hero-plan-text-w { width: 70%; }
+.hero-plan-text-m { width: 55%; }
+.hero-plan-text-s { width: 40%; }
+.hero-plan-amt {
+  font-size: 7px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.38);
+  margin-left: auto;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.hero-plan-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hero-plan-total {
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Send indicator */
+.hero-send-indicator {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 7px;
+  font-weight: 600;
+  color: rgba(52,211,153,0.7);
+  letter-spacing: 0.02em;
+  animation: hero-send-pulse 9s ease-in-out infinite both;
+}
+.hero-send-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(52,211,153,0.6);
+}
+
+/* ── Transit dots (center) ── */
+.hero-transit {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 8px;
+}
+.hero-transit-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+}
+.hero-transit-dot-1 { animation: hero-dot-travel 9s ease-in-out infinite both; }
+.hero-transit-dot-2 { animation: hero-dot-travel 9s ease-in-out 0.15s infinite both; }
+.hero-transit-dot-3 { animation: hero-dot-travel 9s ease-in-out 0.3s infinite both; }
+
+/* ── Patient phone (right side) ── */
+.hero-device {
+  width: 170px;
+  height: 310px;
+  flex-shrink: 0;
+  background: linear-gradient(155deg, rgba(20,21,30,0.98) 0%, rgba(12,13,20,0.98) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top-color: rgba(255,255,255,0.14);
+  border-left-color: rgba(255,255,255,0.11);
   border-radius: 22px;
   padding: 8px;
   box-shadow:
-    0 4px 12px rgba(0,0,0,0.3),
-    0 16px 56px rgba(0,0,0,0.55),
-    0 0 1px rgba(255,255,255,0.05),
+    0 4px 12px rgba(0,0,0,0.25),
+    0 14px 48px rgba(0,0,0,0.45),
     inset 0 1px 0 rgba(255,255,255,0.04);
 }
-
-.hero-phone-notch {
-  width: 50px;
+.hero-device-notch {
+  width: 48px;
   height: 5px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.07);
   border-radius: 3px;
-  margin: 4px auto 10px;
+  margin: 4px auto 8px;
 }
-
-.hero-phone-screen {
-  background: rgba(20,20,28,0.9);
+.hero-device-screen {
+  background: rgba(18,18,26,0.9);
   border-radius: 14px;
-  padding: 12px 10px;
-  height: calc(100% - 24px);
+  padding: 10px 9px;
+  height: calc(100% - 22px);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   overflow: hidden;
 }
 
-.hero-sms-bubble {
-  border-radius: 10px;
-  padding: 8px 10px;
+/* Phone message bubbles */
+.hero-msg {
+  border-radius: 9px;
+  padding: 7px 9px;
 }
-
-.hero-sms-bubble-1 {
-  animation: hero-sms1-seq 12s ease-in-out infinite both;
+.hero-msg-1 {
+  background: rgba(96,165,250,0.12);
+  border: 1px solid rgba(96,165,250,0.16);
+  animation: hero-msg-arrive 9s ease-in-out infinite both;
 }
-.hero-sms-bubble-2 {
-  animation: hero-sms2-seq 12s ease-in-out infinite both;
+.hero-msg-2 {
+  animation: hero-msg-arrive2 9s ease-in-out infinite both;
 }
-.hero-sms-bubble-3 {
-  animation: hero-sms3-seq 12s ease-in-out infinite both;
+.hero-msg-3 {
+  animation: hero-msg-arrive3 9s ease-in-out infinite both;
 }
-
-.hero-sms-incoming {
-  background: rgba(96,165,250,0.15);
-  border: 1px solid rgba(96,165,250,0.20);
-}
-
-.hero-sms-label {
-  font-size: 8px;
+.hero-msg-from {
+  font-size: 7px;
   font-weight: 700;
-  color: rgba(147,197,253,0.8);
+  color: rgba(147,197,253,0.7);
   margin-bottom: 4px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
-
-.hero-sms-text-line {
+.hero-msg-body {
   height: 4px;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.15);
   border-radius: 2px;
   margin-bottom: 3px;
-  width: 100%;
 }
-.hero-sms-text-short { width: 55%; }
-.hero-sms-text-med { width: 75%; }
+.hero-msg-body-w { width: 100%; }
+.hero-msg-body-m { width: 72%; }
+.hero-msg-body-s { width: 50%; }
 
-.hero-sms-link {
-  background: rgba(52,211,153,0.12);
-  border: 1px solid rgba(52,211,153,0.18);
+.hero-msg-link {
+  background: rgba(52,211,153,0.10);
+  border: 1px solid rgba(52,211,153,0.14);
   display: flex;
   align-items: center;
   gap: 6px;
 }
-
-.hero-sms-link-icon {
-  width: 12px;
-  height: 12px;
+.hero-msg-link-icon {
+  width: 11px;
+  height: 11px;
   border-radius: 3px;
-  background: rgba(52,211,153,0.25);
+  background: rgba(52,211,153,0.22);
   flex-shrink: 0;
 }
 
-.hero-sms-plan-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+/* Plan summary inside phone */
+.hero-msg-summary {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 8px;
-  padding: 8px 9px;
+  padding: 7px 8px;
 }
-
-.hero-plan-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-
-.hero-plan-title-bar {
-  height: 5px;
-  width: 55%;
-  background: rgba(255,255,255,0.20);
-  border-radius: 3px;
-}
-
-.hero-plan-status {
-  font-size: 6px;
-  font-weight: 600;
-  color: rgba(251,191,36,0.85);
-  background: rgba(251,191,36,0.12);
-  padding: 1px 5px;
-  border-radius: 3px;
-  letter-spacing: 0.03em;
-}
-
-.hero-plan-divider {
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-  margin: 5px 0;
-}
-
-.hero-plan-row {
+.hero-summary-row {
   display: flex;
   align-items: center;
   gap: 5px;
   margin-bottom: 4px;
 }
-
-.hero-plan-dot {
+.hero-summary-dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.20);
+  background: rgba(255,255,255,0.16);
   flex-shrink: 0;
 }
-.hero-plan-dot-blue {
-  background: rgba(96,165,250,0.5);
-}
-.hero-plan-dot-green {
-  background: rgba(52,211,153,0.5);
-}
-
-.hero-plan-cost {
-  font-size: 7px;
+.hero-summary-dot-b { background: rgba(96,165,250,0.4); }
+.hero-summary-dot-g { background: rgba(52,211,153,0.4); }
+.hero-summary-amt {
+  font-size: 6.5px;
   font-weight: 600;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.38);
   margin-left: auto;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
-
-.hero-plan-total-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 2px;
+.hero-summary-sep {
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  margin: 4px 0;
 }
-
-.hero-plan-total {
-  font-size: 8px;
+.hero-summary-total {
+  font-size: 7.5px;
   font-weight: 700;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.55);
+  margin-left: auto;
   font-variant-numeric: tabular-nums;
 }
-
-.hero-plan-accept-btn {
-  margin-top: 6px;
-  background: rgba(96,165,250,0.2);
-  border: 1px solid rgba(96,165,250,0.25);
+.hero-summary-btn {
+  margin-top: 5px;
+  background: rgba(96,165,250,0.18);
+  border: 1px solid rgba(96,165,250,0.22);
   border-radius: 5px;
   padding: 3px 0;
   text-align: center;
   font-size: 7px;
   font-weight: 600;
-  color: rgba(147,197,253,0.85);
+  color: rgba(147,197,253,0.8);
   letter-spacing: 0.02em;
 }
 
-.hero-sms-preview-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(96,165,250,0.4);
-  flex-shrink: 0;
-}
-.hero-sms-preview-dot-green { background: rgba(52,211,153,0.4); }
+/* ── Keyframes ──
+   9s total: build 0-2s, send 2-3.5s, arrive 3-5.5s, hold 5.5-7s, fade 7-8s, pause 8-9s */
 
-/* Animations — sequenced story over 12s cycle */
-/* 12s cycle: deliberate build (0-4s), long confident hold (4-9s), gentle fade (9-11s), pause (11-12s) */
-
-/* Card 1: fades in over 0.8s */
-@keyframes hero-card1-seq {
-  0%   { opacity: 0; transform: translateY(12px); }
-  7%   { opacity: 1; transform: translateY(0); }
-  75%  { opacity: 1; transform: translateY(0); }
-  85%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(0); }
+/* Plan card fades in first */
+@keyframes hero-plan-in {
+  0%    { opacity: 0; transform: translateY(8px); }
+  8%    { opacity: 1; transform: translateY(0); }
+  78%   { opacity: 1; transform: translateY(0); }
+  89%   { opacity: 0; transform: translateY(0); }
+  100%  { opacity: 0; transform: translateY(0); }
 }
 
-/* Card 2: waits 1s, fades in over 0.8s */
-@keyframes hero-card2-seq {
-  0%   { opacity: 0; transform: translateY(14px); }
-  8%   { opacity: 0; transform: translateY(14px); }
-  15%  { opacity: 1; transform: translateY(0); }
-  75%  { opacity: 1; transform: translateY(0); }
-  85%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(0); }
+/* Send indicator appears after plan is visible */
+@keyframes hero-send-pulse {
+  0%    { opacity: 0; }
+  12%   { opacity: 0; }
+  20%   { opacity: 1; }
+  78%   { opacity: 1; }
+  89%   { opacity: 0; }
+  100%  { opacity: 0; }
 }
 
-/* SMS 1: waits 2s, fades in over 0.7s */
-@keyframes hero-sms1-seq {
-  0%   { opacity: 0; transform: translateY(10px); }
-  17%  { opacity: 0; transform: translateY(10px); }
-  23%  { opacity: 1; transform: translateY(0); }
-  75%  { opacity: 1; transform: translateY(0); }
-  85%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(0); }
+/* Transit dots light up as plan sends */
+@keyframes hero-dot-travel {
+  0%    { opacity: 0.1; transform: scale(1); }
+  22%   { opacity: 0.1; transform: scale(1); }
+  28%   { opacity: 0.6; transform: scale(1.3); }
+  36%   { opacity: 0.15; transform: scale(1); }
+  78%   { opacity: 0.15; }
+  89%   { opacity: 0; }
+  100%  { opacity: 0; }
 }
 
-/* SMS 2: waits 2.8s, fades in over 0.7s */
-@keyframes hero-sms2-seq {
-  0%   { opacity: 0; transform: translateY(10px); }
-  23%  { opacity: 0; transform: translateY(10px); }
-  29%  { opacity: 1; transform: translateY(0); }
-  75%  { opacity: 1; transform: translateY(0); }
-  85%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(0); }
+/* Phone messages arrive sequentially */
+@keyframes hero-msg-arrive {
+  0%    { opacity: 0; transform: translateY(8px); }
+  30%   { opacity: 0; transform: translateY(8px); }
+  38%   { opacity: 1; transform: translateY(0); }
+  78%   { opacity: 1; transform: translateY(0); }
+  89%   { opacity: 0; transform: translateY(0); }
+  100%  { opacity: 0; transform: translateY(0); }
+}
+@keyframes hero-msg-arrive2 {
+  0%    { opacity: 0; transform: translateY(8px); }
+  38%   { opacity: 0; transform: translateY(8px); }
+  46%   { opacity: 1; transform: translateY(0); }
+  78%   { opacity: 1; transform: translateY(0); }
+  89%   { opacity: 0; transform: translateY(0); }
+  100%  { opacity: 0; transform: translateY(0); }
+}
+@keyframes hero-msg-arrive3 {
+  0%    { opacity: 0; transform: translateY(8px); }
+  46%   { opacity: 0; transform: translateY(8px); }
+  56%   { opacity: 1; transform: translateY(0); }
+  78%   { opacity: 1; transform: translateY(0); }
+  89%   { opacity: 0; transform: translateY(0); }
+  100%  { opacity: 0; transform: translateY(0); }
 }
 
-/* Plan card: waits 3.6s, fades in over 0.8s */
-@keyframes hero-sms3-seq {
-  0%   { opacity: 0; transform: translateY(10px); }
-  30%  { opacity: 0; transform: translateY(10px); }
-  37%  { opacity: 1; transform: translateY(0); }
-  75%  { opacity: 1; transform: translateY(0); }
-  85%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(0); }
-}
-
+/* Responsive */
 @media (max-width: 1024px) {
-  .hero-demo-scene {
-    width: 280px;
-    height: 260px;
+  .hero-scene {
+    width: 320px;
+    height: 240px;
     right: 2%;
     opacity: 0.5;
   }
-  .hero-card-1 { width: 150px; }
-  .hero-card-2 { width: 140px; }
-  .hero-phone { width: 120px; height: 240px; border-radius: 18px; }
+  .hero-plan { width: 140px; padding: 10px 11px; }
+  .hero-device { width: 130px; height: 240px; border-radius: 18px; }
 }
 
 @media (max-width: 640px) {
-  .hero-demo-scene { display: none; }
+  .hero-scene { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-card, .hero-phone, .hero-sms-bubble {
+  .hero-plan, .hero-device, .hero-msg,
+  .hero-send-indicator, .hero-transit-dot {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
