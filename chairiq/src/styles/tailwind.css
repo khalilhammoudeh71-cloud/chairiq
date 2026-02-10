@@ -610,7 +610,7 @@
   top: 6px;
   left: 0;
   transform: rotate(-0.8deg);
-  animation: hero-card1-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+  animation: hero-card1-seq 12s ease-in-out infinite both;
 }
 
 .hero-card-2 {
@@ -618,7 +618,7 @@
   top: 68px;
   left: 52px;
   transform: rotate(0.5deg);
-  animation: hero-card2-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+  animation: hero-card2-seq 12s ease-in-out infinite both;
 }
 
 .hero-card-header {
@@ -740,13 +740,13 @@
 }
 
 .hero-sms-bubble-1 {
-  animation: hero-sms1-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+  animation: hero-sms1-seq 12s ease-in-out infinite both;
 }
 .hero-sms-bubble-2 {
-  animation: hero-sms2-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+  animation: hero-sms2-seq 12s ease-in-out infinite both;
 }
 .hero-sms-bubble-3 {
-  animation: hero-sms3-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
+  animation: hero-sms3-seq 12s ease-in-out infinite both;
 }
 
 .hero-sms-incoming {
@@ -891,55 +891,55 @@
 }
 .hero-sms-preview-dot-green { background: rgba(52,211,153,0.4); }
 
-/* Animations — sequenced story over 8s cycle */
-/* Elements slide in fast (first 2s), hold visible (4s), fade out, reset */
+/* Animations — sequenced story over 12s cycle */
+/* 12s cycle: deliberate build (0-4s), long confident hold (4-9s), gentle fade (9-11s), pause (11-12s) */
 
-/* Card 1: slides up immediately, visible by 0.3s */
+/* Card 1: fades in over 0.8s */
 @keyframes hero-card1-seq {
-  0%   { opacity: 0; transform: translateY(20px); }
-  4%   { opacity: 1; transform: translateY(0); }
-  80%  { opacity: 1; transform: translateY(0); }
-  88%  { opacity: 0; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(12px); }
+  7%   { opacity: 1; transform: translateY(0); }
+  75%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 0; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(0); }
 }
 
-/* Card 2: waits 0.4s, slides up, visible by 0.8s */
+/* Card 2: waits 1s, fades in over 0.8s */
 @keyframes hero-card2-seq {
-  0%   { opacity: 0; transform: translateY(24px); }
-  5%   { opacity: 0; transform: translateY(24px); }
-  10%  { opacity: 1; transform: translateY(0); }
-  80%  { opacity: 1; transform: translateY(0); }
-  88%  { opacity: 0; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(14px); }
+  8%   { opacity: 0; transform: translateY(14px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  75%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 0; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(0); }
 }
 
-/* SMS 1: waits 1s, slides up into phone by 1.4s */
+/* SMS 1: waits 2s, fades in over 0.7s */
 @keyframes hero-sms1-seq {
-  0%   { opacity: 0; transform: translateY(14px); }
-  12%  { opacity: 0; transform: translateY(14px); }
-  18%  { opacity: 1; transform: translateY(0); }
-  80%  { opacity: 1; transform: translateY(0); }
-  88%  { opacity: 0; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(10px); }
+  17%  { opacity: 0; transform: translateY(10px); }
+  23%  { opacity: 1; transform: translateY(0); }
+  75%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 0; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(0); }
 }
 
-/* SMS 2: waits 1.5s, slides up by 1.9s */
+/* SMS 2: waits 2.8s, fades in over 0.7s */
 @keyframes hero-sms2-seq {
-  0%   { opacity: 0; transform: translateY(14px); }
-  18%  { opacity: 0; transform: translateY(14px); }
-  24%  { opacity: 1; transform: translateY(0); }
-  80%  { opacity: 1; transform: translateY(0); }
-  88%  { opacity: 0; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(10px); }
+  23%  { opacity: 0; transform: translateY(10px); }
+  29%  { opacity: 1; transform: translateY(0); }
+  75%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 0; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(0); }
 }
 
-/* SMS 3: waits 2s, slides up by 2.4s */
+/* Plan card: waits 3.6s, fades in over 0.8s */
 @keyframes hero-sms3-seq {
-  0%   { opacity: 0; transform: translateY(14px); }
-  24%  { opacity: 0; transform: translateY(14px); }
-  30%  { opacity: 1; transform: translateY(0); }
-  80%  { opacity: 1; transform: translateY(0); }
-  88%  { opacity: 0; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(10px); }
+  30%  { opacity: 0; transform: translateY(10px); }
+  37%  { opacity: 1; transform: translateY(0); }
+  75%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 0; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(0); }
 }
 
