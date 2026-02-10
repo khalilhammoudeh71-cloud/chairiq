@@ -66,13 +66,13 @@ const Landing = () => {
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => navigate('/signup')}
-                className="hero-cta-primary px-8 py-3.5 bg-accent text-white text-[15px] rounded-lg font-semibold transition-all inline-flex items-center gap-2">
+                className="hero-cta-primary px-8 py-3.5 bg-accent text-white text-[15px] rounded-lg font-semibold inline-flex items-center gap-2">
                 Request Access
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => navigate('/login')}
-                className="px-6 py-3 text-[13px] rounded-lg font-medium transition-all inline-flex items-center gap-2"
+                className="px-6 py-3 text-[13px] rounded-lg font-medium inline-flex items-center gap-2"
                 style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)' }}>
                 Dentist Login
               </button>
