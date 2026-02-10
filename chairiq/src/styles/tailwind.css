@@ -566,12 +566,20 @@
   border-radius: 50%;
 }
 .hero-ambient-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(ellipse at 40% 35%, rgba(30,58,138,0.10) 0%, transparent 65%);
-  top: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse at 35% 30%, rgba(30,58,138,0.14) 0%, rgba(30,58,138,0.04) 45%, transparent 70%);
+  top: -25%;
   right: -5%;
-  opacity: 0.5;
+  opacity: 0.6;
+}
+.hero-ambient-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(20,30,60,0.25) 0%, transparent 65%);
+  bottom: -15%;
+  right: 10%;
+  opacity: 0.4;
 }
 
 .hero-scene {
@@ -640,14 +648,19 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.18);
   flex-shrink: 0;
 }
+.hero-plan-bullet-b { background: rgba(96,165,250,0.45); }
+.hero-plan-bullet-g { background: rgba(52,211,153,0.45); }
 .hero-plan-text {
   height: 4px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.13);
   border-radius: 2px;
 }
+.hero-plan-text-w { width: 70%; }
+.hero-plan-text-m { width: 55%; }
+.hero-plan-text-s { width: 40%; }
 .hero-plan-amt {
   font-size: 7px;
   font-weight: 600;
@@ -680,18 +693,19 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Send button — static, part of the card */
+/* Send button */
 .hero-send-btn {
   margin-top: 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(52,211,153,0.10);
+  border: 1px solid rgba(52,211,153,0.15);
   border-radius: 6px;
   padding: 5px 0;
   text-align: center;
   font-size: 8px;
   font-weight: 600;
-  color: rgba(255,255,255,0.4);
+  color: rgba(110,231,183,0.6);
   letter-spacing: 0.02em;
+  transition: none;
 }
 
 /* ── PATIENT PHONE ── */
@@ -701,19 +715,21 @@
   flex-shrink: 0;
   background: linear-gradient(155deg, rgba(20,21,30,0.98) 0%, rgba(11,12,18,0.99) 100%);
   border: 1px solid rgba(255,255,255,0.07);
-  border-top-color: rgba(255,255,255,0.12);
-  border-left-color: rgba(255,255,255,0.09);
+  border-top-color: rgba(255,255,255,0.15);
+  border-left-color: rgba(255,255,255,0.11);
   border-radius: 22px;
   padding: 8px;
   box-shadow:
     0 1px 4px rgba(0,0,0,0.2),
-    0 6px 20px rgba(0,0,0,0.3),
-    0 0 0 1px rgba(255,255,255,0.03);
+    0 6px 20px rgba(0,0,0,0.35),
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(255,255,255,0.03),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .hero-device-notch {
   width: 48px;
   height: 5px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.07);
   border-radius: 3px;
   margin: 4px auto 8px;
 }
@@ -736,14 +752,14 @@
   margin-bottom: 8px;
   font-size: 8px;
   font-weight: 700;
-  color: rgba(255,255,255,0.5);
+  color: rgba(147,197,253,0.8);
   letter-spacing: 0.04em;
 }
 .hero-phone-logo {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.12);
+  background: rgba(96,165,250,0.5);
   flex-shrink: 0;
 }
 .hero-phone-sep {
@@ -751,33 +767,30 @@
   background: rgba(255,255,255,0.05);
   margin-bottom: 8px;
 }
-.hero-phone-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
 .hero-phone-item {
   display: flex;
   align-items: center;
   gap: 6px;
   margin-bottom: 7px;
 }
-.hero-phone-bullet {
+.hero-phone-dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.18);
   flex-shrink: 0;
 }
+.hero-phone-dot-b { background: rgba(96,165,250,0.45); }
+.hero-phone-dot-g { background: rgba(52,211,153,0.45); }
 .hero-phone-label {
   height: 4px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.13);
   border-radius: 2px;
 }
 .hero-phone-price {
   font-size: 7px;
   font-weight: 600;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.4);
   margin-left: auto;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
@@ -791,51 +804,129 @@
 .hero-phone-total-label {
   font-size: 7px;
   font-weight: 600;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.3);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 .hero-phone-total-value {
   font-size: 9px;
   font-weight: 700;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.6);
   font-variant-numeric: tabular-nums;
 }
 .hero-phone-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   padding: 4px 8px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.12);
   border-radius: 5px;
   font-size: 7px;
   font-weight: 600;
-  color: rgba(255,255,255,0.35);
+  color: rgba(251,191,36,0.75);
   letter-spacing: 0.03em;
-  text-align: center;
+}
+.hero-phone-status-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(251,191,36,0.6);
+  flex-shrink: 0;
 }
 
-/* ── ANIMATION — plays once, holds final state ──
-   Step 1: Card appears      0–0.8s
-   Step 2: Phone appears      1.2–2s
-   Step 3: Phone content      2.2–3s
-   Then holds indefinitely.
+/* ── ANIMATION ──
+   7s cycle, ease-in-out, opacity only, no continuous movement.
+   Act 1 (card):  0–1s     =  0–14%
+   Act 2 (send):  1–2s     = 14–29%
+   Act 3 (phone): 2–3.8s   = 29–54%
+   Hold:          3.8–5s   = 54–71%
+   Fade:          5–5.6s   = 71–80%
+   Pause:         5.6–7s   = 80–100%
 */
 
-.ha-step-1 {
-  opacity: 0;
-  animation: ha-fade-in 0.8s ease-in-out 0.3s forwards;
+.ha-plan {
+  animation: ha-act1 7s ease-in-out infinite both;
 }
-.ha-step-2 {
-  opacity: 0;
-  animation: ha-fade-in 0.8s ease-in-out 1.4s forwards;
-}
-.ha-step-3 {
-  opacity: 0;
-  animation: ha-fade-in 0.8s ease-in-out 2.4s forwards;
+@keyframes ha-act1 {
+  0%    { opacity: 0; }
+  12%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
 }
 
-@keyframes ha-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+.ha-send {
+  animation: ha-act2 7s ease-in-out infinite both;
+}
+@keyframes ha-act2 {
+  0%    { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); }
+  14%   { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); }
+  24%   { opacity: 1; background: rgba(52,211,153,0.20); border-color: rgba(52,211,153,0.35); color: rgba(110,231,183,0.9); }
+  34%   { opacity: 1; background: rgba(52,211,153,0.14); border-color: rgba(52,211,153,0.20); color: rgba(110,231,183,0.7); }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+.ha-device {
+  animation: ha-act3 7s ease-in-out infinite both;
+}
+@keyframes ha-act3 {
+  0%    { opacity: 0; }
+  29%   { opacity: 0; }
+  40%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+.ha-ph-1 {
+  animation: ha-ph1 7s ease-in-out infinite both;
+}
+@keyframes ha-ph1 {
+  0%    { opacity: 0; }
+  33%   { opacity: 0; }
+  42%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+.ha-ph-2 {
+  animation: ha-ph2 7s ease-in-out infinite both;
+}
+@keyframes ha-ph2 {
+  0%    { opacity: 0; }
+  38%   { opacity: 0; }
+  46%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+.ha-ph-3 {
+  animation: ha-ph3 7s ease-in-out infinite both;
+}
+@keyframes ha-ph3 {
+  0%    { opacity: 0; }
+  43%   { opacity: 0; }
+  50%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+.ha-ph-4 {
+  animation: ha-ph4 7s ease-in-out infinite both;
+}
+@keyframes ha-ph4 {
+  0%    { opacity: 0; }
+  48%   { opacity: 0; }
+  54%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
 }
 
 /* Responsive */
@@ -856,7 +947,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ha-step-1, .ha-step-2, .ha-step-3 {
+  .ha-plan, .ha-send, .ha-device,
+  .ha-ph-1, .ha-ph-2, .ha-ph-3, .ha-ph-4 {
     animation: none !important;
     opacity: 1 !important;
   }
