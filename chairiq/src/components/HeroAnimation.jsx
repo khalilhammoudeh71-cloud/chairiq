@@ -54,16 +54,33 @@ const HeroAnimation = () => {
               <div className="hero-sms-link-icon" />
               <div className="hero-sms-text-line hero-sms-text-med" />
             </div>
-            <div className="hero-sms-bubble hero-sms-bubble-3 hero-sms-preview">
-              <div className="hero-sms-preview-bar" />
-              <div className="hero-sms-preview-row">
-                <div className="hero-sms-preview-dot" />
-                <div className="hero-sms-text-line hero-sms-text-short" />
+            <div className="hero-sms-bubble hero-sms-bubble-3 hero-sms-plan-card">
+              <div className="hero-plan-header">
+                <div className="hero-plan-title-bar" />
+                <div className="hero-plan-status">Pending</div>
               </div>
-              <div className="hero-sms-preview-row">
-                <div className="hero-sms-preview-dot hero-sms-preview-dot-green" />
+              <div className="hero-plan-divider" />
+              <div className="hero-plan-row">
+                <div className="hero-plan-dot" />
                 <div className="hero-sms-text-line hero-sms-text-med" />
+                <div className="hero-plan-cost">$850</div>
               </div>
+              <div className="hero-plan-row">
+                <div className="hero-plan-dot hero-plan-dot-blue" />
+                <div className="hero-sms-text-line hero-sms-text-short" />
+                <div className="hero-plan-cost">$420</div>
+              </div>
+              <div className="hero-plan-row">
+                <div className="hero-plan-dot hero-plan-dot-green" />
+                <div className="hero-sms-text-line hero-sms-text-med" />
+                <div className="hero-plan-cost">$275</div>
+              </div>
+              <div className="hero-plan-divider" />
+              <div className="hero-plan-total-row">
+                <div className="hero-sms-text-line hero-sms-text-short" style={{ background: 'rgba(255,255,255,0.25)' }} />
+                <div className="hero-plan-total">$1,545</div>
+              </div>
+              <div className="hero-plan-accept-btn">Review Plan</div>
             </div>
           </div>
         </div>
