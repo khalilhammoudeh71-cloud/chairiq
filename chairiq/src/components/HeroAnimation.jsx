@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+const slides = [
+  '/assets/images/slides/dental-1.jpg',
+  '/assets/images/slides/dental-2.jpg',
+  '/assets/images/slides/dental-3.jpg',
+  '/assets/images/slides/dental-4.jpg',
+];
 
 const HeroAnimation = () => {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActive((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="hero-scan" aria-hidden="true">
-      <div className="hero-scan-glow" />
-      <div className="hero-scan-form">
-        <div className="hero-scan-contour hsc-1" />
-        <div className="hero-scan-contour hsc-2" />
-        <div className="hero-scan-contour hsc-3" />
-        <div className="hero-scan-contour hsc-4" />
-        <div className="hero-scan-contour hsc-5" />
-        <div className="hero-scan-contour hsc-6" />
-        <div className="hero-scan-contour hsc-7" />
-        <div className="hero-scan-core" />
-        <div className="hero-scan-line" />
-      </div>
+    <div className="hero-slides" aria-hidden="true">
+      {slides.map((src, i) => (
+        <div
+          key={i}
+          className={`hero-slide ${i === active ? 'hero-slide-active' : ''}`}
+          style={{ backgroundImage: `url(${src})` }}
+        />
+      ))}
+      <div className="hero-slides-overlay" />
     </div>
   );
 };

@@ -545,198 +545,70 @@
 }
 
 /* ═══════════════════════════════════════════
-   HERO — Dental scan topography
-   Concentric contour lines forming an abstract
-   molar profile. Slow vertical scan sweep.
-   Evokes dental CAD/CAM, CBCT imaging.
-   8s cycle, calm and precise.
+   HERO — Dental slideshow
+   Crossfade between dental stock photos.
+   5s per slide, smooth 1s transitions.
+   Positioned right side, masked edges.
    ═══════════════════════════════════════════ */
 
-.hero-scan {
+.hero-slides {
   position: absolute;
-  inset: 0;
-  overflow: hidden;
+  right: 0;
+  top: 0;
+  width: 55%;
+  height: 100%;
   pointer-events: none;
   z-index: 0;
+  overflow: hidden;
 }
 
-.hero-scan-glow {
+.hero-slide {
   position: absolute;
-  width: 600px;
-  height: 600px;
-  right: 0;
-  top: 5%;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at 50% 50%,
-    rgba(30,58,138,0.10) 0%,
-    rgba(20,40,100,0.04) 45%,
-    transparent 70%
-  );
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
 }
 
-.hero-scan-form {
+.hero-slide-active {
+  opacity: 1;
+}
+
+.hero-slides-overlay {
   position: absolute;
-  right: 8%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 380px;
-  height: 440px;
-}
-
-/* ── Contour lines — nested molar cross-section ── */
-.hero-scan-contour {
-  position: absolute;
-  border: 1px solid transparent;
-  background: none;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.hsc-1 {
-  width: 320px;
-  height: 380px;
-  border-radius: 45% 55% 52% 48% / 38% 42% 58% 62%;
-  border-color: rgba(100,150,220,0.07);
-  animation: hs-pulse 8s ease-in-out infinite;
-}
-
-.hsc-2 {
-  width: 270px;
-  height: 325px;
-  border-radius: 48% 52% 50% 50% / 40% 38% 62% 60%;
-  border-color: rgba(110,160,230,0.08);
-  animation: hs-pulse 8s ease-in-out 0.6s infinite;
-}
-
-.hsc-3 {
-  width: 225px;
-  height: 275px;
-  border-radius: 50% 50% 47% 53% / 42% 40% 60% 58%;
-  border-color: rgba(120,170,235,0.09);
-  animation: hs-pulse 8s ease-in-out 1.2s infinite;
-}
-
-.hsc-4 {
-  width: 182px;
-  height: 226px;
-  border-radius: 52% 48% 45% 55% / 44% 42% 58% 56%;
-  border-color: rgba(130,175,240,0.10);
-  animation: hs-pulse 8s ease-in-out 1.8s infinite;
-}
-
-.hsc-5 {
-  width: 142px;
-  height: 180px;
-  border-radius: 48% 52% 50% 50% / 46% 44% 56% 54%;
-  border-color: rgba(140,180,240,0.11);
-  animation: hs-pulse 8s ease-in-out 2.4s infinite;
-}
-
-.hsc-6 {
-  width: 105px;
-  height: 136px;
-  border-radius: 50% 50% 48% 52% / 48% 46% 54% 52%;
-  border-color: rgba(150,185,242,0.12);
-  animation: hs-pulse 8s ease-in-out 3s infinite;
-}
-
-.hsc-7 {
-  width: 72px;
-  height: 95px;
-  border-radius: 50% 50% 46% 54% / 50% 48% 52% 50%;
-  border-color: rgba(160,190,245,0.13);
-  animation: hs-pulse 8s ease-in-out 3.6s infinite;
-}
-
-/* ── Core — innermost glow point ── */
-.hero-scan-core {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 28px;
-  height: 36px;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse,
-    rgba(120,170,240,0.12) 0%,
-    rgba(100,150,230,0.04) 60%,
-    transparent 100%
-  );
-  animation: hs-core 8s ease-in-out infinite;
-}
-
-/* ── Scan line — slow vertical sweep ── */
-.hero-scan-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 5%,
-    rgba(120,170,240,0.15) 30%,
-    rgba(160,200,255,0.22) 50%,
-    rgba(120,170,240,0.15) 70%,
-    transparent 95%
-  );
-  box-shadow: 0 0 12px 2px rgba(120,170,240,0.06);
-  animation: hs-sweep 8s ease-in-out infinite;
-}
-
-/* ── Keyframes ── */
-@keyframes hs-pulse {
-  0%, 100% { opacity: 0.5; }
-  50%      { opacity: 1; }
-}
-
-@keyframes hs-core {
-  0%, 100% { opacity: 0.6; }
-  50%      { opacity: 1; }
-}
-
-@keyframes hs-sweep {
-  0%   { top: 2%;  opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
-  100% { top: 98%; opacity: 0; }
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(15,18,25,1) 0%, rgba(15,18,25,0.85) 25%, rgba(15,18,25,0.4) 60%, rgba(15,18,25,0.25) 100%),
+    linear-gradient(180deg, rgba(15,18,25,0.3) 0%, transparent 20%, transparent 80%, rgba(15,18,25,0.5) 100%);
+  z-index: 1;
 }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .hero-scan-form {
-    right: 2%;
-    width: 270px;
-    height: 320px;
-    opacity: 0.45;
+  .hero-slides {
+    width: 65%;
   }
-  .hsc-1 { width: 230px; height: 275px; }
-  .hsc-2 { width: 195px; height: 235px; }
-  .hsc-3 { width: 162px; height: 200px; }
-  .hsc-4 { width: 132px; height: 164px; }
-  .hsc-5 { width: 102px; height: 130px; }
-  .hsc-6 { width: 76px; height: 100px; }
-  .hsc-7 { width: 52px; height: 70px; }
-  .hero-scan-core { width: 20px; height: 26px; }
+  .hero-slides-overlay {
+    background:
+      linear-gradient(90deg, rgba(15,18,25,1) 0%, rgba(15,18,25,0.9) 30%, rgba(15,18,25,0.5) 70%, rgba(15,18,25,0.35) 100%),
+      linear-gradient(180deg, rgba(15,18,25,0.3) 0%, transparent 20%, transparent 80%, rgba(15,18,25,0.5) 100%);
+  }
 }
 
 @media (max-width: 640px) {
-  .hero-scan-form { display: none; }
-  .hero-scan-glow { opacity: 0.35; right: -25%; }
+  .hero-slides {
+    width: 100%;
+  }
+  .hero-slides-overlay {
+    background:
+      linear-gradient(90deg, rgba(15,18,25,0.95) 0%, rgba(15,18,25,0.8) 50%, rgba(15,18,25,0.6) 100%),
+      linear-gradient(180deg, rgba(15,18,25,0.4) 0%, transparent 30%, transparent 70%, rgba(15,18,25,0.5) 100%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hsc-1, .hsc-2, .hsc-3, .hsc-4,
-  .hsc-5, .hsc-6, .hsc-7,
-  .hero-scan-core, .hero-scan-line {
-    animation: none !important;
+  .hero-slide {
+    transition: none !important;
   }
-  .hsc-1, .hsc-2, .hsc-3, .hsc-4,
-  .hsc-5, .hsc-6, .hsc-7 {
-    opacity: 0.8 !important;
-  }
-  .hero-scan-core { opacity: 0.8 !important; }
-  .hero-scan-line { top: 50% !important; opacity: 0.6 !important; }
 }
