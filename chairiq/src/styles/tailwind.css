@@ -549,9 +549,12 @@
 }
 
 /* ═══════════════════════════════════════════
-   HERO MICRO-ANIMATION
-   9s cycle: 6s narrative + 1s fade + 2s pause
-   Story: Dentist sends plan → patient receives it
+   HERO ANIMATION — THREE-ACT SEQUENCE
+   10.5s cycle (6s story + 1.5s fade + 3s pause)
+   Act 1: Plan card appears (0–1.5s)
+   Act 2: Send button highlights (1.5–3s)
+   Act 3: Phone content appears (3–5.5s)
+   Hold: 5.5–7s | Fade: 7–8.5s | Pause: 8.5–10.5s
    ═══════════════════════════════════════════ */
 
 .hero-container {
@@ -583,36 +586,34 @@
   opacity: 0.5;
 }
 
-/* Scene layout: plan card on left, transit dots center, phone on right */
 .hero-scene {
   position: absolute;
   right: 4%;
   top: 50%;
   transform: translateY(-50%);
-  width: 460px;
+  width: 440px;
   height: 320px;
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 28px;
 }
 
-/* ── Dentist plan card (left side) ── */
+/* ── PLAN CARD ── */
 .hero-plan {
-  width: 180px;
+  width: 190px;
   flex-shrink: 0;
   background: linear-gradient(150deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.05) 100%);
   border: 1px solid rgba(255,255,255,0.09);
   border-top-color: rgba(255,255,255,0.18);
   border-left-color: rgba(255,255,255,0.14);
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 13px 15px;
   box-shadow:
     0 1px 4px rgba(0,0,0,0.2),
     0 4px 16px rgba(0,0,0,0.3),
     0 16px 48px rgba(0,0,0,0.4),
     0 0 0 1px rgba(255,255,255,0.03),
     inset 0 1px 0 rgba(255,255,255,0.06);
-  animation: hero-plan-in 9s ease-in-out infinite both;
 }
 
 .hero-plan-bar {
@@ -621,7 +622,7 @@
   gap: 7px;
   margin-bottom: 8px;
 }
-.hero-plan-dot {
+.hero-plan-indicator {
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -670,6 +671,18 @@
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
+.hero-plan-badge {
+  display: inline-block;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: rgba(96,165,250,0.12);
+  color: rgba(147,197,253,0.85);
+}
 .hero-plan-foot {
   display: flex;
   align-items: center;
@@ -682,48 +695,25 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Send indicator */
-.hero-send-indicator {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 7px;
+/* Send button */
+.hero-send-btn {
+  margin-top: 10px;
+  background: rgba(52,211,153,0.10);
+  border: 1px solid rgba(52,211,153,0.15);
+  border-radius: 6px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 8px;
   font-weight: 600;
-  color: rgba(52,211,153,0.7);
+  color: rgba(110,231,183,0.6);
   letter-spacing: 0.02em;
-  animation: hero-send-pulse 9s ease-in-out infinite both;
-}
-.hero-send-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(52,211,153,0.6);
+  transition: none;
 }
 
-/* ── Transit dots (center) ── */
-.hero-transit {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 0 8px;
-}
-.hero-transit-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-}
-.hero-transit-dot-1 { animation: hero-dot-travel 9s ease-in-out infinite both; }
-.hero-transit-dot-2 { animation: hero-dot-travel 9s ease-in-out 0.15s infinite both; }
-.hero-transit-dot-3 { animation: hero-dot-travel 9s ease-in-out 0.3s infinite both; }
-
-/* ── Patient phone (right side) ── */
+/* ── PATIENT PHONE ── */
 .hero-device {
-  width: 170px;
-  height: 310px;
+  width: 175px;
+  height: 320px;
   flex-shrink: 0;
   background: linear-gradient(155deg, rgba(20,21,30,0.98) 0%, rgba(11,12,18,0.99) 100%);
   border: 1px solid rgba(255,255,255,0.07);
@@ -748,173 +738,200 @@
 .hero-device-screen {
   background: rgba(18,18,26,0.9);
   border-radius: 14px;
-  padding: 10px 9px;
+  padding: 12px 10px;
   height: calc(100% - 22px);
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 0;
   overflow: hidden;
 }
 
-/* Phone message bubbles */
-.hero-msg {
-  border-radius: 9px;
-  padding: 7px 9px;
-}
-.hero-msg-1 {
-  background: rgba(96,165,250,0.12);
-  border: 1px solid rgba(96,165,250,0.16);
-  animation: hero-msg-arrive 9s ease-in-out infinite both;
-}
-.hero-msg-2 {
-  animation: hero-msg-arrive2 9s ease-in-out infinite both;
-}
-.hero-msg-3 {
-  animation: hero-msg-arrive3 9s ease-in-out infinite both;
-}
-.hero-msg-from {
-  font-size: 7px;
-  font-weight: 700;
-  color: rgba(147,197,253,0.7);
-  margin-bottom: 4px;
-  letter-spacing: 0.04em;
-}
-.hero-msg-body {
-  height: 4px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 2px;
-  margin-bottom: 3px;
-}
-.hero-msg-body-w { width: 100%; }
-.hero-msg-body-m { width: 72%; }
-.hero-msg-body-s { width: 50%; }
-
-.hero-msg-link {
-  background: rgba(52,211,153,0.10);
-  border: 1px solid rgba(52,211,153,0.14);
+/* Phone inner elements */
+.hero-phone-header {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-bottom: 8px;
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(147,197,253,0.8);
+  letter-spacing: 0.04em;
 }
-.hero-msg-link-icon {
-  width: 11px;
-  height: 11px;
-  border-radius: 3px;
-  background: rgba(52,211,153,0.22);
+.hero-phone-logo {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(96,165,250,0.5);
   flex-shrink: 0;
 }
-
-/* Plan summary inside phone */
-.hero-msg-summary {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px;
-  padding: 7px 8px;
+.hero-phone-sep {
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 8px;
 }
-.hero-summary-row {
+.hero-phone-item {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 4px;
+  gap: 6px;
+  margin-bottom: 7px;
 }
-.hero-summary-dot {
+.hero-phone-dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.18);
   flex-shrink: 0;
 }
-.hero-summary-dot-b { background: rgba(96,165,250,0.4); }
-.hero-summary-dot-g { background: rgba(52,211,153,0.4); }
-.hero-summary-amt {
-  font-size: 6.5px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.38);
-  margin-left: auto;
-  flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
+.hero-phone-dot-b { background: rgba(96,165,250,0.45); }
+.hero-phone-dot-g { background: rgba(52,211,153,0.45); }
+.hero-phone-label {
+  height: 4px;
+  background: rgba(255,255,255,0.13);
+  border-radius: 2px;
 }
-.hero-summary-sep {
-  height: 1px;
-  background: rgba(255,255,255,0.05);
-  margin: 4px 0;
-}
-.hero-summary-total {
-  font-size: 7.5px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.55);
-  margin-left: auto;
-  font-variant-numeric: tabular-nums;
-}
-.hero-summary-btn {
-  margin-top: 5px;
-  background: rgba(96,165,250,0.18);
-  border: 1px solid rgba(96,165,250,0.22);
-  border-radius: 5px;
-  padding: 3px 0;
-  text-align: center;
+.hero-phone-price {
   font-size: 7px;
   font-weight: 600;
-  color: rgba(147,197,253,0.8);
-  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.4);
+  margin-left: auto;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.hero-phone-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.hero-phone-total-label {
+  font-size: 7px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.hero-phone-total-value {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  font-variant-numeric: tabular-nums;
+}
+.hero-phone-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.12);
+  border-radius: 5px;
+  font-size: 7px;
+  font-weight: 600;
+  color: rgba(251,191,36,0.75);
+  letter-spacing: 0.03em;
+}
+.hero-phone-status-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(251,191,36,0.6);
+  flex-shrink: 0;
 }
 
-/* ── Keyframes ──
-   9s total: build 0-2s, send 2-3.5s, arrive 3-5.5s, hold 5.5-7s, fade 7-8s, pause 8-9s */
+/* ── ANIMATION CLASSES ──
+   10.5s total cycle. Percentages:
+   Act 1 (card): 0–14%      = 0–1.5s
+   Act 2 (send): 14–29%     = 1.5–3s
+   Act 3 (phone): 29–52%    = 3–5.5s
+   Hold: 52–67%             = 5.5–7s
+   Fade out: 67–81%         = 7–8.5s
+   Pause: 81–100%           = 8.5–10.5s
+*/
 
-/* Plan card fades in first */
-@keyframes hero-plan-in {
+/* Act 1: Plan card fades in */
+.ha-plan {
+  animation: ha-act1 10.5s ease infinite both;
+}
+@keyframes ha-act1 {
+  0%    { opacity: 0; transform: translateY(6px); }
+  10%   { opacity: 1; transform: translateY(0); }
+  67%   { opacity: 1; transform: translateY(0); }
+  78%   { opacity: 0; transform: translateY(0); }
+  100%  { opacity: 0; transform: translateY(0); }
+}
+
+/* Act 2: Send button highlights */
+.ha-send {
+  animation: ha-act2 10.5s ease infinite both;
+}
+@keyframes ha-act2 {
+  0%    { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); box-shadow: none; }
+  14%   { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); box-shadow: none; }
+  22%   { opacity: 1; background: rgba(52,211,153,0.20); border-color: rgba(52,211,153,0.35); color: rgba(110,231,183,0.9); box-shadow: 0 0 12px rgba(52,211,153,0.12); }
+  34%   { opacity: 1; background: rgba(52,211,153,0.14); border-color: rgba(52,211,153,0.22); color: rgba(110,231,183,0.7); box-shadow: none; }
+  67%   { opacity: 1; }
+  78%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
+/* Act 3: Phone fades in */
+.ha-device {
+  animation: ha-act3-device 10.5s ease infinite both;
+}
+@keyframes ha-act3-device {
+  0%    { opacity: 0; transform: translateY(6px); }
+  29%   { opacity: 0; transform: translateY(6px); }
+  38%   { opacity: 1; transform: translateY(0); }
+  67%   { opacity: 1; transform: translateY(0); }
+  78%   { opacity: 0; transform: translateY(0); }
+  100%  { opacity: 0; transform: translateY(0); }
+}
+
+/* Phone content appears in sub-steps within Act 3 */
+.ha-ph-1 {
+  animation: ha-ph1 10.5s ease infinite both;
+}
+@keyframes ha-ph1 {
   0%    { opacity: 0; }
-  8%    { opacity: 1; }
-  78%   { opacity: 1; }
-  89%   { opacity: 0; }
+  33%   { opacity: 0; }
+  40%   { opacity: 1; }
+  67%   { opacity: 1; }
+  78%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
-/* Send indicator appears after plan is visible */
-@keyframes hero-send-pulse {
+.ha-ph-2 {
+  animation: ha-ph2 10.5s ease infinite both;
+}
+@keyframes ha-ph2 {
   0%    { opacity: 0; }
-  12%   { opacity: 0; }
-  20%   { opacity: 1; }
-  78%   { opacity: 1; }
-  89%   { opacity: 0; }
+  37%   { opacity: 0; }
+  44%   { opacity: 1; }
+  67%   { opacity: 1; }
+  78%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
-/* Transit dots brighten as plan sends */
-@keyframes hero-dot-travel {
-  0%    { opacity: 0.08; }
-  22%   { opacity: 0.08; }
-  28%   { opacity: 0.45; }
-  36%   { opacity: 0.12; }
-  78%   { opacity: 0.12; }
-  89%   { opacity: 0; }
+.ha-ph-3 {
+  animation: ha-ph3 10.5s ease infinite both;
+}
+@keyframes ha-ph3 {
+  0%    { opacity: 0; }
+  41%   { opacity: 0; }
+  48%   { opacity: 1; }
+  67%   { opacity: 1; }
+  78%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
-/* Phone messages appear sequentially -- opacity only, no sliding */
-@keyframes hero-msg-arrive {
-  0%    { opacity: 0; }
-  30%   { opacity: 0; }
-  38%   { opacity: 1; }
-  78%   { opacity: 1; }
-  89%   { opacity: 0; }
-  100%  { opacity: 0; }
+.ha-ph-4 {
+  animation: ha-ph4 10.5s ease infinite both;
 }
-@keyframes hero-msg-arrive2 {
-  0%    { opacity: 0; }
-  38%   { opacity: 0; }
-  46%   { opacity: 1; }
-  78%   { opacity: 1; }
-  89%   { opacity: 0; }
-  100%  { opacity: 0; }
-}
-@keyframes hero-msg-arrive3 {
+@keyframes ha-ph4 {
   0%    { opacity: 0; }
   46%   { opacity: 0; }
-  56%   { opacity: 1; }
-  78%   { opacity: 1; }
-  89%   { opacity: 0; }
+  53%   { opacity: 1; }
+  67%   { opacity: 1; }
+  78%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
@@ -924,10 +941,11 @@
     width: 320px;
     height: 240px;
     right: 2%;
+    gap: 16px;
     opacity: 0.5;
   }
   .hero-plan { width: 140px; padding: 10px 11px; }
-  .hero-device { width: 130px; height: 240px; border-radius: 18px; }
+  .hero-device { width: 135px; height: 250px; border-radius: 18px; }
 }
 
 @media (max-width: 640px) {
@@ -935,8 +953,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-plan, .hero-device, .hero-msg,
-  .hero-send-indicator, .hero-transit-dot {
+  .ha-plan, .ha-send, .ha-device,
+  .ha-ph-1, .ha-ph-2, .ha-ph-3, .ha-ph-4 {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
