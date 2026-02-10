@@ -4,10 +4,8 @@ const HeroAnimation = () => {
   return (
     <div className="hero-container" aria-hidden="true">
       <div className="hero-ambient hero-ambient-1" />
-      <div className="hero-ambient hero-ambient-2" />
 
       <div className="hero-scene">
-        {/* Act 1: Dentist's treatment plan card */}
         <div className="hero-plan ha-plan">
           <div className="hero-plan-bar">
             <div className="hero-plan-indicator" />
@@ -35,12 +33,9 @@ const HeroAnimation = () => {
             <div className="hero-plan-text hero-plan-text-s" style={{ background: 'rgba(255,255,255,0.22)' }} />
             <div className="hero-plan-total">$1,545</div>
           </div>
-
-          {/* Act 2: Send button highlights */}
           <div className="hero-send-btn ha-send">Send via SMS</div>
         </div>
 
-        {/* Act 3: Patient phone view */}
         <div className="hero-device ha-device">
           <div className="hero-device-notch" />
           <div className="hero-device-screen">

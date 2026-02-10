@@ -53,7 +53,7 @@ const Landing = () => {
         </div>
       </header>
 
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(170deg, #111827 0%, #0a0c12 40%, #080a0f 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(175deg, #0f1219 0%, #090a0f 100%)' }}>
         <HeroAnimation />
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-32 lg:py-44 flex items-center min-h-[520px]">
           <div className="max-w-lg">
