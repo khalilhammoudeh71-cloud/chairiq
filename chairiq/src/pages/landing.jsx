@@ -55,15 +55,15 @@ const Landing = () => {
 
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(170deg, #111827 0%, #0a0c12 40%, #080a0f 100%)' }}>
         <HeroAnimation />
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-24 lg:py-32 flex items-center">
-          <div className="max-w-xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-5" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
+        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-32 lg:py-44 flex items-center min-h-[520px]">
+          <div className="max-w-lg">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-7" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
               Patients get it.<br />You move on.
             </h1>
-            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-8" style={{ color: 'rgba(255,255,255,0.55)', letterSpacing: '-0.01em' }}>
+            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(255,255,255,0.5)', letterSpacing: '-0.01em' }}>
               Treatment plans patients actually read. Fewer callbacks, faster case acceptance.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => navigate('/signup')}
                 className="hero-cta-primary px-8 py-3.5 bg-accent text-white text-[15px] rounded-lg font-semibold transition-all inline-flex items-center gap-2">
@@ -73,7 +73,7 @@ const Landing = () => {
               <button
                 onClick={() => navigate('/login')}
                 className="px-6 py-3 text-[13px] rounded-lg font-medium transition-all inline-flex items-center gap-2"
-                style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)' }}>
+                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)' }}>
                 Dentist Login
               </button>
             </div>
