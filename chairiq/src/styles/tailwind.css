@@ -837,101 +837,97 @@
   flex-shrink: 0;
 }
 
-/* ── ANIMATION CLASSES ──
-   10.5s total cycle. Percentages:
-   Act 1 (card): 0–14%      = 0–1.5s
-   Act 2 (send): 14–29%     = 1.5–3s
-   Act 3 (phone): 29–52%    = 3–5.5s
-   Hold: 52–67%             = 5.5–7s
-   Fade out: 67–81%         = 7–8.5s
-   Pause: 81–100%           = 8.5–10.5s
+/* ── ANIMATION ──
+   7s cycle, ease-in-out, opacity only, no continuous movement.
+   Act 1 (card):  0–1s     =  0–14%
+   Act 2 (send):  1–2s     = 14–29%
+   Act 3 (phone): 2–3.8s   = 29–54%
+   Hold:          3.8–5s   = 54–71%
+   Fade:          5–5.6s   = 71–80%
+   Pause:         5.6–7s   = 80–100%
 */
 
-/* Act 1: Plan card fades in */
 .ha-plan {
-  animation: ha-act1 10.5s ease infinite both;
+  animation: ha-act1 7s ease-in-out infinite both;
 }
 @keyframes ha-act1 {
-  0%    { opacity: 0; transform: translateY(6px); }
-  10%   { opacity: 1; transform: translateY(0); }
-  67%   { opacity: 1; transform: translateY(0); }
-  78%   { opacity: 0; transform: translateY(0); }
-  100%  { opacity: 0; transform: translateY(0); }
-}
-
-/* Act 2: Send button highlights */
-.ha-send {
-  animation: ha-act2 10.5s ease infinite both;
-}
-@keyframes ha-act2 {
-  0%    { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); box-shadow: none; }
-  14%   { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); box-shadow: none; }
-  22%   { opacity: 1; background: rgba(52,211,153,0.20); border-color: rgba(52,211,153,0.35); color: rgba(110,231,183,0.9); box-shadow: 0 0 12px rgba(52,211,153,0.12); }
-  34%   { opacity: 1; background: rgba(52,211,153,0.14); border-color: rgba(52,211,153,0.22); color: rgba(110,231,183,0.7); box-shadow: none; }
-  67%   { opacity: 1; }
-  78%   { opacity: 0; }
+  0%    { opacity: 0; }
+  12%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
-/* Act 3: Phone fades in */
-.ha-device {
-  animation: ha-act3-device 10.5s ease infinite both;
+.ha-send {
+  animation: ha-act2 7s ease-in-out infinite both;
 }
-@keyframes ha-act3-device {
-  0%    { opacity: 0; transform: translateY(6px); }
-  29%   { opacity: 0; transform: translateY(6px); }
-  38%   { opacity: 1; transform: translateY(0); }
-  67%   { opacity: 1; transform: translateY(0); }
-  78%   { opacity: 0; transform: translateY(0); }
-  100%  { opacity: 0; transform: translateY(0); }
+@keyframes ha-act2 {
+  0%    { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); }
+  14%   { opacity: 0.4; background: rgba(52,211,153,0.10); border-color: rgba(52,211,153,0.15); color: rgba(110,231,183,0.5); }
+  24%   { opacity: 1; background: rgba(52,211,153,0.20); border-color: rgba(52,211,153,0.35); color: rgba(110,231,183,0.9); }
+  34%   { opacity: 1; background: rgba(52,211,153,0.14); border-color: rgba(52,211,153,0.20); color: rgba(110,231,183,0.7); }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
 }
 
-/* Phone content appears in sub-steps within Act 3 */
+.ha-device {
+  animation: ha-act3 7s ease-in-out infinite both;
+}
+@keyframes ha-act3 {
+  0%    { opacity: 0; }
+  29%   { opacity: 0; }
+  40%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+
 .ha-ph-1 {
-  animation: ha-ph1 10.5s ease infinite both;
+  animation: ha-ph1 7s ease-in-out infinite both;
 }
 @keyframes ha-ph1 {
   0%    { opacity: 0; }
   33%   { opacity: 0; }
-  40%   { opacity: 1; }
-  67%   { opacity: 1; }
-  78%   { opacity: 0; }
+  42%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
 .ha-ph-2 {
-  animation: ha-ph2 10.5s ease infinite both;
+  animation: ha-ph2 7s ease-in-out infinite both;
 }
 @keyframes ha-ph2 {
   0%    { opacity: 0; }
-  37%   { opacity: 0; }
-  44%   { opacity: 1; }
-  67%   { opacity: 1; }
-  78%   { opacity: 0; }
+  38%   { opacity: 0; }
+  46%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
 .ha-ph-3 {
-  animation: ha-ph3 10.5s ease infinite both;
+  animation: ha-ph3 7s ease-in-out infinite both;
 }
 @keyframes ha-ph3 {
   0%    { opacity: 0; }
-  41%   { opacity: 0; }
-  48%   { opacity: 1; }
-  67%   { opacity: 1; }
-  78%   { opacity: 0; }
+  43%   { opacity: 0; }
+  50%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
 .ha-ph-4 {
-  animation: ha-ph4 10.5s ease infinite both;
+  animation: ha-ph4 7s ease-in-out infinite both;
 }
 @keyframes ha-ph4 {
   0%    { opacity: 0; }
-  46%   { opacity: 0; }
-  53%   { opacity: 1; }
-  67%   { opacity: 1; }
-  78%   { opacity: 0; }
+  48%   { opacity: 0; }
+  54%   { opacity: 1; }
+  71%   { opacity: 1; }
+  80%   { opacity: 0; }
   100%  { opacity: 0; }
 }
 
@@ -957,6 +953,5 @@
   .ha-ph-1, .ha-ph-2, .ha-ph-3, .ha-ph-4 {
     animation: none !important;
     opacity: 1 !important;
-    transform: none !important;
   }
 }
