@@ -545,12 +545,13 @@
 }
 
 /* ═══════════════════════════════════════════
-   HERO ANIMATION
-   7s cycle. Phone is the product. Plan card is context.
-   End state: phone with Pending visible, plan card gone.
+   HERO — Abstract dental geometry
+   Crystalline enamel-inspired facets with
+   slow light sweep. No UI, no screenshots.
+   8s cycle, barely perceptible motion.
    ═══════════════════════════════════════════ */
 
-.hero-container {
+.hero-geo {
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -558,376 +559,205 @@
   z-index: 0;
 }
 
-.hero-ambient {
+.hero-geo-glow {
   position: absolute;
-  border-radius: 50%;
-}
-.hero-ambient-1 {
   width: 700px;
   height: 700px;
-  background: radial-gradient(ellipse at 40% 35%, rgba(30,58,138,0.13) 0%, rgba(30,58,138,0.03) 50%, transparent 72%);
-  top: -20%;
-  right: -8%;
-  opacity: 1;
+  right: -5%;
+  top: -15%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 45% 40%,
+    rgba(30,58,138,0.12) 0%,
+    rgba(30,58,138,0.04) 40%,
+    transparent 68%
+  );
 }
 
-.hero-scene {
+.hero-geo-form {
   position: absolute;
-  right: 5%;
+  right: 8%;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  gap: 24px;
+  width: 360px;
+  height: 420px;
 }
 
-/* ── PLAN CARD — small, contextual ── */
-.hero-plan {
-  width: 160px;
-  flex-shrink: 0;
-  background: linear-gradient(150deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.04) 100%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-top-color: rgba(255,255,255,0.12);
-  border-left-color: rgba(255,255,255,0.10);
-  border-radius: 10px;
-  padding: 11px 13px;
-  box-shadow:
-    0 2px 8px rgba(0,0,0,0.2),
-    0 8px 32px rgba(0,0,0,0.3);
+/* ── Facets — overlapping translucent planes ── */
+.hero-geo-facet {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.03) 0%,
+    rgba(255,255,255,0.01) 100%
+  );
 }
 
-.hero-plan-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 7px;
-}
-.hero-plan-indicator {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(96,165,250,0.6);
-  flex-shrink: 0;
-}
-.hero-plan-title {
-  height: 5px;
-  width: 60%;
-  background: rgba(255,255,255,0.15);
-  border-radius: 3px;
-}
-.hero-plan-sep {
-  height: 1px;
-  background: rgba(255,255,255,0.05);
-  margin: 5px 0;
-}
-.hero-plan-line {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 4px;
-}
-.hero-plan-bullet {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  flex-shrink: 0;
-}
-.hero-plan-bullet-b { background: rgba(96,165,250,0.4); }
-.hero-plan-bullet-g { background: rgba(52,211,153,0.4); }
-.hero-plan-text {
-  height: 3px;
-  background: rgba(255,255,255,0.10);
-  border-radius: 2px;
-}
-.hero-plan-text-w { width: 70%; }
-.hero-plan-text-m { width: 55%; }
-.hero-plan-text-s { width: 40%; }
-.hero-plan-amt {
-  font-size: 6.5px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.32);
-  margin-left: auto;
-  flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
-}
-.hero-plan-badge {
-  display: inline-block;
-  margin-top: 3px;
-  margin-bottom: 1px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  font-size: 7px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  background: rgba(96,165,250,0.10);
-  color: rgba(147,197,253,0.7);
-}
-.hero-plan-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.hero-plan-total {
-  font-size: 7px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.45);
-  font-variant-numeric: tabular-nums;
+.hero-geo-f1 {
+  width: 280px;
+  height: 340px;
+  left: 40px;
+  top: 30px;
+  border-radius: 48% 52% 45% 55% / 40% 35% 65% 60%;
+  border-color: rgba(140,170,220,0.06);
+  animation: hg-breathe 8s ease-in-out infinite;
 }
 
-.hero-send-btn {
-  margin-top: 8px;
-  background: rgba(52,211,153,0.08);
-  border: 1px solid rgba(52,211,153,0.12);
-  border-radius: 5px;
-  padding: 4px 0;
-  text-align: center;
-  font-size: 7px;
-  font-weight: 600;
-  color: rgba(110,231,183,0.5);
-  letter-spacing: 0.02em;
+.hero-geo-f2 {
+  width: 220px;
+  height: 280px;
+  left: 80px;
+  top: 70px;
+  border-radius: 42% 58% 50% 50% / 45% 40% 60% 55%;
+  transform: rotate(6deg);
+  border-color: rgba(140,170,220,0.05);
+  background: linear-gradient(
+    160deg,
+    rgba(96,165,250,0.03) 0%,
+    rgba(255,255,255,0.01) 100%
+  );
+  animation: hg-breathe 8s ease-in-out 1s infinite;
 }
 
-/* ── PATIENT PHONE — the product, larger ── */
-.hero-device {
-  width: 210px;
-  height: 400px;
-  flex-shrink: 0;
-  background: linear-gradient(160deg, rgba(20,22,32,0.98) 0%, rgba(10,11,16,0.99) 100%);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-top-color: rgba(255,255,255,0.12);
-  border-left-color: rgba(255,255,255,0.09);
-  border-radius: 26px;
-  padding: 10px;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.15),
-    0 8px 24px rgba(0,0,0,0.3),
-    0 24px 64px rgba(0,0,0,0.45);
-}
-.hero-device-notch {
-  width: 56px;
-  height: 5px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 3px;
-  margin: 5px auto 10px;
-}
-.hero-device-screen {
-  background: rgba(16,17,24,0.95);
-  border-radius: 17px;
-  padding: 16px 14px;
-  height: calc(100% - 26px);
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow: hidden;
+.hero-geo-f3 {
+  width: 180px;
+  height: 230px;
+  left: 100px;
+  top: 100px;
+  border-radius: 50% 50% 42% 58% / 48% 52% 48% 52%;
+  transform: rotate(-4deg);
+  border-color: rgba(160,185,230,0.05);
+  animation: hg-breathe 8s ease-in-out 2s infinite;
 }
 
-.hero-phone-header {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 12px;
-  font-size: 9px;
-  font-weight: 700;
-  color: rgba(147,197,253,0.75);
-  letter-spacing: 0.04em;
-}
-.hero-phone-logo {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(96,165,250,0.45);
-  flex-shrink: 0;
-}
-.hero-phone-sep {
-  height: 1px;
-  background: rgba(255,255,255,0.04);
-  margin-bottom: 12px;
-}
-.hero-phone-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.hero-phone-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.16);
-  flex-shrink: 0;
-}
-.hero-phone-dot-b { background: rgba(96,165,250,0.4); }
-.hero-phone-dot-g { background: rgba(52,211,153,0.4); }
-.hero-phone-label {
-  height: 5px;
-  background: rgba(255,255,255,0.11);
-  border-radius: 2px;
-}
-.hero-phone-price {
-  font-size: 8px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.38);
-  margin-left: auto;
-  flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
-}
-.hero-phone-total-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.hero-phone-total-label {
-  font-size: 8px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.28);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.hero-phone-total-value {
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.6);
-  font-variant-numeric: tabular-nums;
-}
-.hero-phone-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  background: rgba(251,191,36,0.07);
-  border: 1px solid rgba(251,191,36,0.10);
-  border-radius: 6px;
-  font-size: 8px;
-  font-weight: 600;
-  color: rgba(251,191,36,0.7);
-  letter-spacing: 0.03em;
-}
-.hero-phone-status-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(251,191,36,0.55);
-  flex-shrink: 0;
+.hero-geo-f4 {
+  width: 140px;
+  height: 170px;
+  left: 120px;
+  top: 140px;
+  border-radius: 52% 48% 46% 54% / 50% 45% 55% 50%;
+  transform: rotate(3deg);
+  border-color: rgba(180,200,240,0.04);
+  background: linear-gradient(
+    130deg,
+    rgba(96,165,250,0.025) 0%,
+    transparent 100%
+  );
+  animation: hg-breathe 8s ease-in-out 3s infinite;
 }
 
-/* ── ANIMATION ──
-   7s cycle, ease-in-out, opacity only.
-   Plan card: appears early, fades back when phone arrives.
-   Phone: appears mid, STAYS as end state, then fades for loop.
-   0–1s: plan in          0–14%
-   1–1.8s: send highlight 14–26%
-   1.8–2.5s: plan dims    26–36%
-   2.5–4s: phone in       36–57%
-   4–5.8s: hold (phone)   57–83%
-   5.8–6.4s: phone fades  83–91%
-   6.4–7s: pause          91–100%
-*/
-
-.ha-plan {
-  animation: ha-plan 7s ease-in-out infinite both;
-}
-@keyframes ha-plan {
-  0%    { opacity: 0; }
-  12%   { opacity: 0.85; }
-  26%   { opacity: 0.85; }
-  40%   { opacity: 0; }
-  100%  { opacity: 0; }
+.hero-geo-f5 {
+  width: 100px;
+  height: 120px;
+  left: 145px;
+  top: 170px;
+  border-radius: 50% 50% 45% 55% / 55% 45% 55% 45%;
+  transform: rotate(-2deg);
+  border-color: rgba(200,215,245,0.035);
+  animation: hg-breathe 8s ease-in-out 4s infinite;
 }
 
-.ha-send {
-  animation: ha-send 7s ease-in-out infinite both;
-}
-@keyframes ha-send {
-  0%    { opacity: 0.3; background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.12); color: rgba(110,231,183,0.4); }
-  14%   { opacity: 0.3; background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.12); color: rgba(110,231,183,0.4); }
-  22%   { opacity: 1; background: rgba(52,211,153,0.18); border-color: rgba(52,211,153,0.30); color: rgba(110,231,183,0.85); }
-  30%   { opacity: 0.8; background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.18); color: rgba(110,231,183,0.6); }
-  40%   { opacity: 0; }
-  100%  { opacity: 0; }
+/* ── Ridges — fine structural lines suggesting enamel prisms ── */
+.hero-geo-ridge {
+  position: absolute;
+  background: rgba(140,170,220,0.04);
 }
 
-.ha-device {
-  animation: ha-device 7s ease-in-out infinite both;
-}
-@keyframes ha-device {
-  0%    { opacity: 0; }
-  33%   { opacity: 0; }
-  45%   { opacity: 1; }
-  83%   { opacity: 1; }
-  91%   { opacity: 0; }
-  100%  { opacity: 0; }
+.hero-geo-r1 {
+  width: 1px;
+  height: 200px;
+  left: 155px;
+  top: 90px;
+  transform: rotate(8deg);
+  animation: hg-ridge 8s ease-in-out infinite;
 }
 
-.ha-ph-1 {
-  animation: ha-ph1 7s ease-in-out infinite both;
-}
-@keyframes ha-ph1 {
-  0%    { opacity: 0; }
-  38%   { opacity: 0; }
-  48%   { opacity: 1; }
-  83%   { opacity: 1; }
-  91%   { opacity: 0; }
-  100%  { opacity: 0; }
+.hero-geo-r2 {
+  width: 1px;
+  height: 160px;
+  left: 200px;
+  top: 120px;
+  transform: rotate(12deg);
+  animation: hg-ridge 8s ease-in-out 1.5s infinite;
 }
 
-.ha-ph-2 {
-  animation: ha-ph2 7s ease-in-out infinite both;
-}
-@keyframes ha-ph2 {
-  0%    { opacity: 0; }
-  43%   { opacity: 0; }
-  52%   { opacity: 1; }
-  83%   { opacity: 1; }
-  91%   { opacity: 0; }
-  100%  { opacity: 0; }
+.hero-geo-r3 {
+  width: 1px;
+  height: 130px;
+  left: 240px;
+  top: 140px;
+  transform: rotate(5deg);
+  animation: hg-ridge 8s ease-in-out 3s infinite;
 }
 
-.ha-ph-3 {
-  animation: ha-ph3 7s ease-in-out infinite both;
-}
-@keyframes ha-ph3 {
-  0%    { opacity: 0; }
-  48%   { opacity: 0; }
-  56%   { opacity: 1; }
-  83%   { opacity: 1; }
-  91%   { opacity: 0; }
-  100%  { opacity: 0; }
-}
-
-.ha-ph-4 {
-  animation: ha-ph4 7s ease-in-out infinite both;
-}
-@keyframes ha-ph4 {
-  0%    { opacity: 0; }
-  53%   { opacity: 0; }
-  60%   { opacity: 1; }
-  83%   { opacity: 1; }
-  91%   { opacity: 0; }
-  100%  { opacity: 0; }
+/* ── Light sweep — slow diagonal highlight ── */
+.hero-geo-light {
+  position: absolute;
+  inset: 0;
+  border-radius: 48% 52% 45% 55% / 40% 35% 65% 60%;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(180,210,255,0.06) 45%,
+    rgba(220,235,255,0.04) 50%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 250% 250%;
+  animation: hg-sweep 8s ease-in-out infinite;
 }
 
-/* Responsive */
+/* ── Keyframes ── */
+@keyframes hg-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+
+@keyframes hg-ridge {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.8; }
+}
+
+@keyframes hg-sweep {
+  0%   { background-position: 120% 120%; }
+  100% { background-position: -20% -20%; }
+}
+
+/* ── Responsive ── */
 @media (max-width: 1024px) {
-  .hero-scene {
+  .hero-geo-form {
     right: 2%;
-    gap: 14px;
-    transform: translateY(-50%) scale(0.7);
-    transform-origin: right center;
+    width: 260px;
+    height: 300px;
     opacity: 0.5;
   }
+  .hero-geo-f1 { width: 200px; height: 240px; left: 30px; top: 20px; }
+  .hero-geo-f2 { width: 160px; height: 200px; left: 55px; top: 50px; }
+  .hero-geo-f3 { width: 130px; height: 165px; left: 70px; top: 70px; }
+  .hero-geo-f4 { width: 100px; height: 120px; left: 85px; top: 100px; }
+  .hero-geo-f5 { width: 72px; height: 86px; left: 100px; top: 120px; }
+  .hero-geo-r1 { height: 140px; left: 110px; top: 65px; }
+  .hero-geo-r2 { height: 110px; left: 140px; top: 85px; }
+  .hero-geo-r3 { height: 90px; left: 170px; top: 100px; }
 }
 
 @media (max-width: 640px) {
-  .hero-scene { display: none; }
+  .hero-geo-form { display: none; }
+  .hero-geo-glow { opacity: 0.4; right: -30%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ha-plan, .ha-send, .ha-device,
-  .ha-ph-1, .ha-ph-2, .ha-ph-3, .ha-ph-4 {
+  .hero-geo-f1, .hero-geo-f2, .hero-geo-f3,
+  .hero-geo-f4, .hero-geo-f5,
+  .hero-geo-r1, .hero-geo-r2, .hero-geo-r3,
+  .hero-geo-light {
     animation: none !important;
+    opacity: 0.7 !important;
+  }
+  .hero-geo-light {
+    background-position: 50% 50% !important;
     opacity: 1 !important;
   }
-  .ha-plan { opacity: 0 !important; }
 }
