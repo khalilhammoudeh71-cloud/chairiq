@@ -584,9 +584,9 @@
   position: absolute;
   right: 5%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(0.3deg);
   width: 420px;
-  height: 340px;
+  height: 360px;
 }
 
 .hero-card {
@@ -603,15 +603,17 @@
 
 .hero-card-1 {
   width: 200px;
-  top: 10px;
+  top: 6px;
   left: 0;
+  transform: rotate(-0.8deg);
   animation: hero-card1-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
 }
 
 .hero-card-2 {
   width: 190px;
-  top: 80px;
-  left: 60px;
+  top: 68px;
+  left: 52px;
+  transform: rotate(0.5deg);
   animation: hero-card2-seq 8s cubic-bezier(0.25, 0.1, 0.25, 1) infinite both;
 }
 
@@ -691,8 +693,8 @@
 /* Phone mockup */
 .hero-phone {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: -6px;
+  top: 14px;
   width: 155px;
   height: 310px;
   background: rgba(16,17,24,0.97);
