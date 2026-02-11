@@ -79,7 +79,7 @@ const Landing = () => {
               <button
                 onClick={() => navigate('/login')}
                 className="px-6 py-3 text-[13px] rounded-lg font-medium inline-flex items-center gap-2"
-                style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.55)' }}>
+                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.35)' }}>
                 Dentist Login
               </button>
             </div>
