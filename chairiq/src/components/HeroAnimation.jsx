@@ -7,7 +7,6 @@ const slides = [
   '/assets/images/slides/dental-4.jpg',
   '/assets/images/slides/dental-5.jpg',
   '/assets/images/slides/dental-6.jpg',
-  '/assets/images/slides/dental-7.jpg',
 ];
 
 const HeroAnimation = () => {
