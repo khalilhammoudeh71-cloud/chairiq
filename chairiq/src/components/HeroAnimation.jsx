@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 const slides = [
-  '/assets/images/slides/hero-1.jpg',
-  '/assets/images/slides/hero-2.jpg',
-  '/assets/images/slides/hero-3.jpg',
-  '/assets/images/slides/hero-4.jpg',
+  '/assets/images/slides/hero-1.png',
+  '/assets/images/slides/hero-2.png',
+  '/assets/images/slides/hero-3.png',
+  '/assets/images/slides/hero-4.png',
+  '/assets/images/slides/hero-5.png',
 ];
 
-const INTERVAL = 8000;
+const SLIDE_DURATION = 7000;
 
 const HeroAnimation = () => {
   const [active, setActive] = useState(0);
@@ -25,7 +26,7 @@ const HeroAnimation = () => {
     if (!motionOk) return;
     const timer = setInterval(() => {
       setActive((prev) => (prev + 1) % slides.length);
-    }, INTERVAL);
+    }, SLIDE_DURATION);
     return () => clearInterval(timer);
   }, [motionOk]);
 

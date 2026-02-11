@@ -577,7 +577,7 @@
   object-fit: cover;
   object-position: center;
   opacity: 0;
-  transition: opacity 1.4s ease-in-out;
+  transition: opacity 1s ease-in-out;
   will-change: opacity;
 }
 
@@ -592,17 +592,17 @@
   background:
     linear-gradient(
       90deg,
-      rgba(10,12,18,0.88) 0%,
-      rgba(10,12,18,0.78) 30%,
-      rgba(10,12,18,0.45) 60%,
-      rgba(10,12,18,0.22) 100%
+      rgba(10,12,18,0.75) 0%,
+      rgba(10,12,18,0.65) 28%,
+      rgba(10,12,18,0.35) 58%,
+      rgba(10,12,18,0.15) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(10,12,18,0.35) 0%,
-      transparent 25%,
-      transparent 75%,
-      rgba(10,12,18,0.55) 100%
+      rgba(10,12,18,0.25) 0%,
+      transparent 20%,
+      transparent 80%,
+      rgba(10,12,18,0.40) 100%
     );
 }
 
@@ -612,17 +612,17 @@
     background:
       linear-gradient(
         90deg,
-        rgba(10,12,18,0.92) 0%,
-        rgba(10,12,18,0.82) 35%,
-        rgba(10,12,18,0.50) 65%,
-        rgba(10,12,18,0.28) 100%
+        rgba(10,12,18,0.80) 0%,
+        rgba(10,12,18,0.70) 32%,
+        rgba(10,12,18,0.40) 62%,
+        rgba(10,12,18,0.20) 100%
       ),
       linear-gradient(
         180deg,
-        rgba(10,12,18,0.35) 0%,
-        transparent 25%,
-        transparent 75%,
-        rgba(10,12,18,0.55) 100%
+        rgba(10,12,18,0.30) 0%,
+        transparent 22%,
+        transparent 78%,
+        rgba(10,12,18,0.45) 100%
       );
   }
 }
@@ -640,17 +640,10 @@
   .hero-bg-overlay {
     background:
       linear-gradient(
-        90deg,
-        rgba(10,12,18,0.92) 0%,
-        rgba(10,12,18,0.80) 50%,
-        rgba(10,12,18,0.60) 100%
-      ),
-      linear-gradient(
         180deg,
-        rgba(10,12,18,0.40) 0%,
-        transparent 30%,
-        transparent 70%,
-        rgba(10,12,18,0.60) 100%
+        rgba(10,12,18,0.82) 0%,
+        rgba(10,12,18,0.65) 45%,
+        rgba(10,12,18,0.40) 100%
       );
   }
 }
