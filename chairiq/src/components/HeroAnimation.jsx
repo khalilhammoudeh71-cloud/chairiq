@@ -5,7 +5,6 @@ const slides = [
   '/assets/images/slides/hero-2.png',
   '/assets/images/slides/hero-3.png',
   '/assets/images/slides/hero-4.png',
-  '/assets/images/slides/hero-5.png',
 ];
 
 const SLIDE_DURATION = 8000;
