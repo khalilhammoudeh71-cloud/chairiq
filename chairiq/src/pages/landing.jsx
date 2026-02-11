@@ -57,16 +57,16 @@ const Landing = () => {
         <HeroAnimation />
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center hero-content-wrap">
           <div className="max-w-lg">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-6" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.08] mb-5" style={{ fontWeight: 700, letterSpacing: '-0.025em' }}>
               Patients get it.<br />You move on.
             </h1>
-            <p className="text-lg sm:text-xl leading-relaxed max-w-md mb-3" style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+            <p className="text-lg sm:text-xl leading-snug max-w-md mb-4" style={{ color: 'rgba(255,255,255,0.88)', fontWeight: 400, letterSpacing: '-0.01em' }}>
               Treatment plans patients actually read.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-3" style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+            <p className="text-[15px] sm:text-base leading-relaxed max-w-md mb-2" style={{ color: 'rgba(255,255,255,0.52)', fontWeight: 400, letterSpacing: '0' }}>
               Fewer callbacks. Faster case acceptance.
             </p>
-            <p className="text-sm sm:text-base leading-relaxed mb-10" style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 400, maxWidth: '70%' }}>
+            <p className="text-[13px] sm:text-sm leading-relaxed mb-10" style={{ color: 'rgba(255,255,255,0.38)', fontWeight: 400, letterSpacing: '0', maxWidth: '70%' }}>
               Stop re-explaining the same treatment plan.
             </p>
             <div className="flex flex-wrap gap-4">
