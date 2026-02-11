@@ -63,8 +63,11 @@ const Landing = () => {
             <p className="text-lg sm:text-xl leading-relaxed max-w-md mb-3" style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 400, letterSpacing: '-0.01em' }}>
               Treatment plans patients actually read.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-3" style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, letterSpacing: '-0.01em' }}>
               Fewer callbacks. Faster case acceptance.
+            </p>
+            <p className="text-sm sm:text-base leading-relaxed mb-10" style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 400, maxWidth: '70%' }}>
+              Stop re-explaining the same treatment plan.
             </p>
             <div className="flex flex-wrap gap-4">
               <button
