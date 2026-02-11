@@ -1,34 +1,46 @@
 import React, { useState, useEffect } from 'react';
 
 const slides = [
-  '/assets/images/slides/dental-1.jpg',
-  '/assets/images/slides/dental-2.jpg',
-  '/assets/images/slides/dental-3.jpg',
-  '/assets/images/slides/dental-4.jpg',
-  '/assets/images/slides/dental-5.jpg',
-  '/assets/images/slides/dental-6.jpg',
+  '/assets/images/slides/hero-1.jpg',
+  '/assets/images/slides/hero-2.jpg',
+  '/assets/images/slides/hero-3.jpg',
+  '/assets/images/slides/hero-4.jpg',
 ];
+
+const INTERVAL = 8000;
 
 const HeroAnimation = () => {
   const [active, setActive] = useState(0);
+  const [motionOk, setMotionOk] = useState(true);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActive((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setMotionOk(!mq.matches);
+    const handler = (e) => setMotionOk(!e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
   }, []);
 
+  useEffect(() => {
+    if (!motionOk) return;
+    const timer = setInterval(() => {
+      setActive((prev) => (prev + 1) % slides.length);
+    }, INTERVAL);
+    return () => clearInterval(timer);
+  }, [motionOk]);
+
   return (
-    <div className="hero-slides" aria-hidden="true">
+    <div className="hero-bg-slideshow" aria-hidden="true">
       {slides.map((src, i) => (
-        <div
-          key={i}
-          className={`hero-slide ${i === active ? 'hero-slide-active' : ''}`}
-          style={{ backgroundImage: `url(${src})` }}
+        <img
+          key={src}
+          src={src}
+          alt=""
+          className={`hero-bg-slide${i === active ? ' hero-bg-slide--active' : ''}`}
+          draggable={false}
         />
       ))}
-      <div className="hero-slides-overlay" />
+      <div className="hero-bg-overlay" />
     </div>
   );
 };

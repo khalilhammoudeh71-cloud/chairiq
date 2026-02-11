@@ -53,14 +53,14 @@ const Landing = () => {
         </div>
       </header>
 
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(175deg, #0f1219 0%, #090a0f 100%)' }}>
+      <section className="hero-section relative overflow-hidden">
         <HeroAnimation />
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-32 lg:py-44 flex items-center min-h-[520px]">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center hero-content-wrap">
           <div className="max-w-lg">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-7" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
               Patients get it.<br />You move on.
             </h1>
-            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(255,255,255,0.5)', letterSpacing: '-0.01em' }}>
+            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(255,255,255,0.65)', letterSpacing: '-0.01em' }}>
               Treatment plans patients actually read. Fewer callbacks, faster case acceptance.
             </p>
             <div className="flex flex-wrap gap-4">
@@ -73,7 +73,7 @@ const Landing = () => {
               <button
                 onClick={() => navigate('/login')}
                 className="px-6 py-3 text-[13px] rounded-lg font-medium inline-flex items-center gap-2"
-                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)' }}>
+                style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.55)' }}>
                 Dentist Login
               </button>
             </div>

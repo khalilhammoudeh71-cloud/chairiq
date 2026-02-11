@@ -545,70 +545,119 @@
 }
 
 /* ═══════════════════════════════════════════
-   HERO — Dental slideshow
-   Crossfade between dental stock photos.
-   5s per slide, smooth 1s transitions.
-   Positioned right side, masked edges.
+   HERO — Full-bleed dental slideshow
+   Covers entire hero section as background.
+   8s per slide, 1.4s crossfade.
+   Left-heavy dark overlay for text readability.
    ═══════════════════════════════════════════ */
 
-.hero-slides {
+.hero-section {
+  min-height: 70vh;
+  background: #0a0c12;
+}
+
+.hero-content-wrap {
+  min-height: 70vh;
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+.hero-bg-slideshow {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 55%;
-  height: 100%;
-  pointer-events: none;
+  inset: 0;
   z-index: 0;
   overflow: hidden;
 }
 
-.hero-slide {
+.hero-bg-slide {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   opacity: 0;
-  transition: opacity 1.2s ease-in-out;
+  transition: opacity 1.4s ease-in-out;
+  will-change: opacity;
 }
 
-.hero-slide-active {
+.hero-bg-slide--active {
   opacity: 1;
 }
 
-.hero-slides-overlay {
+.hero-bg-overlay {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(15,18,25,1) 0%, rgba(15,18,25,0.85) 25%, rgba(15,18,25,0.4) 60%, rgba(15,18,25,0.25) 100%),
-    linear-gradient(180deg, rgba(15,18,25,0.3) 0%, transparent 20%, transparent 80%, rgba(15,18,25,0.5) 100%);
   z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10,12,18,0.88) 0%,
+      rgba(10,12,18,0.78) 30%,
+      rgba(10,12,18,0.45) 60%,
+      rgba(10,12,18,0.22) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(10,12,18,0.35) 0%,
+      transparent 25%,
+      transparent 75%,
+      rgba(10,12,18,0.55) 100%
+    );
 }
 
-/* ── Responsive ── */
+/* ── Tablet ── */
 @media (max-width: 1024px) {
-  .hero-slides {
-    width: 65%;
-  }
-  .hero-slides-overlay {
+  .hero-bg-overlay {
     background:
-      linear-gradient(90deg, rgba(15,18,25,1) 0%, rgba(15,18,25,0.9) 30%, rgba(15,18,25,0.5) 70%, rgba(15,18,25,0.35) 100%),
-      linear-gradient(180deg, rgba(15,18,25,0.3) 0%, transparent 20%, transparent 80%, rgba(15,18,25,0.5) 100%);
+      linear-gradient(
+        90deg,
+        rgba(10,12,18,0.92) 0%,
+        rgba(10,12,18,0.82) 35%,
+        rgba(10,12,18,0.50) 65%,
+        rgba(10,12,18,0.28) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(10,12,18,0.35) 0%,
+        transparent 25%,
+        transparent 75%,
+        rgba(10,12,18,0.55) 100%
+      );
   }
 }
 
+/* ── Mobile ── */
 @media (max-width: 640px) {
-  .hero-slides {
-    width: 100%;
+  .hero-section {
+    min-height: 80vh;
   }
-  .hero-slides-overlay {
+  .hero-content-wrap {
+    min-height: 80vh;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .hero-bg-overlay {
     background:
-      linear-gradient(90deg, rgba(15,18,25,0.95) 0%, rgba(15,18,25,0.8) 50%, rgba(15,18,25,0.6) 100%),
-      linear-gradient(180deg, rgba(15,18,25,0.4) 0%, transparent 30%, transparent 70%, rgba(15,18,25,0.5) 100%);
+      linear-gradient(
+        90deg,
+        rgba(10,12,18,0.92) 0%,
+        rgba(10,12,18,0.80) 50%,
+        rgba(10,12,18,0.60) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(10,12,18,0.40) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(10,12,18,0.60) 100%
+      );
   }
 }
 
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .hero-slide {
+  .hero-bg-slide {
     transition: none !important;
   }
 }
