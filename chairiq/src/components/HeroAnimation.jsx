@@ -8,7 +8,7 @@ const slides = [
   '/assets/images/slides/hero-5.png',
 ];
 
-const SLIDE_DURATION = 7000;
+const SLIDE_DURATION = 8000;
 
 const HeroAnimation = () => {
   const [active, setActive] = useState(0);
