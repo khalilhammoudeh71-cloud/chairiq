@@ -57,11 +57,14 @@ const Landing = () => {
         <HeroAnimation />
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center hero-content-wrap">
           <div className="max-w-lg">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-7" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-6" style={{ fontWeight: 800, letterSpacing: '-0.04em' }}>
               Patients get it.<br />You move on.
             </h1>
-            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(255,255,255,0.65)', letterSpacing: '-0.01em' }}>
-              Treatment plans patients actually read. Fewer callbacks, faster case acceptance.
+            <p className="text-lg sm:text-xl leading-relaxed max-w-md mb-3" style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+              Treatment plans patients actually read.
+            </p>
+            <p className="text-base sm:text-lg leading-relaxed max-w-md mb-10" style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+              Fewer callbacks. Faster case acceptance.
             </p>
             <div className="flex flex-wrap gap-4">
               <button
