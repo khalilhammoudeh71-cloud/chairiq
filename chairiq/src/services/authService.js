@@ -20,6 +20,37 @@ export const authService = {
   },
 
   /**
+   * Sign up with email and password (sends verification email)
+   */
+  async signUp({ email, password, fullName, practiceName, phone, location }) {
+    try {
+      if (!supabase) {
+        return { data: null, error: { message: 'Authentication service is unavailable.' } };
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            practice_name: practiceName,
+            phone: phone || '',
+            location: location || '',
+            role: 'dentist'
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      return { data, error: null };
+    } catch (error) {
+      return { data: null, error: { message: error?.message || 'Sign up failed' } };
+    }
+  },
+
+  /**
    * Sign out current user
    */
   async signOut() {

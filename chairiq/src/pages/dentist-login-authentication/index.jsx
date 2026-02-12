@@ -155,9 +155,17 @@ export default function DentistLoginAuthentication() {
           </form>
         </div>
 
-        {/* Security Notice */}
         <div className="mt-6 text-center text-sm text-t3">
-          <p>Protected admin area. Authorized dentist access only.</p>
+          <p>
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={() => navigate('/signup')}
+              className="text-accent hover:underline font-medium"
+            >
+              Sign up
+            </button>
+          </p>
         </div>
       </div>
     </div>
