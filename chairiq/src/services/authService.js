@@ -28,10 +28,13 @@ export const authService = {
         return { data: null, error: { message: 'Authentication service is unavailable.' } };
       }
 
+      const siteUrl = window.location.origin;
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          emailRedirectTo: `${siteUrl}/login`,
           data: {
             full_name: fullName,
             practice_name: practiceName,
