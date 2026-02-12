@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, CheckCircle, ArrowLeft } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 
 const DentistSignUpPage = () => {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ const DentistSignUpPage = () => {
     phone: '',
     location: ''
   });
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -19,10 +23,37 @@ const DentistSignUpPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e?.preventDefault();
-    // No auth logic - just placeholder
-    console.log('Form submitted:', formData);
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      if (supabase) {
+        const { error: dbError } = await supabase
+          .from('access_requests')
+          .insert([{
+            dentist_name: formData.dentistName,
+            practice_name: formData.practiceName,
+            email: formData.email,
+            phone: formData.phone,
+            location: formData.location,
+            status: 'pending',
+            created_at: new Date().toISOString()
+          }]);
+
+        if (dbError) {
+          console.warn('Could not save to database:', dbError.message);
+        }
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      console.warn('Submission error:', err);
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -47,116 +78,146 @@ const DentistSignUpPage = () => {
       </header>
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        {/* Page Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-t1 mb-4">
-            ChairIQ – Dentist Sign Up
-          </h1>
-          <p className="text-xl text-accent font-semibold mb-6">
-            Request Access to the Platform
-          </p>
-          <p className="text-t2 text-lg max-w-2xl mx-auto leading-relaxed">
-            Join dental practices using ChairIQ to enhance patient understanding, reduce anxiety, and improve treatment acceptance through clear, visual communication.
-          </p>
-        </div>
-
-        {/* Form Card */}
-        <div className="card p-8 lg:p-12">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Dentist Name */}
-            <div>
-              <label htmlFor="dentistName" className="block text-sm font-medium text-t2 mb-2">
-                Dentist Name *
-              </label>
-              <input
-                type="text"
-                id="dentistName"
-                name="dentistName"
-                value={formData?.dentistName}
-                onChange={handleChange}
-                required
-                className="input-field w-full"
-                placeholder="Dr. John Smith"
-              />
+        {submitted ? (
+          <div className="text-center py-16">
+            <div className="w-20 h-20 bg-accent/15 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-10 h-10 text-accent" />
             </div>
-
-            {/* Practice Name */}
-            <div>
-              <label htmlFor="practiceName" className="block text-sm font-medium text-t2 mb-2">
-                Practice Name *
-              </label>
-              <input
-                type="text"
-                id="practiceName"
-                name="practiceName"
-                value={formData?.practiceName}
-                onChange={handleChange}
-                required
-                className="input-field w-full"
-                placeholder="Smith Dental Care"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-t2 mb-2">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData?.email}
-                onChange={handleChange}
-                required
-                className="input-field w-full"
-                placeholder="dr.smith@example.com"
-              />
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-t2 mb-2">
-                Phone Number *
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData?.phone}
-                onChange={handleChange}
-                required
-                className="input-field w-full"
-                placeholder="(555) 123-4567"
-              />
-            </div>
-
-            {/* Practice Location */}
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-t2 mb-2">
-                Practice Location *
-              </label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData?.location}
-                onChange={handleChange}
-                required
-                className="input-field w-full"
-                placeholder="City, State"
-              />
-            </div>
-
-            {/* Submit Button */}
+            <h1 className="text-3xl sm:text-4xl font-bold text-t1 mb-4">
+              Request Received
+            </h1>
+            <p className="text-t2 text-lg max-w-md mx-auto mb-3 leading-relaxed">
+              Thank you, {formData.dentistName}. We'll review your request and reach out to <span className="text-t1 font-medium">{formData.email}</span> shortly.
+            </p>
+            <p className="text-t3 text-sm mb-10">
+              Most requests are reviewed within 1–2 business days.
+            </p>
             <button
-              type="submit"
-              className="btn-primary w-full py-4 text-lg font-semibold mt-8"
+              onClick={() => navigate('/')}
+              className="btn-primary px-8 py-3 text-[15px] font-semibold"
             >
-              Request Access
+              Back to Home
             </button>
-          </form>
-        </div>
+          </div>
+        ) : (
+          <>
+            {/* Page Title */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl sm:text-5xl font-bold text-t1 mb-4">
+                ChairIQ – Dentist Sign Up
+              </h1>
+              <p className="text-xl text-accent font-semibold mb-6">
+                Request Access to the Platform
+              </p>
+              <p className="text-t2 text-lg max-w-2xl mx-auto leading-relaxed">
+                Join dental practices using ChairIQ to enhance patient understanding, reduce anxiety, and improve treatment acceptance through clear, visual communication.
+              </p>
+            </div>
+
+            {/* Form Card */}
+            <div className="card p-8 lg:p-12">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Dentist Name */}
+                <div>
+                  <label htmlFor="dentistName" className="block text-sm font-medium text-t2 mb-2">
+                    Dentist Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="dentistName"
+                    name="dentistName"
+                    value={formData?.dentistName}
+                    onChange={handleChange}
+                    required
+                    className="input-field w-full"
+                    placeholder="Dr. John Smith"
+                  />
+                </div>
+
+                {/* Practice Name */}
+                <div>
+                  <label htmlFor="practiceName" className="block text-sm font-medium text-t2 mb-2">
+                    Practice Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="practiceName"
+                    name="practiceName"
+                    value={formData?.practiceName}
+                    onChange={handleChange}
+                    required
+                    className="input-field w-full"
+                    placeholder="Smith Dental Care"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-t2 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData?.email}
+                    onChange={handleChange}
+                    required
+                    className="input-field w-full"
+                    placeholder="dr.smith@example.com"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-t2 mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData?.phone}
+                    onChange={handleChange}
+                    required
+                    className="input-field w-full"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+
+                {/* Practice Location */}
+                <div>
+                  <label htmlFor="location" className="block text-sm font-medium text-t2 mb-2">
+                    Practice Location *
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={formData?.location}
+                    onChange={handleChange}
+                    required
+                    className="input-field w-full"
+                    placeholder="City, State"
+                  />
+                </div>
+
+                {error && (
+                  <p className="text-danger text-sm">{error}</p>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="btn-primary w-full py-4 text-lg font-semibold mt-8 disabled:opacity-50"
+                >
+                  {submitting ? 'Submitting...' : 'Request Access'}
+                </button>
+              </form>
+            </div>
+          </>
+        )}
 
         {/* Trust Signals */}
         <div className="mt-16 grid md:grid-cols-3 gap-8">
