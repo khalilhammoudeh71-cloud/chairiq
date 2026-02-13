@@ -36,5 +36,5 @@ externalPort = 80
 
 [deployment]
 deploymentTarget = "static"
-build = ["bash", "-c", "cd chairiq && npm run build"]
+build = ["bash", "-c", "cd chairiq && npm install && npm run build"]
 publicDir = "chairiq/build"
