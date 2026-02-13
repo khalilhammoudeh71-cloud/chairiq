@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Save, Eye, Check, AlertCircle } from 'lucide-react';
 
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 import { procedures } from '../../data/procedures';
 import DentistNavigation from '../../components/DentistNavigation';
 import RichTextEditor from './components/RichTextEditor';
