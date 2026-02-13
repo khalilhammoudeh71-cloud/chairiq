@@ -1,90 +1,67 @@
-import React, { useMemo } from 'react';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import React, { useRef, useCallback } from 'react';
+import { Bold, Italic, Underline, List, ListOrdered, Link, Type, Trash2 } from 'lucide-react';
 
 const RichTextEditor = ({ value, onChange, placeholder }) => {
-  const modules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'color': [] }, { 'background': [] }],
-      ['link'],
-      ['clean']
-    ],
-  }), []);
+  const editorRef = useRef(null);
 
-  const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'color', 'background',
-    'link'
+  const execCommand = useCallback((command, val = null) => {
+    document.execCommand(command, false, val);
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  }, [onChange]);
+
+  const handleInput = useCallback(() => {
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  }, [onChange]);
+
+  const handleLink = useCallback(() => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      execCommand('createLink', url);
+    }
+  }, [execCommand]);
+
+  const handleHeading = useCallback((level) => {
+    execCommand('formatBlock', level === 'p' ? 'p' : `h${level}`);
+  }, [execCommand]);
+
+  const toolbarButtons = [
+    { icon: Type, action: () => handleHeading(2), title: 'Heading' },
+    { icon: Bold, action: () => execCommand('bold'), title: 'Bold' },
+    { icon: Italic, action: () => execCommand('italic'), title: 'Italic' },
+    { icon: Underline, action: () => execCommand('underline'), title: 'Underline' },
+    { icon: ListOrdered, action: () => execCommand('insertOrderedList'), title: 'Ordered List' },
+    { icon: List, action: () => execCommand('insertUnorderedList'), title: 'Bullet List' },
+    { icon: Link, action: handleLink, title: 'Insert Link' },
+    { icon: Trash2, action: () => execCommand('removeFormat'), title: 'Clear Formatting' },
   ];
 
   return (
-    <div className="rich-text-editor">
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={onChange}
-        modules={modules}
-        formats={formats}
-        placeholder={placeholder}
-        className="bg-bg3 text-t1 rounded-lg"
+    <div className="rich-text-editor border border-bd rounded-lg overflow-hidden">
+      <div className="flex flex-wrap gap-1 p-2 bg-bg2 border-b border-bd">
+        {toolbarButtons.map((btn, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={btn.action}
+            title={btn.title}
+            className="p-2 rounded hover:bg-bg3 text-t3 hover:text-t1 transition-colors"
+          >
+            <btn.icon className="w-4 h-4" />
+          </button>
+        ))}
+      </div>
+      <div
+        ref={editorRef}
+        contentEditable
+        onInput={handleInput}
+        dangerouslySetInnerHTML={{ __html: value || '' }}
+        data-placeholder={placeholder}
+        className="min-h-[200px] p-4 bg-bg3 text-t1 text-[15px] leading-relaxed outline-none empty:before:content-[attr(data-placeholder)] empty:before:text-t3"
       />
-      <style jsx global>{`
-        .rich-text-editor .ql-container {
-          background-color: var(--bg3);
-          border-color: var(--bd);
-          border-radius: 0 0 0.5rem 0.5rem;
-          min-height: 200px;
-          font-size: 15px;
-        }
-        
-        .rich-text-editor .ql-toolbar {
-          background-color: var(--bg2);
-          border-color: var(--bd);
-          border-radius: 0.5rem 0.5rem 0 0;
-        }
-        
-        .rich-text-editor .ql-editor {
-          color: var(--t1);
-          min-height: 200px;
-        }
-        
-        .rich-text-editor .ql-editor.ql-blank::before {
-          color: var(--t3);
-          font-style: normal;
-        }
-        
-        .rich-text-editor .ql-stroke {
-          stroke: var(--t3);
-        }
-        
-        .rich-text-editor .ql-fill {
-          fill: var(--t3);
-        }
-        
-        .rich-text-editor .ql-picker-label {
-          color: var(--t3);
-        }
-        
-        .rich-text-editor .ql-toolbar button:hover,
-        .rich-text-editor .ql-toolbar button.ql-active {
-          color: var(--accent);
-        }
-        
-        .rich-text-editor .ql-toolbar button:hover .ql-stroke,
-        .rich-text-editor .ql-toolbar button.ql-active .ql-stroke {
-          stroke: var(--accent);
-        }
-        
-        .rich-text-editor .ql-toolbar button:hover .ql-fill,
-        .rich-text-editor .ql-toolbar button.ql-active .ql-fill {
-          fill: var(--accent);
-        }
-      `}</style>
     </div>
   );
 };
