@@ -227,10 +227,10 @@ const Landing = () => {
               <span className="font-semibold text-t1 text-sm">ChairIQ</span>
             </div>
             <div className="flex gap-6 text-t3 text-sm">
-              <button onClick={() => navigate('/privacy')} className="hover:text-t1 transition-colors">
+              <button onClick={() => navigate('/privacy-policy')} className="hover:text-t1 transition-colors">
                 Privacy Policy
               </button>
-              <button onClick={() => navigate('/terms')} className="hover:text-t1 transition-colors">
+              <button onClick={() => navigate('/terms-of-service')} className="hover:text-t1 transition-colors">
                 Terms of Service
               </button>
             </div>
