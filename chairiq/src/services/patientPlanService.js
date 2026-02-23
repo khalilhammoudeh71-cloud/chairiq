@@ -610,17 +610,26 @@ export const patientPlanService = {
 
               if (allVisuals?.length > 0) {
                 const heroVisual = allVisuals.find(v => v.step_key === 'hero');
-                const stepVisuals = allVisuals
+                const stepVisualsMap = {};
+                allVisuals
                   .filter(v => v.step_key !== 'hero')
-                  .sort((a, b) => {
-                    const aNum = parseInt(a.step_key?.replace('step_', '')) || 0;
-                    const bNum = parseInt(b.step_key?.replace('step_', '')) || 0;
-                    return aNum - bNum;
+                  .forEach(v => {
+                    const num = parseInt(v.step_key?.replace('step_', '')) || 0;
+                    if (num > 0) stepVisualsMap[num] = v;
                   });
+
+                const totalSteps = educationContent?.steps?.length || 0;
+                const maxVisualStep = Math.max(totalSteps, ...Object.keys(stepVisualsMap).map(Number));
+                const alignedStepKeys = [];
+                for (let i = 1; i <= maxVisualStep; i++) {
+                  alignedStepKeys.push(
+                    stepVisualsMap[i] ? this.resolveVisualUrl(stepVisualsMap[i].image_url) : null
+                  );
+                }
 
                 visualsData = {
                   heroKey: heroVisual ? this.resolveVisualUrl(heroVisual.image_url) : null,
-                  stepKeys: stepVisuals.map(v => this.resolveVisualUrl(v.image_url))
+                  stepKeys: alignedStepKeys
                 };
               }
             }
