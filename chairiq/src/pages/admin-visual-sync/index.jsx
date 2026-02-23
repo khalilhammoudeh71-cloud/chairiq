@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Upload, Check, AlertCircle, RefreshCw, Image as ImageIcon, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Upload, Check, AlertCircle, RefreshCw, Image as ImageIcon, Loader2, Plus, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DentistNavigation from '../../components/DentistNavigation';
 import { supabase } from '../../lib/supabase';
@@ -15,6 +15,14 @@ export default function AdminVisualSync() {
   const [globalProgress, setGlobalProgress] = useState({ done: 0, total: 0 });
   const [existingVisuals, setExistingVisuals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showUploadPanel, setShowUploadPanel] = useState(false);
+  const [uploadProcedure, setUploadProcedure] = useState('');
+  const [uploadStepKey, setUploadStepKey] = useState('hero');
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadPreview, setUploadPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadResult, setUploadResult] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     loadExistingVisuals();
@@ -225,6 +233,90 @@ export default function AdminVisualSync() {
     return null;
   }
 
+  function handleFileSelect(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadFile(file);
+    setUploadResult(null);
+    const reader = new FileReader();
+    reader.onload = (ev) => setUploadPreview(ev.target.result);
+    reader.readAsDataURL(file);
+  }
+
+  function resetUploadForm() {
+    setUploadFile(null);
+    setUploadPreview(null);
+    setUploadResult(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  function getSelectedProcedure() {
+    return proceduresLibrary.find(p => p.id === uploadProcedure);
+  }
+
+  function getStepOptions() {
+    const proc = getSelectedProcedure();
+    if (!proc) return [{ value: 'hero', label: 'Hero Image' }];
+    const steps = [{ value: 'hero', label: 'Hero Image' }];
+    (proc.visualGuideSteps || []).forEach((step, idx) => {
+      steps.push({ value: `step_${idx + 1}`, label: `Step ${idx + 1}${step.title_en ? ` - ${step.title_en}` : ''}` });
+    });
+    for (let i = (proc.visualGuideSteps || []).length + 1; i <= 10; i++) {
+      steps.push({ value: `step_${i}`, label: `Step ${i} (new)` });
+    }
+    return steps;
+  }
+
+  async function handleCustomUpload() {
+    if (!uploadFile || !uploadProcedure) return;
+    setIsUploading(true);
+    setUploadResult(null);
+    try {
+      const proc = getSelectedProcedure();
+      if (proc) await ensureCanonicalProcedure(proc);
+
+      const ext = uploadFile.name.split('.').pop()?.toLowerCase() || 'png';
+      const storagePath = `${uploadProcedure}/${uploadStepKey}.${ext}`;
+
+      const { data, error } = await supabase.storage
+        .from(BUCKET_NAME)
+        .upload(storagePath, uploadFile, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: uploadFile.type || 'image/png',
+        });
+      if (error) throw error;
+
+      const { data: urlData } = supabase.storage.from(BUCKET_NAME).getPublicUrl(data.path);
+      const publicUrl = urlData.publicUrl;
+
+      const sortOrder = uploadStepKey === 'hero' ? 0 : parseInt(uploadStepKey.replace('step_', ''), 10);
+      const procName = proc?.name_en || uploadProcedure;
+      const altEn = uploadStepKey === 'hero' ? `${procName} hero image` : `${procName} - ${uploadStepKey.replace('_', ' ')}`;
+
+      const { error: upsertError } = await supabase
+        .from('procedure_visuals')
+        .upsert({
+          canonical_slug: uploadProcedure,
+          step_key: uploadStepKey,
+          image_url: publicUrl,
+          sort_order: sortOrder,
+          alt_text_en: altEn,
+          alt_text_es: altEn,
+        }, { onConflict: 'canonical_slug,step_key' });
+      if (upsertError) throw upsertError;
+
+      setUploadResult({ success: true, message: 'Image uploaded and saved successfully' });
+      resetUploadForm();
+      await loadExistingVisuals();
+    } catch (err) {
+      console.error('Custom upload failed:', err);
+      setUploadResult({ success: false, message: err.message || 'Upload failed' });
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-bg0">
@@ -285,14 +377,112 @@ export default function AdminVisualSync() {
               across {new Set(existingVisuals.map(v => v.canonical_slug)).size} procedures
             </span>
             <button
+              onClick={() => { setShowUploadPanel(p => !p); setUploadResult(null); }}
+              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-sm bg-accent text-white rounded-lg hover:brightness-110 transition-all"
+            >
+              {showUploadPanel ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+              {showUploadPanel ? 'Close' : 'Upload Image'}
+            </button>
+            <button
               onClick={loadExistingVisuals}
-              className="ml-auto p-1.5 rounded hover:bg-bg3 text-t3"
+              className="p-1.5 rounded hover:bg-bg3 text-t3"
               title="Refresh"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
           </div>
         </div>
+
+        {showUploadPanel && (
+          <div className="mb-6 bg-bg1 rounded-xl border border-accent/30 p-5">
+            <h3 className="text-t1 font-semibold mb-4 flex items-center gap-2">
+              <Upload className="w-4 h-4 text-accent" />
+              Upload Custom Image
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-t2 text-sm mb-1.5">Procedure</label>
+                <select
+                  value={uploadProcedure}
+                  onChange={(e) => { setUploadProcedure(e.target.value); setUploadStepKey('hero'); }}
+                  className="w-full bg-bg2 border border-bd rounded-lg px-3 py-2 text-t1 text-sm focus-visible:outline focus-visible:outline-accent/30"
+                >
+                  <option value="">Select a procedure...</option>
+                  {proceduresLibrary.map(p => (
+                    <option key={p.id} value={p.id}>{p.name_en}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-t2 text-sm mb-1.5">Step</label>
+                <select
+                  value={uploadStepKey}
+                  onChange={(e) => setUploadStepKey(e.target.value)}
+                  disabled={!uploadProcedure}
+                  className="w-full bg-bg2 border border-bd rounded-lg px-3 py-2 text-t1 text-sm focus-visible:outline focus-visible:outline-accent/30 disabled:opacity-50"
+                >
+                  {getStepOptions().map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-t2 text-sm mb-1.5">Image File</label>
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <label className="flex items-center justify-center gap-2 px-4 py-3 bg-bg2 border-2 border-dashed border-bd rounded-lg cursor-pointer hover:border-accent/50 hover:bg-bg3 transition-all">
+                    <Upload className="w-4 h-4 text-t3" />
+                    <span className="text-t2 text-sm">{uploadFile ? uploadFile.name : 'Choose an image...'}</span>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                {uploadPreview && (
+                  <div className="w-20 h-20 rounded-lg overflow-hidden border border-bd flex-shrink-0">
+                    <img src={uploadPreview} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {uploadResult && (
+              <div className={`mb-4 px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 ${
+                uploadResult.success
+                  ? 'bg-success/10 border border-success/30 text-success'
+                  : 'bg-danger/10 border border-danger/30 text-danger'
+              }`}>
+                {uploadResult.success ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                {uploadResult.message}
+              </div>
+            )}
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleCustomUpload}
+                disabled={!uploadFile || !uploadProcedure || isUploading}
+                className="flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-lg hover:brightness-110 disabled:opacity-50 transition-all text-sm font-medium"
+              >
+                {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                {isUploading ? 'Uploading...' : 'Upload & Save'}
+              </button>
+              {uploadFile && (
+                <button
+                  onClick={resetUploadForm}
+                  className="px-3 py-2.5 text-t3 text-sm hover:text-t1 transition-colors"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-4">
           {proceduresLibrary.map((procedure) => {
