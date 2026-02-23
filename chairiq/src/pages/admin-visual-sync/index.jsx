@@ -88,6 +88,24 @@ export default function AdminVisualSync() {
     const slug = procedure.id;
     const results = {};
 
+    async function upsertVisual(canonicalSlug, stepKey, imageUrl, sortOrder, altEn, altEs) {
+      const { error: upsertError } = await supabase
+        .from('procedure_visuals')
+        .upsert({
+          canonical_slug: canonicalSlug,
+          step_key: stepKey,
+          image_url: imageUrl,
+          sort_order: sortOrder,
+          alt_text_en: altEn,
+          alt_text_es: altEs,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'canonical_slug,step_key' });
+      if (upsertError) {
+        console.error(`DB upsert failed for ${canonicalSlug}/${stepKey}:`, upsertError);
+        throw upsertError;
+      }
+    }
+
     if (procedure.heroImage) {
       const heroKey = getVisualKey(slug, 'hero');
       try {
@@ -96,22 +114,11 @@ export default function AdminVisualSync() {
         const storagePath = `${slug}/hero.${ext}`;
         const publicUrl = await uploadImageFromSrc(procedure.heroImage, storagePath);
 
-        const existing = existingVisuals.find(v => v.canonical_slug === slug && v.step_key === 'hero');
-        if (existing) {
-          await supabase.from('procedure_visuals')
-            .update({ image_url: publicUrl, updated_at: new Date().toISOString() })
-            .eq('canonical_slug', slug)
-            .eq('step_key', 'hero');
-        } else {
-          await supabase.from('procedure_visuals').insert({
-            canonical_slug: slug,
-            step_key: 'hero',
-            image_url: publicUrl,
-            sort_order: 0,
-            alt_text_en: procedure.heroImageAlt || `${procedure.name_en} hero image`,
-            alt_text_es: procedure.heroImageAlt || `${procedure.name_es} imagen principal`,
-          });
-        }
+        await upsertVisual(
+          slug, 'hero', publicUrl, 0,
+          procedure.heroImageAlt || `${procedure.name_en} hero image`,
+          procedure.heroImageAlt || `${procedure.name_es} imagen principal`
+        );
         setSyncStatus(prev => ({ ...prev, [heroKey]: 'done' }));
         results[heroKey] = 'done';
       } catch (err) {
@@ -134,22 +141,11 @@ export default function AdminVisualSync() {
         const storagePath = `${slug}/${stepKey}.${ext}`;
         const publicUrl = await uploadImageFromSrc(step.visualSrc, storagePath);
 
-        const existing = existingVisuals.find(v => v.canonical_slug === slug && v.step_key === stepKey);
-        if (existing) {
-          await supabase.from('procedure_visuals')
-            .update({ image_url: publicUrl, updated_at: new Date().toISOString() })
-            .eq('canonical_slug', slug)
-            .eq('step_key', stepKey);
-        } else {
-          await supabase.from('procedure_visuals').insert({
-            canonical_slug: slug,
-            step_key: stepKey,
-            image_url: publicUrl,
-            sort_order: i + 1,
-            alt_text_en: step.visualAlt || `${procedure.name_en} - Step ${i + 1}`,
-            alt_text_es: step.visualAlt || `${procedure.name_es} - Paso ${i + 1}`,
-          });
-        }
+        await upsertVisual(
+          slug, stepKey, publicUrl, i + 1,
+          step.visualAlt || `${procedure.name_en} - Step ${i + 1}`,
+          step.visualAlt || `${procedure.name_es} - Paso ${i + 1}`
+        );
         setSyncStatus(prev => ({ ...prev, [key]: 'done' }));
         results[key] = 'done';
       } catch (err) {
