@@ -233,6 +233,9 @@ const Landing = () => {
               <button onClick={() => navigate('/terms-of-service')} className="hover:text-t1 transition-colors">
                 Terms of Service
               </button>
+              <button onClick={() => navigate('/sms')} className="hover:text-t1 transition-colors">
+                SMS
+              </button>
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-bd">
