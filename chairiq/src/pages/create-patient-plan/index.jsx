@@ -462,11 +462,32 @@ export default function CreatePatientPlan() {
     }
   };
 
+  const fallbackCopy = (text) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.top = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  };
+
+  const safeCopy = (text) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text);
+    } else {
+      fallbackCopy(text);
+    }
+  };
+
   // Copy patient link
   const copyPatientLink = () => {
     if (!savedPlan) return;
     const link = `${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`;
-    navigator.clipboard?.writeText(link);
+    safeCopy(link);
     showToast('Patient link copied to clipboard!', 'success');
   };
 
@@ -484,7 +505,7 @@ export default function CreatePatientPlan() {
       savedPlan?.treatmentPlan?.practiceName,
       savedPlan?.treatmentPlan?.publicToken
     );
-    navigator.clipboard?.writeText(message);
+    safeCopy(message);
     showToast('SMS message copied to clipboard!', 'success');
   };
 

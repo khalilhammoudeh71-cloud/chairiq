@@ -80,9 +80,21 @@ export default function DentistAdminAnalyticsDashboard() {
       setCopyingToken(publicToken);
       const link = `${window.location?.origin}/treatment-plan-landing?token=${publicToken}`;
       
-      await navigator.clipboard?.writeText(link);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(link);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = link;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
       
-      // Clear any existing timer
       if (messageTimer) {
         clearTimeout(messageTimer);
       }
