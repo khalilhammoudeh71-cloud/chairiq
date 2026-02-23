@@ -42,7 +42,33 @@ export default function AdminVisualSync() {
     return existingVisuals.some(v => v.canonical_slug === slug && v.step_key === stepKey);
   }
 
+  function isExternalUrl(src) {
+    return src?.startsWith('http://') || src?.startsWith('https://');
+  }
+
   async function uploadImageFromSrc(src, storagePath) {
+    if (isExternalUrl(src)) {
+      try {
+        const response = await fetch(src, { mode: 'cors' });
+        if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
+        const blob = await response.blob();
+        if (blob.size < 100) throw new Error('Image too small, likely invalid');
+        const { data, error } = await supabase.storage
+          .from(BUCKET_NAME)
+          .upload(storagePath, blob, {
+            cacheControl: '3600',
+            upsert: true,
+            contentType: blob.type || 'image/png',
+          });
+        if (error) throw error;
+        const { data: urlData } = supabase.storage.from(BUCKET_NAME).getPublicUrl(data.path);
+        return urlData.publicUrl;
+      } catch (fetchErr) {
+        console.warn(`Could not re-upload external image, using original URL: ${src}`);
+        return src;
+      }
+    }
+
     const response = await fetch(src);
     if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
     const blob = await response.blob();
