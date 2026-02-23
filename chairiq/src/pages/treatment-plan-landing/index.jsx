@@ -441,16 +441,12 @@ const TreatmentPlanLanding = () => {
                             className="text-2xl sm:text-3xl mb-6 text-t1 font-semibold leading-snug"
                           >
                             {title}
+                            {procedure?.adaCode && (
+                              <span className="text-t3 text-base font-mono font-normal ml-3">
+                                ({procedure?.adaCode})
+                              </span>
+                            )}
                           </h3>
-                          
-                          {/* ADA Code */}
-                          {procedure?.adaCode && (
-                            <p 
-                              className="mb-3 text-t3 text-base font-mono"
-                            >
-                              {procedure?.adaCode}
-                            </p>
-                          )}
 
                           {/* Tooth Numbers */}
                           {procedure?.toothNumbers && (
@@ -485,6 +481,25 @@ const TreatmentPlanLanding = () => {
                             {previewText}
                             {previewText?.length >= 180 && summary?.length > 180 ? '...' : ''}
                           </p>
+                        )}
+
+                        {/* Hero image - visible by default, hidden when full details shown */}
+                        {!isFullDetailsVisible && visuals?.heroKey && (
+                          <div className="flex justify-center my-6">
+                            <Image
+                              src={visuals?.heroKey}
+                              alt={`${title} illustration`}
+                              className="rounded-xl"
+                              style={{ 
+                                maxWidth: '100%', 
+                                maxHeight: '280px', 
+                                objectFit: 'contain'
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
                         )}
                         
                         {/* Expand/Collapse indicator */}
@@ -708,87 +723,6 @@ const TreatmentPlanLanding = () => {
                           {/* Full Details Section - Only shown when toggle is active */}
                           {isFullDetailsVisible && (
                             <div className="space-y-16 pt-6 animate-slideDown">
-                              
-                              {/* Hero image with fallback placeholder */}
-                              {visuals?.heroKey ? (
-                                <div>
-                                  <div className="flex justify-center my-8">
-                                    <Image
-                                      src={visuals?.heroKey}
-                                      alt={`${title} illustration`}
-                                      className="rounded-xl"
-                                      style={{ 
-                                        maxWidth: '100%', 
-                                        maxHeight: '320px', 
-                                        objectFit: 'contain'
-                                      }}
-                                      onError={(e) => {
-                                        console.warn('⚠️ [IMAGE DEBUG] Failed to load hero image:', {
-                                          url: visuals?.heroKey,
-                                          procedure_name: procedure?.procedureName,
-                                          canonical_slug: procedure?.canonicalSlug,
-                                          error_type: 'image_load_failed'
-                                        });
-                                        e.target.style.display = 'none';
-                                        const placeholder = e?.target?.parentElement?.querySelector('.visual-placeholder');
-                                        if (placeholder) placeholder.style.display = 'flex';
-                                      }}
-                                    />
-                                    <div 
-                                      className="visual-placeholder rounded-xl items-center justify-center p-8"
-                                      style={{ 
-                                        display: 'none',
-                                        backgroundColor: 'rgba(122, 140, 245, 0.08)',
-                                        border: '1px solid rgba(122, 140, 245, 0.15)',
-                                        color: '#7a8cf5',
-                                        fontSize: '0.9375rem',
-                                        textAlign: 'center'
-                                      }}
-                                    >
-                                      <div>
-                                        <Icon name="ImageOff" size={32} style={{ margin: '0 auto 0.5rem', color: '#7a8cf5' }} />
-                                        <p>{currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p>
-                                        {debugMode && (
-                                          <p style={{ fontSize: '0.75rem', marginTop: '0.5rem', opacity: 0.7 }}>
-                                            Image failed to load
-                                          </p>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div>
-                                  <div 
-                                    className="flex justify-center my-8 rounded-xl items-center p-8"
-                                    style={{ 
-                                      backgroundColor: 'rgba(122, 140, 245, 0.08)',
-                                      border: '1px solid rgba(122, 140, 245, 0.15)',
-                                      color: '#7a8cf5',
-                                      fontSize: '0.9375rem',
-                                      textAlign: 'center'
-                                    }}
-                                  >
-                                    <div>
-                                      <Icon name="ImageOff" size={32} style={{ margin: '0 auto 0.5rem', color: '#7a8cf5' }} />
-                                      <p>{currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p>
-                                    </div>
-                                  </div>
-                                  
-                                  {/* 🔍 DEV-ONLY DEBUG LINE */}
-                                  {debugMode && (
-                                    <div style={{ 
-                                      fontSize: '0.75rem', 
-                                      color: '#ffb74d', 
-                                      marginTop: '0.5rem',
-                                      textAlign: 'center',
-                                      fontFamily: 'monospace'
-                                    }}>
-                                      visuals found: 0 | key used: none
-                                    </div>
-                                  )}
-                                </div>
-                              )}
 
                               {/* Why it's recommended */}
                               {why && (
