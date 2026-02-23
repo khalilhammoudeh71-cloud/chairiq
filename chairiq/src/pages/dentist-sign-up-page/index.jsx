@@ -12,7 +12,8 @@ const DentistSignUpPage = () => {
     phone: '',
     location: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    smsConsent: false
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -171,7 +172,7 @@ const DentistSignUpPage = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-t2 mb-1.5">
-                      Phone Number
+                      Mobile Number (optional)
                     </label>
                     <input
                       type="tel"
@@ -240,6 +241,28 @@ const DentistSignUpPage = () => {
                     className="input-field w-full"
                     placeholder="Re-enter your password"
                   />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.smsConsent}
+                      onChange={(e) => setFormData({ ...formData, smsConsent: e.target.checked })}
+                      className="mt-0.5 w-4 h-4 rounded border-bd accent-accent"
+                    />
+                    <span className="text-sm text-t2">I agree to receive SMS messages from ChairIQ.</span>
+                  </label>
+                  <p className="text-xs text-t3 leading-relaxed">
+                    <span className="font-semibold text-t2">SMS Consent:</span> By providing your mobile number and opting in, you agree to receive SMS messages from ChairIQ related to appointments and treatment plans. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out. Reply HELP for help. Consent is not a condition of purchase.
+                  </p>
+                  <p className="text-xs text-t3">
+                    Support: <a href="mailto:support@chairiq.online" className="text-accent hover:underline">support@chairiq.online</a>
+                  </p>
+                  <p className="text-xs text-t3 flex gap-3">
+                    <a href="/privacy-policy" className="text-accent hover:underline">Privacy Policy</a>
+                    <a href="/terms-of-service" className="text-accent hover:underline">Terms</a>
+                  </p>
                 </div>
 
                 {error && (
