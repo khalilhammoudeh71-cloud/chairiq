@@ -764,14 +764,27 @@ export const patientPlanService = {
                   }
                 }
 
+                const visualSlugForHero = CANONICAL_TO_VISUAL_SLUG[canonicalKey] || canonicalKey;
+                const staticProc = proceduresLibrary?.find(p => p?.id === visualSlugForHero);
+                const fallbackHero = staticProc?.heroImage || null;
+
                 visualsData = {
-                  heroKey: heroVisual ? this.resolveVisualUrl(heroVisual.image_url) : null,
+                  heroKey: heroVisual ? this.resolveVisualUrl(heroVisual.image_url) : fallbackHero,
                   stepKeys: alignedStepKeys
                 };
               }
             }
           } catch (visualsLookupError) {
             console.error('Error fetching visuals data:', visualsLookupError);
+          }
+
+          if (!visualsData?.heroKey && canonicalKey) {
+            const heroSlug = CANONICAL_TO_VISUAL_SLUG[canonicalKey] || canonicalKey;
+            const heroProc = proceduresLibrary?.find(p => p?.id === heroSlug);
+            if (heroProc?.heroImage) {
+              visualsData = visualsData || {};
+              visualsData.heroKey = heroProc.heroImage;
+            }
           }
 
           const langSuffix = patientLanguage === 'ES' ? 'Es' : 'En';
