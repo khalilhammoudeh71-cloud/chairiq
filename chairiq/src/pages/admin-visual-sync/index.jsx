@@ -84,9 +84,34 @@ export default function AdminVisualSync() {
     return urlData.publicUrl;
   }
 
+  async function ensureCanonicalProcedure(procedure) {
+    const slug = procedure.id;
+    const { data } = await supabase
+      .from('canonical_procedures')
+      .select('slug')
+      .eq('slug', slug)
+      .maybeSingle();
+    if (!data) {
+      const { error } = await supabase
+        .from('canonical_procedures')
+        .insert({
+          slug,
+          display_name_en: procedure.name_en || procedure.id,
+          display_name_es: procedure.name_es || procedure.id,
+          category: procedure.category || 'general',
+        });
+      if (error) {
+        console.error(`Failed to create canonical procedure ${slug}:`, error);
+        throw error;
+      }
+    }
+  }
+
   async function syncProcedure(procedure) {
     const slug = procedure.id;
     const results = {};
+
+    await ensureCanonicalProcedure(procedure);
 
     async function upsertVisual(canonicalSlug, stepKey, imageUrl, sortOrder, altEn, altEs) {
       const { error: upsertError } = await supabase
