@@ -4,7 +4,62 @@ import { procedureEducationGeneratorService } from './procedureEducationGenerato
 import { normalizeProcedureKey } from '../utils/procedureNormalization';
 import proceduresLibrary from '../data/procedures';
 
-const normalizeTitle = (title) => (title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const DENTAL_SYNONYMS = {
+  clean: ['cleaning', 'clean', 'remove', 'removing'],
+  canal: ['canal', 'canals', 'root'],
+  seal: ['seal', 'sealing', 'sealed', 'obturation', 'obturat', 'fill', 'filling', 'filled'],
+  crown: ['crown', 'cap', 'restoration'],
+  placement: ['placement', 'place', 'placing', 'cemented', 'cement'],
+  build: ['build', 'buildup', 'core', 'reconstruct', 'reconstruction'],
+  access: ['access', 'opening', 'open', 'entry'],
+  prep: ['preparation', 'prepare', 'prepared', 'prep', 'reshape', 'reshaped'],
+  impression: ['impression', 'impressions', 'scan', 'scanning', 'mold', 'molds'],
+  temp: ['temporary', 'temp', 'interim', 'provisional'],
+  lab: ['lab', 'laboratory', 'fabrication', 'fabricate', 'crafted'],
+  numb: ['numb', 'numbing', 'anesthesia', 'anesthetic', 'anestesia'],
+  decay: ['decay', 'decayed', 'cavity', 'caries', 'carious'],
+  polish: ['polish', 'polishing', 'shape', 'shaping', 'contour'],
+  bite: ['bite', 'occlusion', 'occlusal', 'check'],
+  assess: ['assessment', 'assess', 'evaluate', 'evaluation', 'measure', 'probe'],
+  scale: ['scaling', 'scale', 'deep', 'scrape'],
+  planing: ['planing', 'plane', 'smooth', 'smoothing', 'root'],
+  rinse: ['rinse', 'antimicrobial', 'medicated', 'mouthwash'],
+  extract: ['extract', 'extraction', 'remove', 'pull', 'loosen'],
+  suture: ['suture', 'stitch', 'close', 'closure'],
+  bridge: ['bridge', 'pontic', 'span'],
+  support: ['support', 'supporting', 'abutment', 'anchor'],
+};
+
+function getWordSet(title) {
+  return (title || '').toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+}
+
+function expandWithSynonyms(words) {
+  const expanded = new Set(words);
+  for (const word of words) {
+    for (const [, synonyms] of Object.entries(DENTAL_SYNONYMS)) {
+      if (synonyms.some(s => s === word || word.includes(s) || s.includes(word))) {
+        synonyms.forEach(s => expanded.add(s));
+      }
+    }
+  }
+  return expanded;
+}
+
+function titleMatchScore(aiTitle, visualTitle) {
+  const aiWords = getWordSet(aiTitle);
+  const visualWords = getWordSet(visualTitle);
+  if (aiWords.length === 0 || visualWords.length === 0) return 0;
+
+  const aiExpanded = expandWithSynonyms(aiWords);
+  const visualExpanded = expandWithSynonyms(visualWords);
+
+  let score = 0;
+  for (const w of aiExpanded) {
+    if (visualExpanded.has(w)) score++;
+  }
+  return score;
+}
 
 function buildVisualTitleMap(procedureId) {
   const proc = proceduresLibrary?.find(p => p?.id === procedureId);
@@ -12,8 +67,8 @@ function buildVisualTitleMap(procedureId) {
   const map = {};
   proc.visualGuideSteps.forEach((step, idx) => {
     map[`step_${idx + 1}`] = {
-      titleEn: normalizeTitle(step?.title_en),
-      titleEs: normalizeTitle(step?.title_es),
+      titleEn: step?.title_en || '',
+      titleEs: step?.title_es || '',
     };
   });
   return map;
@@ -575,32 +630,43 @@ export const patientPlanService = {
               const visualSlugForSteps = CANONICAL_TO_VISUAL_SLUG[canonicalKey] || canonicalKey;
               const titleMapForSteps = buildVisualTitleMap(visualSlugForSteps);
 
-              let visualByTitleForSteps = null;
+              let visualEntriesForSteps = null;
               if (titleMapForSteps && visuals?.length > 0) {
-                visualByTitleForSteps = {};
+                visualEntriesForSteps = [];
                 visuals.forEach(v => {
                   const stepKey = v?.step_key || v?.step_id;
                   const meta = titleMapForSteps[stepKey];
-                  if (meta?.titleEn) visualByTitleForSteps[meta.titleEn] = v;
+                  if (meta?.titleEn) visualEntriesForSteps.push({ visual: v, titleEn: meta.titleEn });
                 });
               }
 
+              const usedVisualsForSteps = new Set();
               visualsForSteps = educationContent?.steps?.map((step, idx) => {
                 let matchingVisual = null;
 
-                if (visualByTitleForSteps) {
-                  const stepTitle = normalizeTitle(step?.title);
-                  for (const [vTitle, visual] of Object.entries(visualByTitleForSteps)) {
-                    if (stepTitle.includes(vTitle) || vTitle.includes(stepTitle)) {
-                      matchingVisual = visual;
-                      break;
+                if (visualEntriesForSteps) {
+                  let bestScore = 0;
+                  let bestEntry = null;
+                  for (const entry of visualEntriesForSteps) {
+                    const key = entry.visual?.step_key || entry.visual?.step_id;
+                    if (usedVisualsForSteps.has(key)) continue;
+                    const score = titleMatchScore(step?.title, entry.titleEn);
+                    if (score > bestScore) {
+                      bestScore = score;
+                      bestEntry = entry;
                     }
+                  }
+                  if (bestEntry && bestScore >= 2) {
+                    const key = bestEntry.visual?.step_key || bestEntry.visual?.step_id;
+                    usedVisualsForSteps.add(key);
+                    matchingVisual = bestEntry.visual;
                   }
                 }
 
                 if (!matchingVisual) {
                   const stepId = step?.step_id || `step_${idx + 1}`;
-                  matchingVisual = visuals?.find(v => v?.step_id === stepId);
+                  const fallback = visuals?.find(v => v?.step_id === stepId && !usedVisualsForSteps.has(v?.step_id));
+                  if (fallback) matchingVisual = fallback;
                 }
                 
                 return {
@@ -661,22 +727,30 @@ export const patientPlanService = {
                 const alignedStepKeys = [];
 
                 if (titleMap && educSteps.length > 0) {
-                  const visualByTitle = {};
+                  const visualEntries = [];
                   stepVisuals.forEach(v => {
                     const meta = titleMap[v.step_key];
-                    if (meta?.titleEn) visualByTitle[meta.titleEn] = v;
+                    if (meta?.titleEn) visualEntries.push({ visual: v, titleEn: meta.titleEn });
                   });
 
+                  const usedVisuals = new Set();
                   for (const step of educSteps) {
-                    const stepTitle = normalizeTitle(step?.title);
-                    let matched = null;
-                    for (const [vTitle, visual] of Object.entries(visualByTitle)) {
-                      if (stepTitle.includes(vTitle) || vTitle.includes(stepTitle)) {
-                        matched = visual;
-                        break;
+                    let bestMatch = null;
+                    let bestScore = 0;
+                    for (const entry of visualEntries) {
+                      if (usedVisuals.has(entry.visual.step_key)) continue;
+                      const score = titleMatchScore(step?.title, entry.titleEn);
+                      if (score > bestScore) {
+                        bestScore = score;
+                        bestMatch = entry;
                       }
                     }
-                    alignedStepKeys.push(matched ? this.resolveVisualUrl(matched.image_url) : null);
+                    if (bestMatch && bestScore >= 2) {
+                      usedVisuals.add(bestMatch.visual.step_key);
+                      alignedStepKeys.push(this.resolveVisualUrl(bestMatch.visual.image_url));
+                    } else {
+                      alignedStepKeys.push(null);
+                    }
                   }
                 } else {
                   const stepVisualsMap = {};
