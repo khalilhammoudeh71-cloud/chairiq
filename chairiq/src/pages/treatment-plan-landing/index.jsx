@@ -457,20 +457,6 @@ const TreatmentPlanLanding = () => {
                             </p>
                           )}
                           
-                          {/* Priority Badge */}
-                          {procedure?.priority && (
-                            <div 
-                              className="inline-block px-5 py-2 rounded-full text-base mb-6"
-                              style={{
-                                backgroundColor: procedure?.priority === 'Immediate' ? 'rgba(255, 183, 77, 0.15)' 
-                                  : procedure?.priority === 'Soon' ? 'rgba(74, 111, 165, 0.15)' : 'rgba(156, 163, 175, 0.15)',
-                                color: procedure?.priority === 'Immediate' ? '#ffb74d'
-                                  : procedure?.priority === 'Soon' ? '#4A6FA5' : '#9ca3af'
-                              }}
-                            >
-                              {text?.priority?.[procedure?.priority] || procedure?.priority}
-                            </div>
-                          )}
                         </div>
                         
                         {/* Hero image - visible by default, hidden when full details shown */}
