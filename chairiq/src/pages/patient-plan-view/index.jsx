@@ -50,14 +50,24 @@ function VisualsDebugPanel({ planData }) {
             {visualSteps.length === 0 && (
               <div style={{ color: '#ef4444', marginTop: '4px' }}>No visuals found. Query used canonical_slug="{proc?.canonicalSlug || 'N/A'}"</div>
             )}
-            {firstVisual && (
-              <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '4px' }}>
-                <div style={{ color: '#9ca3af', marginBottom: '2px' }}>First visual:</div>
-                <div><span style={{ color: '#9ca3af' }}>step_id: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.step_id || 'N/A'}</span></div>
-                <div><span style={{ color: '#9ca3af' }}>title: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.title || 'N/A'}</span></div>
-                <div style={{ wordBreak: 'break-all' }}><span style={{ color: '#9ca3af' }}>image_url: </span><span style={{ color: '#e8e9ed', fontSize: '10px' }}>{firstVisual?.visual?.image_url || 'null'}</span></div>
-              </div>
+            {visualSteps.length === 0 && content.length > 0 && (
+              <div style={{ color: '#fbbf24', marginTop: '4px', fontSize: '11px' }}>Possible causes: RLS blocking anon SELECT on procedure_visuals, or no visuals uploaded for this canonical_slug.</div>
             )}
+            {firstVisual && (() => {
+              const url = firstVisual?.visual?.image_url || '';
+              const urlType = url.includes('supabase.co/storage') 
+                ? (url.includes('/object/public/') ? 'supabase-public' : 'supabase-private') 
+                : (url ? 'external' : 'none');
+              return (
+                <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '4px' }}>
+                  <div style={{ color: '#9ca3af', marginBottom: '2px' }}>First visual:</div>
+                  <div><span style={{ color: '#9ca3af' }}>step_id: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.step_id || 'N/A'}</span></div>
+                  <div><span style={{ color: '#9ca3af' }}>title: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.title || 'N/A'}</span></div>
+                  <div><span style={{ color: '#9ca3af' }}>url_type: </span><span style={{ color: urlType === 'supabase-public' ? '#10b981' : urlType === 'supabase-private' ? '#fbbf24' : '#93c5fd' }}>{urlType}</span></div>
+                  <div style={{ wordBreak: 'break-all' }}><span style={{ color: '#9ca3af' }}>image_url: </span><span style={{ color: '#e8e9ed', fontSize: '10px' }}>{url || 'null'}</span></div>
+                </div>
+              );
+            })()}
           </div>
         );
       })}

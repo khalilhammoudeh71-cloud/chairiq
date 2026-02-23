@@ -270,6 +270,34 @@ export const patientPlanService = {
    * @param {Array} steps - Array of procedure steps with step_id
    * @returns {Promise<Array>} Array of visual objects matched by step_key
    */
+  resolveVisualUrl(imageUrl) {
+    if (!imageUrl) return null;
+
+    const isSupabaseStorageUrl = imageUrl?.includes('supabase.co/storage');
+    if (!isSupabaseStorageUrl) return imageUrl;
+
+    const isPublicUrl = imageUrl?.includes('/object/public/');
+    if (isPublicUrl) return imageUrl;
+
+    const isPrivateUrl = imageUrl?.includes('/object/') && !imageUrl?.includes('/object/public/');
+    if (isPrivateUrl && supabase) {
+      const pathMatch = imageUrl?.match(/\/object\/(?:sign\/)?(.+?)$/);
+      if (pathMatch) {
+        const parts = pathMatch[1]?.split('/');
+        const bucket = parts?.[0];
+        const filePath = parts?.slice(1)?.join('/');
+        
+        if (bucket && filePath) {
+          console.log('🔐 [URL RESOLVER] Generating signed URL:', { bucket, filePath });
+          const { data } = supabase?.storage?.from(bucket)?.getPublicUrl(filePath);
+          if (data?.publicUrl) return data.publicUrl;
+        }
+      }
+    }
+
+    return imageUrl;
+  },
+
   async fetchProcedureVisualsByStepId(canonicalSlug, steps) {
     try {
       if (!canonicalSlug) {
@@ -299,11 +327,19 @@ export const patientPlanService = {
       });
 
       if (visualsError) {
+        const isRLSError = visualsError?.message?.includes('permission') || 
+                           visualsError?.message?.includes('policy') ||
+                           visualsError?.code === '42501' ||
+                           httpStatus === 403;
         console.error('💥 [VISUAL MAPPER] SUPABASE ERROR:', {
           error_message: visualsError?.message,
           error_details: visualsError?.details,
           error_hint: visualsError?.hint,
-          canonical_slug: canonicalSlug
+          canonical_slug: canonicalSlug,
+          is_rls_error: isRLSError,
+          fix_hint: isRLSError 
+            ? 'RLS is blocking anonymous SELECT on procedure_visuals. Add policy: CREATE POLICY "Allow public read" ON procedure_visuals FOR SELECT USING (true);'
+            : null
         });
         return [];
       }
@@ -356,9 +392,9 @@ export const patientPlanService = {
             cacheBusterValue = Date.now();
           }
 
-          // Handle existing query parameters properly
-          const separator = matchingVisual?.image_url?.includes('?') ? '&' : '?';
-          const cachedUrl = `${matchingVisual?.image_url}${separator}v=${cacheBusterValue}`;
+          const resolvedUrl = this.resolveVisualUrl(matchingVisual?.image_url);
+          const separator = resolvedUrl?.includes('?') ? '&' : '?';
+          const cachedUrl = `${resolvedUrl}${separator}v=${cacheBusterValue}`;
 
           console.log(`✅ [VISUAL MAPPER] MATCH FOUND:`, {
             step_id: step?.step_id,
