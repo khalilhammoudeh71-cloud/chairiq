@@ -68,6 +68,11 @@ export default function Privacy() {
             Reasonable safeguards are used to protect information. No system is 100% secure.
           </p>
 
+          <h2 style={{ fontSize: '1.75rem', marginTop: '2rem', marginBottom: '1rem', color: '#1A202C' }}>SMS Privacy</h2>
+          <p style={{ marginBottom: '1rem' }}>
+            If you opt in to receive SMS messages, we use your phone number to send appointment-related and treatment plan messages. We do not sell your phone number. We may use service providers (e.g., SMS carriers and messaging platforms) to deliver messages. You can opt out anytime by replying STOP.
+          </p>
+
           <h2 style={{ fontSize: '1.75rem', marginTop: '2rem', marginBottom: '1rem', color: '#1A202C' }}>Contact</h2>
           <p style={{ marginBottom: '2rem' }}>
             Email: <a href="mailto:support@chairiq.online" style={{ color: '#4A90E2', textDecoration: 'underline' }}>support@chairiq.online</a>
