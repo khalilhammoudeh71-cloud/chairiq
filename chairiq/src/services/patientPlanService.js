@@ -628,6 +628,26 @@ export const patientPlanService = {
             console.error('Error fetching visuals data:', visualsLookupError);
           }
 
+          const langSuffix = patientLanguage === 'ES' ? 'Es' : 'En';
+          const altLangSuffix = patientLanguage === 'ES' ? 'En' : 'Es';
+
+          const whyText = (educationContent?.whyRecommendedBullets || []).length > 0
+            ? educationContent.whyRecommendedBullets.map(b => `- ${b}`).join('\n')
+            : null;
+          const aftercareText = (educationContent?.aftercareBullets || []).length > 0
+            ? educationContent.aftercareBullets.map(b => `- ${b}`).join('\n')
+            : null;
+          const whatIfNotText = (educationContent?.redFlagsBullets || []).length > 0
+            ? educationContent.redFlagsBullets.map(b => `- ${b}`).join('\n')
+            : null;
+
+          const stepsForLanding = educationContent?.steps?.map(s => ({
+            title: s?.title,
+            description: s?.whatWeDo || s?.description || s?.body || '',
+            whatYouMayFeel: s?.whatYouMayFeel || null,
+            whyItMatters: s?.whyItMatters || null
+          })) || [];
+
           return {
             id: proc?.id,
             procedureName: proc?.procedure_name || proc?.display_title || 'Not specified',
@@ -645,6 +665,20 @@ export const patientPlanService = {
                 [patientLanguage]: visualsForSteps?.length > 0 ? visualsForSteps : educationContent?.steps
               },
               title: educationContent?.title || proc?.displayTitle,
+              [`title${langSuffix}`]: educationContent?.title || proc?.display_title || proc?.procedure_name,
+              [`title${altLangSuffix}`]: educationContent?.title || proc?.display_title || proc?.procedure_name,
+              [`summary${langSuffix}`]: educationContent?.whatThisIs || null,
+              [`summary${altLangSuffix}`]: educationContent?.whatThisIs || null,
+              [`why${langSuffix}`]: whyText,
+              [`why${altLangSuffix}`]: whyText,
+              [`steps${langSuffix}`]: stepsForLanding,
+              [`steps${altLangSuffix}`]: stepsForLanding,
+              [`aftercare${langSuffix}`]: aftercareText,
+              [`aftercare${altLangSuffix}`]: aftercareText,
+              [`whatIfNot${langSuffix}`]: whatIfNotText,
+              [`whatIfNot${altLangSuffix}`]: whatIfNotText,
+              [`faqs${langSuffix}`]: null,
+              [`faqs${altLangSuffix}`]: null,
               whatThisIs: educationContent?.whatThisIs,
               whyRecommendedBullets: educationContent?.whyRecommendedBullets || [],
               aftercareBullets: educationContent?.aftercareBullets || [],

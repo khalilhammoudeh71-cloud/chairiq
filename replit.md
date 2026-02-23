@@ -39,6 +39,12 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
 ## Recent Changes (2026-02-23)
+- Fixed treatment-plan-landing page missing all text content (summary, why, steps, aftercare, whatIfNot)
+  - Root cause: getEnrichedPatientPlan returned fields like `whatThisIs`, `whyRecommendedBullets` but treatment-plan-landing expected language-suffixed fields like `summaryEn`, `whyEn`, `stepsEn`
+  - Fix: patientPlanService now includes both formats in the library object so both patient-plan-view and treatment-plan-landing pages render correctly
+- Removed generic procedure terms from AddProcedureDrawer — ADA codes only + manual entry
+- Fixed copy-link clipboard function to properly handle async API with fallback
+- Added inline "Link copied!" notification near copy button
 - Added custom image upload panel to Visual Sync page — dentists can select a procedure + step and upload their own images directly
 - Visual sync now auto-creates missing entries in canonical_procedures table before syncing visuals (fixes foreign key errors)
 - Switched procedure_visuals DB operations to upsert for reliability
