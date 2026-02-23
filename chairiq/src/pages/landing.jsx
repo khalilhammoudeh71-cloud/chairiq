@@ -235,6 +235,11 @@ const Landing = () => {
               </button>
             </div>
           </div>
+          <div className="mt-8 pt-6 border-t border-bd">
+            <p className="text-t2 text-xs leading-relaxed max-w-3xl mx-auto text-center">
+              <span className="font-semibold text-t1">SMS Consent:</span> By providing your phone number and opting in, you agree to receive SMS messages from ChairIQ related to appointment reminders and treatment plan information. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out. Reply HELP for help. Consent is not a condition of purchase.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
