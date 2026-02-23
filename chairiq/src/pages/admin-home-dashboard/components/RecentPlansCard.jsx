@@ -5,7 +5,7 @@ import Card from '../../../components/ui/Card';
 import ButtonSecondary from '../../../components/ui/ButtonSecondary';
 import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
 import DeletePatientModal from './DeletePatientModal';
-import { deletePatient } from '../../../services/patientSearchService';
+import patientSearchService from '../../../services/patientSearchService';
 import { useToast } from '../../../hooks/useToast';
 
 export default function RecentPlansCard({ plans = [], onRefresh }) {
@@ -51,7 +51,8 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
 
   const handleDeleteConfirm = async () => {
     try {
-      await deletePatient(selectedPatient?.id);
+      const result = await patientSearchService?.deletePatient(selectedPatient?.id);
+      if (!result?.success) throw new Error(result?.message || 'Delete failed');
       showToast('Patient profile deleted successfully', 'success');
       setShowDeleteModal(false);
       setSelectedPatient(null);
