@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Search, Star, Clock } from 'lucide-react';
 import { procedureCodesService } from '../../../services/procedureCodesService';
-import { procedureLibraryService } from '../../../services/procedureLibraryService';
 import { supabase } from '../../../lib/supabase';
 
 export default function AddProcedureDrawer({ 
@@ -12,12 +11,11 @@ export default function AddProcedureDrawer({
 }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [procedureCodes, setProcedureCodes] = useState([]);
-  const [procedureLibrary, setProcedureLibrary] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [recents, setRecents] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectionMethod, setSelectionMethod] = useState('library'); // 'library', 'code', 'manual'
+  const [selectionMethod, setSelectionMethod] = useState('code'); // 'code', 'manual'
   
   // Form state
   const [formData, setFormData] = useState({
@@ -44,13 +42,8 @@ export default function AddProcedureDrawer({
       const { data: { user } } = await supabase?.auth?.getUser();
       setCurrentUser(user);
 
-      const [codes, library] = await Promise.all([
-        procedureCodesService?.getAllCodes(),
-        procedureLibraryService?.getAll()
-      ]);
-
+      const codes = await procedureCodesService?.getAllCodes();
       setProcedureCodes(codes || []);
-      setProcedureLibrary(library || []);
 
       if (user) {
         const [favs, recs] = await Promise.all([
@@ -70,23 +63,11 @@ export default function AddProcedureDrawer({
   };
 
   const handleProcedureSelect = async (procedure) => {
-    if (procedure?.slug) {
-      // From procedure library
-      setFormData(prev => ({
-        ...prev,
-        procedureSlug: procedure?.slug,
-        displayTitle: procedure?.titleEn,
-        procedureName: procedure?.titleEn
-      }));
-      if (currentUser) {
-        await procedureCodesService?.addRecent(currentUser?.id, procedure?.slug, null);
-      }
-    } else if (procedure?.code) {
-      // From procedure codes
+    if (procedure?.code) {
       setFormData(prev => ({
         ...prev,
         adaCode: procedure?.code,
-        displayTitle: procedure?.title,
+        displayTitle: `${procedure?.title} (${procedure?.code})`,
         procedureName: procedure?.title
       }));
       if (currentUser) {
@@ -149,33 +130,26 @@ export default function AddProcedureDrawer({
     
     if (activeTab === 'favorites') {
       items = favorites?.map(fav => {
-        if (fav?.procedureSlug) {
-          return procedureLibrary?.find(p => p?.slug === fav?.procedureSlug);
-        } else if (fav?.adaCode) {
+        if (fav?.adaCode) {
           return procedureCodes?.find(c => c?.code === fav?.adaCode);
         }
         return null;
       })?.filter(Boolean);
     } else if (activeTab === 'recents') {
       items = recents?.map(rec => {
-        if (rec?.procedureSlug) {
-          return procedureLibrary?.find(p => p?.slug === rec?.procedureSlug);
-        } else if (rec?.adaCode) {
+        if (rec?.adaCode) {
           return procedureCodes?.find(c => c?.code === rec?.adaCode);
         }
         return null;
       })?.filter(Boolean);
     } else {
-      items = [...procedureLibrary, ...procedureCodes];
+      items = [...procedureCodes];
     }
 
     if (!searchTerm) return items;
 
     return items?.filter(item => {
       const searchLower = searchTerm?.toLowerCase();
-      if (item?.titleEn) {
-        return item?.titleEn?.toLowerCase()?.includes(searchLower);
-      }
       if (item?.code && item?.title) {
         return item?.code?.toLowerCase()?.includes(searchLower) ||
                item?.title?.toLowerCase()?.includes(searchLower);
@@ -250,15 +224,7 @@ export default function AddProcedureDrawer({
             <label className="block text-t2 mb-3 text-base font-semibold">
               Selection Method
             </label>
-            <div className="grid grid-cols-3 gap-3">
-              <button
-                onClick={() => setSelectionMethod('library')}
-                className={`px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
-                  selectionMethod === 'library' ?'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
-                }`}
-              >
-                Treatment Title
-              </button>
+            <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setSelectionMethod('code')}
                 className={`px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
@@ -278,8 +244,8 @@ export default function AddProcedureDrawer({
             </div>
           </div>
 
-          {/* Quick Access Tabs (for library/code selection) */}
-          {(selectionMethod === 'library' || selectionMethod === 'code') && (
+          {/* Quick Access Tabs (for ADA code selection) */}
+          {selectionMethod === 'code' && (
             <div className="flex gap-2">
               <button
                 onClick={() => setActiveTab('all')}
@@ -311,10 +277,10 @@ export default function AddProcedureDrawer({
           )}
 
           {/* Search & Selection */}
-          {(selectionMethod === 'library' || selectionMethod === 'code') && (
+          {selectionMethod === 'code' && (
             <div>
               <label className="block text-t2 mb-2 text-base font-semibold">
-                {selectionMethod === 'library' ? 'Search Treatment Titles' : 'Search ADA Codes'}
+                Search ADA Codes
               </label>
               <div className="relative mb-3">
                 <Search className="absolute left-3 top-3 text-t3" size={20} />
@@ -322,7 +288,7 @@ export default function AddProcedureDrawer({
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e?.target?.value)}
-                  placeholder={selectionMethod === 'library' ? 'Search procedures...' : 'Search codes...'}
+                  placeholder="Search by code or procedure name..."
                   className="w-full pl-10 pr-3 py-2 bg-bg2 border-2 border-bd rounded-lg text-t1 placeholder-t3 focus:outline-none focus:border-accent"
                 />
               </div>
@@ -337,26 +303,24 @@ export default function AddProcedureDrawer({
                       className="w-full text-left px-4 py-3 text-t1 hover:bg-bg3 transition-colors flex items-center justify-between border-b border-bd last:border-b-0"
                     >
                       <div className="flex-1">
-                        {item?.titleEn && <span className="font-medium">{item?.titleEn}</span>}
-                        {item?.code && (
-                          <div>
-                            <span className="font-semibold text-accent">{item?.code}</span>
-                            <span className="ml-2 text-t3">{item?.title}</span>
-                          </div>
-                        )}
+                        <span className="font-semibold text-accent">{item?.code}</span>
+                        <span className="ml-2 text-t2">{item?.title}</span>
                       </div>
-                      <button
+                      <div
+                        role="button"
+                        tabIndex={0}
                         onClick={(e) => {
                           e?.stopPropagation();
-                          handleToggleFavorite(item?.slug, item?.code);
+                          handleToggleFavorite(null, item?.code);
                         }}
-                        className="ml-2 text-warning hover:text-warning"
+                        onKeyDown={(e) => { if (e?.key === 'Enter') { e?.stopPropagation(); handleToggleFavorite(null, item?.code); } }}
+                        className="ml-2 text-warning hover:text-warning cursor-pointer"
                       >
                         <Star 
                           size={16} 
-                          fill={isFavorite(item?.slug, item?.code) ? 'currentColor' : 'none'} 
+                          fill={isFavorite(null, item?.code) ? 'currentColor' : 'none'} 
                         />
-                      </button>
+                      </div>
                     </button>
                   ))
                 ) : (

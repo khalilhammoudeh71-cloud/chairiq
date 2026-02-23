@@ -488,6 +488,15 @@ export const patientPlanService = {
       // Get patient's preferred language
       const patientLanguage = plan?.patients?.preferred_language || 'EN';
 
+      const CANONICAL_TO_VISUAL_SLUG = {
+        crown: 'dental-crown',
+        root_canal: 'root-canal',
+        bridge: 'dental-bridge',
+        srp: 'scaling-root-planing',
+        extraction: 'simple-extraction',
+        filling: 'composite-filling',
+      };
+
       // Normalize canonical keys for all procedures using new normalization function
       const resolvedProcedures = plan?.plan_procedures?.map((proc) => {
         const canonicalKey = normalizeProcedureKey({
@@ -579,14 +588,6 @@ export const patientPlanService = {
           }
 
           let visualsData = null;
-          const CANONICAL_TO_VISUAL_SLUG = {
-            crown: 'dental-crown',
-            root_canal: 'root-canal',
-            bridge: 'dental-bridge',
-            srp: 'scaling-root-planing',
-            extraction: 'simple-extraction',
-            filling: 'composite-filling',
-          };
           try {
             if (canonicalKey && canonicalKey !== 'unknown') {
               const slugsToTry = [canonicalKey];
