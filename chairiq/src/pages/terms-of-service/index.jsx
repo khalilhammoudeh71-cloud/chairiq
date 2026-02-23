@@ -50,7 +50,10 @@ export default function Terms() {
 
           <h2 style={{ fontSize: '1.75rem', marginTop: '2rem', marginBottom: '1rem', color: '#1A202C' }}>SMS Terms</h2>
           <p style={{ marginBottom: '1rem' }}>
-            By providing your mobile phone number through your dental provider, you expressly consent to receive SMS messages from ChairIQ related to appointments, treatment plans, and care coordination. Message frequency varies. Message and data rates may apply. Reply <strong>STOP</strong> to opt out at any time or <strong>HELP</strong> for assistance.
+            By opting in to receive SMS messages from ChairIQ, you agree to receive appointment reminders and treatment plan information via text message. Message frequency varies. Msg & data rates may apply. Reply <strong>STOP</strong> to opt out at any time. Reply <strong>HELP</strong> for help. Consent is not a condition of purchase.
+          </p>
+          <p style={{ marginBottom: '1rem' }}>
+            <strong>Support:</strong> <a href="mailto:support@chairiq.online" style={{ color: '#4A90E2', textDecoration: 'underline' }}>support@chairiq.online</a>
           </p>
 
           <h2 style={{ fontSize: '1.75rem', marginTop: '2rem', marginBottom: '1rem', color: '#1A202C' }}>Acceptable Use</h2>
