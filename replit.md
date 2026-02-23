@@ -39,6 +39,9 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
 ## Recent Changes (2026-02-23)
+- Added custom image upload panel to Visual Sync page — dentists can select a procedure + step and upload their own images directly
+- Visual sync now auto-creates missing entries in canonical_procedures table before syncing visuals (fixes foreign key errors)
+- Switched procedure_visuals DB operations to upsert for reliability
 - Integrated Supabase storage bucket "treatment-images" for procedure visuals
 - Created storageService.js with upload/download/list/URL resolution for treatment images
 - Created admin visual sync page (/admin/visual-sync) for bulk-uploading procedure images and populating procedure_visuals table
