@@ -2,6 +2,22 @@ import { supabase } from '../lib/supabase';
 import { twilioService } from './twilioService';
 import { procedureEducationGeneratorService } from './procedureEducationGeneratorService';
 import { normalizeProcedureKey } from '../utils/procedureNormalization';
+import proceduresLibrary from '../data/procedures';
+
+const normalizeTitle = (title) => (title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+function buildVisualTitleMap(procedureId) {
+  const proc = proceduresLibrary?.find(p => p?.id === procedureId);
+  if (!proc?.visualGuideSteps?.length) return null;
+  const map = {};
+  proc.visualGuideSteps.forEach((step, idx) => {
+    map[`step_${idx + 1}`] = {
+      titleEn: normalizeTitle(step?.title_en),
+      titleEs: normalizeTitle(step?.title_es),
+    };
+  });
+  return map;
+}
 
 /**
  * Patient Plan Service - Handles all patient plan CRUD operations
@@ -556,10 +572,36 @@ export const patientPlanService = {
                 first_visual: visuals?.[0] ? { id: visuals[0]?.visual_id, step_id: visuals[0]?.step_id, image_url: visuals[0]?.image_url?.substring(0, 80) } : 'none'
               });
               
-              // Map visuals to steps - show placeholder for missing visuals (no error banners)
+              const visualSlugForSteps = CANONICAL_TO_VISUAL_SLUG[canonicalKey] || canonicalKey;
+              const titleMapForSteps = buildVisualTitleMap(visualSlugForSteps);
+
+              let visualByTitleForSteps = null;
+              if (titleMapForSteps && visuals?.length > 0) {
+                visualByTitleForSteps = {};
+                visuals.forEach(v => {
+                  const stepKey = v?.step_key || v?.step_id;
+                  const meta = titleMapForSteps[stepKey];
+                  if (meta?.titleEn) visualByTitleForSteps[meta.titleEn] = v;
+                });
+              }
+
               visualsForSteps = educationContent?.steps?.map((step, idx) => {
-                const stepId = step?.step_id || `step_${idx + 1}`;
-                const matchingVisual = visuals?.find(v => v?.step_id === stepId);
+                let matchingVisual = null;
+
+                if (visualByTitleForSteps) {
+                  const stepTitle = normalizeTitle(step?.title);
+                  for (const [vTitle, visual] of Object.entries(visualByTitleForSteps)) {
+                    if (stepTitle.includes(vTitle) || vTitle.includes(stepTitle)) {
+                      matchingVisual = visual;
+                      break;
+                    }
+                  }
+                }
+
+                if (!matchingVisual) {
+                  const stepId = step?.step_id || `step_${idx + 1}`;
+                  matchingVisual = visuals?.find(v => v?.step_id === stepId);
+                }
                 
                 return {
                   ...step,
@@ -610,21 +652,42 @@ export const patientPlanService = {
 
               if (allVisuals?.length > 0) {
                 const heroVisual = allVisuals.find(v => v.step_key === 'hero');
-                const stepVisualsMap = {};
-                allVisuals
-                  .filter(v => v.step_key !== 'hero')
-                  .forEach(v => {
+                const stepVisuals = allVisuals.filter(v => v.step_key !== 'hero');
+
+                const visualSlug = CANONICAL_TO_VISUAL_SLUG[canonicalKey] || canonicalKey;
+                const titleMap = buildVisualTitleMap(visualSlug);
+
+                const educSteps = educationContent?.steps || [];
+                const alignedStepKeys = [];
+
+                if (titleMap && educSteps.length > 0) {
+                  const visualByTitle = {};
+                  stepVisuals.forEach(v => {
+                    const meta = titleMap[v.step_key];
+                    if (meta?.titleEn) visualByTitle[meta.titleEn] = v;
+                  });
+
+                  for (const step of educSteps) {
+                    const stepTitle = normalizeTitle(step?.title);
+                    let matched = null;
+                    for (const [vTitle, visual] of Object.entries(visualByTitle)) {
+                      if (stepTitle.includes(vTitle) || vTitle.includes(stepTitle)) {
+                        matched = visual;
+                        break;
+                      }
+                    }
+                    alignedStepKeys.push(matched ? this.resolveVisualUrl(matched.image_url) : null);
+                  }
+                } else {
+                  const stepVisualsMap = {};
+                  stepVisuals.forEach(v => {
                     const num = parseInt(v.step_key?.replace('step_', '')) || 0;
                     if (num > 0) stepVisualsMap[num] = v;
                   });
-
-                const totalSteps = educationContent?.steps?.length || 0;
-                const maxVisualStep = Math.max(totalSteps, ...Object.keys(stepVisualsMap).map(Number));
-                const alignedStepKeys = [];
-                for (let i = 1; i <= maxVisualStep; i++) {
-                  alignedStepKeys.push(
-                    stepVisualsMap[i] ? this.resolveVisualUrl(stepVisualsMap[i].image_url) : null
-                  );
+                  for (let i = 0; i < educSteps.length; i++) {
+                    const v = stepVisualsMap[i + 1];
+                    alignedStepKeys.push(v ? this.resolveVisualUrl(v.image_url) : null);
+                  }
                 }
 
                 visualsData = {
