@@ -473,16 +473,6 @@ const TreatmentPlanLanding = () => {
                           )}
                         </div>
                         
-                        {/* Preview Text - Always visible */}
-                        {!isExpanded && (
-                          <p 
-                            className="mb-0 text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
-                          >
-                            {previewText}
-                            {previewText?.length >= 180 && summary?.length > 180 ? '...' : ''}
-                          </p>
-                        )}
-
                         {/* Hero image - visible by default, hidden when full details shown */}
                         {!isFullDetailsVisible && visuals?.heroKey && (
                           <div className="flex justify-center my-6">
@@ -502,21 +492,37 @@ const TreatmentPlanLanding = () => {
                           </div>
                         )}
                         
-                        {/* Expand/Collapse indicator */}
-                        <div 
-                          className="flex items-center justify-between mt-8"
-                          aria-hidden="true"
-                        >
-                          <span
-                            className="text-accent text-lg font-medium"
-                          >
-                            {isExpanded ? text?.seeLess : text?.seeMore}
-                          </span>
-                          <Icon 
-                            name={isExpanded ? "ChevronUp" : "ChevronDown"} 
-                            size={24}
-                            style={{ color: '#60A5FA' }}
-                          />
+                        {/* Expand/Collapse CTA */}
+                        <div className="mt-8">
+                          {isExpanded ? (
+                            <div 
+                              className="flex items-center justify-between"
+                              aria-hidden="true"
+                            >
+                              <span className="text-accent text-lg font-medium">
+                                {text?.seeLess}
+                              </span>
+                              <Icon name="ChevronUp" size={24} style={{ color: '#60A5FA' }} />
+                            </div>
+                          ) : (
+                            <div
+                              className="w-full py-4 px-8 rounded-xl text-center transition-all duration-200 hover:brightness-110"
+                              style={{ 
+                                backgroundColor: '#4A6FA5',
+                                color: 'white',
+                                fontSize: '1.125rem',
+                                fontWeight: 500,
+                                minHeight: '48px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.5rem'
+                              }}
+                            >
+                              {text?.seeMore}
+                              <Icon name="ChevronDown" size={20} style={{ color: 'white' }} />
+                            </div>
+                          )}
                         </div>
                       </div>
                       
