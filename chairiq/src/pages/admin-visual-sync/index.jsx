@@ -98,7 +98,6 @@ export default function AdminVisualSync() {
           sort_order: sortOrder,
           alt_text_en: altEn,
           alt_text_es: altEs,
-          updated_at: new Date().toISOString(),
         }, { onConflict: 'canonical_slug,step_key' });
       if (upsertError) {
         console.error(`DB upsert failed for ${canonicalSlug}/${stepKey}:`, upsertError);
