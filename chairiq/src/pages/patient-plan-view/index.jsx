@@ -9,6 +9,62 @@ import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
 
+function VisualsDebugPanel({ planData }) {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('debug') !== '1') return null;
+
+  const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || 'NOT SET';
+  const projectRef = supabaseUrl.replace('https://', '').split('.')[0];
+
+  return (
+    <div style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: '12px', padding: '16px', marginBottom: '24px', fontFamily: 'monospace', fontSize: '12px', color: '#93c5fd' }}>
+      <div style={{ fontWeight: 'bold', marginBottom: '12px', fontSize: '14px' }}>Visuals Debug Panel</div>
+      <div style={{ marginBottom: '8px' }}>
+        <span style={{ color: '#9ca3af' }}>Supabase Project Ref: </span>
+        <span style={{ color: '#e8e9ed' }}>{projectRef}</span>
+      </div>
+      <div style={{ marginBottom: '8px' }}>
+        <span style={{ color: '#9ca3af' }}>Env Vars: </span>
+        <span style={{ color: supabaseUrl !== 'NOT SET' ? '#10b981' : '#ef4444' }}>VITE_SUPABASE_URL={supabaseUrl !== 'NOT SET' ? 'SET' : 'MISSING'}</span>
+        {', '}
+        <span style={{ color: import.meta.env?.VITE_SUPABASE_ANON_KEY ? '#10b981' : '#ef4444' }}>VITE_SUPABASE_ANON_KEY={import.meta.env?.VITE_SUPABASE_ANON_KEY ? 'SET' : 'MISSING'}</span>
+      </div>
+      <div style={{ marginBottom: '12px' }}>
+        <span style={{ color: '#9ca3af' }}>Route: </span>
+        <span style={{ color: '#e8e9ed' }}>/p/{planData?.treatmentPlan?.publicToken || window.location.pathname}</span>
+      </div>
+      {planData?.procedures?.map((proc, i) => {
+        const lang = planData?.patient?.preferredLanguage || 'EN';
+        const content = proc?.library?.content?.[lang] || proc?.library?.content?.EN || [];
+        const visualSteps = content.filter(s => s?.visual?.image_url);
+        const firstVisual = visualSteps[0];
+
+        return (
+          <div key={proc?.id || i} style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '12px', marginBottom: '8px' }}>
+            <div style={{ color: '#fbbf24', fontWeight: 'bold', marginBottom: '4px' }}>{proc?.procedureName}</div>
+            <div><span style={{ color: '#9ca3af' }}>procedure_id: </span><span style={{ color: '#e8e9ed' }}>{proc?.id || 'N/A'}</span></div>
+            <div><span style={{ color: '#9ca3af' }}>canonical_slug: </span><span style={{ color: '#e8e9ed' }}>{proc?.canonicalSlug || 'N/A'}</span></div>
+            <div><span style={{ color: '#9ca3af' }}>ada_code: </span><span style={{ color: '#e8e9ed' }}>{proc?.adaCode || 'N/A'}</span></div>
+            <div><span style={{ color: '#9ca3af' }}>total_steps: </span><span style={{ color: '#e8e9ed' }}>{content.length}</span></div>
+            <div><span style={{ color: '#9ca3af' }}>visuals_count: </span><span style={{ color: visualSteps.length > 0 ? '#10b981' : '#ef4444' }}>{visualSteps.length}</span></div>
+            {visualSteps.length === 0 && (
+              <div style={{ color: '#ef4444', marginTop: '4px' }}>No visuals found. Query used canonical_slug="{proc?.canonicalSlug || 'N/A'}"</div>
+            )}
+            {firstVisual && (
+              <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '4px' }}>
+                <div style={{ color: '#9ca3af', marginBottom: '2px' }}>First visual:</div>
+                <div><span style={{ color: '#9ca3af' }}>step_id: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.step_id || 'N/A'}</span></div>
+                <div><span style={{ color: '#9ca3af' }}>title: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.title || 'N/A'}</span></div>
+                <div style={{ wordBreak: 'break-all' }}><span style={{ color: '#9ca3af' }}>image_url: </span><span style={{ color: '#e8e9ed', fontSize: '10px' }}>{firstVisual?.visual?.image_url || 'null'}</span></div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function PatientPlanView() {
   const { publicToken } = useParams();
   const navigate = useNavigate();
@@ -421,6 +477,7 @@ export default function PatientPlanView() {
   return (
     <div className="min-h-screen py-12 px-4 bg-bg0">
       <div className="max-w-5xl mx-auto">
+        <VisualsDebugPanel planData={planData} />
         {/* Header with iOS-style language toggle */}
         <div 
           className="rounded-2xl p-8 mb-8 transition-all ease-out" 

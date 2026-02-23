@@ -485,11 +485,23 @@ export const patientPlanService = {
             ES: educationContent?.steps || []
           };
 
-          // Fetch visuals for this procedure using canonical key
           let visualsForSteps = [];
           try {
             if (canonicalKey && canonicalKey !== 'unknown' && educationContent?.steps?.length > 0) {
+              console.log(`🔎 [VISUALS FETCH] Querying procedure_visuals table:`, {
+                table: 'procedure_visuals',
+                filter: `canonical_slug = '${canonicalKey}'`,
+                procedure_id: proc?.id,
+                procedure_name: proc?.procedure_name,
+                steps_count: educationContent?.steps?.length,
+                step_ids: educationContent?.steps?.map(s => s?.step_id)
+              });
               const visuals = await this.fetchProcedureVisualsByStepId(canonicalKey, educationContent?.steps);
+              console.log(`📊 [VISUALS FETCH] Result for ${canonicalKey}:`, {
+                visuals_returned: visuals?.length || 0,
+                error: null,
+                first_visual: visuals?.[0] ? { id: visuals[0]?.visual_id, step_id: visuals[0]?.step_id, image_url: visuals[0]?.image_url?.substring(0, 80) } : 'none'
+              });
               
               // Map visuals to steps - show placeholder for missing visuals (no error banners)
               visualsForSteps = educationContent?.steps?.map((step, idx) => {
