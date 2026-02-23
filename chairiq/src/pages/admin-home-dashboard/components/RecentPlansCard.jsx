@@ -5,7 +5,7 @@ import Card from '../../../components/ui/Card';
 import ButtonSecondary from '../../../components/ui/ButtonSecondary';
 import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
 import DeletePatientModal from './DeletePatientModal';
-import patientSearchService from '../../../services/patientSearchService';
+import { patientSearchService } from '../../../services/patientSearchService';
 import { useToast } from '../../../hooks/useToast';
 
 export default function RecentPlansCard({ plans = [], onRefresh }) {
