@@ -322,8 +322,7 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
           ))}
         </div>
       )}
-      {/* Dev Mode Debug Panel - ONLY IN DEVELOPMENT */}
-      {import.meta.env?.DEV && currentStep && (
+      {new URLSearchParams(window.location.search).get('debug') === '1' && currentStep && (
         <div 
           className="rounded-xl p-4 text-xs font-mono"
           style={{ 
@@ -332,7 +331,7 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
           }}
         >
           <div style={{ color: '#93c5fd', marginBottom: '8px', fontWeight: 'bold' }}>
-            🔍 DEV DEBUG INFO
+            Visual Debug
           </div>
           <div style={{ color: '#9ca3af', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px' }}>
             <span>canonical_slug:</span>
@@ -340,9 +339,6 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
             
             <span>step_id:</span>
             <span style={{ color: '#e8e9ed' }}>{currentStep?.step_id}</span>
-            
-            <span>step_order:</span>
-            <span style={{ color: '#e8e9ed' }}>{currentStep?.step_order}</span>
             
             <span>visuals_found:</span>
             <span style={{ color: '#e8e9ed' }}>{stepsWithVisuals?.length}</span>
@@ -360,12 +356,7 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
               wordBreak: 'break-all',
               fontSize: '10px' 
             }}>
-              {displayImageUrl?.substring(0, 100)}...
-            </span>
-
-            <span>cache_buster:</span>
-            <span style={{ color: '#10b981' }}>
-              {displayImageUrl?.includes('?v=') || displayImageUrl?.includes('&v=') ? '✅ Active' : '❌ Missing'}
+              {displayImageUrl?.substring(0, 100)}
             </span>
           </div>
         </div>

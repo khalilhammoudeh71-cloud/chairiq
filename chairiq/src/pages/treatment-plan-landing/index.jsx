@@ -23,7 +23,7 @@ const TreatmentPlanLanding = () => {
   const [resendError, setResendError] = useState(null);
 
   // Debug mode - controlled by URL parameter
-  const debugMode = searchParams?.get('debug') === '1' || import.meta.env?.DEV;
+  const debugMode = searchParams?.get('debug') === '1';
   const publicToken = searchParams?.get('token');
 
   useEffect(() => {
