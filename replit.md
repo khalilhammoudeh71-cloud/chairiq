@@ -38,7 +38,16 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Client configured in `chairiq/src/services/openaiClient.js`
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
-## Recent Changes (2026-02-09)
+## Recent Changes (2026-02-23)
+- Integrated Supabase storage bucket "treatment-images" for procedure visuals
+- Created storageService.js with upload/download/list/URL resolution for treatment images
+- Created admin visual sync page (/admin/visual-sync) for bulk-uploading procedure images and populating procedure_visuals table
+- Updated patientPlanService to fetch and resolve visual URLs (heroKey + stepKeys) from procedure_visuals
+- Updated ImageManager to upload directly to Supabase storage when procedure slug is provided
+- Fixed debug panels across all pages to strictly gate behind ?debug=1 query parameter
+- Added Visual Sync shortcut to admin dashboard Quick Actions
+
+## Previous Changes (2026-02-09)
 - Redesigned landing page hero: dark premium background (#0c0e14) with animated product demo
 - Hero shows treatment plan cards and phone SMS mockup with gentle floating animations
 - Dark header matching hero, high-contrast white text, dual CTA buttons
