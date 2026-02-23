@@ -532,8 +532,16 @@ export const patientPlanService = {
                 steps_count: educationContent?.steps?.length,
                 step_ids: educationContent?.steps?.map(s => s?.step_id)
               });
-              const visuals = await this.fetchProcedureVisualsByStepId(canonicalKey, educationContent?.steps);
-              console.log(`📊 [VISUALS FETCH] Result for ${canonicalKey}:`, {
+              const slugsToTry = [canonicalKey];
+              if (CANONICAL_TO_VISUAL_SLUG[canonicalKey]) {
+                slugsToTry.push(CANONICAL_TO_VISUAL_SLUG[canonicalKey]);
+              }
+              let visuals = [];
+              for (const slug of slugsToTry) {
+                visuals = await this.fetchProcedureVisualsByStepId(slug, educationContent?.steps);
+                if (visuals?.length > 0) break;
+              }
+              console.log(`📊 [VISUALS FETCH] Result for ${canonicalKey} (tried: ${slugsToTry.join(', ')}):`, {
                 visuals_returned: visuals?.length || 0,
                 error: null,
                 first_visual: visuals?.[0] ? { id: visuals[0]?.visual_id, step_id: visuals[0]?.step_id, image_url: visuals[0]?.image_url?.substring(0, 80) } : 'none'
@@ -571,13 +579,33 @@ export const patientPlanService = {
           }
 
           let visualsData = null;
+          const CANONICAL_TO_VISUAL_SLUG = {
+            crown: 'dental-crown',
+            root_canal: 'root-canal',
+            bridge: 'dental-bridge',
+            srp: 'scaling-root-planing',
+            extraction: 'simple-extraction',
+            filling: 'composite-filling',
+          };
           try {
             if (canonicalKey && canonicalKey !== 'unknown') {
-              const { data: allVisuals } = await supabase
-                ?.from('procedure_visuals')
-                ?.select('step_key, image_url')
-                ?.eq('canonical_slug', canonicalKey)
-                ?.order('sort_order', { ascending: true });
+              const slugsToTry = [canonicalKey];
+              if (CANONICAL_TO_VISUAL_SLUG[canonicalKey]) {
+                slugsToTry.push(CANONICAL_TO_VISUAL_SLUG[canonicalKey]);
+              }
+
+              let allVisuals = null;
+              for (const slug of slugsToTry) {
+                const { data } = await supabase
+                  ?.from('procedure_visuals')
+                  ?.select('step_key, image_url')
+                  ?.eq('canonical_slug', slug)
+                  ?.order('sort_order', { ascending: true });
+                if (data?.length > 0) {
+                  allVisuals = data;
+                  break;
+                }
+              }
 
               if (allVisuals?.length > 0) {
                 const heroVisual = allVisuals.find(v => v.step_key === 'hero');

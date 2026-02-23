@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { patientPlanService } from '../../services/patientPlanService';
 
 import { useToast } from '../../hooks/useToast';
-import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
+import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
@@ -85,7 +85,6 @@ export default function PatientPlanView() {
   const [error, setError] = useState('');
   const [currentLanguage, setCurrentLanguage] = useState('EN');
   const [expandedProcedures, setExpandedProcedures] = useState(new Set());
-  const [expandedExplanations, setExpandedExplanations] = useState(new Set());
 
   useEffect(() => {
     loadPlanData();
@@ -123,17 +122,6 @@ export default function PatientPlanView() {
     });
   };
 
-  const toggleExplanationExpand = (procedureId) => {
-    setExpandedExplanations((prev) => {
-      const newSet = new Set(prev);
-      if (newSet?.has(procedureId)) {
-        newSet?.delete(procedureId);
-      } else {
-        newSet?.add(procedureId);
-      }
-      return newSet;
-    });
-  };
 
   // Group procedures by priority
   const getProceduresByPriority = () => {
@@ -243,7 +231,6 @@ export default function PatientPlanView() {
     const hasContent = !!procedure?.library?.content;
     const isGenerating = false; // Remove loading state since content is always available
     const isExpanded = expandedProcedures?.has(procedure?.id);
-    const isExplanationExpanded = expandedExplanations?.has(procedure?.id);
     
     // Get content based on current language
     const content = procedure?.library?.content?.[currentLanguage] || procedure?.library?.content?.EN || [];
@@ -375,106 +362,14 @@ export default function PatientPlanView() {
                 />
               )}
 
-              {/* In-Place Explanation Section - Replaces Modal */}
-              {hasContent && (
-                <div className="space-y-4">
-                  <button
-                    onClick={() => toggleExplanationExpand(procedure?.id)}
-                    className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl w-full justify-center transition-all ease-out"
-                    style={{ 
-                      backgroundColor: 'rgba(107, 124, 232, 0.15)', 
-                      color: '#8b9aec', 
-                      border: '1px solid rgba(107, 124, 232, 0.25)',
-                      transitionDuration: '200ms'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'scale(1.02)';
-                      e.currentTarget.style.backgroundColor = 'rgba(107, 124, 232, 0.2)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.backgroundColor = 'rgba(107, 124, 232, 0.15)';
-                    }}
-                  >
-                    <BookOpen size={20} />
-                    {isExplanationExpanded ? t?.collapseDetails : t?.viewExplanation}
-                    {isExplanationExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                  </button>
-
-                  {/* Expandable Full Explanation Content */}
-                  {isExplanationExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="rounded-xl p-6 space-y-6"
-                      style={{
-                        backgroundColor: 'rgba(107, 124, 232, 0.05)',
-                        border: '1px solid rgba(107, 124, 232, 0.2)'
-                      }}
-                    >
-                      <h3 className="text-2xl font-medium" style={{ color: '#e8e9ed' }}>
-                        {procedure?.procedureName} - {currentLanguage === 'EN' ? 'Detailed Explanation' : 'Explicación Detallada'}
-                      </h3>
-                      
-                      {/* Full content sections with enhanced styling */}
-                      <div className="space-y-6">
-                        {content?.map((section, index) => (
-                          <div key={index} className="space-y-3">
-                            <h4 className="text-xl font-medium" style={{ color: '#8b9aec' }}>
-                              {section?.title}
-                            </h4>
-                            {section?.content && (
-                              <p style={{ color: '#b0b3ba', lineHeight: '1.8' }}>
-                                {section?.content}
-                              </p>
-                            )}
-                            {section?.bullets && section?.bullets?.length > 0 && (
-                              <ul className="space-y-2 ml-4">
-                                {section?.bullets?.map((bullet, bulletIndex) => (
-                                  <li key={bulletIndex} className="flex items-start gap-2">
-                                    <span style={{ color: '#8b9aec', marginTop: '0.25rem' }}>•</span>
-                                    <span style={{ color: '#b0b3ba', lineHeight: '1.6' }}>{bullet}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                            {section?.steps && section?.steps?.length > 0 && (
-                              <ol className="space-y-3 ml-4">
-                                {section?.steps?.map((step, stepIndex) => (
-                                  <li key={stepIndex} className="flex gap-3">
-                                    <span 
-                                      className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center font-semibold text-sm"
-                                      style={{ backgroundColor: 'rgba(107, 124, 232, 0.2)', color: '#8b9aec' }}
-                                    >
-                                      {stepIndex + 1}
-                                    </span>
-                                    <div className="flex-1 space-y-1">
-                                      <p className="font-medium" style={{ color: '#e8e9ed' }}>{step?.title}</p>
-                                      <p style={{ color: '#b0b3ba', lineHeight: '1.6' }}>{step?.description}</p>
-                                    </div>
-                                  </li>
-                                ))}
-                              </ol>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Disclaimer section if available */}
-                      {procedure?.library?.disclaimer && (
-                        <div 
-                          className="rounded-lg p-4 mt-6"
-                          style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.2)' }}
-                        >
-                          <p className="text-sm" style={{ color: '#fbbf24' }}>
-                            {procedure?.library?.disclaimer}
-                          </p>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
+              {procedure?.library?.disclaimer && (
+                <div 
+                  className="rounded-lg p-4"
+                  style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.2)' }}
+                >
+                  <p className="text-sm" style={{ color: '#fbbf24' }}>
+                    {procedure?.library?.disclaimer}
+                  </p>
                 </div>
               )}
             </div>
