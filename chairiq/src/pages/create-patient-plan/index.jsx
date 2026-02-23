@@ -4,7 +4,7 @@ import { patientPlanService } from '../../services/patientPlanService';
 import { sendSms, getSmsDeliveryStatus, retrySmsDelivery } from '../../services/twilioService';
 
 import { useToast } from '../../hooks/useToast';
-import { Plus, Copy, MessageSquare, Send, RefreshCw } from 'lucide-react';
+import { Plus, Copy, Check, MessageSquare, Send, RefreshCw } from 'lucide-react';
 import DentistNavigation from '../../components/DentistNavigation';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { supabase } from '../../lib/supabase';
@@ -49,6 +49,7 @@ export default function CreatePatientPlan() {
   const [smsDeliveryLogs, setSmsDeliveryLogs] = useState([]);
   const [showSmsStatus, setShowSmsStatus] = useState(false);
   const [retryingMessageId, setRetryingMessageId] = useState(null);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   // New state for procedure codes feature
   const [procedureCodes, setProcedureCodes] = useState([]);
@@ -475,20 +476,33 @@ export default function CreatePatientPlan() {
     document.body.removeChild(textArea);
   };
 
-  const safeCopy = (text) => {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text);
-    } else {
-      fallbackCopy(text);
+  const safeCopy = async (text) => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        fallbackCopy(text);
+      }
+      return true;
+    } catch (err) {
+      try {
+        fallbackCopy(text);
+        return true;
+      } catch (e) {
+        console.error('Copy failed:', e);
+        return false;
+      }
     }
   };
 
-  // Copy patient link
-  const copyPatientLink = () => {
+  const copyPatientLink = async () => {
     if (!savedPlan) return;
     const link = `${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`;
-    safeCopy(link);
-    showToast('Patient link copied to clipboard!', 'success');
+    const success = await safeCopy(link);
+    if (success) {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2500);
+    }
   };
 
   // Generate and show SMS message
@@ -971,20 +985,27 @@ export default function CreatePatientPlan() {
                 
                 <div className="mb-4">
                   <label className="block text-t2 mb-2 font-semibold text-base">Patient Link</label>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 items-center">
                     <input
                       type="text"
                       readOnly
                       value={`${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`}
                       className="input-field flex-1"
                     />
-                    <button
-                      onClick={copyPatientLink}
-                      className="btn-primary flex items-center gap-2"
-                    >
-                      <Copy size={20} />
-                      Copy
-                    </button>
+                    <div className="relative">
+                      <button
+                        onClick={copyPatientLink}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${linkCopied ? 'bg-success text-white' : 'btn-primary'}`}
+                      >
+                        {linkCopied ? <Check size={20} /> : <Copy size={20} />}
+                        {linkCopied ? 'Copied!' : 'Copy'}
+                      </button>
+                      {linkCopied && (
+                        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-success font-medium">
+                          Link copied!
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
