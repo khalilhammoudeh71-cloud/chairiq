@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, BarChart3, BookOpen, Edit3 } from 'lucide-react';
+import { Plus, BarChart3, BookOpen, Edit3, Image } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import ButtonSecondary from '../../../components/ui/ButtonSecondary';
@@ -36,12 +36,19 @@ export default function ShortcutsCard() {
       icon: Edit3,
       path: '/admin-home-dashboard',
     },
+    {
+      id: 5,
+      title: 'Visual Sync',
+      description: 'Manage treatment images',
+      icon: Image,
+      path: '/admin/visual-sync',
+    },
   ];
 
   return (
     <Card>
       <h2 className="text-2xl font-bold text-t1 mb-6">Quick Actions</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {shortcuts?.map((shortcut, index) => (
           <ButtonSecondary
             key={index}

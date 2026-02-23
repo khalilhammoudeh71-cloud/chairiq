@@ -29,6 +29,7 @@ import Terms from './pages/terms-of-service';
 import SmsDisclosure from './pages/sms';
 import Landing from './pages/landing';
 import DentistSignUpPage from './pages/dentist-sign-up-page';
+import AdminVisualSync from './pages/admin-visual-sync';
 function ProjectRoutes() {
   return (
     <BrowserRouter>
@@ -137,6 +138,11 @@ function ProjectRoutes() {
           <Route path="/admin/batch-jobs/:jobId" element={
             <ProtectedRoute>
               <BatchJobDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/visual-sync" element={
+            <ProtectedRoute>
+              <AdminVisualSync />
             </ProtectedRoute>
           } />
           <Route path="*" element={<NotFound />} />

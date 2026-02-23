@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { Upload, X, Image as ImageIcon, Eye } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Eye, Loader2 } from 'lucide-react';
 import { useToast } from '../../../hooks/useToast';
+import storageService from '../../../services/storageService';
 
-const ImageManager = ({ images, onUpdate, procedureName }) => {
+const ImageManager = ({ images, onUpdate, procedureName, procedureSlug }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const { showToast } = useToast();
 
-  const handleFileSelect = (files) => {
+  const handleFileSelect = async (files) => {
     const validFiles = Array.from(files)?.filter(file => {
       if (!file?.type?.startsWith('image/')) {
         showToast('Only image files are allowed', 'error');
@@ -21,7 +23,48 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
       return true;
     });
 
-    if (validFiles?.length > 0) {
+    if (validFiles?.length === 0) return;
+
+    if (procedureSlug) {
+      setUploading(true);
+      try {
+        const newImages = [];
+        for (const file of validFiles) {
+          const stepKey = `img_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+          const sortOrder = (images?.length || 0) + newImages.length;
+          const { publicUrl, record } = await storageService.uploadVisualAndCreateRecord(
+            procedureSlug,
+            stepKey,
+            file,
+            sortOrder
+          );
+          newImages.push({
+            id: record?.id || Date.now() + Math.random(),
+            url: publicUrl,
+            name: file?.name,
+            alt: '',
+            caption: { en: '', es: '' },
+            storagePath: `${procedureSlug}/${stepKey}`,
+          });
+        }
+        onUpdate([...images, ...newImages]);
+        showToast(`${newImages.length} image(s) uploaded to storage`, 'success');
+      } catch (err) {
+        console.error('Upload error:', err);
+        showToast('Failed to upload images to storage', 'error');
+        const fallbackImages = validFiles.map(file => ({
+          id: Date.now() + Math.random(),
+          file,
+          url: URL.createObjectURL(file),
+          name: file?.name,
+          alt: '',
+          caption: { en: '', es: '' },
+        }));
+        onUpdate([...images, ...fallbackImages]);
+      } finally {
+        setUploading(false);
+      }
+    } else {
       const newImages = validFiles?.map(file => ({
         id: Date.now() + Math.random(),
         file,
@@ -30,7 +73,6 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
         alt: '',
         caption: { en: '', es: '' }
       }));
-
       onUpdate([...images, ...newImages]);
       showToast(`${validFiles?.length} image(s) added successfully`, 'success');
     }
@@ -101,26 +143,33 @@ const ImageManager = ({ images, onUpdate, procedureName }) => {
           className="hidden"
         />
         
-        <Upload className="w-12 h-12 text-t3 mx-auto mb-4" />
-        
-        <h3 className="text-lg font-semibold text-t1 mb-2">
-          Upload Treatment Images
-        </h3>
-        
-        <p className="text-t3 mb-4">
-          Drag and drop images here, or click to browse
-        </p>
-        
-        <button
-          onClick={() => fileInputRef?.current?.click()}
-          className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
-        >
-          Select Images
-        </button>
-        
-        <p className="text-sm text-t3 mt-4">
-          Supported: JPG, PNG, GIF • Max size: 5MB per image
-        </p>
+        {uploading ? (
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="w-12 h-12 text-accent animate-spin" />
+            <p className="text-t2">Uploading to storage...</p>
+          </div>
+        ) : (
+          <>
+            <Upload className="w-12 h-12 text-t3 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-t1 mb-2">
+              Upload Treatment Images
+            </h3>
+            <p className="text-t3 mb-4">
+              {procedureSlug
+                ? 'Images will be stored in Supabase storage'
+                : 'Drag and drop images here, or click to browse'}
+            </p>
+            <button
+              onClick={() => fileInputRef?.current?.click()}
+              className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+            >
+              Select Images
+            </button>
+            <p className="text-sm text-t3 mt-4">
+              Supported: JPG, PNG, GIF &bull; Max size: 5MB per image
+            </p>
+          </>
+        )}
       </div>
       {images?.length > 0 ? (
         <div>

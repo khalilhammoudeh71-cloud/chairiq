@@ -570,7 +570,35 @@ export const patientPlanService = {
             }));
           }
 
-          // ✅ FIX: Return education in 'library' property to match UI expectations
+          let visualsData = null;
+          try {
+            if (canonicalKey && canonicalKey !== 'unknown') {
+              const { data: allVisuals } = await supabase
+                ?.from('procedure_visuals')
+                ?.select('step_key, image_url')
+                ?.eq('canonical_slug', canonicalKey)
+                ?.order('sort_order', { ascending: true });
+
+              if (allVisuals?.length > 0) {
+                const heroVisual = allVisuals.find(v => v.step_key === 'hero');
+                const stepVisuals = allVisuals
+                  .filter(v => v.step_key !== 'hero')
+                  .sort((a, b) => {
+                    const aNum = parseInt(a.step_key?.replace('step_', '')) || 0;
+                    const bNum = parseInt(b.step_key?.replace('step_', '')) || 0;
+                    return aNum - bNum;
+                  });
+
+                visualsData = {
+                  heroKey: heroVisual ? this.resolveVisualUrl(heroVisual.image_url) : null,
+                  stepKeys: stepVisuals.map(v => this.resolveVisualUrl(v.image_url))
+                };
+              }
+            }
+          } catch (visualsLookupError) {
+            console.error('Error fetching visuals data:', visualsLookupError);
+          }
+
           return {
             id: proc?.id,
             procedureName: proc?.procedure_name || proc?.display_title || 'Not specified',
@@ -592,7 +620,8 @@ export const patientPlanService = {
               whyRecommendedBullets: educationContent?.whyRecommendedBullets || [],
               aftercareBullets: educationContent?.aftercareBullets || [],
               redFlagsBullets: educationContent?.redFlagsBullets || [],
-              disclaimer: educationContent?.disclaimer
+              disclaimer: educationContent?.disclaimer,
+              visuals: visualsData
             }
           };
         })
