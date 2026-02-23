@@ -778,7 +778,7 @@ export const patientPlanService = {
             console.error('Error fetching visuals data:', visualsLookupError);
           }
 
-          if (!visualsData?.heroKey && canonicalKey) {
+          if (canonicalKey) {
             const heroSlug = CANONICAL_TO_VISUAL_SLUG[canonicalKey] || canonicalKey;
             const heroProc = proceduresLibrary?.find(p => p?.id === heroSlug);
             if (heroProc?.heroImage) {
