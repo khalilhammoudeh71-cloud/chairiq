@@ -38,7 +38,23 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Client configured in `chairiq/src/services/openaiClient.js`
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
-## Recent Changes (2026-02-23)
+## Recent Changes (2026-03-04)
+- Implemented secure expiring share links for patient treatment plans
+  - New `plan_share_links` table with token, plan_id, patient_id, expires_at, view_count
+  - Share tokens are 48-char cryptographically random strings (via Web Crypto API)
+  - Links expire after 24 hours from creation
+  - PatientPlanView validates share tokens: shows "Link Invalid" or "Link Expired" states
+  - Falls back to legacy public_token for backward compatibility with existing links
+  - View count incremented atomically via Supabase RPC function (SECURITY DEFINER)
+  - SMS messages made generic — no patient names or practice names included
+  - SMS now includes "Reply STOP to opt out." per compliance
+  - shareLinkService.js handles token creation, validation, increment, and reuse
+  - patientPlanService refactored: shared `_enrichPlanData()` method for both token types
+  - getEnrichedPatientPlanById() added for plan ID-based lookups (used by share links)
+- Added SMS Consent page at /sms-consent (public, Twilio compliance)
+- Updated root canal hero image to new 4-stage procedure illustration
+
+## Previous Changes (2026-02-23)
 - Fixed treatment-plan-landing page missing all text content (summary, why, steps, aftercare, whatIfNot)
   - Root cause: getEnrichedPatientPlan returned fields like `whatThisIs`, `whyRecommendedBullets` but treatment-plan-landing expected language-suffixed fields like `summaryEn`, `whyEn`, `stepsEn`
   - Fix: patientPlanService now includes both formats in the library object so both patient-plan-view and treatment-plan-landing pages render correctly

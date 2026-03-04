@@ -196,11 +196,9 @@ class TwilioService {
    */
   async sendTreatmentPlanSMS(patientPhone, patientFirstName, practiceName, publicToken) {
     try {
-      // Generate patient link
       const patientLink = `${window?.location?.origin}/p/${publicToken}`;
 
-      // Generate SMS message
-      const message = `Hi ${patientFirstName}! Your treatment plan from ${practiceName} is ready. View it here: ${patientLink}`;
+      const message = `Your dental treatment plan is ready for review. View it here: ${patientLink} Reply STOP to opt out.`;
 
       // Send SMS
       return await this.sendSMS(patientPhone, message);
@@ -239,8 +237,7 @@ export const sendSms = async (phoneNumber, patientFirstName, treatmentPlanUrl, t
     // Format phone number
     const formattedPhone = twilioService?.formatPhoneNumber(phoneNumber);
 
-    // Generate SMS message
-    const messageContent = `Hi ${patientFirstName}! Your dental treatment plan is ready. View it here: ${treatmentPlanUrl}`;
+    const messageContent = `Your dental treatment plan is ready for review. View it here: ${treatmentPlanUrl} Reply STOP to opt out.`;
 
     console.log('Sending SMS via Twilio service...', {
       to: formattedPhone,

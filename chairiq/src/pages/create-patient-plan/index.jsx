@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { patientPlanService } from '../../services/patientPlanService';
+import { shareLinkService } from '../../services/shareLinkService';
 import { sendSms, getSmsDeliveryStatus, retrySmsDelivery } from '../../services/twilioService';
 
 import { useToast } from '../../hooks/useToast';
@@ -44,6 +45,7 @@ export default function CreatePatientPlan() {
   // UI state
   const [loading, setLoading] = useState(false);
   const [savedPlan, setSavedPlan] = useState(null);
+  const [shareToken, setShareToken] = useState(null);
   const [showSMSMessage, setShowSMSMessage] = useState(false);
   const [sendingSMS, setSendingSMS] = useState(false);
   const [smsDeliveryLogs, setSmsDeliveryLogs] = useState([]);
@@ -453,6 +455,15 @@ export default function CreatePatientPlan() {
       );
       console.log('✅ Plan saved successfully:', result);
       setSavedPlan(result);
+
+      const linkResult = await shareLinkService.getOrCreateShareLink(
+        result?.treatmentPlan?.id,
+        result?.patient?.id
+      );
+      if (linkResult?.success) {
+        setShareToken(linkResult.token);
+      }
+
       showToast('Patient plan saved successfully!', 'success');
     } catch (error) {
       console.error('❌ Error saving plan:', error);
@@ -497,7 +508,8 @@ export default function CreatePatientPlan() {
 
   const copyPatientLink = async () => {
     if (!savedPlan) return;
-    const link = `${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`;
+    const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
+    const link = `${window.location?.origin}/p/${token}`;
     const success = await safeCopy(link);
     if (success) {
       setLinkCopied(true);
@@ -511,28 +523,28 @@ export default function CreatePatientPlan() {
     setShowSMSMessage(true);
   };
 
-  // Copy SMS message
   const copySMSMessage = () => {
     if (!savedPlan) return;
+    const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
     const message = patientPlanService?.generateSMSMessage(
       savedPlan?.patient?.firstName,
       savedPlan?.treatmentPlan?.practiceName,
-      savedPlan?.treatmentPlan?.publicToken
+      token
     );
     safeCopy(message);
     showToast('SMS message copied to clipboard!', 'success');
   };
 
-  // Send SMS to patient
   const handleSendSMS = async () => {
     if (!savedPlan) return;
 
     setSendingSMS(true);
     try {
+      const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
       const result = await sendSms(
         savedPlan?.patient?.phone,
         savedPlan?.patient?.firstName,
-        `${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`,
+        `${window.location?.origin}/p/${token}`,
         savedPlan?.treatmentPlan?.id
       );
 
@@ -568,12 +580,11 @@ export default function CreatePatientPlan() {
       smsLog?.id,
       savedPlan?.patient?.phone,
       savedPlan?.patient?.firstName,
-      `${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`
+      `${window.location?.origin}/p/${shareToken || savedPlan?.treatmentPlan?.publicToken}`
     );
 
     if (result?.success) {
       showToast('SMS retry sent successfully!', 'success');
-      // Refresh SMS delivery logs
       await fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id);
     } else {
       showToast(result?.error || 'Failed to retry SMS', 'error');
@@ -582,17 +593,24 @@ export default function CreatePatientPlan() {
     setRetryingMessageId(null);
   };
 
-  // Add resend handler for saved plans
   const handleResendSavedPlanLink = async () => {
-    if (!savedPlan?.treatmentPlan?.publicToken) {
+    if (!savedPlan?.treatmentPlan?.id) {
       showToast('No treatment plan link available to resend', 'error');
       return;
     }
 
     setResendingSavedPlan(true);
     try {
+      const linkResult = await shareLinkService.getOrCreateShareLink(
+        savedPlan?.treatmentPlan?.id,
+        savedPlan?.patient?.id
+      );
+      if (linkResult?.success) {
+        setShareToken(linkResult.token);
+      }
+      const tokenToUse = linkResult?.token || shareToken || savedPlan?.treatmentPlan?.publicToken;
       const result = await patientPlanService?.resendTreatmentPlanLink(
-        savedPlan?.treatmentPlan?.publicToken
+        tokenToUse, true
       );
 
       if (result?.success) {
@@ -989,7 +1007,7 @@ export default function CreatePatientPlan() {
                     <input
                       type="text"
                       readOnly
-                      value={`${window.location?.origin}/p/${savedPlan?.treatmentPlan?.publicToken}`}
+                      value={`${window.location?.origin}/p/${shareToken || savedPlan?.treatmentPlan?.publicToken}`}
                       className="input-field flex-1"
                     />
                     <div className="relative">
@@ -1050,7 +1068,7 @@ export default function CreatePatientPlan() {
                       value={patientPlanService?.generateSMSMessage(
                         savedPlan?.patient?.firstName,
                         savedPlan?.treatmentPlan?.practiceName,
-                        savedPlan?.treatmentPlan?.publicToken
+                        shareToken || savedPlan?.treatmentPlan?.publicToken
                       )}
                       className="input-field w-full"
                       rows="3"

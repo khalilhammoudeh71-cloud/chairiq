@@ -522,7 +522,6 @@ export const patientPlanService = {
    */
   async getEnrichedPatientPlan(publicToken) {
     try {
-      // Get treatment plan with patient info and procedures - use maybeSingle() for resilience
       const { data: plan, error: planError } = await supabase
         ?.from('treatment_plans')
         ?.select(`
@@ -556,7 +555,18 @@ export const patientPlanService = {
         throw new Error('Treatment plan not found');
       }
 
-      // Get patient's preferred language
+      return await this._enrichPlanData(plan);
+    } catch (error) {
+      console.error('Error fetching enriched patient plan:', error);
+      return {
+        success: false,
+        error: error?.message || 'Failed to load treatment plan',
+        errorDetails: error
+      };
+    }
+  },
+
+  async _enrichPlanData(plan) {
       const patientLanguage = plan?.patients?.preferred_language || 'EN';
 
       const CANONICAL_TO_VISUAL_SLUG = {
@@ -864,8 +874,38 @@ export const patientPlanService = {
         },
         procedures: enrichedProcedures || []
       };
+  },
+
+  async getEnrichedPatientPlanById(planId) {
+    try {
+      const { data: plan, error: planError } = await supabase
+        ?.from('treatment_plans')
+        ?.select(`
+          *,
+          patients (*),
+          plan_procedures (
+            id,
+            procedure_name,
+            procedure_slug,
+            display_title,
+            ada_code,
+            tooth_numbers,
+            canonical_slug,
+            priority,
+            est_time,
+            notes_for_patient,
+            sort_order
+          )
+        `)
+        ?.eq('id', planId)
+        ?.maybeSingle();
+
+      if (planError) throw planError;
+      if (!plan) throw new Error('Treatment plan not found');
+
+      return await this._enrichPlanData(plan);
     } catch (error) {
-      console.error('Error fetching enriched patient plan:', error);
+      console.error('Error fetching enriched patient plan by ID:', error);
       return {
         success: false,
         error: error?.message || 'Failed to load treatment plan',
@@ -1089,7 +1129,7 @@ export const patientPlanService = {
    */
   generateSMSMessage(firstName, practiceName, publicToken) {
     const planUrl = `${window.location?.origin}/p/${publicToken}`;
-    return `Hi ${firstName}, your dental treatment plan from ${practiceName} is ready. Tap to view: ${planUrl}`;
+    return `Your dental treatment plan is ready for review. Tap to view: ${planUrl} Reply STOP to opt out.`;
   },
 
   /**
@@ -1128,53 +1168,62 @@ export const patientPlanService = {
    * @param {string} publicToken - Public token for the treatment plan
    * @returns {Promise<Object>} Result of SMS sending operation
    */
-  async resendTreatmentPlanLink(publicToken) {
+  async resendTreatmentPlanLink(token, isShareToken = false) {
     try {
-      // Get plan data with patient info
-      const planData = await this.getEnrichedPatientPlan(publicToken);
+      let planData;
+      if (isShareToken) {
+        const { shareLinkService } = await import('./shareLinkService');
+        const validation = await shareLinkService.validateShareLink(token);
+        if (validation.valid) {
+          planData = await this.getEnrichedPatientPlanById(validation.link.plan_id);
+        }
+      }
+
+      if (!planData?.success) {
+        planData = await this.getEnrichedPatientPlan(token);
+      }
 
       if (!planData?.success) {
         throw new Error(planData?.error || 'Failed to load treatment plan data');
       }
 
-      // Validate patient phone number exists
       if (!planData?.patient?.phone) {
         throw new Error('Patient phone number not found');
       }
 
-      // Send SMS using Twilio service
       const smsResult = await twilioService?.sendTreatmentPlanSMS(
         planData?.patient?.phone,
         planData?.patient?.firstName,
         planData?.treatmentPlan?.practiceName,
-        publicToken
+        token
       );
 
       if (!smsResult?.success) {
         throw new Error(smsResult?.userMessage || smsResult?.error || 'Failed to send SMS');
       }
 
-      // Store SMS record in database - use maybeSingle() to handle missing plan ID gracefully
       const { data: treatmentPlan, error: planError } = await supabase
         ?.from('treatment_plans')
         ?.select('id')
-        ?.eq('public_token', publicToken)
+        ?.eq('public_token', token)
         ?.maybeSingle();
+
+      const planId = treatmentPlan?.id || planData?.treatmentPlan?.id;
 
       if (planError && import.meta.env?.DEV) {
         console.error('🔍 [DEV] Error fetching treatment plan ID:', planError);
       }
 
-      if (treatmentPlan?.id) {
-        const patientLink = `${window?.location?.origin}/p/${publicToken}`;
-        const messageContent = `Hi ${planData?.patient?.firstName}! Your treatment plan from ${planData?.treatmentPlan?.practiceName} is ready. View it here: ${patientLink}`;
+      if (planId) {
+        const patientLink = `${window?.location?.origin}/p/${token}`;
+        const messageContent = `Your dental treatment plan is ready for review. View it here: ${patientLink} Reply STOP to opt out.`;
 
         await supabase?.from('sms_messages')?.insert({
           phone_number: twilioService?.formatPhoneNumber(planData?.patient?.phone),
           message_content: messageContent,
           message_type: 'treatment_plan',
           plan_link_url: patientLink,
-          treatment_plan_id: treatmentPlan?.id,
+          treatment_plan_id: planId,
           delivery_status: 'sent',
           twilio_message_sid: smsResult?.messageSid,
           sent_at: new Date()?.toISOString()

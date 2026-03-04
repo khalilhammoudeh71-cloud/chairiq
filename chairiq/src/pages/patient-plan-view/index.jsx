@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { patientPlanService } from '../../services/patientPlanService';
+import { shareLinkService } from '../../services/shareLinkService';
 
 import { useToast } from '../../hooks/useToast';
-import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, ShieldX, TimerOff } from 'lucide-react';
 import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
@@ -83,6 +84,7 @@ export default function PatientPlanView() {
   const [planData, setPlanData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [linkStatus, setLinkStatus] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState('EN');
   const [expandedProcedures, setExpandedProcedures] = useState(new Set());
 
@@ -93,18 +95,36 @@ export default function PatientPlanView() {
   const loadPlanData = async () => {
     setLoading(true);
     setError('');
+    setLinkStatus(null);
     try {
-      const data = await patientPlanService?.getEnrichedPatientPlan(publicToken);
-      
-      if (!data?.success) {
-        throw new Error(data?.error || 'Failed to load treatment plan');
+      const validation = await shareLinkService.validateShareLink(publicToken);
+
+      if (validation.valid) {
+        await shareLinkService.incrementViewCount(publicToken);
+        const data = await patientPlanService?.getEnrichedPatientPlanById(validation.link.plan_id);
+        if (data?.success) {
+          setPlanData(data);
+          setCurrentLanguage(data?.patient?.preferredLanguage || 'EN');
+          return;
+        }
       }
-      
-      setPlanData(data);
-      setCurrentLanguage(data?.patient?.preferredLanguage || 'EN');
+
+      if (validation.reason === 'expired') {
+        setLinkStatus('expired');
+        return;
+      }
+
+      const fallbackData = await patientPlanService?.getEnrichedPatientPlan(publicToken);
+      if (fallbackData?.success) {
+        setPlanData(fallbackData);
+        setCurrentLanguage(fallbackData?.patient?.preferredLanguage || 'EN');
+      } else if (validation.reason === 'not_found') {
+        setLinkStatus('invalid');
+      } else {
+        setError(fallbackData?.error || 'Failed to load treatment plan');
+      }
     } catch (err) {
       setError(err?.message || 'Failed to load treatment plan');
-      showToast('Failed to load treatment plan', 'error');
     } finally {
       setLoading(false);
     }
@@ -164,7 +184,40 @@ export default function PatientPlanView() {
     );
   }
 
-  // Error state
+  if (linkStatus === 'invalid') {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="rounded-2xl p-8 max-w-md text-center"
+          style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)' }}
+        >
+          <ShieldX className="mx-auto mb-4" size={48} style={{ color: '#fca5a5' }} />
+          <h2 className="text-2xl font-medium mb-3" style={{ color: '#fca5a5', fontWeight: 500 }}>Link Invalid</h2>
+          <p style={{ color: '#b0b3ba' }}>This treatment plan link is not valid. Please contact your dental provider for a new link.</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (linkStatus === 'expired') {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="rounded-2xl p-8 max-w-md text-center"
+          style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.25)' }}
+        >
+          <TimerOff className="mx-auto mb-4" size={48} style={{ color: '#fbbf24' }} />
+          <h2 className="text-2xl font-medium mb-3" style={{ color: '#fbbf24', fontWeight: 500 }}>Link Expired</h2>
+          <p style={{ color: '#b0b3ba' }}>This treatment plan link has expired. Please contact your dental provider to request a new link.</p>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (error || !planData) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
