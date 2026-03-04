@@ -55,16 +55,20 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
   - postcss.config.js → postcss.config.cjs, tailwind.config.js → tailwind.config.cjs (CommonJS compat)
 - Added Nodemailer SMTP transport (chairiq/server/mailer.js)
   - Zoho SMTP via env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL
-  - Port 465 = secure:true, port 587 = STARTTLS
-  - Professional HTML email template with dark header, CTA button, fallback plain text
-- API endpoints:
-  - POST /api/notifications/email — sends treatment plan link email (to, planLink, patientName)
-  - POST /api/test-email — sends test email to verify SMTP config
-- Frontend emailService.js — client for both endpoints
+  - Port 465 = secure:true, port 587 = secure:false + requireTLS
+  - Professional HTML email template with dark header, CTA button, support email, disclaimer, fallback plain text
+- Unified API endpoint:
+  - POST /api/notifications/send — accepts { method: "email"|"sms", toEmail?, toPhone?, patientName, planUrl }
+  - Requires Supabase auth (Bearer token verified server-side)
+  - SMS method returns 503 "coming soon" until carrier approval
+  - Detailed SMTP error logging server-side; user-friendly messages to client
+- Frontend emailService.js — unified sendNotification() + sendTestEmail() helper
 - Create-patient-plan page: Email/SMS radio selector
   - Email selected by default; shows email input + Send Email button
   - SMS shows "coming soon (pending carrier approval)" message
   - Removed old "Send SMS to Patient" standalone button
+- Admin dashboard: TestEmailCard added to System Tools section
+  - Send test email to verify SMTP config with inline success/error feedback
 
 ## Previous Changes (2026-03-04)
 - Implemented secure expiring share links for patient treatment plans

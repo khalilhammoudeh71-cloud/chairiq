@@ -34,66 +34,67 @@ async function requireAuth(req, res, next) {
   }
 }
 
+function smtpErrorToUserMessage(err) {
+  const code = err.responseCode || err.code;
+  if (code === 535 || err.message?.includes('Authentication')) {
+    return 'Email service authentication failed. Please check SMTP credentials.';
+  }
+  if (code === 'ECONNREFUSED' || code === 'ESOCKET') {
+    return 'Could not connect to email server. Please check SMTP host and port.';
+  }
+  if (code === 'EENVELOPE' || code === 552 || code === 553) {
+    return 'Invalid recipient email address.';
+  }
+  if (err.message?.includes('SMTP not configured')) {
+    return 'Email service is not configured. Please set SMTP environment variables.';
+  }
+  return 'Failed to send email. Please try again later.';
+}
+
 async function start() {
   const app = express();
   app.use(express.json());
 
-  app.post('/api/notifications/email', requireAuth, async (req, res) => {
+  app.post('/api/notifications/send', requireAuth, async (req, res) => {
     try {
-      const { to, patientName, planLink } = req.body;
+      const { method, toEmail, toPhone, patientName, planUrl } = req.body;
 
-      if (!to || !planLink) {
-        return res.status(400).json({ ok: false, error: 'Missing required fields: to, planLink' });
+      if (!method || !['email', 'sms'].includes(method)) {
+        return res.status(400).json({ ok: false, error: 'Invalid method. Use "email" or "sms".' });
       }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(to)) {
-        return res.status(400).json({ ok: false, error: 'Invalid email address' });
+      if (method === 'email') {
+        if (!toEmail || !planUrl) {
+          return res.status(400).json({ ok: false, error: 'Missing required fields: toEmail, planUrl' });
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(toEmail)) {
+          return res.status(400).json({ ok: false, error: 'Invalid email address' });
+        }
+
+        const { html, text } = buildTreatmentPlanEmail(planUrl, patientName);
+
+        await sendEmail({
+          to: toEmail,
+          subject: 'Your ChairIQ Treatment Plan',
+          html,
+          text,
+        });
+
+        return res.json({ ok: true, method: 'email' });
       }
 
-      const { html, text } = buildTreatmentPlanEmail(planLink, patientName);
-
-      await sendEmail({
-        to,
-        subject: 'Your ChairIQ treatment plan',
-        html,
-        text,
-      });
-
-      res.json({ ok: true });
+      if (method === 'sms') {
+        return res.status(503).json({
+          ok: false,
+          error: 'SMS delivery is coming soon (pending carrier approval). Please use email instead.',
+        });
+      }
     } catch (err) {
-      console.error('[API] Email send error:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-
-  app.post('/api/test-email', requireAuth, async (req, res) => {
-    try {
-      const { to } = req.body;
-
-      if (!to) {
-        return res.status(400).json({ ok: false, error: 'Missing required field: to' });
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(to)) {
-        return res.status(400).json({ ok: false, error: 'Invalid email address' });
-      }
-
-      const sampleLink = 'https://chairiq.online/p/sample-test-token-12345';
-      const { html, text } = buildTreatmentPlanEmail(sampleLink, 'Test Patient');
-
-      await sendEmail({
-        to,
-        subject: 'ChairIQ Test Email',
-        html,
-        text,
-      });
-
-      res.json({ ok: true, message: `Test email sent to ${to}` });
-    } catch (err) {
-      console.error('[API] Test email error:', err.message);
-      res.status(500).json({ ok: false, error: err.message });
+      console.error('[API] Notification send error:', err.message);
+      const userMessage = smtpErrorToUserMessage(err);
+      res.status(500).json({ ok: false, error: userMessage });
     }
   });
 

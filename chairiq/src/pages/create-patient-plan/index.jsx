@@ -571,17 +571,18 @@ export default function CreatePatientPlan() {
     setSendingEmail(true);
     try {
       const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const planLink = `${window.location?.origin}/p/${token}`;
-      const result = await emailService.sendTreatmentPlanEmail(
-        patientEmail,
-        planLink,
-        savedPlan?.patient?.firstName
-      );
+      const planUrl = `${window.location?.origin}/p/${token}`;
+      const result = await emailService.sendNotification({
+        method: 'email',
+        toEmail: patientEmail,
+        patientName: savedPlan?.patient?.firstName,
+        planUrl,
+      });
 
       if (result?.success) {
         showToast('Email sent successfully!', 'success');
       } else {
-        showToast(`Failed to send email: ${result?.error}`, 'error');
+        showToast(result?.error || 'Failed to send email', 'error');
       }
     } catch (error) {
       showToast(`Error sending email: ${error?.message}`, 'error');
