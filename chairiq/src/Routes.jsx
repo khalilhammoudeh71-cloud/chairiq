@@ -27,6 +27,7 @@ import AdaCodeManagementDashboard from "./pages/ada-code-management-dashboard";
 import Privacy from './pages/privacy-policy';
 import Terms from './pages/terms-of-service';
 import SmsDisclosure from './pages/sms';
+import SmsConsent from './pages/sms-consent';
 import Landing from './pages/landing';
 import DentistSignUpPage from './pages/dentist-sign-up-page';
 import AdminVisualSync from './pages/admin-visual-sync';
@@ -51,6 +52,7 @@ function ProjectRoutes() {
           <Route path="/privacy-policy" element={<Privacy />} />
           <Route path="/terms-of-service" element={<Terms />} />
           <Route path="/sms" element={<SmsDisclosure />} />
+          <Route path="/sms-consent" element={<SmsConsent />} />
           {/* Authentication Routes - /dentist-login-authentication redirects to /login */}
           <Route path="/dentist-login-authentication" element={<Navigate to="/login" replace />} />
           <Route path="/access-denied" element={<AccessDenied />} />
