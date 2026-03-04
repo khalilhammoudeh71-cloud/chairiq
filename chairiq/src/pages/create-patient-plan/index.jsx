@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { patientPlanService } from '../../services/patientPlanService';
 import { shareLinkService } from '../../services/shareLinkService';
+import { emailService } from '../../services/emailService';
 import { sendSms, getSmsDeliveryStatus, retrySmsDelivery } from '../../services/twilioService';
 
 import { useToast } from '../../hooks/useToast';
-import { Plus, Copy, Check, MessageSquare, Send, RefreshCw } from 'lucide-react';
+import { Plus, Copy, Check, MessageSquare, Send, RefreshCw, Mail } from 'lucide-react';
 import DentistNavigation from '../../components/DentistNavigation';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { supabase } from '../../lib/supabase';
@@ -48,6 +49,9 @@ export default function CreatePatientPlan() {
   const [shareToken, setShareToken] = useState(null);
   const [showSMSMessage, setShowSMSMessage] = useState(false);
   const [sendingSMS, setSendingSMS] = useState(false);
+  const [sendMethod, setSendMethod] = useState('email');
+  const [patientEmail, setPatientEmail] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [smsDeliveryLogs, setSmsDeliveryLogs] = useState([]);
   const [showSmsStatus, setShowSmsStatus] = useState(false);
   const [retryingMessageId, setRetryingMessageId] = useState(null);
@@ -561,7 +565,31 @@ export default function CreatePatientPlan() {
     }
   };
 
-  // Fetch SMS delivery status
+  const handleSendEmail = async () => {
+    if (!savedPlan || !patientEmail) return;
+
+    setSendingEmail(true);
+    try {
+      const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
+      const planLink = `${window.location?.origin}/p/${token}`;
+      const result = await emailService.sendTreatmentPlanEmail(
+        patientEmail,
+        planLink,
+        savedPlan?.patient?.firstName
+      );
+
+      if (result?.success) {
+        showToast('Email sent successfully!', 'success');
+      } else {
+        showToast(`Failed to send email: ${result?.error}`, 'error');
+      }
+    } catch (error) {
+      showToast(`Error sending email: ${error?.message}`, 'error');
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
   const fetchSmsDeliveryStatus = async (planId) => {
     const { data, error } = await getSmsDeliveryStatus(planId);
     if (!error && data) {
@@ -1027,16 +1055,68 @@ export default function CreatePatientPlan() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <button
-                    onClick={handleSendSMS}
-                    disabled={sendingSMS}
-                    className="btn-primary bg-success hover:bg-success/90 py-3 flex items-center justify-center gap-2"
-                  >
-                    <MessageSquare size={20} />
-                    {sendingSMS ? 'Sending SMS...' : 'Send SMS to Patient'}
-                  </button>
+                <div className="mb-4">
+                  <label className="block text-t2 mb-2 font-semibold text-base">Send via</label>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="sendMethod"
+                        value="email"
+                        checked={sendMethod === 'email'}
+                        onChange={() => setSendMethod('email')}
+                        className="accent-accent"
+                      />
+                      <Mail size={16} className="text-t2" />
+                      <span className="text-t1">Email</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="sendMethod"
+                        value="sms"
+                        checked={sendMethod === 'sms'}
+                        onChange={() => setSendMethod('sms')}
+                        className="accent-accent"
+                      />
+                      <MessageSquare size={16} className="text-t2" />
+                      <span className="text-t1">SMS</span>
+                    </label>
+                  </div>
+                </div>
 
+                {sendMethod === 'email' && (
+                  <div className="mb-4">
+                    <label className="block text-t2 mb-2 text-sm">Patient Email</label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="email"
+                        value={patientEmail}
+                        onChange={(e) => setPatientEmail(e.target.value)}
+                        placeholder="patient@email.com"
+                        className="input-field flex-1"
+                      />
+                      <button
+                        onClick={handleSendEmail}
+                        disabled={sendingEmail || !patientEmail}
+                        className="btn-primary bg-success hover:bg-success/90 py-2.5 px-5 flex items-center gap-2"
+                      >
+                        <Mail size={18} />
+                        {sendingEmail ? 'Sending...' : 'Send Email'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {sendMethod === 'sms' && (
+                  <div className="mb-4 p-4 rounded-lg bg-warning/10 border border-warning/30">
+                    <p className="text-warning text-sm font-medium">
+                      SMS coming soon (pending carrier approval)
+                    </p>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <button
                     onClick={handleResendSavedPlanLink}
                     disabled={resendingSavedPlan}
@@ -1051,16 +1131,16 @@ export default function CreatePatientPlan() {
                     className="btn-secondary py-3 flex items-center justify-center gap-2"
                   >
                     <Copy size={20} />
-                    View/Copy SMS Message
+                    View/Copy Message
                   </button>
                 </div>
               </div>
 
               {showSMSMessage && (
                 <div className="card bg-accent/10 border-accent">
-                  <h3 className="text-xl font-bold text-accent mb-4">SMS Message Preview</h3>
+                  <h3 className="text-xl font-bold text-accent mb-4">Message Preview</h3>
                   <p className="text-t2 mb-2 text-base">
-                    This message will be sent automatically when you click "Send SMS to Patient":
+                    Message that will be included with the plan link:
                   </p>
                   <div className="mb-4">
                     <textarea

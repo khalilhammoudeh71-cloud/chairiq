@@ -4,7 +4,7 @@
 ChairIQ is a React-based dental treatment planning SPA for dentists and patients. It provides treatment plan creation, procedure education, patient plan sharing, and admin analytics.
 
 ## Tech Stack
-- React 18 + Vite (port 5000)
+- React 18 + Vite (port 5000) with Express backend (middleware mode)
 - Redux Toolkit for state management
 - TailwindCSS for styling
 - React Router v6 for navigation
@@ -12,14 +12,18 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - D3.js/Recharts for data visualization
 - Framer Motion for animations
 - Google Gemini AI for content generation
+- Nodemailer for email delivery (Zoho SMTP)
 
 ## Project Structure
 - `chairiq/` - Main app directory
+  - `server/` - Express backend
+    - `index.js` - Express server with Vite middleware mode + API routes
+    - `mailer.js` - Nodemailer SMTP transport + email templates
   - `src/` - Source code
     - `pages/` - Page components (each in own directory)
     - `components/` - Shared components (AppIcon, ErrorBoundary, ProtectedRoute, etc.)
     - `contexts/` - AuthContext, ThemeContext
-    - `services/` - authService, geminiClient, aiPersonalizationService, ttsService
+    - `services/` - authService, geminiClient, aiPersonalizationService, ttsService, emailService
     - `lib/` - supabase.js client
     - `data/` - Static data files
     - `styles/` - globals.css, index.css, tailwind.css
@@ -28,6 +32,11 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 ## Environment Variables Required
 - `VITE_SUPABASE_URL` - Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` - Supabase anonymous key
+- `SMTP_HOST` - SMTP server hostname (e.g., smtp.zoho.com)
+- `SMTP_PORT` - SMTP port (465 for SSL, 587 for STARTTLS)
+- `SMTP_USER` - SMTP username
+- `SMTP_PASS` - SMTP password
+- `FROM_EMAIL` - Sender email address
 - `VITE_GEMINI_API_KEY` - Google Gemini API key
 - `AI_INTEGRATIONS_OPENAI_BASE_URL` - Auto-set by Replit AI Integration
 - `AI_INTEGRATIONS_OPENAI_API_KEY` - Auto-set by Replit AI Integration (dummy key)
@@ -38,7 +47,26 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Client configured in `chairiq/src/services/openaiClient.js`
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
-## Recent Changes (2026-03-04)
+## Recent Changes (2026-03-04) — Email Delivery
+- Added Express backend server (chairiq/server/index.js) with Vite middleware mode
+  - Express handles API routes, Vite handles frontend in middleware mode
+  - `npm run start` now runs Express server instead of raw Vite
+  - package.json updated: `"type": "module"`, start script → `node server/index.js`
+  - postcss.config.js → postcss.config.cjs, tailwind.config.js → tailwind.config.cjs (CommonJS compat)
+- Added Nodemailer SMTP transport (chairiq/server/mailer.js)
+  - Zoho SMTP via env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL
+  - Port 465 = secure:true, port 587 = STARTTLS
+  - Professional HTML email template with dark header, CTA button, fallback plain text
+- API endpoints:
+  - POST /api/notifications/email — sends treatment plan link email (to, planLink, patientName)
+  - POST /api/test-email — sends test email to verify SMTP config
+- Frontend emailService.js — client for both endpoints
+- Create-patient-plan page: Email/SMS radio selector
+  - Email selected by default; shows email input + Send Email button
+  - SMS shows "coming soon (pending carrier approval)" message
+  - Removed old "Send SMS to Patient" standalone button
+
+## Previous Changes (2026-03-04)
 - Implemented secure expiring share links for patient treatment plans
   - New `plan_share_links` table with token, plan_id, patient_id, expires_at, view_count
   - Share tokens are 48-char cryptographically random strings (via Web Crypto API)
