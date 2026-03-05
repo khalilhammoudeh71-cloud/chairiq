@@ -499,399 +499,378 @@ const TreatmentPlanLanding = () => {
                     const shade = listItemShades[procIdx % listItemShades.length];
                     const iconName = getProcedureIcon(procedure);
 
+                    const hasLibraryContent = procedure?.library !== null && procedure?.library !== undefined;
+                    const summary = procedure?.library?.[`summary${lang}`] || null;
+                    const why = procedure?.library?.[`why${lang}`] || null;
+                    const steps = procedure?.library?.[`steps${lang}`] || null;
+                    const aftercare = procedure?.library?.[`aftercare${lang}`] || null;
+                    const whatIfNot = procedure?.library?.[`whatIfNot${lang}`] || null;
+                    const faqs = procedure?.library?.[`faqs${lang}`] || null;
+                    const visuals = procedure?.library?.visuals || null;
+                    const isFullDetailsVisible = showFullDetails === procedure?.id;
+
                     return (
-                      <button
-                        key={procedure?.id}
-                        onClick={() => toggleProcedure(procedure?.id)}
-                        className="w-full text-left px-6 py-4 transition-all duration-200 focus:outline-none"
-                        style={{
-                          backgroundColor: isSelected ? '#4A6FA5' : shade,
-                          borderBottom: procIdx < procedures.length - 1 ? '1px solid rgba(45,55,72,0.5)' : 'none',
-                          minHeight: '44px',
-                        }}
-                        aria-expanded={isSelected}
-                        aria-label={`${title} - ${isSelected ? 'Selected' : 'Select'}`}
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-4 min-w-0">
-                            <span 
-                              className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
-                              style={{
-                                backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(74,111,165,0.15)',
-                              }}
-                            >
-                              <Icon 
-                                name={iconName} 
-                                size={16} 
-                                style={{ color: isSelected ? '#ffffff' : '#6B8AEE' }} 
-                              />
-                            </span>
-                            <div className="min-w-0">
-                              <h3 
-                                className="text-base sm:text-lg font-medium leading-snug truncate"
-                                style={{ color: isSelected ? '#ffffff' : 'var(--t1)' }}
-                              >
-                                {title}
-                              </h3>
-                              <div className="flex items-center gap-2 mt-0.5">
-                                {procedure?.adaCode && (
-                                  <span 
-                                    className="text-xs font-mono"
-                                    style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
-                                  >
-                                    {procedure?.adaCode}
-                                  </span>
-                                )}
-                                {procedure?.toothNumbers && (
-                                  <span 
-                                    className="text-xs"
-                                    style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
-                                  >
-                                    {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <Icon 
-                            name={isSelected ? 'ChevronDown' : 'ChevronRight'} 
-                            size={18} 
-                            style={{ color: isSelected ? '#ffffff' : 'rgba(74,111,165,0.6)', flexShrink: 0 }} 
-                          />
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* DETAIL PANEL - shown below the list for the selected procedure */}
-                {expandedProcedure && (() => {
-                  const procedure = procedures?.find(p => p?.id === expandedProcedure);
-                  if (!procedure) return null;
-
-                  const lang = currentLanguage === 'es' ? 'Es' : 'En';
-                  const hasLibraryContent = procedure?.library !== null && procedure?.library !== undefined;
-                  const title = procedure?.library?.[`title${lang}`] || procedure?.displayTitle || procedure?.procedureName || 'Not specified';
-                  const summary = procedure?.library?.[`summary${lang}`] || null;
-                  const why = procedure?.library?.[`why${lang}`] || null;
-                  const steps = procedure?.library?.[`steps${lang}`] || null;
-                  const aftercare = procedure?.library?.[`aftercare${lang}`] || null;
-                  const whatIfNot = procedure?.library?.[`whatIfNot${lang}`] || null;
-                  const faqs = procedure?.library?.[`faqs${lang}`] || null;
-                  const visuals = procedure?.library?.visuals || null;
-                  const isFullDetailsVisible = showFullDetails === procedure?.id;
-
-                  return (
-                    <div 
-                      className="rounded-2xl overflow-hidden animate-slideDown"
-                      style={{
-                        backgroundColor: '#1A1F2E',
-                        border: '1px solid #2D3748',
-                      }}
-                    >
-                      {/* Hero image at top of detail panel */}
-                      {visuals?.heroKey && (
-                        <div className="w-full">
-                          <Image
-                            src={visuals?.heroKey}
-                            alt={`${title} illustration`}
-                            className="w-full"
-                            style={{ 
-                              maxHeight: '400px', 
-                              objectFit: 'cover' 
-                            }}
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                      )}
-
-                      <div className="p-10 space-y-10">
-                        <div>
-                          <h3 className="text-3xl sm:text-4xl mb-4 text-t1 font-semibold leading-snug">
-                            {title}
-                          </h3>
-                          {procedure?.toothNumbers && (
-                            <p className="text-t3 text-lg">
-                              {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Debug panel */}
-                        {debugMode && (
-                          <div 
-                            className="p-5 rounded-xl space-y-2"
-                            style={{ 
-                              backgroundColor: 'rgba(255, 183, 77, 0.12)',
-                              border: '1px solid rgba(255, 183, 77, 0.35)',
-                              fontFamily: 'monospace',
-                              fontSize: '0.8125rem'
-                            }}
-                          >
-                            <div style={{ color: '#ffb74d', fontWeight: 600 }}>Debug Info</div>
-                            <div style={{ color: '#c2c6cf' }}>
-                              <span style={{ color: '#9ba1ad' }}>slug:</span> {procedure?.canonicalSlug || 'null'}
-                              {' | '}
-                              <span style={{ color: '#9ba1ad' }}>ada:</span> {procedure?.adaCode || 'null'}
-                              {' | '}
-                              <span style={{ color: '#9ba1ad' }}>visuals:</span>{' '}
-                              <span style={{ color: visuals ? '#22c55e' : '#ef4444' }}>
-                                {visuals ? (visuals?.heroKey ? 1 : 0) + (visuals?.stepKeys?.length || 0) : 0}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-
-                        {summary && (
-                          <div>
-                            <h4 className="text-2xl mb-6 text-accent font-semibold">
-                              {text?.sections?.whatThis}
-                            </h4>
-                            <div
-                              className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
-                              dangerouslySetInnerHTML={{ __html: summary?.replace(/\n/g, '<br />') }}
-                            />
-                          </div>
-                        )}
-
-                        {/* Steps as clickable CTA buttons */}
-                        {steps && steps?.length > 0 && (
-                          <div>
-                            <h4 className="text-2xl mb-8 text-accent font-semibold">
-                              {text?.sections?.howItWorks}
-                            </h4>
-                            <div className="space-y-4">
-                              {steps?.map((step, idx) => {
-                                const isStepActive = activeStepImage === idx;
-                                const hasStepImage = !!visuals?.stepKeys?.[idx];
-
-                                return (
-                                  <div key={idx}>
-                                    <button
-                                      onClick={(e) => toggleStepImage(idx, e)}
-                                      className="w-full text-left rounded-xl transition-all duration-200 focus:outline-none"
-                                      style={{
-                                        backgroundColor: isStepActive ? '#232936' : 'transparent',
-                                        border: isStepActive ? '1px solid #4A6FA5' : '1px solid #2D3748',
-                                        padding: '1.25rem 1.5rem',
-                                      }}
-                                    >
-                                      <div className="flex items-start gap-4">
-                                        <span 
-                                          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mt-0.5"
-                                          style={{
-                                            backgroundColor: isStepActive ? '#4A6FA5' : 'rgba(74,111,165,0.15)',
-                                            color: isStepActive ? '#ffffff' : '#4A6FA5',
-                                          }}
-                                        >
-                                          {idx + 1}
-                                        </span>
-                                        <div className="flex-1 min-w-0">
-                                          <div className="flex items-center justify-between gap-3">
-                                            <h5 className="text-lg sm:text-xl font-semibold text-t1 leading-snug">
-                                              {step?.title || `${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}`}
-                                            </h5>
-                                            {hasStepImage && (
-                                              <div className="flex items-center gap-1.5 flex-shrink-0">
-                                                <Icon 
-                                                  name={isStepActive ? 'EyeOff' : 'Eye'} 
-                                                  size={18} 
-                                                  style={{ color: '#4A6FA5' }} 
-                                                />
-                                                <span className="text-sm hidden sm:inline" style={{ color: '#4A6FA5' }}>
-                                                  {isStepActive 
-                                                    ? (currentLanguage === 'es' ? 'Ocultar' : 'Hide') 
-                                                    : (currentLanguage === 'es' ? 'Ver imagen' : 'View image')}
-                                                </span>
-                                              </div>
-                                            )}
-                                          </div>
-                                          <p className="text-t3 text-base sm:text-lg font-light leading-relaxed mt-2">
-                                            {step?.description || step?.content}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </button>
-
-                                    {isStepActive && hasStepImage && (
-                                      <div className="mt-3 mb-2 px-4 animate-slideDown">
-                                        <div className="flex justify-center rounded-xl overflow-hidden" style={{ backgroundColor: '#0F1218' }}>
-                                          <Image
-                                            src={visuals?.stepKeys?.[idx]}
-                                            alt={`${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}: ${step?.title || title}`}
-                                            className="rounded-xl"
-                                            style={{ 
-                                              maxWidth: '100%', 
-                                              maxHeight: '360px', 
-                                              objectFit: 'contain' 
-                                            }}
-                                            onError={(e) => {
-                                              e.target.parentElement.innerHTML = `<div style="padding:2rem;text-align:center;color:#7a8cf5;font-size:0.875rem"><p>${currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p></div>`;
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                    )}
-
-                                    {isStepActive && !hasStepImage && (
-                                      <div className="mt-3 mb-2 px-4 animate-slideDown">
-                                        <div 
-                                          className="flex items-center justify-center rounded-xl p-8"
-                                          style={{ 
-                                            backgroundColor: 'rgba(122, 140, 245, 0.08)',
-                                            border: '1px solid rgba(122, 140, 245, 0.15)',
-                                          }}
-                                        >
-                                          <div className="text-center">
-                                            <Icon name="ImageOff" size={24} style={{ margin: '0 auto 0.5rem', color: '#7a8cf5' }} />
-                                            <p style={{ color: '#7a8cf5', fontSize: '0.875rem' }}>
-                                              {currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Show Full Details Toggle */}
-                        {hasLibraryContent && (why || whatIfNot || aftercare || (faqs && faqs?.length > 0)) && (
-                          <button
-                            onClick={(e) => toggleFullDetails(procedure?.id, e)}
-                            className="w-full py-4 px-8 rounded-xl transition-all duration-200 hover:brightness-110 focus:outline-none"
-                            style={{ 
-                              backgroundColor: isFullDetailsVisible ? '#2D3748' : '#4A6FA5',
-                              color: 'white',
-                              fontSize: '1.125rem',
-                              fontWeight: 500,
-                              minHeight: '48px'
-                            }}
-                          >
-                            {isFullDetailsVisible ? text?.hideFullDetails : text?.showFullDetails}
-                          </button>
-                        )}
-
-                        {!hasLibraryContent && (
-                          <div 
-                            className="p-8 rounded-xl"
-                            style={{ 
-                              backgroundColor: 'rgba(255, 183, 77, 0.1)',
-                              border: '1px solid rgba(255, 183, 77, 0.2)'
-                            }}
-                          >
-                            <p className="text-warning text-lg leading-relaxed">
-                              {text?.noContentAvailable}
-                            </p>
-                          </div>
-                        )}
-
-                        {isFullDetailsVisible && (
-                          <div className="space-y-16 pt-6 animate-slideDown">
-                            {why && (
-                              <div>
-                                <h4 className="text-2xl mb-6 text-accent font-semibold">
-                                  {text?.sections?.whyNeed}
-                                </h4>
-                                <div
-                                  className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
-                                  dangerouslySetInnerHTML={{ __html: why?.replace(/\n/g, '<br />') }}
-                                />
-                              </div>
-                            )}
-
-                            {(procedure?.library?.timeEstimate || procedure?.library?.visitsEstimate) && (
-                              <div 
-                                className="p-8 rounded-xl"
-                                style={{ 
-                                  backgroundColor: 'rgba(74, 111, 165, 0.1)',
-                                  border: '1px solid rgba(74, 111, 165, 0.2)'
+                      <div key={procedure?.id}>
+                        <button
+                          onClick={() => toggleProcedure(procedure?.id)}
+                          className="w-full text-left px-6 py-4 transition-all duration-200 focus:outline-none"
+                          style={{
+                            backgroundColor: isSelected ? '#4A6FA5' : shade,
+                            borderBottom: (!isSelected && procIdx < procedures.length - 1) ? '1px solid rgba(45,55,72,0.5)' : 'none',
+                            minHeight: '44px',
+                          }}
+                          aria-expanded={isSelected}
+                          aria-label={`${title} - ${isSelected ? 'Selected' : 'Select'}`}
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-4 min-w-0">
+                              <span 
+                                className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
+                                style={{
+                                  backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(74,111,165,0.15)',
                                 }}
                               >
-                                {procedure?.library?.timeEstimate && (
-                                  <div className="mb-4">
-                                    <span className="text-accent text-lg font-semibold">
-                                      {currentLanguage === 'es' ? 'Tiempo: ' : 'Time: '}
-                                    </span>
-                                    <span className="text-t3 text-lg">
-                                      {procedure?.library?.timeEstimate}
-                                    </span>
-                                  </div>
-                                )}
-                                {procedure?.library?.visitsEstimate && (
-                                  <div>
-                                    <span className="text-accent text-lg font-semibold">
-                                      {currentLanguage === 'es' ? 'Visitas: ' : 'Visits: '}
-                                    </span>
-                                    <span className="text-t3 text-lg">
-                                      {procedure?.library?.visitsEstimate}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-
-                            {whatIfNot && (
-                              <div>
-                                <h4 className="text-2xl mb-6 text-warning font-semibold">
-                                  {text?.sections?.ifDelay}
-                                </h4>
-                                <div
-                                  className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
-                                  dangerouslySetInnerHTML={{ __html: whatIfNot?.replace(/\n/g, '<br />') }}
+                                <Icon 
+                                  name={iconName} 
+                                  size={16} 
+                                  style={{ color: isSelected ? '#ffffff' : '#6B8AEE' }} 
                                 />
-                              </div>
-                            )}
-
-                            {aftercare && (
-                              <div>
-                                <h4 className="text-2xl mb-6 text-accent font-semibold">
-                                  {text?.sections?.aftercare}
-                                </h4>
-                                <div
-                                  className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
-                                  dangerouslySetInnerHTML={{ __html: aftercare?.replace(/\n/g, '<br />') }}
-                                />
-                              </div>
-                            )}
-
-                            {faqs && faqs?.length > 0 && (
-                              <div>
-                                <h4 className="text-2xl mb-10 text-accent font-semibold">
-                                  {text?.sections?.faqs}
-                                </h4>
-                                <div className="space-y-8">
-                                  {faqs?.map((faq, idx) => (
-                                    <div 
-                                      key={idx}
-                                      className="p-8 rounded-xl"
-                                      style={{ 
-                                        backgroundColor: '#232936',
-                                        border: '1px solid #2D3748'
-                                      }}
+                              </span>
+                              <div className="min-w-0">
+                                <h3 
+                                  className="text-base sm:text-lg font-medium leading-snug truncate"
+                                  style={{ color: isSelected ? '#ffffff' : 'var(--t1)' }}
+                                >
+                                  {title}
+                                </h3>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                  {procedure?.adaCode && (
+                                    <span 
+                                      className="text-xs font-mono"
+                                      style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
                                     >
-                                      <p className="mb-5 text-t1 text-xl font-semibold">
-                                        {faq?.q}
-                                      </p>
-                                      <p className="text-t3 text-lg leading-[1.8]">
-                                        {faq?.a}
-                                      </p>
-                                    </div>
-                                  ))}
+                                      {procedure?.adaCode}
+                                    </span>
+                                  )}
+                                  {procedure?.toothNumbers && (
+                                    <span 
+                                      className="text-xs"
+                                      style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
+                                    >
+                                      {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
+                            </div>
+                            <Icon 
+                              name={isSelected ? 'ChevronDown' : 'ChevronRight'} 
+                              size={18} 
+                              style={{ color: isSelected ? '#ffffff' : 'rgba(74,111,165,0.6)', flexShrink: 0 }} 
+                            />
+                          </div>
+                        </button>
+
+                        {isSelected && (
+                          <div 
+                            className="overflow-hidden animate-slideDown"
+                            style={{
+                              backgroundColor: '#1A1F2E',
+                              borderBottom: procIdx < procedures.length - 1 ? '1px solid rgba(45,55,72,0.5)' : 'none',
+                            }}
+                          >
+                            {visuals?.heroKey && (
+                              <div className="w-full">
+                                <Image
+                                  src={visuals?.heroKey}
+                                  alt={`${title} illustration`}
+                                  className="w-full"
+                                  style={{ maxHeight: '400px', objectFit: 'cover' }}
+                                  onError={(e) => { e.target.style.display = 'none'; }}
+                                />
+                              </div>
                             )}
+
+                            <div className="p-8 sm:p-10 space-y-10">
+                              <div>
+                                <h3 className="text-2xl sm:text-3xl mb-3 text-t1 font-semibold leading-snug">
+                                  {title}
+                                </h3>
+                                {procedure?.toothNumbers && (
+                                  <p className="text-t3 text-base">
+                                    {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
+                                  </p>
+                                )}
+                              </div>
+
+                              {debugMode && (
+                                <div 
+                                  className="p-5 rounded-xl space-y-2"
+                                  style={{ 
+                                    backgroundColor: 'rgba(255, 183, 77, 0.12)',
+                                    border: '1px solid rgba(255, 183, 77, 0.35)',
+                                    fontFamily: 'monospace',
+                                    fontSize: '0.8125rem'
+                                  }}
+                                >
+                                  <div style={{ color: '#ffb74d', fontWeight: 600 }}>Debug Info</div>
+                                  <div style={{ color: '#c2c6cf' }}>
+                                    <span style={{ color: '#9ba1ad' }}>slug:</span> {procedure?.canonicalSlug || 'null'}
+                                    {' | '}
+                                    <span style={{ color: '#9ba1ad' }}>ada:</span> {procedure?.adaCode || 'null'}
+                                    {' | '}
+                                    <span style={{ color: '#9ba1ad' }}>visuals:</span>{' '}
+                                    <span style={{ color: visuals ? '#22c55e' : '#ef4444' }}>
+                                      {visuals ? (visuals?.heroKey ? 1 : 0) + (visuals?.stepKeys?.length || 0) : 0}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+
+                              {summary && (
+                                <div>
+                                  <h4 className="text-2xl mb-6 text-accent font-semibold">
+                                    {text?.sections?.whatThis}
+                                  </h4>
+                                  <div
+                                    className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                    dangerouslySetInnerHTML={{ __html: summary?.replace(/\n/g, '<br />') }}
+                                  />
+                                </div>
+                              )}
+
+                              {steps && steps?.length > 0 && (
+                                <div>
+                                  <h4 className="text-2xl mb-8 text-accent font-semibold">
+                                    {text?.sections?.howItWorks}
+                                  </h4>
+                                  <div className="space-y-4">
+                                    {steps?.map((step, idx) => {
+                                      const isStepActive = activeStepImage === idx;
+                                      const hasStepImage = !!visuals?.stepKeys?.[idx];
+
+                                      return (
+                                        <div key={idx}>
+                                          <button
+                                            onClick={(e) => toggleStepImage(idx, e)}
+                                            className="w-full text-left rounded-xl transition-all duration-200 focus:outline-none"
+                                            style={{
+                                              backgroundColor: isStepActive ? '#232936' : 'transparent',
+                                              border: isStepActive ? '1px solid #4A6FA5' : '1px solid #2D3748',
+                                              padding: '1.25rem 1.5rem',
+                                            }}
+                                          >
+                                            <div className="flex items-start gap-4">
+                                              <span 
+                                                className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mt-0.5"
+                                                style={{
+                                                  backgroundColor: isStepActive ? '#4A6FA5' : 'rgba(74,111,165,0.15)',
+                                                  color: isStepActive ? '#ffffff' : '#4A6FA5',
+                                                }}
+                                              >
+                                                {idx + 1}
+                                              </span>
+                                              <div className="flex-1 min-w-0">
+                                                <div className="flex items-center justify-between gap-3">
+                                                  <h5 className="text-lg sm:text-xl font-semibold text-t1 leading-snug">
+                                                    {step?.title || `${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}`}
+                                                  </h5>
+                                                  {hasStepImage && (
+                                                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                                                      <Icon 
+                                                        name={isStepActive ? 'EyeOff' : 'Eye'} 
+                                                        size={18} 
+                                                        style={{ color: '#4A6FA5' }} 
+                                                      />
+                                                      <span className="text-sm hidden sm:inline" style={{ color: '#4A6FA5' }}>
+                                                        {isStepActive 
+                                                          ? (currentLanguage === 'es' ? 'Ocultar' : 'Hide') 
+                                                          : (currentLanguage === 'es' ? 'Ver imagen' : 'View image')}
+                                                      </span>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                                <p className="text-t3 text-base sm:text-lg font-light leading-relaxed mt-2">
+                                                  {step?.description || step?.content}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </button>
+
+                                          {isStepActive && hasStepImage && (
+                                            <div className="mt-3 mb-2 px-4 animate-slideDown">
+                                              <div className="flex justify-center rounded-xl overflow-hidden" style={{ backgroundColor: '#0F1218' }}>
+                                                <Image
+                                                  src={visuals?.stepKeys?.[idx]}
+                                                  alt={`${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}: ${step?.title || title}`}
+                                                  className="rounded-xl"
+                                                  style={{ maxWidth: '100%', maxHeight: '360px', objectFit: 'contain' }}
+                                                  onError={(e) => {
+                                                    e.target.parentElement.innerHTML = `<div style="padding:2rem;text-align:center;color:#7a8cf5;font-size:0.875rem"><p>${currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p></div>`;
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+
+                                          {isStepActive && !hasStepImage && (
+                                            <div className="mt-3 mb-2 px-4 animate-slideDown">
+                                              <div 
+                                                className="flex items-center justify-center rounded-xl p-8"
+                                                style={{ 
+                                                  backgroundColor: 'rgba(122, 140, 245, 0.08)',
+                                                  border: '1px solid rgba(122, 140, 245, 0.15)',
+                                                }}
+                                              >
+                                                <div className="text-center">
+                                                  <Icon name="ImageOff" size={24} style={{ margin: '0 auto 0.5rem', color: '#7a8cf5' }} />
+                                                  <p style={{ color: '#7a8cf5', fontSize: '0.875rem' }}>
+                                                    {currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              {hasLibraryContent && (why || whatIfNot || aftercare || (faqs && faqs?.length > 0)) && (
+                                <button
+                                  onClick={(e) => toggleFullDetails(procedure?.id, e)}
+                                  className="w-full py-4 px-8 rounded-xl transition-all duration-200 hover:brightness-110 focus:outline-none"
+                                  style={{ 
+                                    backgroundColor: isFullDetailsVisible ? '#2D3748' : '#4A6FA5',
+                                    color: 'white',
+                                    fontSize: '1.125rem',
+                                    fontWeight: 500,
+                                    minHeight: '48px'
+                                  }}
+                                >
+                                  {isFullDetailsVisible ? text?.hideFullDetails : text?.showFullDetails}
+                                </button>
+                              )}
+
+                              {!hasLibraryContent && (
+                                <div 
+                                  className="p-8 rounded-xl"
+                                  style={{ 
+                                    backgroundColor: 'rgba(255, 183, 77, 0.1)',
+                                    border: '1px solid rgba(255, 183, 77, 0.2)'
+                                  }}
+                                >
+                                  <p className="text-warning text-lg leading-relaxed">
+                                    {text?.noContentAvailable}
+                                  </p>
+                                </div>
+                              )}
+
+                              {isFullDetailsVisible && (
+                                <div className="space-y-16 pt-6 animate-slideDown">
+                                  {why && (
+                                    <div>
+                                      <h4 className="text-2xl mb-6 text-accent font-semibold">
+                                        {text?.sections?.whyNeed}
+                                      </h4>
+                                      <div
+                                        className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                        dangerouslySetInnerHTML={{ __html: why?.replace(/\n/g, '<br />') }}
+                                      />
+                                    </div>
+                                  )}
+
+                                  {(procedure?.library?.timeEstimate || procedure?.library?.visitsEstimate) && (
+                                    <div 
+                                      className="p-8 rounded-xl"
+                                      style={{ 
+                                        backgroundColor: 'rgba(74, 111, 165, 0.1)',
+                                        border: '1px solid rgba(74, 111, 165, 0.2)'
+                                      }}
+                                    >
+                                      {procedure?.library?.timeEstimate && (
+                                        <div className="mb-4">
+                                          <span className="text-accent text-lg font-semibold">
+                                            {currentLanguage === 'es' ? 'Tiempo: ' : 'Time: '}
+                                          </span>
+                                          <span className="text-t3 text-lg">
+                                            {procedure?.library?.timeEstimate}
+                                          </span>
+                                        </div>
+                                      )}
+                                      {procedure?.library?.visitsEstimate && (
+                                        <div>
+                                          <span className="text-accent text-lg font-semibold">
+                                            {currentLanguage === 'es' ? 'Visitas: ' : 'Visits: '}
+                                          </span>
+                                          <span className="text-t3 text-lg">
+                                            {procedure?.library?.visitsEstimate}
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {whatIfNot && (
+                                    <div>
+                                      <h4 className="text-2xl mb-6 text-warning font-semibold">
+                                        {text?.sections?.ifDelay}
+                                      </h4>
+                                      <div
+                                        className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                        dangerouslySetInnerHTML={{ __html: whatIfNot?.replace(/\n/g, '<br />') }}
+                                      />
+                                    </div>
+                                  )}
+
+                                  {aftercare && (
+                                    <div>
+                                      <h4 className="text-2xl mb-6 text-accent font-semibold">
+                                        {text?.sections?.aftercare}
+                                      </h4>
+                                      <div
+                                        className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                        dangerouslySetInnerHTML={{ __html: aftercare?.replace(/\n/g, '<br />') }}
+                                      />
+                                    </div>
+                                  )}
+
+                                  {faqs && faqs?.length > 0 && (
+                                    <div>
+                                      <h4 className="text-2xl mb-10 text-accent font-semibold">
+                                        {text?.sections?.faqs}
+                                      </h4>
+                                      <div className="space-y-8">
+                                        {faqs?.map((faq, idx) => (
+                                          <div 
+                                            key={idx}
+                                            className="p-8 rounded-xl"
+                                            style={{ 
+                                              backgroundColor: '#232936',
+                                              border: '1px solid #2D3748'
+                                            }}
+                                          >
+                                            <p className="mb-5 text-t1 text-xl font-semibold">
+                                              {faq?.q}
+                                            </p>
+                                            <p className="text-t3 text-lg leading-[1.8]">
+                                              {faq?.a}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
-                    </div>
-                  );
-                })()}
+                    );
+                  })}
               </>
             ) : (
               <div 
