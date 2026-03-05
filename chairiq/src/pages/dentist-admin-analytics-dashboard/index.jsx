@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { patientAnalyticsService } from '../../services/patientAnalyticsService';
 import { patientPlanService } from '../../services/patientPlanService';
-import { AlertTriangle, Download, Send, Copy } from 'lucide-react';
+import { emailService } from '../../services/emailService';
+import { AlertTriangle, Download, Send, Copy, Mail, MessageSquare } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import DentistNavigation from '../../components/DentistNavigation';
 import Card from '../../components/ui/Card';
@@ -22,6 +23,9 @@ export default function DentistAdminAnalyticsDashboard() {
   const [dateRange, setDateRange] = useState('30');
   const [timeRange, setTimeRange] = useState('30d');
   const [resendingToken, setResendingToken] = useState(null);
+  const [resendingEmailToken, setResendingEmailToken] = useState(null);
+  const [emailPrompt, setEmailPrompt] = useState(null);
+  const [emailInput, setEmailInput] = useState('');
   const [copyingToken, setCopyingToken] = useState(null);
   const [successMessages, setSuccessMessages] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
@@ -181,6 +185,43 @@ export default function DentistAdminAnalyticsDashboard() {
       setMessageTimer(timer);
     } finally {
       setResendingToken(null);
+    }
+  };
+
+  const handleResendViaEmail = async (publicToken, patientName, email) => {
+    try {
+      setResendingEmailToken(publicToken);
+      if (messageTimer) clearTimeout(messageTimer);
+      setSuccessMessages({});
+      setErrorMessage('');
+
+      const planUrl = `${window?.location?.origin}/treatment-plan-landing?token=${publicToken}`;
+      const result = await emailService.sendNotification({
+        method: 'email',
+        toEmail: email,
+        patientName: patientName || 'Patient',
+        planUrl,
+      });
+
+      if (result?.success) {
+        setSuccessMessages({ [publicToken]: 'Email sent' });
+        setEmailPrompt(null);
+        setEmailInput('');
+        const timer = setTimeout(() => setSuccessMessages({}), 2000);
+        setMessageTimer(timer);
+      } else {
+        setErrorMessage(result?.error || 'Failed to send email');
+        const timer = setTimeout(() => setErrorMessage(''), 3000);
+        setMessageTimer(timer);
+      }
+    } catch (err) {
+      console.error('Error sending email:', err);
+      if (messageTimer) clearTimeout(messageTimer);
+      setErrorMessage(err?.message || 'Failed to send email');
+      const timer = setTimeout(() => setErrorMessage(''), 3000);
+      setMessageTimer(timer);
+    } finally {
+      setResendingEmailToken(null);
     }
   };
 
@@ -357,42 +398,88 @@ export default function DentistAdminAnalyticsDashboard() {
                         </td>
                         <td className="py-3 px-4">
                           <div className="relative">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <button
                                 onClick={() => handleResendLink(patient?.publicToken, patient?.patientName)}
                                 disabled={resendingToken === patient?.publicToken}
-                                className="flex items-center gap-2 bg-accent text-t1 px-4 py-2 rounded-lg font-medium hover:bg-accent2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-1.5 bg-accent text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {resendingToken === patient?.publicToken ? (
                                   <>
-                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-t-transparent border-t1"></div>
+                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-white"></div>
                                     <span>Sending...</span>
                                   </>
                                 ) : (
                                   <>
-                                    <Send size={16} />
-                                    <span>Resend Link</span>
+                                    <MessageSquare size={14} />
+                                    <span>SMS</span>
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEmailPrompt(emailPrompt === patient?.publicToken ? null : patient?.publicToken);
+                                  setEmailInput('');
+                                }}
+                                disabled={resendingEmailToken === patient?.publicToken}
+                                className="flex items-center gap-1.5 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{ backgroundColor: '#2D7D46' }}
+                              >
+                                {resendingEmailToken === patient?.publicToken ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-white"></div>
+                                    <span>Sending...</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Mail size={14} />
+                                    <span>Email</span>
                                   </>
                                 )}
                               </button>
                               <button
                                 onClick={() => handleCopyLink(patient?.publicToken, patient?.patientName)}
                                 disabled={copyingToken === patient?.publicToken}
-                                className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-1.5 bg-bg2 text-t1 px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-bd"
                               >
                                 {copyingToken === patient?.publicToken ? (
                                   <>
-                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-t-transparent border-white"></div>
+                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-t1"></div>
                                     <span>Copying...</span>
                                   </>
                                 ) : (
                                   <>
-                                    <Copy size={16} />
-                                    <span>Copy Link</span>
+                                    <Copy size={14} />
+                                    <span>Copy</span>
                                   </>
                                 )}
                               </button>
                             </div>
+                            {emailPrompt === patient?.publicToken && (
+                              <div className="mt-2 flex items-center gap-2">
+                                <input
+                                  type="email"
+                                  value={emailInput}
+                                  onChange={(e) => setEmailInput(e.target.value)}
+                                  placeholder="patient@email.com"
+                                  className="flex-1 bg-bg1 border border-bd rounded-lg px-3 py-1.5 text-sm text-t1 placeholder-t3 focus:outline-none focus:border-accent"
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && emailInput) {
+                                      handleResendViaEmail(patient?.publicToken, patient?.patientName, emailInput);
+                                    }
+                                  }}
+                                />
+                                <button
+                                  onClick={() => handleResendViaEmail(patient?.publicToken, patient?.patientName, emailInput)}
+                                  disabled={!emailInput || resendingEmailToken === patient?.publicToken}
+                                  className="flex items-center gap-1.5 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                  style={{ backgroundColor: '#2D7D46' }}
+                                >
+                                  <Send size={14} />
+                                  <span>Send</span>
+                                </button>
+                              </div>
+                            )}
                             {successMessages?.[patient?.publicToken] && (
                               <div className="absolute left-0 top-full mt-2 text-success text-sm animate-fadeIn whitespace-nowrap">
                                 {successMessages?.[patient?.publicToken]}
