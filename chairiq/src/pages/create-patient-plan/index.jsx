@@ -6,7 +6,7 @@ import { emailService } from '../../services/emailService';
 import { sendSms, getSmsDeliveryStatus, retrySmsDelivery } from '../../services/twilioService';
 
 import { useToast } from '../../hooks/useToast';
-import { Plus, Copy, Check, MessageSquare, Send, RefreshCw, Mail } from 'lucide-react';
+import { Plus, Copy, Check, MessageSquare, Send, RefreshCw, Mail, User, Phone, Globe, ClipboardList, SendHorizonal } from 'lucide-react';
 import DentistNavigation from '../../components/DentistNavigation';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { supabase } from '../../lib/supabase';
@@ -779,6 +779,18 @@ export default function CreatePatientPlan() {
     showToast('Procedure added successfully', 'success');
   };
 
+  const getCurrentStep = () => {
+    if (savedPlan) return 3;
+    if (procedures?.length > 0) return 2;
+    return 1;
+  };
+
+  const stepIndicatorItems = [
+    { label: 'Patient Info', icon: User },
+    { label: 'Procedures', icon: ClipboardList },
+    { label: 'Review & Send', icon: SendHorizonal },
+  ];
+
   return (
     <div className="page-container">
       {/* Add Navigation */}
@@ -788,44 +800,105 @@ export default function CreatePatientPlan() {
         <div className="card mb-8">
           <h1 className="text-4xl font-bold text-t1 mb-2">Create Patient Plan</h1>
           <p className="text-t2 text-lg">Generate treatment plans and share with patients via SMS</p>
+
+          <div className="flex items-center justify-between mt-6 pt-5 border-t border-bd">
+            {stepIndicatorItems.map((step, idx) => {
+              const currentStep = getCurrentStep();
+              const stepNum = idx + 1;
+              const isActive = stepNum === currentStep;
+              const isCompleted = stepNum < currentStep;
+              const isFuture = stepNum > currentStep;
+              const StepIcon = step.icon;
+
+              return (
+                <React.Fragment key={step.label}>
+                  <div className="flex flex-col items-center gap-1.5 flex-1">
+                    <div
+                      className={cn(
+                        'w-9 h-9 rounded-full flex items-center justify-center transition-colors',
+                        isActive && 'bg-accent text-white',
+                        isCompleted && 'bg-accent/20 text-accent',
+                        isFuture && 'bg-bg3 text-t3'
+                      )}
+                    >
+                      {isCompleted ? <Check size={18} /> : <StepIcon size={18} />}
+                    </div>
+                    <span
+                      className={cn(
+                        'text-xs font-semibold transition-colors',
+                        isActive && 'text-accent',
+                        isCompleted && 'text-accent',
+                        isFuture && 'text-t3'
+                      )}
+                    >
+                      {step.label}
+                    </span>
+                  </div>
+                  {idx < stepIndicatorItems.length - 1 && (
+                    <div
+                      className={cn(
+                        'h-0.5 flex-1 -mt-5 mx-1 rounded-full transition-colors',
+                        stepNum < currentStep ? 'bg-accent' : 'bg-bg3'
+                      )}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
         </div>
 
         {/* Patient Information Section */}
         <div className="card mb-6">
-          <h2 className="text-2xl font-bold text-t1 mb-6">Patient Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-8 bg-accent rounded-full"></div>
+            <h2 className="text-2xl font-bold text-t1">Patient Information</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">First Name *</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <User size={16} className="text-accent" />
+                First Name *
+              </label>
               <input
                 type="text"
                 value={patientInfo?.firstName}
                 onChange={(e) => handlePatientChange('firstName', e?.target?.value)}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
                 placeholder="Enter first name"
               />
             </div>
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">Last Name *</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <User size={16} className="text-accent" />
+                Last Name *
+              </label>
               <input
                 type="text"
                 value={patientInfo?.lastName}
                 onChange={(e) => handlePatientChange('lastName', e?.target?.value)}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
                 placeholder="Enter last name"
               />
             </div>
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">Phone Number *</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <Phone size={16} className="text-accent" />
+                Phone Number *
+              </label>
               <input
                 type="tel"
                 value={patientInfo?.phone}
                 onChange={(e) => handlePatientChange('phone', e?.target?.value)}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
                 placeholder="+1-555-0123"
               />
             </div>
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">Email</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <Mail size={16} className="text-accent" />
+                Email
+              </label>
               <input
                 type="email"
                 value={patientInfo?.email}
@@ -833,16 +906,19 @@ export default function CreatePatientPlan() {
                   handlePatientChange('email', e?.target?.value);
                   setPatientEmail(e?.target?.value);
                 }}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
                 placeholder="patient@email.com"
               />
             </div>
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">Preferred Language</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <Globe size={16} className="text-accent" />
+                Preferred Language
+              </label>
               <select
                 value={patientInfo?.preferredLanguage}
                 onChange={(e) => handlePatientChange('preferredLanguage', e?.target?.value)}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
               >
                 <option value="EN" className="bg-bg2">English</option>
                 <option value="ES" className="bg-bg2">Spanish</option>
@@ -853,25 +929,34 @@ export default function CreatePatientPlan() {
 
         {/* Plan Information Section */}
         <div className="card mb-6">
-          <h2 className="text-2xl font-bold text-t1 mb-6">Plan Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-8 bg-accent rounded-full"></div>
+            <h2 className="text-2xl font-bold text-t1">Plan Information</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">Dentist Name *</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <User size={16} className="text-accent" />
+                Dentist Name *
+              </label>
               <input
                 type="text"
                 value={planInfo?.dentistName}
                 onChange={(e) => handlePlanChange('dentistName', e?.target?.value)}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
                 placeholder="Dr. Smith"
               />
             </div>
             <div>
-              <label className="block text-t2 mb-2 font-semibold text-base">Practice Name *</label>
+              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+                <Globe size={16} className="text-accent" />
+                Practice Name *
+              </label>
               <input
                 type="text"
                 value={planInfo?.practiceName}
                 onChange={(e) => handlePlanChange('practiceName', e?.target?.value)}
-                className="input-field w-full"
+                className="input-field w-full focus:border-accent focus:ring-2 focus:ring-accent/20"
                 placeholder="Bright Smile Dental"
               />
             </div>
@@ -936,8 +1021,14 @@ export default function CreatePatientPlan() {
 
           {/* Procedures Table/List */}
           {procedures?.length === 0 ? (
-            <div className="text-center py-12 bg-bg3 rounded border-2 border-dashed border-bd">
-              <p className="text-t3 text-lg mb-4">No procedures added yet</p>
+            <div className="text-center py-16 bg-bg2/30 rounded-xl border-2 border-dashed border-bd/60">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
+                  <ClipboardList size={32} className="text-accent/60" />
+                </div>
+              </div>
+              <p className="text-t2 text-lg font-medium mb-2">No procedures added yet</p>
+              <p className="text-t3 text-sm mb-6 max-w-sm mx-auto">Add procedures to build the patient's treatment plan. You can search by name or ADA code.</p>
               <button
                 onClick={openAddProcedureDrawer}
                 className="btn-primary inline-flex items-center gap-2"
@@ -996,6 +1087,7 @@ export default function CreatePatientPlan() {
                             procedure={procedure}
                             index={procedures?.indexOf(procedure)}
                             onDelete={removeProcedure}
+                            isEven={index % 2 === 0}
                           />
                         ))}
                     </SortableContext>
@@ -1017,6 +1109,7 @@ export default function CreatePatientPlan() {
                         procedure={procedure}
                         index={procedures?.indexOf(procedure)}
                         onDelete={removeProcedure}
+                        isEven={index % 2 === 0}
                       />
                     ))}
                 </SortableContext>

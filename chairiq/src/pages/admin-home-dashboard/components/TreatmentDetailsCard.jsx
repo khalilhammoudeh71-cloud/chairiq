@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Clock, Send, Edit, Trash2 } from 'lucide-react';
+import { CheckCircle, Clock, Send, Edit, Trash2, ClipboardList } from 'lucide-react';
 import { patientSearchService } from '../../../services/patientSearchService';
 import { patientPlanService } from '../../../services/patientPlanService';
 import Card from '../../../components/ui/Card';
@@ -153,8 +153,10 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
     return (
       <Card>
         <h2 className="text-2xl font-bold text-t1 mb-6">Treatment Details</h2>
-        <div className="text-center py-8 text-t2">
-          <p>Select a patient to view treatment details</p>
+        <div className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-bd rounded-xl bg-bg1/50">
+          <ClipboardList className="w-10 h-10 text-t3 mb-3" />
+          <p className="text-t2 text-sm font-medium">Select a patient to view their treatment details</p>
+          <p className="text-t3 text-xs mt-1">Use the search above to find a patient</p>
         </div>
       </Card>
     );
@@ -279,8 +281,10 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
             </div>
           </div>
         ) : (
-          <div className="text-center py-8 text-t2">
-            <p>No treatment plans found for this patient</p>
+          <div className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-bd rounded-xl bg-bg1/50">
+            <ClipboardList className="w-10 h-10 text-t3 mb-3" />
+            <p className="text-t2 text-sm font-medium">No treatment plans found for this patient</p>
+            <p className="text-t3 text-xs mt-1">Create a new plan to get started</p>
           </div>
         )}
       </Card>

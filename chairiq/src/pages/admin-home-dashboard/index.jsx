@@ -115,54 +115,85 @@ export default function AdminHomeDashboard() {
             <p className="text-t2 text-lg">{getCurrentDate()}</p>
           </div>
 
-          {/* KPI Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatCard
-              title="Active Patients"
-              value={stats?.totalPatients}
-              icon={Users}
-            />
-            <StatCard
-              title="Plans This Month"
-              value={stats?.monthlyPlans}
-              icon={FileText}
-            />
-            <StatCard
-              title="Completion Rate"
-              value={stats?.completionRate}
-              suffix="%"
-              icon={TrendingUp}
-            />
-            <StatCard
-              title="Avg. Engagement"
-              value={stats?.avgEngagementMinutes}
-              suffix="min"
-              icon={Clock}
-            />
-          </div>
+          <div className="space-y-10">
+            <section>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 rounded-full bg-accent" />
+                <h2 className="text-xl font-bold text-t1 tracking-tight">Key Metrics</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard
+                  title="Active Patients"
+                  value={stats?.totalPatients}
+                  icon={Users}
+                  accentColor="blue"
+                />
+                <StatCard
+                  title="Plans This Month"
+                  value={stats?.monthlyPlans}
+                  icon={FileText}
+                  accentColor="green"
+                />
+                <StatCard
+                  title="Completion Rate"
+                  value={stats?.completionRate}
+                  suffix="%"
+                  icon={TrendingUp}
+                  accentColor="amber"
+                />
+                <StatCard
+                  title="Avg. Engagement"
+                  value={stats?.avgEngagementMinutes}
+                  suffix="min"
+                  icon={Clock}
+                  accentColor="accent"
+                />
+              </div>
+            </section>
 
-          {/* Patient Search and Treatment Details Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <PatientSearchCard onPatientSelect={handlePatientSelect} />
-            <TreatmentDetailsCard 
-              selectedPatient={selectedPatient} 
-              onPatientDeleted={handlePatientDeleted}
-            />
-          </div>
+            <section>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 rounded-full bg-accent" />
+                <h2 className="text-xl font-bold text-t1 tracking-tight">Patient Lookup</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <PatientSearchCard onPatientSelect={handlePatientSelect} />
+                <TreatmentDetailsCard 
+                  selectedPatient={selectedPatient} 
+                  onPatientDeleted={handlePatientDeleted}
+                />
+              </div>
+            </section>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <RecentPlansCard plans={recentPlans} onRefresh={fetchDashboardData} />
-            <PendingActionsCard actions={pendingActions} />
-          </div>
+            <section>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 rounded-full bg-accent" />
+                <h2 className="text-xl font-bold text-t1 tracking-tight">Plans & Actions</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <RecentPlansCard plans={recentPlans} onRefresh={fetchDashboardData} />
+                <PendingActionsCard actions={pendingActions} />
+              </div>
+            </section>
 
-          {/* System Tools */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <TestEmailCard />
-          </div>
+            <section>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 rounded-full bg-accent" />
+                <h2 className="text-xl font-bold text-t1 tracking-tight">System Tools</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <TestEmailCard />
+              </div>
+            </section>
 
-          {/* Shortcuts Section */}
-          <ShortcutsCard />
+            <section>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 rounded-full bg-accent" />
+                <h2 className="text-xl font-bold text-t1 tracking-tight">Quick Actions</h2>
+              </div>
+              <ShortcutsCard />
+            </section>
+          </div>
         </PageShell>
       </div>
     </>

@@ -411,7 +411,8 @@
 
   .input-field:focus {
     @apply border-accent outline-none;
-    box-shadow: var(--focus-ring);
+    border-width: 2px;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), var(--focus-ring);
   }
 
   /* ═══════════════════════════════

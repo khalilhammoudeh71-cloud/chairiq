@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Calendar, Eye, Edit, ListPlus, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
-import ButtonSecondary from '../../../components/ui/ButtonSecondary';
 import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
 import DeletePatientModal from './DeletePatientModal';
 import { patientSearchService } from '../../../services/patientSearchService';
@@ -107,39 +106,35 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
                     <span>{formatDate(plan?.createdAt)}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <ButtonSecondary
-                    size="sm"
+                <div className="flex items-center gap-3">
+                  <button
                     onClick={() => handleViewPlan(plan?.publicToken)}
                     title="View Plan"
-                    className="p-2"
+                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-accent/15 hover:text-accent transition-all duration-200"
                   >
                     <Eye size={18} />
-                  </ButtonSecondary>
-                  <ButtonSecondary
-                    size="sm"
+                  </button>
+                  <button
                     onClick={() => navigate('/dentist-admin-analytics-dashboard')}
                     title="View Analytics"
-                    className="p-2"
+                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-accent/15 hover:text-accent transition-all duration-200"
                   >
                     <Edit size={18} />
-                  </ButtonSecondary>
-                  <ButtonSecondary
-                    size="sm"
+                  </button>
+                  <button
                     onClick={() => handleModifyPlan(plan?.id)}
                     title="Modify Treatment Plan"
-                    className="p-2"
+                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-accent/15 hover:text-accent transition-all duration-200"
                   >
                     <ListPlus size={18} />
-                  </ButtonSecondary>
-                  <ButtonSecondary
-                    size="sm"
+                  </button>
+                  <button
                     onClick={() => handleDeleteClick(plan)}
                     title="Delete Patient Profile"
-                    className="p-2 hover:bg-danger/10 hover:text-danger"
+                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-danger/15 hover:text-danger transition-all duration-200"
                   >
                     <Trash2 size={18} />
-                  </ButtonSecondary>
+                  </button>
                 </div>
               </div>
             </Card>

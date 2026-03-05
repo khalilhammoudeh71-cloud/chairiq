@@ -47,7 +47,21 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Client configured in `chairiq/src/services/openaiClient.js`
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
-## Recent Changes (2026-03-05) — Patient Landing Page Redesign
+## Recent Changes (2026-03-05) — UI Polish Across All Pages
+- **Navigation Bar**: "IQ" in logo highlighted with accent color; active tab gets 2px bottom accent line; inactive tabs get hover:font-medium; separator between nav links and theme toggle
+- **Dashboard Stat Cards**: Colored left borders (blue/green/amber/accent per metric); larger stat values (text-5xl); circular icon containers with contextual colors; hover elevation
+- **Dashboard Empty States**: Patient search and treatment details show centered Lucide icons + guiding text in dashed-border containers; loading/error states for search
+- **Dashboard Recent Plans**: Icon-only action buttons now 36x36 rounded-full with hover backgrounds; increased gap for touch targets; tooltips on all buttons
+- **Dashboard Spacing**: Section titles with accent-colored left bars; increased vertical separation via space-y-10; semantic section elements
+- **Create Plan Form**: Lucide icons next to form labels (User, Phone, Mail, Globe); accent left-bar section headers; improved input focus states with accent border + ring; increased field spacing
+- **Create Plan Header**: 3-step progress indicator (Patient Info → Procedures → Review & Send) with completed/active/future states and connecting lines
+- **Procedure Table**: Alternating row shading; improved priority badge padding; enhanced empty state with icon + helpful subtitle
+- **Analytics Dashboard**: Contextual stat card icons (Users, FileText, BarChart3, TrendingUp) replacing AlertTriangle; accent-bar section headers; chart container padding/borders; empty state illustrations
+- **Card Component**: New `accentColor` prop for left border; `hover` and `padding` props properly destructured (fixes React DOM warning); dark mode shadow; consistent rounded-xl
+- **Patient Search Fix**: onChange now calls handleSearch (was only setting state without API call); result clicks use handlePatientClick; loading/error states rendered
+- Patient landing page: step images shown by default (no toggle); body text white + smaller; headers/step titles yellow (#F5C542) + larger
+
+## Previous Changes (2026-03-05) — Patient Landing Page Redesign
 - Redesigned treatment-plan-landing procedures section from accordion cards to list + detail panel layout
   - Patient name greeting ("Hi, [Name]") shown at the top of the page content
   - Compact inline "At a glance" summary — procedure count + visit estimate in a single row with divider

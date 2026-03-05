@@ -7,7 +7,8 @@ export default function ProcedureTableRow({
   procedure, 
   index, 
   onDelete,
-  isDragging = false 
+  isDragging = false,
+  isEven = false 
 }) {
   const {
     attributes,
@@ -48,7 +49,7 @@ export default function ProcedureTableRow({
       <tr 
         ref={setNodeRef} 
         style={style}
-        className="hidden md:table-row hover:bg-bg2 transition-colors border-b border-bd"
+        className={`hidden md:table-row hover:bg-bg2 transition-colors border-b border-bd ${isEven ? 'bg-bg2/50' : 'bg-bg1'}`}
       >
         {/* Drag Handle */}
         <td className="px-4 py-4">
@@ -63,7 +64,7 @@ export default function ProcedureTableRow({
 
         {/* Priority */}
         <td className="px-4 py-4">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getPriorityColor(procedure?.priority)}`}>
+          <span className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold border tracking-wide ${getPriorityColor(procedure?.priority)}`}>
             {procedure?.priority || 'Soon'}
           </span>
         </td>
@@ -129,7 +130,7 @@ export default function ProcedureTableRow({
           >
             <GripVertical size={20} />
           </button>
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getPriorityColor(procedure?.priority)}`}>
+          <span className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold border tracking-wide ${getPriorityColor(procedure?.priority)}`}>
             {procedure?.priority || 'Soon'}
           </span>
           <div className="flex-1" />

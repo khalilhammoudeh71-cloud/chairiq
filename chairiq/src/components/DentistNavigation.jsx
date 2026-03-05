@@ -42,7 +42,7 @@ export default function DentistNavigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-t1 tracking-wide">ChairIQ</h1>
+            <h1 className="text-2xl font-bold tracking-wide"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></h1>
           </div>
 
           {/* Desktop Navigation */}
@@ -51,21 +51,27 @@ export default function DentistNavigation() {
               <button
                 key={item?.path}
                 onClick={() => navigate(item?.path)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+                className={`relative flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                   isActivePath(item?.path)
-                    ? 'bg-accent text-t1 font-medium' :'text-t2 hover:bg-bg1 hover:text-t1'
+                    ? 'bg-accent text-t1 font-medium'
+                    : 'text-t2 hover:bg-bg1 hover:text-t1 hover:font-medium'
                 }`}
               >
                 <item.icon size={20} />
                 {item?.name}
+                {isActivePath(item?.path) && (
+                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full" />
+                )}
               </button>
             ))}
             
             {/* Theme Toggle */}
-            <ThemeToggle />
+            <div className="ml-2 pl-4 border-l border-bd">
+              <ThemeToggle />
+            </div>
             
             {/* User Info & Logout */}
-            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-bd">
+            <div className="flex items-center gap-4 ml-2 pl-4 border-l border-bd">
               {user?.email && (
                 <span className="text-t3 text-sm hidden lg:block">
                   {user?.email}
@@ -100,11 +106,15 @@ export default function DentistNavigation() {
                   navigate(item?.path);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center gap-2 px-4 py-3 rounded-lg ${
+                className={`relative w-full flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActivePath(item?.path)
-                    ? 'bg-accent text-t1 font-medium' :'text-t2 hover:bg-bg1 hover:text-t1'
+                    ? 'bg-accent text-t1 font-medium'
+                    : 'text-t2 hover:bg-bg1 hover:text-t1 hover:font-medium'
                 }`}
               >
+                {isActivePath(item?.path) && (
+                  <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-accent rounded-full" />
+                )}
                 <item.icon size={20} />
                 {item?.name}
               </button>
