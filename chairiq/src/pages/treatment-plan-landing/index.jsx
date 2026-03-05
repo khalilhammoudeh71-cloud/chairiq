@@ -27,10 +27,14 @@ const procedureIconMap = {
   'whitening': 'Sun',
   'cleaning': 'Sparkles',
   'sealant': 'Shield',
+  'dental-sealant': 'Shield',
   'exam': 'Search',
   'x-ray': 'Scan',
   'scaling': 'Layers',
+  'scaling-root-planing': 'Layers',
+  'srp': 'Layers',
   'gum-treatment': 'Heart',
+  'gum-graft': 'Heart',
   'orthodontics': 'AlignCenter',
   'braces': 'AlignCenter',
   'retainer': 'Lock',
@@ -40,6 +44,10 @@ const procedureIconMap = {
   'periodontal': 'Activity',
   'deep-cleaning': 'Filter',
   'fluoride': 'Droplet',
+  'fluoride-treatment': 'Droplet',
+  'sedation': 'Syringe',
+  'inlay-onlay': 'Layers',
+  'core-buildup': 'Building2',
 };
 
 const getProcedureIcon = (procedure) => {
@@ -61,11 +69,16 @@ const getProcedureIcon = (procedure) => {
   if (name.includes('exam') || name.includes('evaluation') || name.includes('oral')) return 'Search';
   if (name.includes('x-ray') || name.includes('radiograph') || name.includes('panoramic')) return 'Scan';
   if (name.includes('scaling') || name.includes('root planing')) return 'Layers';
+  if (name.includes('gum graft') || name.includes('soft tissue graft') || name.includes('connective tissue')) return 'Heart';
   if (name.includes('gum') || name.includes('gingiv') || name.includes('periodontal')) return 'Activity';
-  if (name.includes('orthodon') || name.includes('brace') || name.includes('align')) return 'AlignCenter';
+  if (name.includes('orthodon') || name.includes('brace') || name.includes('align') || name.includes('retainer')) return 'AlignCenter';
   if (name.includes('fluoride')) return 'Droplet';
-  if (name.includes('guard') || name.includes('splint')) return 'Moon';
-  if (name.includes('bone') || name.includes('graft')) return 'Mountain';
+  if (name.includes('guard') || name.includes('splint') || name.includes('occlusal')) return 'Moon';
+  if (name.includes('sinus') || name.includes('sinus lift')) return 'ArrowUp';
+  if (name.includes('bone') || name.includes('graft') || name.includes('osseous')) return 'Mountain';
+  if (name.includes('inlay') || name.includes('onlay')) return 'Layers';
+  if (name.includes('buildup') || name.includes('build-up') || name.includes('core')) return 'Building2';
+  if (name.includes('sedation') || name.includes('anesthesia') || name.includes('nitrous')) return 'Syringe';
   return 'Stethoscope';
 };
 
