@@ -229,7 +229,65 @@ export const adaCodes = [
   { code: 'D9972', description: 'External bleaching - per arch - in office', category: 'Adjunctive' },
   { code: 'D9973', description: 'External bleaching - per arch - home application', category: 'Adjunctive' },
   { code: 'D9974', description: 'Internal bleaching - per tooth', category: 'Adjunctive' },
-  { code: 'D9975', description: 'External bleaching for home application - includes trays', category: 'Adjunctive' }
+  { code: 'D9975', description: 'External bleaching for home application - includes trays', category: 'Adjunctive' },
+
+  { code: 'D3220', description: 'Therapeutic pulpotomy', category: 'Endodontics' },
+  { code: 'D3221', description: 'Pulpal debridement, primary and permanent teeth', category: 'Endodontics' },
+  { code: 'D3222', description: 'Partial pulpotomy for apexogenesis', category: 'Endodontics' },
+
+  { code: 'D3410', description: 'Apicoectomy - anterior', category: 'Endodontics' },
+  { code: 'D3421', description: 'Apicoectomy - premolar (first root)', category: 'Endodontics' },
+  { code: 'D3425', description: 'Apicoectomy - molar (first root)', category: 'Endodontics' },
+  { code: 'D3426', description: 'Apicoectomy (each additional root)', category: 'Endodontics' },
+  { code: 'D3427', description: 'Periradicular surgery without apicoectomy', category: 'Endodontics' },
+  { code: 'D3428', description: 'Bone graft in conjunction with periradicular surgery', category: 'Endodontics' },
+  { code: 'D3430', description: 'Retrograde filling - per root', category: 'Endodontics' },
+  { code: 'D3450', description: 'Root amputation - per root', category: 'Endodontics' },
+  { code: 'D3470', description: 'Intentional reimplantation', category: 'Endodontics' },
+  { code: 'D3471', description: 'Surgical repair of root resorption - anterior', category: 'Endodontics' },
+  { code: 'D3472', description: 'Surgical repair of root resorption - premolar', category: 'Endodontics' },
+  { code: 'D3473', description: 'Surgical repair of root resorption - molar', category: 'Endodontics' },
+
+  { code: 'D7961', description: 'Buccal / labial frenectomy', category: 'Oral Surgery' },
+  { code: 'D7962', description: 'Lingual frenectomy', category: 'Oral Surgery' },
+  { code: 'D7963', description: 'Frenuloplasty', category: 'Oral Surgery' },
+
+  { code: 'D4249', description: 'Clinical crown lengthening - hard tissue', category: 'Periodontics' },
+
+  { code: 'D1510', description: 'Space maintainer - fixed, unilateral', category: 'Preventive' },
+  { code: 'D1515', description: 'Space maintainer - fixed, bilateral (maxillary)', category: 'Preventive' },
+  { code: 'D1520', description: 'Space maintainer - removable, unilateral', category: 'Preventive' },
+  { code: 'D1525', description: 'Space maintainer - removable, bilateral (maxillary)', category: 'Preventive' },
+  { code: 'D1550', description: 'Re-cement or re-bond bilateral space maintainer', category: 'Preventive' },
+  { code: 'D1555', description: 'Removal of fixed unilateral space maintainer', category: 'Preventive' },
+  { code: 'D1575', description: 'Distal shoe space maintainer - fixed, unilateral', category: 'Preventive' },
+
+  { code: 'D7810', description: 'Open reduction of dislocation', category: 'TMJ' },
+  { code: 'D7820', description: 'Closed reduction of dislocation', category: 'TMJ' },
+  { code: 'D7830', description: 'Manipulation under anesthesia', category: 'TMJ' },
+  { code: 'D7840', description: 'Condylectomy', category: 'TMJ' },
+  { code: 'D7850', description: 'Surgical discectomy, with/without implant', category: 'TMJ' },
+  { code: 'D7852', description: 'Disc repair', category: 'TMJ' },
+  { code: 'D7854', description: 'Synovectomy', category: 'TMJ' },
+  { code: 'D7856', description: 'Myotomy', category: 'TMJ' },
+  { code: 'D7858', description: 'Joint reconstruction', category: 'TMJ' },
+  { code: 'D7860', description: 'Arthrotomy', category: 'TMJ' },
+  { code: 'D7865', description: 'Arthroplasty', category: 'TMJ' },
+  { code: 'D7870', description: 'Arthrocentesis', category: 'TMJ' },
+  { code: 'D7872', description: 'Arthroscopy - no surgical intervention', category: 'TMJ' },
+  { code: 'D7873', description: 'Arthroscopy - surgical: lavage and lysis of adhesions', category: 'TMJ' },
+  { code: 'D7874', description: 'Arthroscopy - surgical: disc repositioning', category: 'TMJ' },
+  { code: 'D7875', description: 'Arthroscopy - surgical: synovectomy', category: 'TMJ' },
+  { code: 'D7876', description: 'Arthroscopy - surgical: discectomy', category: 'TMJ' },
+  { code: 'D7877', description: 'Arthroscopy - surgical: debridement', category: 'TMJ' },
+  { code: 'D7880', description: 'Occlusal orthotic device, by report', category: 'TMJ' },
+
+  { code: 'D9947', description: 'Custom sleep apnea appliance fabrication and delivery', category: 'Adjunctive' },
+  { code: 'D9948', description: 'Adjustment of sleep apnea appliance', category: 'Adjunctive' },
+  { code: 'D9949', description: 'Repair of sleep apnea appliance', category: 'Adjunctive' },
+
+  { code: 'D9110', description: 'Palliative (emergency) treatment of dental pain', category: 'Adjunctive' },
+  { code: 'D9120', description: 'Fixed partial denture sectioning', category: 'Adjunctive' }
 ];
 
 export const procedureNames = [
@@ -255,7 +313,15 @@ export const procedureNames = [
   { name: 'Surgical Extraction', hasEducationalPage: true, route: '/individual-procedure-detail/extraction' },
   { name: 'Denture', hasEducationalPage: true, route: '/individual-procedure-detail/denture' },
   { name: 'Dental Exam', hasEducationalPage: true, route: '/individual-procedure-detail/exam' },
-  { name: 'Pulpotomy + SSC', hasEducationalPage: false },
+  { name: 'Pulpotomy', hasEducationalPage: true, route: '/individual-procedure-detail/pulpotomy' },
+  { name: 'Pulpotomy + SSC', hasEducationalPage: true, route: '/individual-procedure-detail/pulpotomy' },
+  { name: 'Apicoectomy', hasEducationalPage: true, route: '/individual-procedure-detail/apicoectomy' },
+  { name: 'Frenectomy', hasEducationalPage: true, route: '/individual-procedure-detail/frenectomy' },
+  { name: 'Crown Lengthening', hasEducationalPage: true, route: '/individual-procedure-detail/crown-lengthening' },
+  { name: 'Space Maintainer', hasEducationalPage: true, route: '/individual-procedure-detail/space-maintainer' },
+  { name: 'TMJ Treatment', hasEducationalPage: true, route: '/individual-procedure-detail/tmj-treatment' },
+  { name: 'Sleep Apnea Appliance', hasEducationalPage: true, route: '/individual-procedure-detail/sleep-apnea-appliance' },
+  { name: 'Emergency / Palliative Care', hasEducationalPage: true, route: '/individual-procedure-detail/emergency-palliative' },
   { name: 'Invisalign', hasEducationalPage: true, route: '/individual-procedure-detail/orthodontics' },
   { name: 'Wisdom Teeth Extraction', hasEducationalPage: true, route: '/individual-procedure-detail/extraction' }
 ];

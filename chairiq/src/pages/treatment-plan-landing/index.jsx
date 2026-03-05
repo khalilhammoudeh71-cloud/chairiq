@@ -48,6 +48,14 @@ const procedureIconMap = {
   'sedation': 'Syringe',
   'inlay-onlay': 'Layers',
   'core-buildup': 'Building2',
+  'pulpotomy': 'Zap',
+  'apicoectomy': 'Zap',
+  'frenectomy': 'Scissors',
+  'crown-lengthening': 'TrendingUp',
+  'space-maintainer': 'Maximize2',
+  'tmj-treatment': 'Activity',
+  'sleep-apnea-appliance': 'Moon',
+  'emergency-palliative': 'AlertCircle',
 };
 
 const getProcedureIcon = (procedure) => {
@@ -79,6 +87,14 @@ const getProcedureIcon = (procedure) => {
   if (name.includes('inlay') || name.includes('onlay')) return 'Layers';
   if (name.includes('buildup') || name.includes('build-up') || name.includes('core')) return 'Building2';
   if (name.includes('sedation') || name.includes('anesthesia') || name.includes('nitrous')) return 'Syringe';
+  if (name.includes('pulpotomy')) return 'Zap';
+  if (name.includes('apicoectomy')) return 'Zap';
+  if (name.includes('frenectomy') || name.includes('frenum')) return 'Scissors';
+  if (name.includes('crown lengthening')) return 'TrendingUp';
+  if (name.includes('space maintainer')) return 'Maximize2';
+  if (name.includes('tmj') || name.includes('temporomandibular')) return 'Activity';
+  if (name.includes('sleep apnea')) return 'Moon';
+  if (name.includes('palliative') || name.includes('emergency')) return 'AlertCircle';
   return 'Stethoscope';
 };
 

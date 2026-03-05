@@ -41,7 +41,23 @@ export const ADA_CODE_FAMILIES = {
   
   'core-buildup': ['D2950', 'D2951', 'D2952', 'D2953', 'D2954'],
   
-  'gum-graft': ['D4265', 'D4266', 'D4267', 'D4270', 'D4271', 'D4273', 'D4274', 'D4275', 'D4276', 'D4277', 'D4278']
+  'gum-graft': ['D4265', 'D4266', 'D4267', 'D4270', 'D4271', 'D4273', 'D4274', 'D4275', 'D4276', 'D4277', 'D4278'],
+
+  pulpotomy: ['D3220', 'D3221', 'D3222'],
+
+  apicoectomy: ['D3410', 'D3421', 'D3425', 'D3426', 'D3427', 'D3428', 'D3430', 'D3450', 'D3470', 'D3471', 'D3472', 'D3473'],
+
+  frenectomy: ['D7961', 'D7962', 'D7963'],
+
+  'crown-lengthening': ['D4249'],
+
+  'space-maintainer': ['D1510', 'D1515', 'D1520', 'D1525', 'D1550', 'D1555', 'D1575'],
+
+  'tmj-treatment': ['D7810', 'D7820', 'D7830', 'D7840', 'D7850', 'D7852', 'D7854', 'D7856', 'D7858', 'D7860', 'D7865', 'D7870', 'D7872', 'D7873', 'D7874', 'D7875', 'D7876', 'D7877', 'D7880'],
+
+  'sleep-apnea-appliance': ['D9947', 'D9948', 'D9949'],
+
+  'emergency-palliative': ['D9110', 'D9120']
 };
 
 const PROCEDURE_NAME_MAPPING = {
@@ -175,7 +191,56 @@ const PROCEDURE_NAME_MAPPING = {
   'conscious sedation': 'sedation',
   'general anesthesia': 'sedation',
   'local anesthesia': 'sedation',
-  'iv sedation': 'sedation'
+  'iv sedation': 'sedation',
+
+  'pulpotomy': 'pulpotomy',
+  'pulpotomy + ssc': 'pulpotomy',
+  'therapeutic pulpotomy': 'pulpotomy',
+  'pulpal debridement': 'pulpotomy',
+
+  'apicoectomy': 'apicoectomy',
+  'apico': 'apicoectomy',
+  'root end surgery': 'apicoectomy',
+  'periradicular surgery': 'apicoectomy',
+  'root amputation': 'apicoectomy',
+  'retrograde filling': 'apicoectomy',
+
+  'frenectomy': 'frenectomy',
+  'frenulectomy': 'frenectomy',
+  'frenuloplasty': 'frenectomy',
+  'frenum': 'frenectomy',
+  'tongue tie': 'frenectomy',
+  'lip tie': 'frenectomy',
+  'labial frenectomy': 'frenectomy',
+  'lingual frenectomy': 'frenectomy',
+
+  'crown lengthening': 'crown-lengthening',
+  'crown lengthen': 'crown-lengthening',
+  'clinical crown lengthening': 'crown-lengthening',
+
+  'space maintainer': 'space-maintainer',
+  'space maintenance': 'space-maintainer',
+  'distal shoe': 'space-maintainer',
+
+  'tmj': 'tmj-treatment',
+  'tmj treatment': 'tmj-treatment',
+  'temporomandibular': 'tmj-treatment',
+  'jaw joint': 'tmj-treatment',
+  'tmj disorder': 'tmj-treatment',
+  'tmd': 'tmj-treatment',
+
+  'sleep apnea appliance': 'sleep-apnea-appliance',
+  'sleep apnea': 'sleep-apnea-appliance',
+  'oral appliance therapy': 'sleep-apnea-appliance',
+  'mandibular advancement': 'sleep-apnea-appliance',
+  'snoring appliance': 'sleep-apnea-appliance',
+
+  'emergency': 'emergency-palliative',
+  'palliative': 'emergency-palliative',
+  'emergency treatment': 'emergency-palliative',
+  'palliative care': 'emergency-palliative',
+  'urgent dental care': 'emergency-palliative',
+  'dental emergency': 'emergency-palliative'
 };
 
 export const getCanonicalKeyFromAdaCode = (adaCode) => {
@@ -266,6 +331,14 @@ export const getDisplayNameForCanonicalKey = (canonicalKey, language = 'EN') => 
       'core-buildup': 'Core Buildup',
       'gum-graft': 'Gum Graft',
       sedation: 'Sedation / Anesthesia',
+      pulpotomy: 'Pulpotomy',
+      apicoectomy: 'Apicoectomy',
+      frenectomy: 'Frenectomy',
+      'crown-lengthening': 'Crown Lengthening',
+      'space-maintainer': 'Space Maintainer',
+      'tmj-treatment': 'TMJ Treatment',
+      'sleep-apnea-appliance': 'Sleep Apnea Appliance',
+      'emergency-palliative': 'Emergency / Palliative Care',
       unknown: 'Procedure'
     },
     ES: {
@@ -292,6 +365,14 @@ export const getDisplayNameForCanonicalKey = (canonicalKey, language = 'EN') => 
       'core-buildup': 'Reconstrucción de Muñón',
       'gum-graft': 'Injerto de Encía',
       sedation: 'Sedación / Anestesia',
+      pulpotomy: 'Pulpotomía',
+      apicoectomy: 'Apicoectomía',
+      frenectomy: 'Frenectomía',
+      'crown-lengthening': 'Alargamiento de Corona',
+      'space-maintainer': 'Mantenedor de Espacio',
+      'tmj-treatment': 'Tratamiento de ATM',
+      'sleep-apnea-appliance': 'Aparato para Apnea del Sueño',
+      'emergency-palliative': 'Atención de Emergencia / Paliativa',
       unknown: 'Procedimiento'
     }
   };

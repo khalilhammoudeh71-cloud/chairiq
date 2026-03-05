@@ -260,6 +260,64 @@ export const adaToCanonicalMapping = {
   'D9242': 'sedation',
   'D9243': 'sedation',
   'D9248': 'sedation',
+
+  'D3220': 'pulpotomy',
+  'D3221': 'pulpotomy',
+  'D3222': 'pulpotomy',
+
+  'D3410': 'apicoectomy',
+  'D3421': 'apicoectomy',
+  'D3425': 'apicoectomy',
+  'D3426': 'apicoectomy',
+  'D3427': 'apicoectomy',
+  'D3428': 'apicoectomy',
+  'D3430': 'apicoectomy',
+  'D3450': 'apicoectomy',
+  'D3470': 'apicoectomy',
+  'D3471': 'apicoectomy',
+  'D3472': 'apicoectomy',
+  'D3473': 'apicoectomy',
+
+  'D7961': 'frenectomy',
+  'D7962': 'frenectomy',
+  'D7963': 'frenectomy',
+
+  'D4249': 'crown-lengthening',
+
+  'D1510': 'space-maintainer',
+  'D1515': 'space-maintainer',
+  'D1520': 'space-maintainer',
+  'D1525': 'space-maintainer',
+  'D1550': 'space-maintainer',
+  'D1555': 'space-maintainer',
+  'D1575': 'space-maintainer',
+
+  'D7810': 'tmj-treatment',
+  'D7820': 'tmj-treatment',
+  'D7830': 'tmj-treatment',
+  'D7840': 'tmj-treatment',
+  'D7850': 'tmj-treatment',
+  'D7852': 'tmj-treatment',
+  'D7854': 'tmj-treatment',
+  'D7856': 'tmj-treatment',
+  'D7858': 'tmj-treatment',
+  'D7860': 'tmj-treatment',
+  'D7865': 'tmj-treatment',
+  'D7870': 'tmj-treatment',
+  'D7872': 'tmj-treatment',
+  'D7873': 'tmj-treatment',
+  'D7874': 'tmj-treatment',
+  'D7875': 'tmj-treatment',
+  'D7876': 'tmj-treatment',
+  'D7877': 'tmj-treatment',
+  'D7880': 'tmj-treatment',
+
+  'D9947': 'sleep-apnea-appliance',
+  'D9948': 'sleep-apnea-appliance',
+  'D9949': 'sleep-apnea-appliance',
+
+  'D9110': 'emergency-palliative',
+  'D9120': 'emergency-palliative',
 };
 
 export const getCanonicalSlugFromAdaCode = (adaCode) => {
@@ -307,6 +365,14 @@ export const getDisplayNameForCanonicalSlug = (canonicalSlug) => {
     'core-buildup': 'Core Buildup',
     'gum-graft': 'Gum Graft / Soft Tissue Graft',
     'sedation': 'Sedation / Anesthesia',
+    'pulpotomy': 'Pulpotomy',
+    'apicoectomy': 'Apicoectomy',
+    'frenectomy': 'Frenectomy',
+    'crown-lengthening': 'Crown Lengthening',
+    'space-maintainer': 'Space Maintainer',
+    'tmj-treatment': 'TMJ Treatment',
+    'sleep-apnea-appliance': 'Sleep Apnea Appliance',
+    'emergency-palliative': 'Emergency / Palliative Care',
   };
   
   return displayNames?.[canonicalSlug] || canonicalSlug;
