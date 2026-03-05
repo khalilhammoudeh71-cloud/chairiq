@@ -871,6 +871,7 @@ const TreatmentPlanLanding = () => {
                       </div>
                     );
                   })}
+                </div>
               </>
             ) : (
               <div 
