@@ -47,6 +47,17 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 - Client configured in `chairiq/src/services/openaiClient.js`
 - Used by: dentalChatService, ttsService, aiContentGenerationService, procedureEducationGeneratorService, visualDescriptionService, aiPersonalizationService, procedureAnalysisService, learningJourneySummaryService
 
+## Recent Changes (2026-03-05) — Patient Landing Page Redesign
+- Redesigned treatment-plan-landing procedures section from accordion cards to list + detail panel layout
+  - Clickable numbered treatment list at top — each procedure is a row with number badge, title, ADA code, tooth numbers
+  - Selected procedure highlights in blue; clicking toggles detail panel below the entire list
+  - Detail panel starts with full-width hero image, then title, summary, steps, and full details toggle
+  - Steps section redesigned: each step is a clickable CTA button with eye icon
+  - Tapping a step reveals/hides the associated step image inline below the button
+  - State resets (activeStepImage, showFullDetails) when switching between procedures
+  - All existing content preserved: summary, why, steps, aftercare, whatIfNot, FAQs, time/visits estimates
+  - Debug panel preserved behind ?debug=1 query parameter
+
 ## Recent Changes (2026-03-04) — Email Delivery
 - Added Express backend server (chairiq/server/index.js) with Vite middleware mode
   - Express handles API routes, Vite handles frontend in middleware mode
