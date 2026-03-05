@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import LanguageToggle from '../../components/ui/LanguageToggle';
@@ -7,6 +7,13 @@ import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
 import { patientPlanService } from '../../services/patientPlanService';
 import { useAuth } from '../../contexts/AuthContext';
+
+const heroSlides = [
+  '/assets/images/hero-slide-1.png',
+  '/assets/images/hero-slide-2.png',
+  '/assets/images/hero-slide-3.png',
+  '/assets/images/hero-slide-4.png',
+];
 
 const TreatmentPlanLanding = () => {
   const [searchParams] = useSearchParams();
@@ -21,6 +28,7 @@ const TreatmentPlanLanding = () => {
   const [resending, setResending] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
   const [resendError, setResendError] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   // Debug mode - controlled by URL parameter
   const debugMode = searchParams?.get('debug') === '1';
@@ -68,6 +76,13 @@ const TreatmentPlanLanding = () => {
 
     fetchPlanData();
   }, [publicToken]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleResendLink = async () => {
     if (!publicToken || !user) return;
@@ -241,12 +256,55 @@ const TreatmentPlanLanding = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </Helmet>
       <div className="min-h-screen bg-bg0">
-        <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16 py-16 md:py-24">
-          
-          {/* Language Toggle */}
-          <div className="flex justify-end items-center mb-16">
+        {/* Hero Slideshow */}
+        <div className="relative w-full overflow-hidden" style={{ height: 'clamp(360px, 56vw, 560px)' }}>
+          {heroSlides.map((src, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+              style={{ opacity: currentSlide === i ? 1 : 0 }}
+            >
+              <img
+                src={src}
+                alt=""
+                className="w-full h-full object-cover"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
+          ))}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%)' }} />
+          <div className="absolute top-4 right-4 z-10">
             <LanguageToggle />
           </div>
+          <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 lg:p-16 z-10">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl mb-4 text-white font-bold leading-tight tracking-tight drop-shadow-lg">
+              {text?.title}
+            </h1>
+            <p className="mb-3 text-white/90 text-lg sm:text-2xl font-light leading-relaxed drop-shadow">
+              {text?.subtitle}
+            </p>
+            <p className="text-white/75 text-base sm:text-lg font-light leading-relaxed max-w-2xl drop-shadow">
+              {text?.reassurance}
+            </p>
+          </div>
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {heroSlides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentSlide(i)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: currentSlide === i ? 24 : 8,
+                  height: 8,
+                  backgroundColor: currentSlide === i ? '#ffffff' : 'rgba(255,255,255,0.45)',
+                }}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16 py-16 md:py-24">
 
           {/* Resend Success Message */}
           {resendSuccess && (
@@ -304,25 +362,6 @@ const TreatmentPlanLanding = () => {
               </div>
             </div>
           )}
-
-          {/* HEADER */}
-          <header className="mb-32">
-            <h1 
-              className="text-5xl sm:text-6xl lg:text-7xl mb-8 text-t1 font-bold leading-tight tracking-tight"
-            >
-              {text?.title}
-            </h1>
-            <p 
-              className="mb-6 text-t3 text-2xl sm:text-3xl font-light leading-relaxed"
-            >
-              {text?.subtitle}
-            </p>
-            <p 
-              className="text-t3 text-xl sm:text-2xl font-light leading-[1.7]"
-            >
-              {text?.reassurance}
-            </p>
-          </header>
 
           {/* OVERVIEW SUMMARY CARD */}
           <section className="mb-40">
