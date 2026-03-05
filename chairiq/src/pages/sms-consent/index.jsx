@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { Shield } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function SmsConsent() {
   return (
@@ -11,18 +11,18 @@ export default function SmsConsent() {
         <meta name="description" content="ChairIQ SMS Consent & Communication Policy - Learn about SMS messaging from your dental provider." />
       </Helmet>
 
-      <header className="bg-bg0 border-b border-bd sticky top-0 z-40">
+      <header className="bg-bg0 border-b-2 border-accent/20 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-                <Shield className="w-6 h-6 text-white" />
+                <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <span className="text-2xl font-bold text-t1">ChairIQ</span>
             </Link>
             <Link
               to="/"
-              className="px-4 py-2 text-sm font-medium text-accent hover:text-accent-hover"
+              className="px-4 py-2 text-sm font-medium text-accent hover:text-accent2 transition-colors"
             >
               Back to Home
             </Link>

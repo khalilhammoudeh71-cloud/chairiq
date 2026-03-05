@@ -186,50 +186,84 @@ export default function PatientPlanView() {
 
   if (linkStatus === 'invalid') {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="rounded-2xl p-8 max-w-md text-center"
-          style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)' }}
-        >
-          <ShieldX className="mx-auto mb-4" size={48} style={{ color: '#fca5a5' }} />
-          <h2 className="text-2xl font-medium mb-3" style={{ color: '#fca5a5', fontWeight: 500 }}>Link Invalid</h2>
-          <p style={{ color: '#b0b3ba' }}>This treatment plan link is not valid. Please contact your dental provider for a new link.</p>
-        </motion.div>
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+        <div className="max-w-md w-full text-center">
+          <div className="flex items-center justify-center gap-2.5 mb-10">
+            <ShieldX size={28} style={{ color: '#6B8AEE' }} />
+            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+          </div>
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="rounded-2xl p-8 mb-8"
+            style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', backdropFilter: 'blur(12px)' }}
+          >
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
+              <ShieldX size={32} style={{ color: '#fca5a5' }} />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-3" style={{ color: '#e8e9ed' }}>Link Invalid</h2>
+            <p className="text-base leading-relaxed mb-6" style={{ color: '#9ca3af' }}>This treatment plan link is not valid. Please contact your dental provider for a new link.</p>
+            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+            <p className="text-sm" style={{ color: '#6b7280' }}>Contact your dental office for assistance</p>
+          </motion.div>
+          <p className="text-xs" style={{ color: '#4b5563' }}>Powered by ChairIQ</p>
+        </div>
       </div>
     );
   }
 
   if (linkStatus === 'expired') {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="rounded-2xl p-8 max-w-md text-center"
-          style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.25)' }}
-        >
-          <TimerOff className="mx-auto mb-4" size={48} style={{ color: '#fbbf24' }} />
-          <h2 className="text-2xl font-medium mb-3" style={{ color: '#fbbf24', fontWeight: 500 }}>Link Expired</h2>
-          <p style={{ color: '#b0b3ba' }}>This treatment plan link has expired. Please contact your dental provider to request a new link.</p>
-        </motion.div>
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+        <div className="max-w-md w-full text-center">
+          <div className="flex items-center justify-center gap-2.5 mb-10">
+            <TimerOff size={28} style={{ color: '#6B8AEE' }} />
+            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+          </div>
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="rounded-2xl p-8 mb-8"
+            style={{ backgroundColor: 'rgba(251, 191, 36, 0.06)', border: '1px solid rgba(251, 191, 36, 0.15)', backdropFilter: 'blur(12px)' }}
+          >
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)' }}>
+              <TimerOff size={32} style={{ color: '#fbbf24' }} />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-3" style={{ color: '#e8e9ed' }}>Link Expired</h2>
+            <p className="text-base leading-relaxed mb-6" style={{ color: '#9ca3af' }}>This treatment plan link has expired. Please contact your dental provider to request a new link.</p>
+            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+            <p className="text-sm" style={{ color: '#6b7280' }}>Contact your dental office for assistance</p>
+          </motion.div>
+          <p className="text-xs" style={{ color: '#4b5563' }}>Powered by ChairIQ</p>
+        </div>
       </div>
     );
   }
 
   if (error || !planData) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-bg0">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="rounded-2xl p-8 max-w-md" 
-          style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)' }}
-        >
-          <h2 className="text-2xl font-medium mb-4" style={{ color: '#fca5a5', fontWeight: 500 }}>Plan Not Found</h2>
-          <p style={{ color: '#b0b3ba' }}>{error || 'The treatment plan you are looking for does not exist.'}</p>
-        </motion.div>
+      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+        <div className="max-w-md w-full text-center">
+          <div className="flex items-center justify-center gap-2.5 mb-10">
+            <AlertCircle size={28} style={{ color: '#6B8AEE' }} />
+            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+          </div>
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="rounded-2xl p-8 mb-8"
+            style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', backdropFilter: 'blur(12px)' }}
+          >
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
+              <AlertCircle size={32} style={{ color: '#fca5a5' }} />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-3" style={{ color: '#e8e9ed' }}>Plan Not Found</h2>
+            <p className="text-base leading-relaxed mb-6" style={{ color: '#9ca3af' }}>{error || 'The treatment plan you are looking for does not exist.'}</p>
+            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+            <p className="text-sm" style={{ color: '#6b7280' }}>Contact your dental office for assistance</p>
+          </motion.div>
+          <p className="text-xs" style={{ color: '#4b5563' }}>Powered by ChairIQ</p>
+        </div>
       </div>
     );
   }

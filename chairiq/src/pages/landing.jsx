@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, ArrowRight, Monitor, Link2, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Send, ArrowRight, Monitor, Link2, MessageSquare, ShieldCheck, ChevronDown } from 'lucide-react';
 import HeroAnimation from '../components/HeroAnimation';
+
+const FadeInSection = ({ children, className = '' }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('fade-in-visible');
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className={`fade-in-section ${className}`}>
+      {children}
+    </div>
+  );
+};
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -79,16 +105,21 @@ const Landing = () => {
               <button
                 onClick={() => navigate('/login')}
                 className="px-6 py-3 text-[13px] rounded-lg font-medium inline-flex items-center gap-2"
-                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.35)' }}>
+                style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.18)' }}>
                 Dentist Login
               </button>
             </div>
           </div>
         </div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 scroll-indicator">
+          <span className="text-[11px] font-medium tracking-wide uppercase" style={{ color: 'rgba(255,255,255,0.35)' }}>Learn more</span>
+          <ChevronDown className="w-4 h-4 animate-bounce motion-reduce:animate-none" style={{ color: 'rgba(255,255,255,0.35)' }} />
+        </div>
       </section>
 
       <section className="py-20 lg:py-24 bg-bg1">
         <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+          <FadeInSection>
           <div className="text-center mb-14">
             <h2 className="text-2xl sm:text-3xl font-bold text-t1 tracking-[-0.02em] leading-tight mb-3">
               Built for Dental Practices
@@ -97,9 +128,10 @@ const Landing = () => {
               Purpose-built tools for chair-side communication
             </p>
           </div>
+          </FadeInSection>
 
           <div className="grid sm:grid-cols-2 gap-x-12 gap-y-12 max-w-4xl mx-auto">
-            <div className="space-y-3">
+            <FadeInSection><div className="space-y-3">
               <div className="flex items-center gap-3 mb-1">
                 <Monitor className="w-5 h-5 text-accent flex-shrink-0" strokeWidth={1.8} />
                 <h3 className="text-base font-semibold text-t1">Visual Treatment Plans</h3>
@@ -107,19 +139,19 @@ const Landing = () => {
               <p className="text-t2 text-sm leading-relaxed">
                 Chair-side ready visuals with procedure images and step-by-step explanations patients can review during consultation.
               </p>
-            </div>
+            </div></FadeInSection>
 
-            <div className="space-y-3">
+            <FadeInSection><div className="space-y-3">
               <div className="flex items-center gap-3 mb-1">
                 <Send className="w-5 h-5 text-accent flex-shrink-0" strokeWidth={1.8} />
-                <h3 className="text-base font-semibold text-t1">SMS Delivery</h3>
+                <h3 className="text-base font-semibold text-t1">SMS &amp; Email Delivery</h3>
               </div>
               <p className="text-t2 text-sm leading-relaxed">
-                Send treatment plans directly to patients via text message. No app downloads, no logins — just instant access.
+                Send treatment plans directly to patients via text message or email. No app downloads, no logins — just instant access.
               </p>
-            </div>
+            </div></FadeInSection>
 
-            <div className="space-y-3">
+            <FadeInSection><div className="space-y-3">
               <div className="flex items-center gap-3 mb-1">
                 <Link2 className="w-5 h-5 text-accent flex-shrink-0" strokeWidth={1.8} />
                 <h3 className="text-base font-semibold text-t1">Secure Patient Links</h3>
@@ -127,9 +159,9 @@ const Landing = () => {
               <p className="text-t2 text-sm leading-relaxed">
                 Each patient gets a unique, secure link to their personalized treatment plan with no account required.
               </p>
-            </div>
+            </div></FadeInSection>
 
-            <div className="space-y-3">
+            <FadeInSection><div className="space-y-3">
               <div className="flex items-center gap-3 mb-1">
                 <MessageSquare className="w-5 h-5 text-accent flex-shrink-0" strokeWidth={1.8} />
                 <h3 className="text-base font-semibold text-t1">AI Chat Assistant</h3>
@@ -137,13 +169,14 @@ const Landing = () => {
               <p className="text-t2 text-sm leading-relaxed">
                 Patients can ask questions about their treatment anytime. AI provides accurate, context-aware answers based on their plan.
               </p>
-            </div>
+            </div></FadeInSection>
           </div>
         </div>
       </section>
 
       <section className="py-20 lg:py-24">
         <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+          <FadeInSection>
           <div className="text-center mb-14">
             <h2 className="text-2xl sm:text-3xl font-bold text-t1 tracking-[-0.02em] leading-tight mb-3">
               How It Works
@@ -152,9 +185,10 @@ const Landing = () => {
               Simple workflow, powerful results
             </p>
           </div>
+          </FadeInSection>
 
           <div className="grid sm:grid-cols-3 gap-12 max-w-4xl mx-auto">
-            <div className="text-center space-y-3">
+            <FadeInSection><div className="text-center space-y-3">
               <div className="w-10 h-10 mx-auto rounded-full bg-accent/10 flex items-center justify-center mb-4">
                 <span className="text-sm font-bold text-accent">1</span>
               </div>
@@ -162,19 +196,19 @@ const Landing = () => {
               <p className="text-t2 text-sm leading-relaxed">
                 Build a visual treatment plan with procedure details, images, and step-by-step explanations.
               </p>
-            </div>
+            </div></FadeInSection>
 
-            <div className="text-center space-y-3">
+            <FadeInSection><div className="text-center space-y-3">
               <div className="w-10 h-10 mx-auto rounded-full bg-accent/10 flex items-center justify-center mb-4">
                 <span className="text-sm font-bold text-accent">2</span>
               </div>
-              <h3 className="text-base font-semibold text-t1">Send via SMS</h3>
+              <h3 className="text-base font-semibold text-t1">Share via SMS or Email</h3>
               <p className="text-t2 text-sm leading-relaxed">
-                Text the plan to your patient instantly. They receive a secure link to view everything.
+                Send the plan to your patient instantly. They receive a secure link to view everything.
               </p>
-            </div>
+            </div></FadeInSection>
 
-            <div className="text-center space-y-3">
+            <FadeInSection><div className="text-center space-y-3">
               <div className="w-10 h-10 mx-auto rounded-full bg-accent/10 flex items-center justify-center mb-4">
                 <span className="text-sm font-bold text-accent">3</span>
               </div>
@@ -182,7 +216,7 @@ const Landing = () => {
               <p className="text-t2 text-sm leading-relaxed">
                 Patients explore their plan, ask questions via AI chat, and feel confident about next steps.
               </p>
-            </div>
+            </div></FadeInSection>
           </div>
         </div>
       </section>
@@ -241,10 +275,13 @@ const Landing = () => {
               </button>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t border-bd">
-            <p className="text-t2 text-xs leading-relaxed max-w-3xl mx-auto text-center">
-              <span className="font-semibold text-t1">SMS Consent:</span> By providing your phone number and opting in, you agree to receive SMS messages from ChairIQ related to appointment reminders and treatment plan information. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out. Reply HELP for help. Consent is not a condition of purchase.
-            </p>
+          <div className="mt-6 pt-5 border-t border-bd">
+            <div className="max-w-2xl mx-auto text-center space-y-1">
+              <p className="text-t3 text-[10px] leading-snug font-medium uppercase tracking-wider">SMS Compliance</p>
+              <p className="text-t3 text-[10px] leading-relaxed">
+                By providing your phone number and opting in, you agree to receive SMS messages from ChairIQ related to treatment plan information. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out. Reply HELP for help. Consent is not a condition of purchase.
+              </p>
+            </div>
           </div>
         </div>
       </footer>

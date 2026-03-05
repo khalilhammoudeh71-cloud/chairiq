@@ -799,7 +799,7 @@ export default function CreatePatientPlan() {
         {/* Header */}
         <div className="card mb-8">
           <h1 className="text-4xl font-bold text-t1 mb-2">Create Patient Plan</h1>
-          <p className="text-t2 text-lg">Generate treatment plans and share with patients via SMS</p>
+          <p className="text-t2 text-lg">Create and share visual treatment plans with patients</p>
 
           <div className="flex items-center justify-between mt-6 pt-5 border-t border-bd">
             {stepIndicatorItems.map((step, idx) => {
@@ -1028,7 +1028,7 @@ export default function CreatePatientPlan() {
                 </div>
               </div>
               <p className="text-t2 text-lg font-medium mb-2">No procedures added yet</p>
-              <p className="text-t3 text-sm mb-6 max-w-sm mx-auto">Add procedures to build the patient's treatment plan. You can search by name or ADA code.</p>
+              <p className="text-t3 text-sm mb-6 max-w-sm mx-auto">Search by ADA code or procedure name to build the plan.</p>
               <button
                 onClick={openAddProcedureDrawer}
                 className="btn-primary inline-flex items-center gap-2"

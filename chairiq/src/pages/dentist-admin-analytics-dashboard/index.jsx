@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { patientAnalyticsService } from '../../services/patientAnalyticsService';
 import { patientPlanService } from '../../services/patientPlanService';
 import { emailService } from '../../services/emailService';
-import { AlertTriangle, Download, Send, Copy, Mail, MessageSquare, Users, FileText, TrendingUp, BarChart3 } from 'lucide-react';
+import { AlertTriangle, Download, Send, Copy, Mail, MessageSquare, Users, FileText, TrendingUp, BarChart3, Info, CalendarDays } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import DentistNavigation from '../../components/DentistNavigation';
 import Card from '../../components/ui/Card';
@@ -257,6 +257,7 @@ export default function DentistAdminAnalyticsDashboard() {
       change: overallMetrics?.engagementChange || 0,
       icon: BarChart3,
       accentColor: 'amber',
+      tooltip: 'Average percentage of treatment plan content viewed by patients across all active plans',
     },
     {
       label: 'Completion Rate',
@@ -264,6 +265,7 @@ export default function DentistAdminAnalyticsDashboard() {
       change: overallMetrics?.completionChange || 0,
       icon: TrendingUp,
       accentColor: 'accent',
+      tooltip: 'Percentage of patients who viewed all steps and procedures in their treatment plan',
     }
   ];
 
@@ -334,6 +336,10 @@ export default function DentistAdminAnalyticsDashboard() {
           <div className="mb-8">
             <h1 className="text-4xl font-semibold text-t1 mb-2 tracking-tight">Analytics Dashboard</h1>
             <p className="text-t2 text-lg">Track patient engagement and treatment effectiveness</p>
+            <div className="flex items-center gap-2 mt-3 text-t3 text-sm">
+              <CalendarDays size={14} />
+              <span>Showing data for the last {timeRange === '7d' ? '7 days' : timeRange === '30d' ? '30 days' : '90 days'}</span>
+            </div>
           </div>
 
           {/* Success/Error Messages */}
@@ -376,7 +382,28 @@ export default function DentistAdminAnalyticsDashboard() {
                 <div key={index} className={`bg-bg1 border border-bd border-l-[3px] ${colors.border} rounded-xl p-6 dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300`}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <p className="text-t3 text-sm font-medium mb-2 uppercase tracking-wider">{stat?.label}</p>
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <p className="text-t3 text-sm font-medium uppercase tracking-wider">{stat?.label}</p>
+                        {stat?.tooltip && (
+                          <div className="group relative">
+                            <button
+                              type="button"
+                              className="text-t3 cursor-help focus:outline-none focus:text-t1"
+                              aria-label={`Info about ${stat.label}`}
+                              aria-describedby={`tooltip-${index}`}
+                            >
+                              <Info size={13} />
+                            </button>
+                            <div
+                              id={`tooltip-${index}`}
+                              role="tooltip"
+                              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-bg2 border border-bd text-t2 text-xs rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 w-52 text-center z-10 pointer-events-none"
+                            >
+                              {stat.tooltip}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       <p className="text-t1 text-4xl font-bold tracking-tight">{stat?.value}</p>
                       {stat?.change !== 0 && (
                         <Badge 
@@ -568,10 +595,12 @@ export default function DentistAdminAnalyticsDashboard() {
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <div className="bg-bg0/50 rounded-lg border border-dashed border-bd p-8 flex flex-col items-center justify-center min-h-[300px]">
-                  <TrendingUp size={36} className="text-t3 mb-3" />
+                <div className="bg-bg0/50 rounded-lg border border-dashed border-bd p-6 flex flex-col items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-3">
+                    <TrendingUp size={22} className="text-blue-500/60" />
+                  </div>
                   <p className="text-t2 font-medium">No engagement data yet</p>
-                  <p className="text-t3 text-sm mt-1">Trends will appear as patients interact with their plans</p>
+                  <p className="text-t3 text-sm mt-1 text-center max-w-xs">Trends will appear as patients interact with their treatment plans</p>
                 </div>
               )}
             </Card>
@@ -595,10 +624,12 @@ export default function DentistAdminAnalyticsDashboard() {
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <div className="bg-bg0/50 rounded-lg border border-dashed border-bd p-8 flex flex-col items-center justify-center min-h-[300px]">
-                  <BarChart3 size={36} className="text-t3 mb-3" />
+                <div className="bg-bg0/50 rounded-lg border border-dashed border-bd p-6 flex flex-col items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-3">
+                    <BarChart3 size={22} className="text-emerald-500/60" />
+                  </div>
                   <p className="text-t2 font-medium">No completion data yet</p>
-                  <p className="text-t3 text-sm mt-1">Completion rates will display once procedures are tracked</p>
+                  <p className="text-t3 text-sm mt-1 text-center max-w-xs">Completion rates will display once patients begin viewing procedures</p>
                 </div>
               )}
             </Card>

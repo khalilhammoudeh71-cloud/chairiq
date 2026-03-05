@@ -299,17 +299,39 @@ const TreatmentPlanLanding = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-5 bg-bg0">
-        <div className="max-w-md text-center">
-          <Icon name="AlertCircle" size={48} style={{ color: '#ffb74d', margin: '0 auto 1.5rem' }} />
-          <h1 className="text-3xl mb-6 text-t1 font-semibold">
-            {text?.errorTitle}
-          </h1>
-          <p className="mb-8 text-t3 text-xl leading-relaxed">
-            {error}
-          </p>
-          <p className="text-t3 text-lg">
-            {text?.contactOffice}
+      <div className="min-h-screen flex flex-col items-center justify-center px-5" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+        <div className="max-w-md w-full text-center">
+          <div className="flex items-center justify-center gap-2.5 mb-10">
+            <Icon name="ShieldCheck" size={28} style={{ color: '#6B8AEE' }} />
+            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+          </div>
+          <div
+            className="rounded-2xl p-8 mb-8"
+            style={{
+              backgroundColor: 'rgba(255, 183, 77, 0.06)',
+              border: '1px solid rgba(255, 183, 77, 0.15)',
+              backdropFilter: 'blur(12px)',
+            }}
+          >
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+              style={{ backgroundColor: 'rgba(255, 183, 77, 0.12)' }}
+            >
+              <Icon name="AlertCircle" size={32} style={{ color: '#ffb74d' }} />
+            </div>
+            <h1 className="text-2xl sm:text-3xl mb-4 font-semibold" style={{ color: '#e8e9ed' }}>
+              {text?.errorTitle}
+            </h1>
+            <p className="mb-6 text-base sm:text-lg leading-relaxed" style={{ color: '#9ca3af' }}>
+              {error}
+            </p>
+            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+            <p className="text-sm sm:text-base" style={{ color: '#6b7280' }}>
+              {text?.contactOffice}
+            </p>
+          </div>
+          <p className="text-xs" style={{ color: '#4b5563' }}>
+            Powered by ChairIQ
           </p>
         </div>
       </div>
