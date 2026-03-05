@@ -629,11 +629,12 @@ const TreatmentPlanLanding = () => {
 
                               {summary && (
                                 <div>
-                                  <h4 className="text-2xl mb-6 text-accent font-semibold">
+                                  <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
                                     {text?.sections?.whatThis}
                                   </h4>
                                   <div
-                                    className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                    className="text-base sm:text-lg font-light leading-[1.8]"
+                                    style={{ color: '#ffffff' }}
                                     dangerouslySetInnerHTML={{ __html: summary?.replace(/\n/g, '<br />') }}
                                   />
                                 </div>
@@ -641,22 +642,20 @@ const TreatmentPlanLanding = () => {
 
                               {steps && steps?.length > 0 && (
                                 <div>
-                                  <h4 className="text-2xl mb-8 text-accent font-semibold">
+                                  <h4 className="text-2xl sm:text-3xl mb-8 font-semibold" style={{ color: '#F5C542' }}>
                                     {text?.sections?.howItWorks}
                                   </h4>
-                                  <div className="space-y-4">
+                                  <div className="space-y-6">
                                     {steps?.map((step, idx) => {
-                                      const isStepActive = activeStepImage === idx;
                                       const hasStepImage = !!visuals?.stepKeys?.[idx];
 
                                       return (
                                         <div key={idx}>
-                                          <button
-                                            onClick={(e) => toggleStepImage(idx, e)}
-                                            className="w-full text-left rounded-xl transition-all duration-200 focus:outline-none"
+                                          <div
+                                            className="w-full text-left rounded-xl"
                                             style={{
-                                              backgroundColor: isStepActive ? '#232936' : 'transparent',
-                                              border: isStepActive ? '1px solid #4A6FA5' : '1px solid #2D3748',
+                                              backgroundColor: '#232936',
+                                              border: '1px solid #2D3748',
                                               padding: '1.25rem 1.5rem',
                                             }}
                                           >
@@ -664,41 +663,25 @@ const TreatmentPlanLanding = () => {
                                               <span 
                                                 className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mt-0.5"
                                                 style={{
-                                                  backgroundColor: isStepActive ? '#4A6FA5' : 'rgba(74,111,165,0.15)',
-                                                  color: isStepActive ? '#ffffff' : '#4A6FA5',
+                                                  backgroundColor: '#4A6FA5',
+                                                  color: '#ffffff',
                                                 }}
                                               >
                                                 {idx + 1}
                                               </span>
                                               <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between gap-3">
-                                                  <h5 className="text-lg sm:text-xl font-semibold text-t1 leading-snug">
-                                                    {step?.title || `${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}`}
-                                                  </h5>
-                                                  {hasStepImage && (
-                                                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                                                      <Icon 
-                                                        name={isStepActive ? 'EyeOff' : 'Eye'} 
-                                                        size={18} 
-                                                        style={{ color: '#4A6FA5' }} 
-                                                      />
-                                                      <span className="text-sm hidden sm:inline" style={{ color: '#4A6FA5' }}>
-                                                        {isStepActive 
-                                                          ? (currentLanguage === 'es' ? 'Ocultar' : 'Hide') 
-                                                          : (currentLanguage === 'es' ? 'Ver imagen' : 'View image')}
-                                                      </span>
-                                                    </div>
-                                                  )}
-                                                </div>
-                                                <p className="text-t3 text-base sm:text-lg font-light leading-relaxed mt-2">
+                                                <h5 className="text-lg sm:text-xl font-semibold leading-snug" style={{ color: '#ffffff' }}>
+                                                  {step?.title || `${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}`}
+                                                </h5>
+                                                <p className="text-sm sm:text-base font-light leading-relaxed mt-2" style={{ color: '#ffffff' }}>
                                                   {step?.description || step?.content}
                                                 </p>
                                               </div>
                                             </div>
-                                          </button>
+                                          </div>
 
-                                          {isStepActive && hasStepImage && (
-                                            <div className="mt-3 mb-2 px-4 animate-slideDown">
+                                          {hasStepImage && (
+                                            <div className="mt-3 mb-2 px-4">
                                               <div className="flex justify-center rounded-xl overflow-hidden" style={{ backgroundColor: '#0F1218' }}>
                                                 <Image
                                                   src={visuals?.stepKeys?.[idx]}
@@ -709,25 +692,6 @@ const TreatmentPlanLanding = () => {
                                                     e.target.parentElement.innerHTML = `<div style="padding:2rem;text-align:center;color:#7a8cf5;font-size:0.875rem"><p>${currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p></div>`;
                                                   }}
                                                 />
-                                              </div>
-                                            </div>
-                                          )}
-
-                                          {isStepActive && !hasStepImage && (
-                                            <div className="mt-3 mb-2 px-4 animate-slideDown">
-                                              <div 
-                                                className="flex items-center justify-center rounded-xl p-8"
-                                                style={{ 
-                                                  backgroundColor: 'rgba(122, 140, 245, 0.08)',
-                                                  border: '1px solid rgba(122, 140, 245, 0.15)',
-                                                }}
-                                              >
-                                                <div className="text-center">
-                                                  <Icon name="ImageOff" size={24} style={{ margin: '0 auto 0.5rem', color: '#7a8cf5' }} />
-                                                  <p style={{ color: '#7a8cf5', fontSize: '0.875rem' }}>
-                                                    {currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}
-                                                  </p>
-                                                </div>
                                               </div>
                                             </div>
                                           )}
@@ -772,11 +736,12 @@ const TreatmentPlanLanding = () => {
                                 <div className="space-y-16 pt-6 animate-slideDown">
                                   {why && (
                                     <div>
-                                      <h4 className="text-2xl mb-6 text-accent font-semibold">
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
                                         {text?.sections?.whyNeed}
                                       </h4>
                                       <div
-                                        className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                        className="text-base sm:text-lg font-light leading-[1.8]"
+                                        style={{ color: '#ffffff' }}
                                         dangerouslySetInnerHTML={{ __html: why?.replace(/\n/g, '<br />') }}
                                       />
                                     </div>
@@ -792,20 +757,20 @@ const TreatmentPlanLanding = () => {
                                     >
                                       {procedure?.library?.timeEstimate && (
                                         <div className="mb-4">
-                                          <span className="text-accent text-lg font-semibold">
+                                          <span className="text-lg font-semibold" style={{ color: '#F5C542' }}>
                                             {currentLanguage === 'es' ? 'Tiempo: ' : 'Time: '}
                                           </span>
-                                          <span className="text-t3 text-lg">
+                                          <span className="text-base" style={{ color: '#ffffff' }}>
                                             {procedure?.library?.timeEstimate}
                                           </span>
                                         </div>
                                       )}
                                       {procedure?.library?.visitsEstimate && (
                                         <div>
-                                          <span className="text-accent text-lg font-semibold">
+                                          <span className="text-lg font-semibold" style={{ color: '#F5C542' }}>
                                             {currentLanguage === 'es' ? 'Visitas: ' : 'Visits: '}
                                           </span>
-                                          <span className="text-t3 text-lg">
+                                          <span className="text-base" style={{ color: '#ffffff' }}>
                                             {procedure?.library?.visitsEstimate}
                                           </span>
                                         </div>
@@ -815,11 +780,12 @@ const TreatmentPlanLanding = () => {
 
                                   {whatIfNot && (
                                     <div>
-                                      <h4 className="text-2xl mb-6 text-warning font-semibold">
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
                                         {text?.sections?.ifDelay}
                                       </h4>
                                       <div
-                                        className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                        className="text-base sm:text-lg font-light leading-[1.8]"
+                                        style={{ color: '#ffffff' }}
                                         dangerouslySetInnerHTML={{ __html: whatIfNot?.replace(/\n/g, '<br />') }}
                                       />
                                     </div>
@@ -827,11 +793,12 @@ const TreatmentPlanLanding = () => {
 
                                   {aftercare && (
                                     <div>
-                                      <h4 className="text-2xl mb-6 text-accent font-semibold">
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
                                         {text?.sections?.aftercare}
                                       </h4>
                                       <div
-                                        className="text-t3 text-xl sm:text-2xl font-light leading-[1.8]"
+                                        className="text-base sm:text-lg font-light leading-[1.8]"
+                                        style={{ color: '#ffffff' }}
                                         dangerouslySetInnerHTML={{ __html: aftercare?.replace(/\n/g, '<br />') }}
                                       />
                                     </div>
@@ -839,7 +806,7 @@ const TreatmentPlanLanding = () => {
 
                                   {faqs && faqs?.length > 0 && (
                                     <div>
-                                      <h4 className="text-2xl mb-10 text-accent font-semibold">
+                                      <h4 className="text-2xl sm:text-3xl mb-10 font-semibold" style={{ color: '#F5C542' }}>
                                         {text?.sections?.faqs}
                                       </h4>
                                       <div className="space-y-8">
@@ -852,10 +819,10 @@ const TreatmentPlanLanding = () => {
                                               border: '1px solid #2D3748'
                                             }}
                                           >
-                                            <p className="mb-5 text-t1 text-xl font-semibold">
+                                            <p className="mb-5 text-lg font-semibold" style={{ color: '#ffffff' }}>
                                               {faq?.q}
                                             </p>
-                                            <p className="text-t3 text-lg leading-[1.8]">
+                                            <p className="text-base leading-[1.8]" style={{ color: '#ffffff' }}>
                                               {faq?.a}
                                             </p>
                                           </div>
