@@ -670,7 +670,7 @@ const TreatmentPlanLanding = () => {
                                                 {idx + 1}
                                               </span>
                                               <div className="flex-1 min-w-0">
-                                                <h5 className="text-lg sm:text-xl font-semibold leading-snug" style={{ color: '#ffffff' }}>
+                                                <h5 className="text-lg sm:text-xl font-semibold leading-snug" style={{ color: '#F5C542' }}>
                                                   {step?.title || `${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}`}
                                                 </h5>
                                                 <p className="text-sm sm:text-base font-light leading-relaxed mt-2" style={{ color: '#ffffff' }}>
