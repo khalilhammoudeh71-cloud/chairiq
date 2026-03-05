@@ -15,6 +15,71 @@ const heroSlides = [
   '/assets/images/hero-slide-4.png',
 ];
 
+const procedureIconMap = {
+  'root-canal': 'Zap',
+  'crown': 'Crown',
+  'filling': 'Droplets',
+  'extraction': 'Scissors',
+  'implant': 'Anchor',
+  'bridge': 'Link2',
+  'denture': 'Smile',
+  'veneer': 'Sparkles',
+  'whitening': 'Sun',
+  'cleaning': 'Sparkles',
+  'sealant': 'Shield',
+  'exam': 'Search',
+  'x-ray': 'Scan',
+  'scaling': 'Layers',
+  'gum-treatment': 'Heart',
+  'orthodontics': 'AlignCenter',
+  'braces': 'AlignCenter',
+  'retainer': 'Lock',
+  'night-guard': 'Moon',
+  'bone-graft': 'Mountain',
+  'sinus-lift': 'ArrowUp',
+  'periodontal': 'Activity',
+  'deep-cleaning': 'Filter',
+  'fluoride': 'Droplet',
+};
+
+const getProcedureIcon = (procedure) => {
+  const slug = procedure?.canonicalSlug?.toLowerCase() || '';
+  if (procedureIconMap[slug]) return procedureIconMap[slug];
+  
+  const name = (procedure?.procedureName || procedure?.displayTitle || procedure?.library?.titleEn || procedure?.library?.titleEs || '').toLowerCase();
+  if (name.includes('root canal') || name.includes('endodontic')) return 'Zap';
+  if (name.includes('crown')) return 'Crown';
+  if (name.includes('filling') || name.includes('composite') || name.includes('amalgam') || name.includes('resin')) return 'Droplets';
+  if (name.includes('extract')) return 'Scissors';
+  if (name.includes('implant')) return 'Anchor';
+  if (name.includes('bridge') || name.includes('pontic')) return 'Link2';
+  if (name.includes('denture')) return 'Smile';
+  if (name.includes('veneer')) return 'Sparkles';
+  if (name.includes('whiten') || name.includes('bleach')) return 'Sun';
+  if (name.includes('clean') || name.includes('prophylaxis')) return 'Sparkles';
+  if (name.includes('seal')) return 'Shield';
+  if (name.includes('exam') || name.includes('evaluation') || name.includes('oral')) return 'Search';
+  if (name.includes('x-ray') || name.includes('radiograph') || name.includes('panoramic')) return 'Scan';
+  if (name.includes('scaling') || name.includes('root planing')) return 'Layers';
+  if (name.includes('gum') || name.includes('gingiv') || name.includes('periodontal')) return 'Activity';
+  if (name.includes('orthodon') || name.includes('brace') || name.includes('align')) return 'AlignCenter';
+  if (name.includes('fluoride')) return 'Droplet';
+  if (name.includes('guard') || name.includes('splint')) return 'Moon';
+  if (name.includes('bone') || name.includes('graft')) return 'Mountain';
+  return 'Stethoscope';
+};
+
+const listItemShades = [
+  '#1A1F2E',
+  '#1D2233',
+  '#1F2538',
+  '#22283D',
+  '#242B42',
+  '#272E47',
+  '#29314C',
+  '#2C3451',
+];
+
 const TreatmentPlanLanding = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -312,6 +377,17 @@ const TreatmentPlanLanding = () => {
 
         <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16 py-16 md:py-24">
 
+          {/* Patient Name Greeting */}
+          {planData?.patient?.firstName && (
+            <h2 
+              className="text-3xl sm:text-4xl mb-12 text-t1 font-semibold"
+            >
+              {currentLanguage === 'es' 
+                ? `Hola, ${planData?.patient?.firstName}` 
+                : `Hi, ${planData?.patient?.firstName}`}
+            </h2>
+          )}
+
           {/* Resend Success Message */}
           {resendSuccess && (
             <div 
@@ -370,44 +446,37 @@ const TreatmentPlanLanding = () => {
           )}
 
           {/* OVERVIEW SUMMARY CARD */}
-          <section className="mb-40">
+          <section className="mb-16">
             <h2 
-              className="text-2xl sm:text-3xl mb-12 text-t3 font-light"
+              className="text-xl sm:text-2xl mb-6 text-t3 font-light"
             >
               {text?.overviewTitle}
             </h2>
             <div 
-              className="rounded-2xl p-12" 
+              className="rounded-xl px-8 py-5 flex items-center justify-between" 
               style={{ 
                 backgroundColor: '#1A1F2E',
                 border: '1px solid #2D3748'
               }}
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-16">
-                <div>
-                  <div 
-                    className="text-6xl sm:text-7xl mb-6 text-accent font-semibold"
-                  >
-                    {procedureCount}
-                  </div>
-                  <div 
-                    className="text-t3 text-lg leading-relaxed"
-                  >
-                    {text?.proceduresLabel}
-                  </div>
-                </div>
-                <div>
-                  <div 
-                    className="text-6xl sm:text-7xl mb-6 text-accent font-semibold"
-                  >
-                    {calculateEstimatedVisits()}
-                  </div>
-                  <div 
-                    className="text-t3 text-lg leading-relaxed"
-                  >
-                    {text?.visitsLabel}
-                  </div>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl text-accent font-semibold">
+                  {procedureCount}
+                </span>
+                <span className="text-t3 text-sm sm:text-base">
+                  {text?.proceduresLabel}
+                </span>
+              </div>
+              <div 
+                style={{ width: '1px', height: '28px', backgroundColor: '#2D3748' }}
+              />
+              <div className="flex items-center gap-2">
+                <span className="text-2xl sm:text-3xl text-accent font-semibold">
+                  {calculateEstimatedVisits()}
+                </span>
+                <span className="text-t3 text-sm sm:text-base">
+                  {text?.visitsLabel}
+                </span>
               </div>
             </div>
           </section>
@@ -415,63 +484,68 @@ const TreatmentPlanLanding = () => {
           {/* TREATMENT LIST */}
           <section className="mb-40">
             <h2 
-              className="text-4xl sm:text-5xl mb-20 text-t1 font-semibold leading-snug"
+              className="text-2xl sm:text-3xl mb-10 text-t1 font-semibold leading-snug"
             >
               {text?.proceduresTitle}
             </h2>
             
             {procedures?.length > 0 ? (
               <>
-                <div className="space-y-3 mb-12">
+                <div className="rounded-xl overflow-hidden mb-10" style={{ border: '1px solid #2D3748' }}>
                   {procedures?.map((procedure, procIdx) => {
                     const lang = currentLanguage === 'es' ? 'Es' : 'En';
                     const title = procedure?.library?.[`title${lang}`] || procedure?.displayTitle || procedure?.procedureName || 'Not specified';
                     const isSelected = expandedProcedure === procedure?.id;
+                    const shade = listItemShades[procIdx % listItemShades.length];
+                    const iconName = getProcedureIcon(procedure);
 
                     return (
                       <button
                         key={procedure?.id}
                         onClick={() => toggleProcedure(procedure?.id)}
-                        className="w-full text-left rounded-xl px-8 py-6 transition-all duration-200 focus:outline-none"
+                        className="w-full text-left px-6 py-4 transition-all duration-200 focus:outline-none"
                         style={{
-                          backgroundColor: isSelected ? '#4A6FA5' : '#1A1F2E',
-                          border: isSelected ? '1px solid #5B8AC5' : '1px solid #2D3748',
-                          minHeight: '48px',
+                          backgroundColor: isSelected ? '#4A6FA5' : shade,
+                          borderBottom: procIdx < procedures.length - 1 ? '1px solid rgba(45,55,72,0.5)' : 'none',
+                          minHeight: '44px',
                         }}
                         aria-expanded={isSelected}
                         aria-label={`${title} - ${isSelected ? 'Selected' : 'Select'}`}
                       >
-                        <div className="flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-5 min-w-0">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-4 min-w-0">
                             <span 
-                              className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold"
+                              className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
                               style={{
-                                backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(74,111,165,0.2)',
-                                color: isSelected ? '#ffffff' : '#4A6FA5',
+                                backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(74,111,165,0.15)',
                               }}
                             >
-                              {procIdx + 1}
+                              <Icon 
+                                name={iconName} 
+                                size={16} 
+                                style={{ color: isSelected ? '#ffffff' : '#6B8AEE' }} 
+                              />
                             </span>
                             <div className="min-w-0">
                               <h3 
-                                className="text-xl sm:text-2xl font-semibold leading-snug truncate"
+                                className="text-base sm:text-lg font-medium leading-snug truncate"
                                 style={{ color: isSelected ? '#ffffff' : 'var(--t1)' }}
                               >
                                 {title}
                               </h3>
-                              <div className="flex items-center gap-3 mt-1">
+                              <div className="flex items-center gap-2 mt-0.5">
                                 {procedure?.adaCode && (
                                   <span 
-                                    className="text-sm font-mono"
-                                    style={{ color: isSelected ? 'rgba(255,255,255,0.7)' : 'var(--t3)' }}
+                                    className="text-xs font-mono"
+                                    style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
                                   >
                                     {procedure?.adaCode}
                                   </span>
                                 )}
                                 {procedure?.toothNumbers && (
                                   <span 
-                                    className="text-sm"
-                                    style={{ color: isSelected ? 'rgba(255,255,255,0.7)' : 'var(--t3)' }}
+                                    className="text-xs"
+                                    style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
                                   >
                                     {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
                                   </span>
@@ -480,9 +554,9 @@ const TreatmentPlanLanding = () => {
                             </div>
                           </div>
                           <Icon 
-                            name={isSelected ? 'ChevronUp' : 'ChevronRight'} 
-                            size={22} 
-                            style={{ color: isSelected ? '#ffffff' : '#4A6FA5', flexShrink: 0 }} 
+                            name={isSelected ? 'ChevronDown' : 'ChevronRight'} 
+                            size={18} 
+                            style={{ color: isSelected ? '#ffffff' : 'rgba(74,111,165,0.6)', flexShrink: 0 }} 
                           />
                         </div>
                       </button>

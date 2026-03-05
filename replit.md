@@ -49,7 +49,10 @@ ChairIQ is a React-based dental treatment planning SPA for dentists and patients
 
 ## Recent Changes (2026-03-05) — Patient Landing Page Redesign
 - Redesigned treatment-plan-landing procedures section from accordion cards to list + detail panel layout
-  - Clickable numbered treatment list at top — each procedure is a row with number badge, title, ADA code, tooth numbers
+  - Patient name greeting ("Hi, [Name]") shown at the top of the page content
+  - Compact inline "At a glance" summary — procedure count + visit estimate in a single row with divider
+  - Clickable treatment list with procedure-specific Lucide icons (mapped by canonical slug or keyword)
+  - Each list item has a subtly different background shade to indicate clickability
   - Selected procedure highlights in blue; clicking toggles detail panel below the entire list
   - Detail panel starts with full-width hero image, then title, summary, steps, and full details toggle
   - Steps section redesigned: each step is a clickable CTA button with eye icon
