@@ -31,13 +31,14 @@ export default function CreatePatientPlan() {
     firstName: '',
     lastName: '',
     phone: '',
+    email: '',
     preferredLanguage: 'EN'
   });
 
   // Plan information state
   const [planInfo, setPlanInfo] = useState({
-    dentistName: '',
-    practiceName: ''
+    dentistName: 'Khalil Hammoudeh',
+    practiceName: 'Risas Dental and Braces'
   });
 
   // Procedures state - START WITH EMPTY ARRAY
@@ -821,6 +822,19 @@ export default function CreatePatientPlan() {
                 onChange={(e) => handlePatientChange('phone', e?.target?.value)}
                 className="input-field w-full"
                 placeholder="+1-555-0123"
+              />
+            </div>
+            <div>
+              <label className="block text-t2 mb-2 font-semibold text-base">Email</label>
+              <input
+                type="email"
+                value={patientInfo?.email}
+                onChange={(e) => {
+                  handlePatientChange('email', e?.target?.value);
+                  setPatientEmail(e?.target?.value);
+                }}
+                className="input-field w-full"
+                placeholder="patient@email.com"
               />
             </div>
             <div>
