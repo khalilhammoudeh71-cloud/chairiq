@@ -42,6 +42,26 @@ The system supports 34+ canonical procedure types with comprehensive bilingual (
 - `20260305_procedure_library_batch4.sql` — pulpotomy, apicoectomy, frenectomy, crown-lengthening content
 - `20260305_procedure_library_batch5.sql` — space-maintainer, tmj-treatment, sleep-apnea-appliance, emergency-palliative content
 
+## iOS App (chairiq-ios/)
+A native Swift/SwiftUI iOS port of ChairIQ lives in `chairiq-ios/`. It is a standalone Swift Package (Package.swift) targeting iOS 17+, ready to open in Xcode.
+
+**Architecture:**
+- **Models/** — Codable structs matching the Supabase schema (Patient, TreatmentPlan, PlanProcedure, ProcedureLibraryItem, ProcedureVisual, ADACode, UserProfile, SMSMessage) with snake_case CodingKeys
+- **Services/** — Singleton service layer: SupabaseManager (client), AuthService, PatientPlanService, ProcedureLibraryService, SMSService, EmailService, AIContentGenerationService, AIPersonalizationService, TTSService
+- **ViewModels/** — @Observable classes: AuthViewModel, PatientPlanViewModel, AdminDashboardViewModel, CreatePlanViewModel, ProcedureLibraryViewModel, AIContentViewModel
+- **Views/** — SwiftUI views organized by role:
+  - Auth/ — LoginView, SignUpView
+  - Patient/ — PatientPlanView, TreatmentPlanLandingView, StepByStepTreatmentView, ProcedureDetailView, TreatmentCompletionView
+  - Admin/ — AdminDashboardView, AdminTabView, AnalyticsDashboardView, CreatePatientPlanView, ProcedureLibraryView, AIContentGenerationView
+  - Components/ — LoadingSpinner, PriorityBadge, LanguageToggle, ProcedureCard, StatCard, ImageViewer, SearchBar
+- **Utils/** — Theme.swift (color palette, typography, spacing matching web app's Tailwind tokens)
+
+**Dependencies:** Supabase Swift SDK (2.0+), Kingfisher (7.10+)
+
+**Configuration:** Set SUPABASE_URL and SUPABASE_ANON_KEY in Info.plist or environment. Optional: OPENAI_API_KEY, GEMINI_API_KEY, API_BASE_URL.
+
+**Deep Links:** Handles `chairiq://chairiq/p/{publicToken}` URLs to open patient plan views directly.
+
 ## External Dependencies
 - **Supabase**: For user authentication, database management (PostgreSQL), and storage (for treatment images).
 - **Google Gemini AI**: Used for content generation services.
