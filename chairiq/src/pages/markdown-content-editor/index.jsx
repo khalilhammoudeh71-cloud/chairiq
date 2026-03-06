@@ -20,6 +20,7 @@ export default function MarkdownContentEditor() {
 
   const [formData, setFormData] = useState({
     slug: '',
+    category: '',
     titleEn: '',
     titleEs: '',
     summaryEn: '',
@@ -282,15 +283,43 @@ export default function MarkdownContentEditor() {
             <div className="bg-bg1 rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-bold text-t1 mb-4">Basic Information</h2>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-t2 mb-2">Slug (URL identifier)</label>
-                  <input
-                    type="text"
-                    value={formData?.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e?.target?.value })}
-                    placeholder="e.g., dental-crown"
-                    className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-t2 mb-2">Slug (URL identifier)</label>
+                    <input
+                      type="text"
+                      value={formData?.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e?.target?.value })}
+                      placeholder="e.g., dental-crown"
+                      className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-t2 mb-2">Category</label>
+                    <select
+                      value={formData?.category || ''}
+                      onChange={(e) => setFormData({ ...formData, category: e?.target?.value })}
+                      className="w-full px-4 py-2 border border-bd rounded-lg bg-bg0 text-t1 focus:border-accent focus:outline-none"
+                    >
+                      <option value="">Select category...</option>
+                      <option value="preventive">Preventive</option>
+                      <option value="restorative">Restorative</option>
+                      <option value="endodontics">Endodontics</option>
+                      <option value="endodontic">Endodontic</option>
+                      <option value="periodontics">Periodontics</option>
+                      <option value="periodontic">Periodontic</option>
+                      <option value="prosthodontics">Prosthodontics</option>
+                      <option value="surgery">Surgery</option>
+                      <option value="oral-surgery">Oral Surgery</option>
+                      <option value="orthodontics">Orthodontics</option>
+                      <option value="cosmetic">Cosmetic</option>
+                      <option value="adjunctive">Adjunctive</option>
+                      <option value="diagnostic">Diagnostic</option>
+                      <option value="implants">Implants</option>
+                      <option value="pediatric">Pediatric</option>
+                      <option value="emergency">Emergency</option>
+                    </select>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-t2 mb-2">Title</label>

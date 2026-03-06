@@ -93,6 +93,9 @@ export const adaCodes = [
   { code: 'D3310', description: 'Root canal anterior', category: 'Endodontics' },
   { code: 'D3320', description: 'Root canal premolar', category: 'Endodontics' },
   { code: 'D3330', description: 'Root canal molar', category: 'Endodontics' },
+  { code: 'D3346', description: 'Retreatment of root canal - anterior', category: 'Endodontics' },
+  { code: 'D3347', description: 'Retreatment of root canal - premolar', category: 'Endodontics' },
+  { code: 'D3348', description: 'Retreatment of root canal - molar', category: 'Endodontics' },
 
   { code: 'D4263', description: 'Bone replacement graft - first site in quadrant', category: 'Periodontics' },
   { code: 'D4264', description: 'Bone replacement graft - each additional site', category: 'Periodontics' },
@@ -109,6 +112,8 @@ export const adaCodes = [
   { code: 'D4278', description: 'Free soft tissue graft, each non-contiguous tooth', category: 'Periodontics' },
   { code: 'D4341', description: 'SRP 4+ teeth per quadrant', category: 'Periodontics' },
   { code: 'D4342', description: 'SRP 1-3 teeth per quadrant', category: 'Periodontics' },
+  { code: 'D4355', description: 'Full mouth debridement', category: 'Periodontics' },
+  { code: 'D4910', description: 'Periodontal maintenance', category: 'Periodontics' },
 
   { code: 'D5110', description: 'Complete denture - maxillary', category: 'Prosthodontics' },
   { code: 'D5120', description: 'Complete denture - mandibular', category: 'Prosthodontics' },
@@ -118,6 +123,10 @@ export const adaCodes = [
   { code: 'D5212', description: 'Mandibular partial denture - resin base', category: 'Prosthodontics' },
   { code: 'D5213', description: 'Maxillary partial denture - cast metal', category: 'Prosthodontics' },
   { code: 'D5214', description: 'Mandibular partial denture - cast metal', category: 'Prosthodontics' },
+  { code: 'D5221', description: 'Immediate maxillary partial denture - resin base', category: 'Prosthodontics' },
+  { code: 'D5222', description: 'Immediate mandibular partial denture - resin base', category: 'Prosthodontics' },
+  { code: 'D5225', description: 'Maxillary partial denture - flexible base', category: 'Prosthodontics' },
+  { code: 'D5226', description: 'Mandibular partial denture - flexible base', category: 'Prosthodontics' },
 
   { code: 'D6010', description: 'Surgical placement of implant body - endosteal', category: 'Implants' },
   { code: 'D6011', description: 'Second stage implant surgery', category: 'Implants' },

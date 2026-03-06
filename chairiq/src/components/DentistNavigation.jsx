@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/authService';
-import { ClipboardList, BarChart3, LogOut, Menu, X, Home } from 'lucide-react';
+import { ClipboardList, BarChart3, LogOut, Menu, X, Home, BookOpen } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 export default function DentistNavigation() {
@@ -31,6 +31,11 @@ export default function DentistNavigation() {
       name: 'Analytics',
       path: '/dentist-admin-analytics-dashboard',
       icon: BarChart3,
+    },
+    {
+      name: 'Content Library',
+      path: '/procedure-library-management',
+      icon: BookOpen,
     },
   ];
 

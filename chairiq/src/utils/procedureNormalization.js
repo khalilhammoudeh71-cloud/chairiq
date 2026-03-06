@@ -1,11 +1,17 @@
 export const ADA_CODE_FAMILIES = {
   crown: ['D2740', 'D2750', 'D2751', 'D2752', 'D2780', 'D2790', 'D2791', 'D2792', 'D2794', 'D2781', 'D2782', 'D2783'],
   
-  root_canal: ['D3310', 'D3320', 'D3330', 'D3346', 'D3347', 'D3348'],
+  root_canal: ['D3310', 'D3320', 'D3330'],
+  
+  'root-canal-retreatment': ['D3346', 'D3347', 'D3348'],
   
   extraction: ['D7140', 'D7210', 'D7220', 'D7230', 'D7240', 'D7241', 'D7250', 'D7260', 'D7270', 'D7272', 'D7280', 'D7282', 'D7283'],
   
   srp: ['D4341', 'D4342'],
+  
+  'full-mouth-debridement': ['D4355'],
+  
+  'periodontal-maintenance': ['D4910'],
   
   exam: ['D0120', 'D0140', 'D0150', 'D0160', 'D0170', 'D0180', 'D0210', 'D0220', 'D0230', 'D0240', 'D0250', 'D0270', 'D0272', 'D0273', 'D0274', 'D0277', 'D0330', 'D0340', 'D0350', 'D0364', 'D0365', 'D0366', 'D0367', 'D0368', 'D0380', 'D0381', 'D0382', 'D0391'],
   
@@ -15,7 +21,7 @@ export const ADA_CODE_FAMILIES = {
   
   bridge: ['D6210', 'D6211', 'D6212', 'D6214', 'D6240', 'D6241', 'D6242', 'D6245', 'D6250', 'D6251', 'D6252', 'D6545', 'D6548', 'D6549', 'D6710', 'D6720', 'D6721', 'D6722', 'D6740', 'D6750', 'D6751', 'D6752'],
   
-  denture: ['D5110', 'D5120', 'D5130', 'D5140', 'D5211', 'D5212', 'D5213', 'D5214'],
+  denture: ['D5110', 'D5120', 'D5130', 'D5140', 'D5211', 'D5212', 'D5213', 'D5214', 'D5221', 'D5222', 'D5225', 'D5226'],
   
   implant: ['D6010', 'D6011', 'D6012', 'D6013', 'D6040', 'D6050', 'D6051', 'D6052', 'D6055', 'D6056', 'D6057', 'D6058', 'D6059', 'D6060', 'D6061', 'D6062', 'D6063', 'D6064', 'D6065', 'D6066', 'D6067', 'D6068', 'D6069', 'D6070', 'D6071', 'D6072', 'D6073', 'D6074', 'D6075', 'D6076', 'D6077', 'D6080', 'D6081', 'D6090', 'D6091', 'D6092', 'D6093', 'D6094', 'D6095', 'D6100', 'D6101', 'D6102', 'D6103', 'D6104', 'D6110', 'D6111', 'D6112', 'D6113', 'D6114', 'D6115', 'D6190', 'D6199'],
   
@@ -72,6 +78,8 @@ const PROCEDURE_NAME_MAPPING = {
   'root canal therapy': 'root_canal',
   'endodontic therapy': 'root_canal',
   'rct': 'root_canal',
+  'root canal retreatment': 'root-canal-retreatment',
+  'retreatment': 'root-canal-retreatment',
   
   'extraction': 'extraction',
   'tooth extraction': 'extraction',
@@ -84,6 +92,9 @@ const PROCEDURE_NAME_MAPPING = {
   'scaling and root planing': 'srp',
   'deep cleaning': 'srp',
   'periodontal therapy': 'srp',
+  'full mouth debridement': 'full-mouth-debridement',
+  'periodontal maintenance': 'periodontal-maintenance',
+  'perio maintenance': 'periodontal-maintenance',
   
   'exam': 'exam',
   'examination': 'exam',
@@ -115,6 +126,8 @@ const PROCEDURE_NAME_MAPPING = {
   'complete denture': 'denture',
   'partial denture': 'denture',
   'removable denture': 'denture',
+  'immediate denture': 'denture',
+  'flexible denture': 'denture',
   
   'implant': 'implant',
   'dental implant': 'implant',
@@ -339,6 +352,10 @@ export const getDisplayNameForCanonicalKey = (canonicalKey, language = 'EN') => 
       'tmj-treatment': 'TMJ Treatment',
       'sleep-apnea-appliance': 'Sleep Apnea Appliance',
       'emergency-palliative': 'Emergency / Palliative Care',
+      'root-canal-retreatment': 'Root Canal Retreatment',
+      'full-mouth-debridement': 'Full Mouth Debridement',
+      'periodontal-maintenance': 'Periodontal Maintenance',
+      'denture-reline': 'Denture Reline',
       unknown: 'Procedure'
     },
     ES: {
@@ -373,6 +390,10 @@ export const getDisplayNameForCanonicalKey = (canonicalKey, language = 'EN') => 
       'tmj-treatment': 'Tratamiento de ATM',
       'sleep-apnea-appliance': 'Aparato para Apnea del Sueño',
       'emergency-palliative': 'Atención de Emergencia / Paliativa',
+      'root-canal-retreatment': 'Retratamiento de Conducto',
+      'full-mouth-debridement': 'Desbridamiento Completo',
+      'periodontal-maintenance': 'Mantenimiento Periodontal',
+      'denture-reline': 'Rebase de Dentadura',
       unknown: 'Procedimiento'
     }
   };

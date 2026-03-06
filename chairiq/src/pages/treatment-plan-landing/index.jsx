@@ -17,22 +17,41 @@ const heroSlides = [
 
 const procedureIconMap = {
   'root-canal': 'Zap',
+  'root-canal-retreatment': 'Zap',
   'crown': 'Crown',
+  'dental-crown': 'Crown',
   'filling': 'Droplets',
   'extraction': 'Scissors',
+  'tooth-extraction': 'Scissors',
   'implant': 'Anchor',
   'bridge': 'Link2',
   'denture': 'Smile',
+  'complete-denture': 'Smile',
+  'immediate-complete-denture': 'Smile',
+  'resin-partial-denture': 'Smile',
+  'cast-partial-denture': 'Smile',
+  'immediate-partial-denture': 'Smile',
+  'denture-reline': 'Smile',
   'veneer': 'Sparkles',
   'whitening': 'Sun',
   'cleaning': 'Sparkles',
   'sealant': 'Shield',
   'dental-sealant': 'Shield',
   'exam': 'Search',
+  'periodic-oral-exam': 'Search',
+  'comprehensive-oral-exam': 'Search',
+  'limited-oral-exam': 'Search',
+  'detailed-oral-exam': 'Search',
+  're-evaluation-exam': 'Search',
+  'comprehensive-periodontal-exam': 'Search',
   'x-ray': 'Scan',
+  'radiograph': 'Scan',
   'scaling': 'Layers',
   'scaling-root-planing': 'Layers',
+  'scaling-and-root-planing': 'Layers',
   'srp': 'Layers',
+  'full-mouth-debridement': 'Layers',
+  'periodontal-maintenance': 'Activity',
   'gum-treatment': 'Heart',
   'gum-graft': 'Heart',
   'orthodontics': 'AlignCenter',
@@ -56,6 +75,9 @@ const procedureIconMap = {
   'tmj-treatment': 'Activity',
   'sleep-apnea-appliance': 'Moon',
   'emergency-palliative': 'AlertCircle',
+  'nutritional-counseling': 'Apple',
+  'tobacco-counseling': 'MessageCircle',
+  'oral-hygiene-instructions': 'BookOpen',
 };
 
 const getProcedureIcon = (procedure) => {
@@ -95,6 +117,10 @@ const getProcedureIcon = (procedure) => {
   if (name.includes('tmj') || name.includes('temporomandibular')) return 'Activity';
   if (name.includes('sleep apnea')) return 'Moon';
   if (name.includes('palliative') || name.includes('emergency')) return 'AlertCircle';
+  if (name.includes('debridement')) return 'Layers';
+  if (name.includes('reline') || name.includes('rebase')) return 'Smile';
+  if (name.includes('retreatment')) return 'Zap';
+  if (name.includes('counseling') || name.includes('instruction')) return 'BookOpen';
   return 'Stethoscope';
 };
 
