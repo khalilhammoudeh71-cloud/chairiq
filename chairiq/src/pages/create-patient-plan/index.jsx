@@ -1392,6 +1392,7 @@ export default function CreatePatientPlan() {
         onClose={() => setIsDrawerOpen(false)}
         onSave={handleSaveProcedureFromDrawer}
         isMobile={isMobile}
+        addedProcedures={procedures}
       />
     </div>
   );

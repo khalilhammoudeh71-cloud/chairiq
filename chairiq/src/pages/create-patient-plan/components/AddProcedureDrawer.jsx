@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Search, Star, Clock, ImagePlus, Camera, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, Search, Star, Clock, ImagePlus, Camera, Check, ChevronDown, ChevronUp, ClipboardList } from 'lucide-react';
 import { procedureCodesService } from '../../../services/procedureCodesService';
 import { supabase } from '../../../lib/supabase';
 
@@ -7,7 +7,8 @@ export default function AddProcedureDrawer({
   isOpen, 
   onClose, 
   onSave, 
-  isMobile = false 
+  isMobile = false,
+  addedProcedures = []
 }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [procedureCodes, setProcedureCodes] = useState([]);
@@ -250,6 +251,7 @@ export default function AddProcedureDrawer({
 
   const filteredProcedures = getFilteredProcedures();
   const hasSelection = !!(formData?.adaCode || formData?.displayTitle?.trim());
+  const addedAdaCodes = new Set(addedProcedures?.map(p => p?.adaCode)?.filter(Boolean));
 
   return (
     <>
@@ -269,15 +271,41 @@ export default function AddProcedureDrawer({
             </button>
           </div>
 
+          {addedProcedures?.length > 0 && (
+            <div className="mt-4 p-3 rounded-xl bg-bg2 border border-bd">
+              <div className="flex items-center gap-2 mb-2">
+                <ClipboardList size={16} className="text-accent" />
+                <p className="text-xs text-t2 font-semibold uppercase tracking-wider">
+                  Treatment Plan ({addedProcedures.length} {addedProcedures.length === 1 ? 'procedure' : 'procedures'})
+                </p>
+              </div>
+              <div className="space-y-1.5 max-h-32 overflow-y-auto">
+                {addedProcedures.map((proc, idx) => (
+                  <div key={proc?.id || idx} className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-bg1">
+                    <div className="w-5 h-5 rounded-full bg-accent/20 text-accent flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs font-bold">{idx + 1}</span>
+                    </div>
+                    <span className="text-t1 text-sm font-medium truncate">
+                      {proc?.procedureName || proc?.displayTitle}
+                    </span>
+                    {proc?.adaCode && (
+                      <span className="text-accent text-xs font-mono font-semibold flex-shrink-0">{proc.adaCode}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {hasSelection && (
-            <div className="mt-4 p-4 rounded-xl bg-accent/15 border-2 border-accent">
+            <div className="mt-3 p-4 rounded-xl bg-accent/15 border-2 border-accent">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
                     <Check size={18} className="text-white" />
                   </div>
                   <div>
-                    <p className="text-xs text-accent font-semibold uppercase tracking-wider">Selected Treatment</p>
+                    <p className="text-xs text-accent font-semibold uppercase tracking-wider">Adding Next</p>
                     <p className="text-t1 font-bold text-lg leading-tight">
                       {formData?.procedureName || formData?.displayTitle}
                     </p>
@@ -374,6 +402,7 @@ export default function AddProcedureDrawer({
                 {filteredProcedures?.length > 0 ? (
                   filteredProcedures?.map((item, index) => {
                     const isSelected = formData?.adaCode === item?.code;
+                    const isAlreadyAdded = addedAdaCodes.has(item?.code);
                     return (
                       <button
                         key={index}
@@ -381,7 +410,9 @@ export default function AddProcedureDrawer({
                         className={`w-full text-left px-4 py-3 transition-all flex items-center justify-between border-b border-bd last:border-b-0 ${
                           isSelected
                             ? 'bg-accent/20 border-l-4 border-l-accent'
-                            : 'hover:bg-bg3'
+                            : isAlreadyAdded
+                              ? 'bg-bg3/50'
+                              : 'hover:bg-bg3'
                         }`}
                       >
                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -391,7 +422,7 @@ export default function AddProcedureDrawer({
                             </div>
                           )}
                           <div className="min-w-0">
-                            <span className={`font-bold ${isSelected ? 'text-accent' : 'text-accent'}`}>{item?.code}</span>
+                            <span className="font-bold text-accent">{item?.code}</span>
                             <span className={`ml-2 ${isSelected ? 'text-t1 font-semibold' : 'text-t2'}`}>{item?.title}</span>
                           </div>
                         </div>
@@ -399,6 +430,11 @@ export default function AddProcedureDrawer({
                           {isSelected && (
                             <span className="px-2 py-0.5 rounded text-xs font-bold bg-accent text-white uppercase">
                               Selected
+                            </span>
+                          )}
+                          {isAlreadyAdded && !isSelected && (
+                            <span className="px-2 py-0.5 rounded text-xs font-semibold bg-bg3 text-t3 uppercase">
+                              In Plan
                             </span>
                           )}
                           <div
