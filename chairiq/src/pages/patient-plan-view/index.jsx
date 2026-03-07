@@ -5,7 +5,7 @@ import { patientPlanService } from '../../services/patientPlanService';
 import { shareLinkService } from '../../services/shareLinkService';
 
 import { useToast } from '../../hooks/useToast';
-import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, ShieldX, TimerOff } from 'lucide-react';
+import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, ShieldX, TimerOff, ChevronsUpDown, ChevronsDownUp } from 'lucide-react';
 import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
@@ -141,6 +141,24 @@ export default function PatientPlanView() {
       }
       return newSet;
     });
+  };
+
+  const allProcedureIds = planData?.procedures?.map(p => p?.id) || [];
+  const allExpanded = allProcedureIds.length > 0 && allProcedureIds.every(id => expandedProcedures.has(id));
+
+  const toggleExpandAll = () => {
+    if (allExpanded) {
+      setExpandedProcedures(new Set());
+    } else {
+      setExpandedProcedures(new Set(allProcedureIds));
+    }
+  };
+
+  const scrollToSection = (sectionId) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
 
@@ -288,7 +306,10 @@ export default function PatientPlanView() {
       generatingContent: 'Creating your education summary…',
       contentUnavailable: 'Education summary unavailable right now. Please contact our office.',
       expandDetails: 'Expand Details',
-      collapseDetails: 'Collapse Details'
+      collapseDetails: 'Collapse Details',
+      expandAll: 'Expand All',
+      collapseAll: 'Collapse All',
+      jumpTo: 'Jump to'
     },
     ES: {
       welcome: 'Bienvenido',
@@ -307,7 +328,10 @@ export default function PatientPlanView() {
       generatingContent: 'Creando su resumen educativo…',
       contentUnavailable: 'Resumen educativo no disponible en este momento. Comuníquese con nuestra oficina.',
       expandDetails: 'Expandir Detalles',
-      collapseDetails: 'Contraer Detalles'
+      collapseDetails: 'Contraer Detalles',
+      expandAll: 'Expandir Todo',
+      collapseAll: 'Contraer Todo',
+      jumpTo: 'Ir a'
     }
   };
 
@@ -365,7 +389,7 @@ export default function PatientPlanView() {
           <div className="mb-4">
             <ProcedureTimeline 
               steps={procedure?.timelineSteps || []} 
-              currentStep={0}
+              currentStep={-1}
               language={currentLanguage}
             />
           </div>
@@ -549,6 +573,98 @@ export default function PatientPlanView() {
           </motion.div>
         </div>
 
+        {/* Expand All / Collapse All + Jump to Section */}
+        {planData?.procedures?.length >= 3 && (
+          <div 
+            className="sticky top-0 z-10 rounded-xl p-3 mb-6 flex flex-wrap items-center gap-3"
+            style={{ 
+              backgroundColor: 'rgba(21, 24, 37, 0.95)', 
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(12px)'
+            }}
+          >
+            <button
+              onClick={toggleExpandAll}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ease-out"
+              style={{ 
+                backgroundColor: 'rgba(107, 124, 232, 0.15)', 
+                color: '#8b9aec', 
+                border: '1px solid rgba(107, 124, 232, 0.25)',
+                transitionDuration: '200ms'
+              }}
+            >
+              {allExpanded ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
+              {allExpanded ? t?.collapseAll : t?.expandAll}
+            </button>
+
+            <div className="h-5 w-px" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+
+            {proceduresByPriority?.Immediate?.length > 0 && (
+              <button
+                onClick={() => scrollToSection('priority-immediate')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out"
+                style={{ 
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                  color: '#fca5a5', 
+                  border: '1px solid rgba(239, 68, 68, 0.2)',
+                  transitionDuration: '200ms'
+                }}
+              >
+                <AlertCircle size={14} />
+                {t?.immediate}
+              </button>
+            )}
+            {proceduresByPriority?.Soon?.length > 0 && (
+              <button
+                onClick={() => scrollToSection('priority-soon')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out"
+                style={{ 
+                  backgroundColor: 'rgba(251, 191, 36, 0.1)', 
+                  color: '#fbbf24', 
+                  border: '1px solid rgba(251, 191, 36, 0.2)',
+                  transitionDuration: '200ms'
+                }}
+              >
+                <Clock size={14} />
+                {t?.soon}
+              </button>
+            )}
+            {proceduresByPriority?.Future?.length > 0 && (
+              <button
+                onClick={() => scrollToSection('priority-future')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out"
+                style={{ 
+                  backgroundColor: 'rgba(107, 124, 232, 0.1)', 
+                  color: '#8b9aec', 
+                  border: '1px solid rgba(107, 124, 232, 0.2)',
+                  transitionDuration: '200ms'
+                }}
+              >
+                <Calendar size={14} />
+                {t?.future}
+              </button>
+            )}
+          </div>
+        )}
+
+        {planData?.procedures?.length > 0 && planData?.procedures?.length < 3 && (
+          <div className="mb-6 flex items-center">
+            <button
+              onClick={toggleExpandAll}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ease-out"
+              style={{ 
+                backgroundColor: 'rgba(107, 124, 232, 0.15)', 
+                color: '#8b9aec', 
+                border: '1px solid rgba(107, 124, 232, 0.25)',
+                transitionDuration: '200ms'
+              }}
+            >
+              {allExpanded ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
+              {allExpanded ? t?.collapseAll : t?.expandAll}
+            </button>
+          </div>
+        )}
+
         {/* Priority Sections */}
         {proceduresByPriority?.Immediate?.length > 0 && (
           <motion.div 
@@ -556,6 +672,8 @@ export default function PatientPlanView() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             className="mb-8"
+            id="priority-immediate"
+            style={{ scrollMarginTop: '80px' }}
           >
             <div className="flex items-center gap-3 mb-4">
               <AlertCircle size={28} style={{ color: '#fca5a5' }} />
@@ -573,6 +691,8 @@ export default function PatientPlanView() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
             className="mb-8"
+            id="priority-soon"
+            style={{ scrollMarginTop: '80px' }}
           >
             <h2 className="text-3xl font-medium mb-4" style={{ color: '#e8e9ed', fontWeight: 500 }}>{t?.soon}</h2>
             <div className="space-y-4">
@@ -587,6 +707,8 @@ export default function PatientPlanView() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
             className="mb-8"
+            id="priority-future"
+            style={{ scrollMarginTop: '80px' }}
           >
             <h2 className="text-3xl font-medium mb-4" style={{ color: '#e8e9ed', fontWeight: 500 }}>{t?.future}</h2>
             <div className="space-y-4">

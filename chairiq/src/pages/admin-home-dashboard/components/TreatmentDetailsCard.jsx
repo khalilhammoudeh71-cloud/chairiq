@@ -129,9 +129,9 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
 
   const getPriorityColor = (priority) => {
     const colors = {
-      Immediate: 'bg-danger/10 text-danger border-danger/30',
+      Urgent: 'bg-danger/10 text-danger border-danger/30',
       Soon: 'bg-warning/10 text-warning border-warning/30',
-      Future: 'bg-accent/10 text-accent border-accent/30',
+      Later: 'bg-accent/10 text-accent border-accent/30',
     };
     return colors?.[priority] || colors?.Soon;
   };
@@ -261,8 +261,8 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
                           <span className="text-t2">{proc?.procedureName}</span>
                           <Badge
                             variant={
-                              proc?.priority === 'Urgent' ?'danger'
-                                : proc?.priority === 'Soon' ?'warning' :'default'
+                              proc?.priority === 'Urgent' ? 'danger'
+                                : proc?.priority === 'Soon' ? 'warning' : 'default'
                             }
                           >
                             {proc?.priority}

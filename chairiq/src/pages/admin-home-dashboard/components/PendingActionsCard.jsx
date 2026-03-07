@@ -10,10 +10,13 @@ export default function PendingActionsCard({ actions = [] }) {
 
   const getPriorityColor = (priority) => {
     switch (priority) {
+      case 'Urgent':
       case 'high':
         return 'bg-danger/10 text-danger border-danger/30';
+      case 'Soon':
       case 'medium':
         return 'bg-warning/10 text-warning border-warning/30';
+      case 'Later':
       case 'low':
         return 'bg-accent/10 text-accent border-accent/30';
       default:
@@ -54,7 +57,11 @@ export default function PendingActionsCard({ actions = [] }) {
                 <h3 className="text-t1 font-semibold">{action?.title}</h3>
                 <p className="text-t2 text-sm mt-1">{action?.description}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Badge variant={action?.priority === 'high' ? 'danger' : 'warning'}>
+                  <Badge variant={
+                    (action?.priority === 'Urgent' || action?.priority === 'high') ? 'danger'
+                      : (action?.priority === 'Later' || action?.priority === 'low') ? 'default'
+                      : 'warning'
+                  }>
                     {action?.priority}
                   </Badge>
                 </div>

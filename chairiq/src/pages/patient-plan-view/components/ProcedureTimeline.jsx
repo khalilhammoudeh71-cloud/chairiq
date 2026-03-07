@@ -7,7 +7,7 @@ import { Check, Clock, FileText, Calendar } from 'lucide-react';
  * Shows icons and short labels for each procedure step
  * Includes smooth CSS transitions for hover and active states
  */
-const ProcedureTimeline = ({ steps = [], currentStep = 0, language = 'EN' }) => {
+const ProcedureTimeline = ({ steps = [], currentStep = -1, language = 'EN' }) => {
   // Default step icons mapping
   const getStepIcon = (stepIndex) => {
     const icons = [Check, FileText, Calendar, Clock];

@@ -86,8 +86,8 @@ export default function PatientSearchCard({ onPatientSelect }) {
                 className="bg-bg1 cursor-pointer"
                 onClick={() => handlePatientClick(patient)}
               >
-                <div className="text-t1 font-medium">{patient?.name}</div>
-                <div className="text-t2 text-sm">ID: {patient?.id}</div>
+                <div className="text-t1 font-medium">{patient?.name || `${patient?.firstName} ${patient?.lastName}`}</div>
+                {patient?.phone && <div className="text-t2 text-sm">{patient?.phone}</div>}
               </Card>
             ))}
           </div>

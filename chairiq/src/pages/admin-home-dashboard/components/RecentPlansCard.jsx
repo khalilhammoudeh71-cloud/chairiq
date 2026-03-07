@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, Eye, Edit, ListPlus, Trash2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Calendar, Eye, MoreVertical, Edit, ListPlus, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
@@ -14,6 +14,18 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -96,7 +108,8 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
               key={plan?.id}
               padding="p-4"
               hover={true}
-              className="bg-bg1"
+              className="bg-bg1 cursor-pointer"
+              onClick={() => handleViewPlan(plan?.publicToken)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -106,35 +119,48 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
                     <span>{formatDate(plan?.createdAt)}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => handleViewPlan(plan?.publicToken)}
-                    title="View Plan"
-                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-accent/15 hover:text-accent transition-all duration-200"
+                    className="px-3 py-1.5 text-sm font-medium rounded-lg bg-accent text-white hover:bg-accent/90 transition-all duration-200 flex items-center gap-1.5"
                   >
-                    <Eye size={18} />
+                    <Eye size={14} />
+                    View
                   </button>
-                  <button
-                    onClick={() => navigate('/dentist-admin-analytics-dashboard')}
-                    title="View Analytics"
-                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-accent/15 hover:text-accent transition-all duration-200"
-                  >
-                    <Edit size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleModifyPlan(plan?.id)}
-                    title="Modify Treatment Plan"
-                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-accent/15 hover:text-accent transition-all duration-200"
-                  >
-                    <ListPlus size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteClick(plan)}
-                    title="Delete Patient Profile"
-                    className="w-9 h-9 flex items-center justify-center rounded-full text-t2 hover:bg-danger/15 hover:text-danger transition-all duration-200"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <div className="relative" ref={openMenuId === plan?.id ? menuRef : null}>
+                    <button
+                      onClick={() => setOpenMenuId(openMenuId === plan?.id ? null : plan?.id)}
+                      className="w-8 h-8 flex items-center justify-center rounded-full text-t2 hover:bg-bg2 transition-all duration-200"
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {openMenuId === plan?.id && (
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-bg2 border border-bd rounded-lg shadow-lg z-20 py-1">
+                        <button
+                          onClick={() => { navigate('/dentist-admin-analytics-dashboard'); setOpenMenuId(null); }}
+                          className="w-full px-3 py-2 text-sm text-t1 hover:bg-bg1 flex items-center gap-2 transition-colors"
+                        >
+                          <Edit size={14} />
+                          View Analytics
+                        </button>
+                        <button
+                          onClick={() => { handleModifyPlan(plan?.id); setOpenMenuId(null); }}
+                          className="w-full px-3 py-2 text-sm text-t1 hover:bg-bg1 flex items-center gap-2 transition-colors"
+                        >
+                          <ListPlus size={14} />
+                          Modify Plan
+                        </button>
+                        <div className="border-t border-bd my-1"></div>
+                        <button
+                          onClick={() => { handleDeleteClick(plan); setOpenMenuId(null); }}
+                          className="w-full px-3 py-2 text-sm text-danger hover:bg-danger/10 flex items-center gap-2 transition-colors"
+                        >
+                          <Trash2 size={14} />
+                          Delete Patient
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </Card>

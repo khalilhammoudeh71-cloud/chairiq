@@ -11,7 +11,6 @@ import StatCard from './components/StatCard';
 import RecentPlansCard from './components/RecentPlansCard';
 import PendingActionsCard from './components/PendingActionsCard';
 import ShortcutsCard from './components/ShortcutsCard';
-import TestEmailCard from './components/TestEmailCard';
 import PatientSearchCard from './components/PatientSearchCard';
 import TreatmentDetailsCard from './components/TreatmentDetailsCard';
 
@@ -173,16 +172,6 @@ export default function AdminHomeDashboard() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentPlansCard plans={recentPlans} onRefresh={fetchDashboardData} />
                 <PendingActionsCard actions={pendingActions} />
-              </div>
-            </section>
-
-            <section>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 rounded-full bg-accent" />
-                <h2 className="text-xl font-bold text-t1 tracking-tight">System Tools</h2>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <TestEmailCard />
               </div>
             </section>
 
