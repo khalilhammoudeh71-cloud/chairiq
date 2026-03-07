@@ -12,11 +12,11 @@ struct LoginView: View {
             ScrollView {
                 VStack(spacing: ChairIQTheme.Spacing.xl) {
                     VStack(spacing: ChairIQTheme.Spacing.md) {
-                        Image(systemName: "shield.checkered")
-                            .font(.system(size: 40))
-                            .foregroundStyle(.white)
+                        Image("AppIcon")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 72, height: 72)
-                            .background(ChairIQTheme.Colors.primary, in: RoundedRectangle(cornerRadius: ChairIQTheme.Radius.lg))
+                            .clipShape(RoundedRectangle(cornerRadius: ChairIQTheme.Radius.lg))
 
                         Text("ChairIQ")
                             .font(ChairIQTheme.Typography.largeTitle)

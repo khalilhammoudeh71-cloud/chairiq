@@ -46,7 +46,8 @@ export default function DentistNavigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="ChairIQ" className="w-9 h-9 rounded-lg" />
             <h1 className="text-2xl font-bold tracking-wide"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></h1>
           </div>
 

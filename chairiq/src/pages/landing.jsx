@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, ArrowRight, Monitor, Link2, MessageSquare, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Send, ArrowRight, Monitor, Link2, MessageSquare, ChevronDown } from 'lucide-react';
 import HeroAnimation from '../components/HeroAnimation';
 
 const FadeInSection = ({ children, className = '' }) => {
@@ -37,22 +37,17 @@ const Landing = () => {
       <header className="sticky top-0 z-50 border-b" style={{ background: '#0a0c12', borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div
-              className="flex items-center justify-center rounded-full bg-accent"
+            <img
+              src="/logo.png"
+              alt="ChairIQ"
               style={{
                 width: 'var(--logo-size, 2.25rem)',
                 height: 'var(--logo-size, 2.25rem)',
                 minWidth: 'var(--logo-size, 2.25rem)',
-                flexShrink: 0
-              }}>
-              <ShieldCheck
-                className="text-white"
-                strokeWidth={2.5}
-                style={{
-                  width: 'calc(var(--logo-size, 2.25rem) * 0.55)',
-                  height: 'calc(var(--logo-size, 2.25rem) * 0.55)'
-                }} />
-            </div>
+                flexShrink: 0,
+                borderRadius: '8px'
+              }}
+            />
             <span
               className="font-semibold text-white"
               style={{
@@ -242,22 +237,17 @@ const Landing = () => {
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2.5">
-              <div
-                className="flex items-center justify-center rounded-full bg-accent"
+              <img
+                src="/logo.png"
+                alt="ChairIQ"
                 style={{
                   width: '1.75rem',
                   height: '1.75rem',
                   minWidth: '1.75rem',
-                  flexShrink: 0
-                }}>
-                <ShieldCheck
-                  className="text-white"
-                  strokeWidth={2.5}
-                  style={{
-                    width: '1rem',
-                    height: '1rem'
-                  }} />
-              </div>
+                  flexShrink: 0,
+                  borderRadius: '6px'
+                }}
+              />
               <span className="font-semibold text-t1 text-sm">ChairIQ</span>
             </div>
             <div className="flex gap-6 text-t3 text-sm">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { authService } from '../../services/authService';
-import { ShieldCheck, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 
 export default function DentistLoginAuthentication() {
   const [email, setEmail] = useState('');
@@ -91,12 +91,11 @@ export default function DentistLoginAuthentication() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center px-12 max-w-lg">
-          <div
-            className="w-20 h-20 rounded-2xl flex items-center justify-center mb-8"
-            style={{ background: 'var(--accent)' }}
-          >
-            <ShieldCheck className="w-10 h-10 text-white" strokeWidth={2.2} />
-          </div>
+          <img
+            src="/logo.png"
+            alt="ChairIQ"
+            className="w-20 h-20 rounded-2xl mb-8"
+          />
 
           <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">ChairIQ</h2>
           <p className="text-lg text-gray-300 leading-relaxed mb-8">
@@ -129,12 +128,11 @@ export default function DentistLoginAuthentication() {
       <div className="w-full lg:w-1/2 bg-bg0 flex items-center justify-center p-6 sm:p-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-8 lg:hidden">
-            <div
-              className="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4"
-              style={{ background: 'var(--accent)' }}
-            >
-              <ShieldCheck className="w-7 h-7 text-white" strokeWidth={2.2} />
-            </div>
+            <img
+              src="/logo.png"
+              alt="ChairIQ"
+              className="w-14 h-14 rounded-xl mb-4 inline-block"
+            />
             <h1 className="text-2xl font-bold text-t1">ChairIQ</h1>
           </div>
 
