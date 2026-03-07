@@ -665,7 +665,7 @@ export default function AddProcedureDrawer({
               onClick={onClose}
               className="flex-1 px-6 py-3 bg-bg2 hover:bg-bg3 text-t1 font-bold rounded-xl transition-colors"
             >
-              Cancel
+              {addedProcedures?.length > 0 ? 'Done' : 'Cancel'}
             </button>
             <button
               onClick={handleSave}
@@ -677,7 +677,7 @@ export default function AddProcedureDrawer({
               }`}
             >
               {hasSelection && <Check size={20} />}
-              Add Procedure
+              Add to Plan
             </button>
           </div>
         </div>

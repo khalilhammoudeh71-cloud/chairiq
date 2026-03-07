@@ -771,16 +771,14 @@ export default function CreatePatientPlan() {
     setIsDrawerOpen(true);
   };
 
-  // Handle procedure save from drawer
   const handleSaveProcedureFromDrawer = (procedureData) => {
     const newProcedure = {
       ...procedureData,
       sortOrder: procedures?.length,
-      id: `temp-${Date.now()}` // Temporary ID for drag-and-drop
+      id: `temp-${Date.now()}`
     };
     setProcedures(prev => [...prev, newProcedure]);
-    setIsDrawerOpen(false);
-    showToast('Procedure added successfully', 'success');
+    showToast('Procedure added to plan', 'success');
   };
 
   const getCurrentStep = () => {
