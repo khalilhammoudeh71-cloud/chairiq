@@ -774,11 +774,12 @@ export default function CreatePatientPlan() {
   const handleSaveProcedureFromDrawer = (procedureData) => {
     const newProcedure = {
       ...procedureData,
-      sortOrder: procedures?.length,
-      id: `temp-${Date.now()}`
+      id: `temp-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
     };
-    setProcedures(prev => [...prev, newProcedure]);
-    showToast('Procedure added to plan', 'success');
+    setProcedures(prev => {
+      const updated = [...prev, { ...newProcedure, sortOrder: prev.length }];
+      return updated;
+    });
   };
 
   const getCurrentStep = () => {
