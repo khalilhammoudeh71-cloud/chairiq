@@ -469,7 +469,11 @@ export default function CreatePatientPlan() {
         setShareToken(linkResult.token);
       }
 
-      showToast('Patient plan saved successfully!', 'success');
+      if (result?.imageUploadFailures > 0) {
+        showToast(`Plan saved, but ${result.imageUploadFailures} patient image(s) failed to upload. The plan is still valid.`, 'warning');
+      } else {
+        showToast('Patient plan saved successfully!', 'success');
+      }
     } catch (error) {
       console.error('❌ Error saving plan:', error);
       showToast(`Error saving plan: ${error?.message}`, 'error');

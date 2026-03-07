@@ -3,6 +3,7 @@ import { twilioService } from './twilioService';
 import { procedureEducationGeneratorService } from './procedureEducationGeneratorService';
 import { normalizeProcedureKey } from '../utils/procedureNormalization';
 import proceduresLibrary from '../data/procedures';
+import storageService from './storageService';
 
 const DENTAL_SYNONYMS = {
   clean: ['cleaning', 'clean', 'remove', 'removing'],
@@ -230,6 +231,43 @@ export const patientPlanService = {
         throw proceduresError;
       }
 
+      let imageUploadFailures = 0;
+      if (proceduresResult?.length > 0) {
+        const sortedResults = [...proceduresResult].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+
+        for (let i = 0; i < procedures.length; i++) {
+          const proc = procedures[i];
+          const patientImages = proc?.patientImages;
+          if (!patientImages?.length) continue;
+
+          const matchedProcedure = sortedResults[i];
+          if (!matchedProcedure?.id) {
+            console.warn(`[PatientPlanService] Could not match procedure at index ${i} to DB result for image upload`);
+            continue;
+          }
+
+          for (let j = 0; j < patientImages.length; j++) {
+            const img = patientImages[j];
+            if (!img?.file) continue;
+            try {
+              await storageService.uploadPatientImage(
+                matchedProcedure.id,
+                img.file,
+                img.note || '',
+                j
+              );
+            } catch (uploadError) {
+              imageUploadFailures++;
+              console.error(`[PatientPlanService] Failed to upload patient image ${j} for procedure ${matchedProcedure.id}:`, uploadError);
+            }
+          }
+        }
+
+        if (imageUploadFailures > 0) {
+          console.warn(`[PatientPlanService] ${imageUploadFailures} patient image(s) failed to upload`);
+        }
+      }
+
       // Return complete plan data with camelCase conversion
       return {
         patient: {
@@ -260,7 +298,8 @@ export const patientPlanService = {
           estTime: proc?.est_time,
           notesForPatient: proc?.notes_for_patient,
           sortOrder: proc?.sort_order
-        }))
+        })),
+        imageUploadFailures
       };
     } catch (error) {
       throw error;
@@ -817,6 +856,13 @@ export const patientPlanService = {
             whyItMatters: s?.whyItMatters || null
           })) || [];
 
+          let patientImages = [];
+          try {
+            patientImages = await storageService.fetchPatientImages(proc?.id);
+          } catch (patientImgError) {
+            console.error(`⚠️ Error fetching patient images for ${proc?.id}:`, patientImgError);
+          }
+
           return {
             id: proc?.id,
             procedureName: proc?.procedure_name || proc?.display_title || 'Not specified',
@@ -829,6 +875,7 @@ export const patientPlanService = {
             estTime: proc?.est_time,
             notesForPatient: proc?.notes_for_patient,
             sortOrder: proc?.sort_order,
+            patientImages,
             library: {
               content: {
                 [patientLanguage]: visualsForSteps?.length > 0 ? visualsForSteps : educationContent?.steps

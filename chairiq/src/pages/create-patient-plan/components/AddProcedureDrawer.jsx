@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Search, Star, Clock } from 'lucide-react';
+import { X, Search, Star, Clock, ImagePlus, Camera } from 'lucide-react';
 import { procedureCodesService } from '../../../services/procedureCodesService';
 import { supabase } from '../../../lib/supabase';
 
@@ -26,7 +26,8 @@ export default function AddProcedureDrawer({
     toothNumbers: '',
     priority: 'Soon',
     estTime: '',
-    notesForPatient: ''
+    notesForPatient: '',
+    patientImages: []
   });
 
   const [showToothPicker, setShowToothPicker] = useState(false);
@@ -158,11 +159,57 @@ export default function AddProcedureDrawer({
     });
   };
 
+  const handleImageSelect = (e) => {
+    const files = Array.from(e?.target?.files || []);
+    const currentCount = formData?.patientImages?.length || 0;
+    const remaining = 5 - currentCount;
+    if (remaining <= 0) {
+      alert('Maximum 5 images per procedure');
+      return;
+    }
+    const filesToAdd = files.slice(0, remaining);
+    const validFiles = filesToAdd.filter(file => {
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`File "${file.name}" exceeds 5MB limit and was skipped.`);
+        return false;
+      }
+      return true;
+    });
+    const newImages = validFiles.map(file => ({
+      file,
+      note: '',
+      preview: URL.createObjectURL(file)
+    }));
+    setFormData(prev => ({
+      ...prev,
+      patientImages: [...(prev?.patientImages || []), ...newImages]
+    }));
+    e.target.value = '';
+  };
+
+  const handleRemoveImage = (index) => {
+    setFormData(prev => {
+      const updated = [...(prev?.patientImages || [])];
+      if (updated[index]?.preview) {
+        URL.revokeObjectURL(updated[index].preview);
+      }
+      updated.splice(index, 1);
+      return { ...prev, patientImages: updated };
+    });
+  };
+
+  const handleImageNoteChange = (index, note) => {
+    setFormData(prev => {
+      const updated = [...(prev?.patientImages || [])];
+      updated[index] = { ...updated[index], note };
+      return { ...prev, patientImages: updated };
+    });
+  };
+
   const handleSave = () => {
     console.log('🎯 DRAWER SAVE CLICKED');
     console.log('Form data before validation:', formData);
     
-    // Validate
     if (!formData?.procedureSlug && !formData?.adaCode && !formData?.displayTitle?.trim()) {
       console.error('❌ Drawer validation failed - no valid identifier');
       alert('Please select or enter a procedure');
@@ -173,7 +220,9 @@ export default function AddProcedureDrawer({
     onSave(formData);
     
     console.log('🧹 Resetting drawer form...');
-    // Reset form
+    formData?.patientImages?.forEach(img => {
+      if (img?.preview) URL.revokeObjectURL(img.preview);
+    });
     setFormData({
       procedureSlug: '',
       adaCode: '',
@@ -182,7 +231,8 @@ export default function AddProcedureDrawer({
       toothNumbers: '',
       priority: 'Soon',
       estTime: '',
-      notesForPatient: ''
+      notesForPatient: '',
+      patientImages: []
     });
     setSearchTerm('');
     console.log('✅ Drawer reset complete');
@@ -443,6 +493,70 @@ export default function AddProcedureDrawer({
               rows="3"
               placeholder="Additional information for the patient..."
             />
+          </div>
+
+          {/* Patient Images */}
+          <div>
+            <label className="block text-t2 mb-2 text-base font-semibold flex items-center gap-2">
+              <Camera size={18} />
+              Patient Images
+              <span className="text-t3 text-sm font-normal">({formData?.patientImages?.length || 0}/5)</span>
+            </label>
+            <p className="text-t3 text-sm mb-3">
+              Upload X-rays or intraoral photos specific to this patient (max 5MB each)
+            </p>
+
+            {(formData?.patientImages?.length || 0) < 5 && (
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-bd rounded-lg cursor-pointer bg-bg2 hover:bg-bg3 hover:border-accent transition-colors mb-3">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <ImagePlus size={28} className="text-t3 mb-2" />
+                  <p className="text-sm text-t3">
+                    <span className="font-semibold text-accent">Click to upload</span> or drag and drop
+                  </p>
+                  <p className="text-xs text-t3 mt-1">PNG, JPG, JPEG up to 5MB</p>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageSelect}
+                  className="hidden"
+                />
+              </label>
+            )}
+
+            {formData?.patientImages?.length > 0 && (
+              <div className="space-y-3">
+                {formData.patientImages.map((img, index) => (
+                  <div key={index} className="flex gap-3 p-3 bg-bg2 rounded-lg border border-bd">
+                    <div className="relative w-20 h-20 flex-shrink-0">
+                      <img
+                        src={img.preview}
+                        alt={`Patient image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-error text-white rounded-full flex items-center justify-center hover:brightness-110 transition-colors"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        value={img.note}
+                        onChange={(e) => handleImageNoteChange(index, e?.target?.value)}
+                        placeholder="Add a note (e.g., X-ray shows decay on tooth #14)"
+                        className="w-full px-3 py-2 bg-bg1 border border-bd rounded-lg text-t1 text-sm placeholder-t3 focus:outline-none focus:border-accent"
+                      />
+                      <p className="text-xs text-t3 mt-1">{img.file?.name}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

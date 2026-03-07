@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trash2, GripVertical } from 'lucide-react';
+import { Trash2, GripVertical, Camera } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -78,9 +78,17 @@ export default function ProcedureTableRow({
 
         {/* Treatment Title */}
         <td className="px-4 py-4">
-          <span className="text-t1 font-medium">
-            {procedure?.displayTitle || procedure?.procedureName || '-'}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-t1 font-medium">
+              {procedure?.displayTitle || procedure?.procedureName || '-'}
+            </span>
+            {procedure?.patientImages?.length > 0 && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-semibold">
+                <Camera size={12} />
+                {procedure.patientImages.length}
+              </span>
+            )}
+          </div>
         </td>
 
         {/* ADA Code */}
@@ -145,7 +153,15 @@ export default function ProcedureTableRow({
         {/* Card Content */}
         <div className="p-4 space-y-3">
           <div>
-            <p className="text-xs text-t3 mb-1">Treatment Title</p>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="text-xs text-t3">Treatment Title</p>
+              {procedure?.patientImages?.length > 0 && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-semibold">
+                  <Camera size={12} />
+                  {procedure.patientImages.length}
+                </span>
+              )}
+            </div>
             <p className="text-t1 font-semibold">
               {procedure?.displayTitle || procedure?.procedureName || '-'}
             </p>

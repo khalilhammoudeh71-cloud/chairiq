@@ -62,6 +62,9 @@ A native Swift/SwiftUI iOS port of ChairIQ lives in `chairiq-ios/`. It is a stan
 
 **Deep Links:** Handles `chairiq://chairiq/p/{publicToken}` URLs to open patient plan views directly.
 
+## Patient-Specific Images
+Dentists can upload patient-specific images (X-rays, intraoral photos) with custom notes when creating treatment plans. Images are uploaded per-procedure in the AddProcedureDrawer (max 5 per procedure, 5MB each). On save, images are stored in Supabase Storage at `patient-specific/{plan_procedure_id}/` and tracked in the `procedure_visuals` table using `canonical_slug: 'patient-{plan_procedure_id}'`. On the patient landing page, these images appear under "Why This Treatment Is Needed" before the generic educational content, with a full-screen lightbox on click. The ProcedureTableRow shows a camera icon badge with count when images are attached.
+
 ## External Dependencies
 - **Supabase**: For user authentication, database management (PostgreSQL), and storage (for treatment images).
 - **Google Gemini AI**: Used for content generation services.

@@ -9,6 +9,7 @@ import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, ShieldX, TimerOff
 import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
+import PatientImageGallery from './components/PatientImageGallery';
 
 function VisualsDebugPanel({ planData }) {
   const params = new URLSearchParams(window.location.search);
@@ -432,7 +433,13 @@ export default function PatientPlanView() {
             }}
           >
             <div className="px-6 pb-6 space-y-6">
-              {/* Visual Deck - Always show if content exists */}
+              {procedure?.patientImages?.length > 0 && (
+                <PatientImageGallery
+                  images={procedure.patientImages}
+                  language={currentLanguage}
+                />
+              )}
+
               {hasContent && content?.length > 0 && (
                 <CategoryVisualDeck 
                   steps={content}

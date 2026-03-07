@@ -112,6 +112,78 @@ const storageService = {
     return { publicUrl, record: result };
   },
 
+  async uploadPatientImage(planProcedureId, file, note, sortOrder) {
+    if (!supabase) throw new Error('Supabase not initialized');
+
+    const ext = file.name?.split('.')?.pop()?.toLowerCase() || 'png';
+    const validExt = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext) ? ext : 'png';
+    const stepKey = `patient_img_${sortOrder}`;
+    const storagePath = `patient-specific/${planProcedureId}/${stepKey}.${validExt}`;
+    const canonicalSlug = `patient-${planProcedureId}`;
+
+    const { publicUrl } = await this.upload(storagePath, file, { upsert: true });
+
+    const record = {
+      canonical_slug: canonicalSlug,
+      step_key: stepKey,
+      image_url: publicUrl,
+      sort_order: sortOrder,
+      alt_text_en: note || '',
+      alt_text_es: note || '',
+    };
+
+    const { data: existing } = await supabase
+      .from('procedure_visuals')
+      .select('id')
+      .eq('canonical_slug', canonicalSlug)
+      .eq('step_key', stepKey)
+      .maybeSingle();
+
+    let result;
+    if (existing?.id) {
+      const { data, error } = await supabase
+        .from('procedure_visuals')
+        .update({ image_url: publicUrl, alt_text_en: note || '', alt_text_es: note || '', updated_at: new Date().toISOString() })
+        .eq('id', existing.id)
+        .select()
+        .single();
+      if (error) throw error;
+      result = data;
+    } else {
+      const { data, error } = await supabase
+        .from('procedure_visuals')
+        .insert(record)
+        .select()
+        .single();
+      if (error) throw error;
+      result = data;
+    }
+
+    return { publicUrl, record: result };
+  },
+
+  async fetchPatientImages(planProcedureId) {
+    if (!supabase) return [];
+
+    const canonicalSlug = `patient-${planProcedureId}`;
+    const { data, error } = await supabase
+      .from('procedure_visuals')
+      .select('*')
+      .eq('canonical_slug', canonicalSlug)
+      .order('sort_order', { ascending: true });
+
+    if (error) {
+      console.error('[StorageService] fetchPatientImages error:', error);
+      return [];
+    }
+
+    return (data || []).map(row => ({
+      imageUrl: row.image_url,
+      note: row.alt_text_en || '',
+      sortOrder: row.sort_order,
+    }));
+  },
+
   async syncLocalImageToStorage(canonicalSlug, stepKey, localPath, sortOrder = 0) {
     if (!supabase) throw new Error('Supabase not initialized');
 
