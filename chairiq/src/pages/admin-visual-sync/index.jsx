@@ -5,6 +5,7 @@ import DentistNavigation from '../../components/DentistNavigation';
 import { supabase } from '../../lib/supabase';
 import storageService from '../../services/storageService';
 import proceduresLibrary from '../../data/procedures';
+import { procedureCodesService } from '../../services/procedureCodesService';
 
 const BUCKET_NAME = 'treatment-images';
 
@@ -22,11 +23,22 @@ export default function AdminVisualSync() {
   const [uploadPreview, setUploadPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState(null);
+  const [adaCodes, setAdaCodes] = useState([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     loadExistingVisuals();
+    loadAdaCodes();
   }, []);
+
+  async function loadAdaCodes() {
+    try {
+      const codes = await procedureCodesService?.getAllCodes();
+      setAdaCodes(codes || []);
+    } catch (err) {
+      console.error('Failed to load ADA codes:', err);
+    }
+  }
 
   async function loadExistingVisuals() {
     try {
@@ -251,7 +263,19 @@ export default function AdminVisualSync() {
   }
 
   function getSelectedProcedure() {
-    return proceduresLibrary.find(p => p.id === uploadProcedure);
+    const libProc = proceduresLibrary.find(p => p.id === uploadProcedure);
+    if (libProc) return libProc;
+    const adaCode = adaCodes.find(c => c.code === uploadProcedure);
+    if (adaCode) {
+      return {
+        id: adaCode.code,
+        name_en: adaCode.title,
+        name_es: adaCode.title,
+        category: adaCode.category || 'general',
+        visualGuideSteps: []
+      };
+    }
+    return null;
   }
 
   function getStepOptions() {
@@ -408,9 +432,20 @@ export default function AdminVisualSync() {
                   className="w-full bg-bg2 border border-bd rounded-lg px-3 py-2 text-t1 text-sm focus-visible:outline focus-visible:outline-accent/30"
                 >
                   <option value="">Select a procedure...</option>
-                  {proceduresLibrary.map(p => (
-                    <option key={p.id} value={p.id}>{p.name_en}</option>
-                  ))}
+                  {proceduresLibrary.length > 0 && (
+                    <optgroup label="Library Procedures">
+                      {proceduresLibrary.map(p => (
+                        <option key={p.id} value={p.id}>{p.name_en}</option>
+                      ))}
+                    </optgroup>
+                  )}
+                  {adaCodes.length > 0 && (
+                    <optgroup label="ADA Codes">
+                      {adaCodes.map(c => (
+                        <option key={c.code} value={c.code}>{c.code} — {c.title}</option>
+                      ))}
+                    </optgroup>
+                  )}
                 </select>
               </div>
               <div>
