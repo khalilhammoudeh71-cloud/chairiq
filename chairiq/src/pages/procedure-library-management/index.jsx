@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Search, Copy, Eye, EyeOff, CheckCircle, AlertCircle, BookOpen } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Copy, Eye, EyeOff, CheckCircle, AlertCircle, BookOpen, Upload, Image as ImageIcon, ChevronDown, Loader2, Check, X } from 'lucide-react';
 import { procedureLibraryService } from '../../services/procedureLibraryService';
+import { procedureCodesService } from '../../services/procedureCodesService';
+import { adaCodeMappingService } from '../../services/adaCodeMappingService';
+import { supabase } from '../../lib/supabase';
 import DentistNavigation from '../../components/DentistNavigation';
 import Card from '../../components/ui/Card';
 import ButtonPrimary from '../../components/ui/ButtonPrimary';
@@ -48,6 +51,8 @@ function getContentCompleteness(proc) {
   return Math.round((filled / total) * 100);
 }
 
+const BUCKET_NAME = 'treatment-images';
+
 export default function ProcedureLibraryManagement() {
   const navigate = useNavigate();
   const [procedures, setProcedures] = useState([]);
@@ -59,9 +64,40 @@ export default function ProcedureLibraryManagement() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
+  const [adaCodes, setAdaCodes] = useState([]);
+  const [selectedAdaCode, setSelectedAdaCode] = useState('');
+  const [adaDropdownOpen, setAdaDropdownOpen] = useState(false);
+  const [adaSearchTerm, setAdaSearchTerm] = useState('');
+  const adaDropdownRef = useRef(null);
+
+  const [showVisualUpload, setShowVisualUpload] = useState(false);
+  const [uploadStepKey, setUploadStepKey] = useState('hero');
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadPreview, setUploadPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadResult, setUploadResult] = useState(null);
+  const [existingVisuals, setExistingVisuals] = useState([]);
+  const fileInputRef = useRef(null);
+  const uploadSectionRef = useRef(null);
+
   useEffect(() => {
     loadProcedures();
+    loadAdaCodes();
+    loadExistingVisuals();
   }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (adaDropdownRef.current && !adaDropdownRef.current.contains(e.target)) {
+        setAdaDropdownOpen(false);
+        setAdaSearchTerm('');
+      }
+    }
+    if (adaDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [adaDropdownOpen]);
 
   useEffect(() => {
     if (success) {
@@ -129,7 +165,183 @@ export default function ProcedureLibraryManagement() {
     setSearchTerm('');
     setFilterCategory('all');
     setFilterStatus('all');
+    setSelectedAdaCode('');
   };
+
+  async function loadAdaCodes() {
+    try {
+      const codes = await procedureCodesService?.getAllCodes();
+      setAdaCodes(codes || []);
+    } catch (err) {
+      console.error('Failed to load ADA codes:', err);
+    }
+  }
+
+  async function loadExistingVisuals() {
+    try {
+      if (!supabase) return;
+      const { data } = await supabase
+        .from('procedure_visuals')
+        .select('canonical_slug, step_key, image_url');
+      setExistingVisuals(data || []);
+    } catch (err) {
+      console.error('Failed to load visuals:', err);
+    }
+  }
+
+  const filteredAdaCodes = useMemo(() => {
+    if (!adaSearchTerm) return adaCodes;
+    const term = adaSearchTerm.toLowerCase();
+    return adaCodes.filter(c =>
+      c?.code?.toLowerCase()?.includes(term) ||
+      c?.title?.toLowerCase()?.includes(term)
+    );
+  }, [adaCodes, adaSearchTerm]);
+
+  function handleSelectAdaCode(code) {
+    setSelectedAdaCode(code);
+    setAdaDropdownOpen(false);
+    setAdaSearchTerm('');
+    if (code) {
+      setShowVisualUpload(true);
+      setUploadStepKey('hero');
+      setUploadFile(null);
+      setUploadPreview(null);
+      setUploadResult(null);
+      setTimeout(() => {
+        uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } else {
+      setShowVisualUpload(false);
+    }
+  }
+
+  async function resolveCanonicalSlug(adaCode) {
+    try {
+      const { data } = await adaCodeMappingService.getCanonicalProcedureByAdaCode(adaCode);
+      if (data?.canonicalSlug) {
+        return { slug: data.canonicalSlug, name: data.canonicalNameEn || data.canonicalSlug, category: data.category || 'general' };
+      }
+    } catch (err) {
+      console.warn(`No canonical mapping for ${adaCode}`);
+    }
+    const code = adaCodes.find(c => c.code === adaCode);
+    return { slug: adaCode, name: code?.title || adaCode, category: code?.category || 'general' };
+  }
+
+  function handleFileSelect(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadFile(file);
+    setUploadResult(null);
+    const reader = new FileReader();
+    reader.onload = (ev) => setUploadPreview(ev.target.result);
+    reader.readAsDataURL(file);
+  }
+
+  const selectedVisualsForCode = useMemo(() => {
+    if (!selectedAdaCode) return [];
+    const code = adaCodes.find(c => c.code === selectedAdaCode);
+    if (!code) return [];
+    const possibleSlugs = new Set();
+    possibleSlugs.add(selectedAdaCode);
+    possibleSlugs.add(selectedAdaCode.toLowerCase());
+    if (code.title) {
+      const slug = code.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      possibleSlugs.add(slug);
+    }
+    const allMapped = existingVisuals.filter(v => possibleSlugs.has(v.canonical_slug));
+    if (allMapped.length > 0) return allMapped;
+    return [];
+  }, [selectedAdaCode, adaCodes, existingVisuals]);
+
+  const [resolvedSlugForSelected, setResolvedSlugForSelected] = useState(null);
+
+  useEffect(() => {
+    if (!selectedAdaCode) {
+      setResolvedSlugForSelected(null);
+      return;
+    }
+    let cancelled = false;
+    resolveCanonicalSlug(selectedAdaCode).then(result => {
+      if (!cancelled) setResolvedSlugForSelected(result);
+    });
+    return () => { cancelled = true; };
+  }, [selectedAdaCode]);
+
+  const resolvedVisuals = useMemo(() => {
+    if (!resolvedSlugForSelected) return selectedVisualsForCode;
+    return existingVisuals.filter(v => v.canonical_slug === resolvedSlugForSelected.slug);
+  }, [resolvedSlugForSelected, existingVisuals, selectedVisualsForCode]);
+
+  async function handleVisualUpload() {
+    if (!uploadFile || !selectedAdaCode) return;
+    setIsUploading(true);
+    setUploadResult(null);
+    try {
+      const { slug: canonicalSlug, name: procName, category } = await resolveCanonicalSlug(selectedAdaCode);
+
+      const { data: existingProc } = await supabase
+        .from('canonical_procedures')
+        .select('slug')
+        .eq('slug', canonicalSlug)
+        .maybeSingle();
+      if (!existingProc) {
+        const { error: insertErr } = await supabase.from('canonical_procedures').insert({
+          slug: canonicalSlug,
+          display_name_en: procName,
+          display_name_es: procName,
+          category: category,
+        });
+        if (insertErr) {
+          console.error('Failed to create canonical procedure:', insertErr);
+          throw insertErr;
+        }
+      }
+
+      const ext = uploadFile.name.split('.').pop()?.toLowerCase() || 'png';
+      const storagePath = `${canonicalSlug}/${uploadStepKey}.${ext}`;
+
+      const { data, error: uploadError } = await supabase.storage
+        .from(BUCKET_NAME)
+        .upload(storagePath, uploadFile, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: uploadFile.type || 'image/png',
+        });
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage.from(BUCKET_NAME).getPublicUrl(data.path);
+      const publicUrl = urlData.publicUrl;
+
+      const sortOrder = uploadStepKey === 'hero' ? 0 : parseInt(uploadStepKey.replace('step_', ''), 10);
+      const altEn = uploadStepKey === 'hero' ? `${procName} hero image` : `${procName} - ${uploadStepKey.replace('_', ' ')}`;
+
+      const { error: upsertError } = await supabase
+        .from('procedure_visuals')
+        .upsert({
+          canonical_slug: canonicalSlug,
+          step_key: uploadStepKey,
+          image_url: publicUrl,
+          sort_order: sortOrder,
+          alt_text_en: altEn,
+          alt_text_es: altEn,
+        }, { onConflict: 'canonical_slug,step_key' });
+      if (upsertError) throw upsertError;
+
+      const slugNote = canonicalSlug !== selectedAdaCode ? ` (mapped to "${canonicalSlug}")` : '';
+      setUploadResult({ success: true, message: `Image uploaded successfully${slugNote}` });
+      setUploadFile(null);
+      setUploadPreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      await loadExistingVisuals();
+    } catch (err) {
+      console.error('Visual upload failed:', err);
+      setUploadResult({ success: false, message: err.message || 'Upload failed' });
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   const filteredProcedures = procedures?.filter(proc => {
     const matchesSearch = !searchTerm ||
@@ -245,6 +457,180 @@ export default function ProcedureLibraryManagement() {
               <ButtonSecondary onClick={handleReset} className="w-full">
                 Reset Filters
               </ButtonSecondary>
+            </div>
+          </Card>
+
+          <Card className="mb-6">
+            <div className="p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex-1 relative" ref={adaDropdownRef}>
+                  <label className="block text-t2 text-xs font-medium mb-1.5">Upload Visuals by ADA Code</label>
+                  <div
+                    onClick={() => setAdaDropdownOpen(!adaDropdownOpen)}
+                    className="w-full px-4 py-2.5 border border-bd rounded-lg bg-bg2 text-t1 cursor-pointer flex items-center justify-between hover:border-accent/50 transition-colors"
+                  >
+                    <span className={selectedAdaCode ? 'text-t1' : 'text-t3'}>
+                      {selectedAdaCode
+                        ? `${selectedAdaCode} — ${adaCodes.find(c => c.code === selectedAdaCode)?.title || ''}`
+                        : 'Select an ADA code to upload visuals...'}
+                    </span>
+                    <ChevronDown className={`w-4 h-4 text-t3 transition-transform ${adaDropdownOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {adaDropdownOpen && (
+                    <div className="absolute z-50 mt-1 w-full bg-bg1 border border-bd rounded-lg shadow-xl max-h-72 overflow-hidden flex flex-col">
+                      <div className="p-2 border-b border-bd">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-t3" />
+                          <input
+                            type="text"
+                            autoFocus
+                            placeholder="Type to filter codes..."
+                            value={adaSearchTerm}
+                            onChange={(e) => setAdaSearchTerm(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full pl-9 pr-3 py-2 bg-bg2 border border-bd rounded-lg text-t1 text-sm focus:border-accent focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div className="overflow-y-auto flex-1">
+                        {selectedAdaCode && (
+                          <button
+                            onClick={() => handleSelectAdaCode('')}
+                            className="w-full text-left px-4 py-2.5 text-sm text-t3 hover:bg-bg2 transition-colors"
+                          >
+                            Clear selection
+                          </button>
+                        )}
+                        {filteredAdaCodes.map(c => (
+                          <button
+                            key={c.code}
+                            onClick={() => handleSelectAdaCode(c.code)}
+                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-bg2 transition-colors flex items-center gap-2 ${selectedAdaCode === c.code ? 'bg-accent/10 text-accent font-medium' : 'text-t1'}`}
+                          >
+                            <span className="font-mono text-xs text-accent bg-accent/10 px-1.5 py-0.5 rounded flex-shrink-0">{c.code}</span>
+                            <span className="truncate">{c.title}</span>
+                          </button>
+                        ))}
+                        {filteredAdaCodes.length === 0 && (
+                          <div className="px-4 py-6 text-center text-t3 text-sm">No ADA codes match your search</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {selectedAdaCode && (
+                  <div className="flex items-end gap-2">
+                    <button
+                      onClick={() => { setShowVisualUpload(!showVisualUpload); setUploadResult(null); }}
+                      className="flex items-center gap-1.5 px-4 py-2.5 bg-accent text-white rounded-lg hover:brightness-110 transition-all text-sm font-medium"
+                    >
+                      {showVisualUpload ? <X className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
+                      {showVisualUpload ? 'Close' : 'Upload Visual'}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {showVisualUpload && selectedAdaCode && (
+                <div ref={uploadSectionRef} className="mt-4 p-4 bg-bg2 rounded-xl border border-accent/20">
+                  <h4 className="text-t1 font-semibold text-sm mb-3 flex items-center gap-2">
+                    <Upload className="w-4 h-4 text-accent" />
+                    Upload Visual for {selectedAdaCode} — {adaCodes.find(c => c.code === selectedAdaCode)?.title}
+                    {resolvedSlugForSelected && resolvedSlugForSelected.slug !== selectedAdaCode && (
+                      <span className="text-xs text-t3 font-normal">(saves to "{resolvedSlugForSelected.slug}")</span>
+                    )}
+                  </h4>
+
+                  {resolvedVisuals.length > 0 && (
+                    <div className="mb-3 p-2.5 bg-bg1 rounded-lg border border-bd">
+                      <p className="text-xs text-t2 font-medium mb-2">
+                        Existing images ({resolvedVisuals.length})
+                        {resolvedVisuals.find(v => v.step_key === uploadStepKey) && (
+                          <span className="text-warning ml-1.5">— will replace {uploadStepKey === 'hero' ? 'hero' : uploadStepKey.replace('_', ' ')}</span>
+                        )}
+                      </p>
+                      <div className="flex gap-2 overflow-x-auto pb-1">
+                        {resolvedVisuals
+                          .sort((a, b) => (a.step_key === 'hero' ? -1 : b.step_key === 'hero' ? 1 : a.step_key.localeCompare(b.step_key)))
+                          .map(v => (
+                          <div
+                            key={`${v.canonical_slug}-${v.step_key}`}
+                            className={`flex-shrink-0 w-20 rounded-lg border overflow-hidden ${
+                              v.step_key === uploadStepKey ? 'border-warning ring-2 ring-warning/30' : 'border-bd'
+                            }`}
+                          >
+                            <div className="aspect-video bg-bg3 overflow-hidden">
+                              <img src={v.image_url} alt="" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
+                            </div>
+                            <p className={`text-[10px] text-center py-0.5 ${v.step_key === uploadStepKey ? 'text-warning font-semibold' : 'text-t3'}`}>
+                              {v.step_key === 'hero' ? 'Hero' : v.step_key.replace('step_', 'Step ')}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                    <div>
+                      <label className="block text-t2 text-xs mb-1">Step</label>
+                      <select
+                        value={uploadStepKey}
+                        onChange={(e) => setUploadStepKey(e.target.value)}
+                        className="w-full bg-bg1 border border-bd rounded-lg px-3 py-2 text-t1 text-sm focus:border-accent focus:outline-none"
+                      >
+                        <option value="hero">Hero Image</option>
+                        {[1,2,3,4,5,6,7,8,9,10].map(i => (
+                          <option key={i} value={`step_${i}`}>Step {i}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-t2 text-xs mb-1">Image File</label>
+                      <label className="flex items-center justify-center gap-2 px-3 py-2 bg-bg1 border-2 border-dashed border-bd rounded-lg cursor-pointer hover:border-accent/50 hover:bg-bg3 transition-all">
+                        <Upload className="w-3.5 h-3.5 text-t3" />
+                        <span className="text-t2 text-sm truncate">{uploadFile ? uploadFile.name : 'Choose image...'}</span>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileSelect}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {uploadPreview && (
+                    <div className="mb-3 flex items-center gap-3">
+                      <div className="w-24 h-16 rounded-lg overflow-hidden border border-bd">
+                        <img src={uploadPreview} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                      <span className="text-xs text-t3">Preview</span>
+                    </div>
+                  )}
+
+                  {uploadResult && (
+                    <div className={`mb-3 px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+                      uploadResult.success
+                        ? 'bg-success/10 border border-success/30 text-success'
+                        : 'bg-danger/10 border border-danger/30 text-danger'
+                    }`}>
+                      {uploadResult.success ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                      {uploadResult.message}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleVisualUpload}
+                    disabled={!uploadFile || isUploading}
+                    className="flex items-center gap-2 px-5 py-2 bg-accent text-white rounded-lg hover:brightness-110 disabled:opacity-50 transition-all text-sm font-medium"
+                  >
+                    {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    {isUploading ? 'Uploading...' : 'Upload & Save'}
+                  </button>
+                </div>
+              )}
             </div>
           </Card>
 
