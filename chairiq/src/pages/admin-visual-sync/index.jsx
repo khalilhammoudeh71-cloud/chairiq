@@ -6,6 +6,7 @@ import { supabase } from '../../lib/supabase';
 import storageService from '../../services/storageService';
 import proceduresLibrary from '../../data/procedures';
 import { procedureCodesService } from '../../services/procedureCodesService';
+import { adaCodeMappingService } from '../../services/adaCodeMappingService';
 
 const BUCKET_NAME = 'treatment-images';
 
@@ -291,16 +292,36 @@ export default function AdminVisualSync() {
     return steps;
   }
 
+  async function resolveCanonicalSlug(selectedValue) {
+    const libProc = proceduresLibrary.find(p => p.id === selectedValue);
+    if (libProc) return { slug: libProc.id, name: libProc.name_en };
+
+    try {
+      const { data } = await adaCodeMappingService.getCanonicalProcedureByAdaCode(selectedValue);
+      if (data?.canonicalSlug) {
+        return { slug: data.canonicalSlug, name: data.canonicalNameEn || data.canonicalSlug };
+      }
+    } catch (err) {
+      console.warn(`No canonical mapping for ${selectedValue}, using as-is`);
+    }
+
+    const adaCode = adaCodes.find(c => c.code === selectedValue);
+    return { slug: selectedValue, name: adaCode?.title || selectedValue };
+  }
+
   async function handleCustomUpload() {
     if (!uploadFile || !uploadProcedure) return;
     setIsUploading(true);
     setUploadResult(null);
     try {
+      const { slug: canonicalSlug, name: procName } = await resolveCanonicalSlug(uploadProcedure);
+
       const proc = getSelectedProcedure();
-      if (proc) await ensureCanonicalProcedure(proc);
+      const canonicalProc = proc ? { ...proc, id: canonicalSlug } : { id: canonicalSlug, name_en: procName, name_es: procName, category: 'general' };
+      await ensureCanonicalProcedure(canonicalProc);
 
       const ext = uploadFile.name.split('.').pop()?.toLowerCase() || 'png';
-      const storagePath = `${uploadProcedure}/${uploadStepKey}.${ext}`;
+      const storagePath = `${canonicalSlug}/${uploadStepKey}.${ext}`;
 
       const { data, error } = await supabase.storage
         .from(BUCKET_NAME)
@@ -315,13 +336,12 @@ export default function AdminVisualSync() {
       const publicUrl = urlData.publicUrl;
 
       const sortOrder = uploadStepKey === 'hero' ? 0 : parseInt(uploadStepKey.replace('step_', ''), 10);
-      const procName = proc?.name_en || uploadProcedure;
       const altEn = uploadStepKey === 'hero' ? `${procName} hero image` : `${procName} - ${uploadStepKey.replace('_', ' ')}`;
 
       const { error: upsertError } = await supabase
         .from('procedure_visuals')
         .upsert({
-          canonical_slug: uploadProcedure,
+          canonical_slug: canonicalSlug,
           step_key: uploadStepKey,
           image_url: publicUrl,
           sort_order: sortOrder,
@@ -330,7 +350,8 @@ export default function AdminVisualSync() {
         }, { onConflict: 'canonical_slug,step_key' });
       if (upsertError) throw upsertError;
 
-      setUploadResult({ success: true, message: 'Image uploaded and saved successfully' });
+      const slugNote = canonicalSlug !== uploadProcedure ? ` (mapped to "${canonicalSlug}")` : '';
+      setUploadResult({ success: true, message: `Image uploaded and saved successfully${slugNote}` });
       resetUploadForm();
       await loadExistingVisuals();
     } catch (err) {
