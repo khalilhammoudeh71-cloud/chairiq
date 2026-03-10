@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Book, Clock, TrendingUp, Filter, Languages, BarChart3, X } from 'lucide-react';
+import { Book, Clock, TrendingUp, Filter, Languages, BarChart3, X, Search, ChevronDown } from 'lucide-react';
 import { getAllProcedures } from '../../data/procedures';
 import TreatmentCard from './components/TreatmentCard';
 import ContentViewerModal from './components/ContentViewerModal';
 import DentistNavigation from '../../components/DentistNavigation';
+import { procedureCodesService } from '../../services/procedureCodesService';
 
 const TreatmentContentManagementDashboard = () => {
   const navigate = useNavigate();
@@ -12,11 +13,49 @@ const TreatmentContentManagementDashboard = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [languageFilter, setLanguageFilter] = useState('both');
+  const [adaCodes, setAdaCodes] = useState([]);
+  const [selectedAdaCode, setSelectedAdaCode] = useState('');
+  const [adaDropdownOpen, setAdaDropdownOpen] = useState(false);
+  const [adaSearchTerm, setAdaSearchTerm] = useState('');
+  const adaDropdownRef = useRef(null);
+
+  useEffect(() => {
+    async function loadAdaCodes() {
+      try {
+        const codes = await procedureCodesService?.getAllCodes();
+        setAdaCodes(codes || []);
+      } catch (err) {
+        console.error('Failed to load ADA codes:', err);
+      }
+    }
+    loadAdaCodes();
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (adaDropdownRef.current && !adaDropdownRef.current.contains(e.target)) {
+        setAdaDropdownOpen(false);
+        setAdaSearchTerm('');
+      }
+    }
+    if (adaDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [adaDropdownOpen]);
 
   // Get all procedures from data
   const allProcedures = useMemo(() => getAllProcedures(), []);
 
-  // Filter procedures based on selected filters
+  const filteredAdaCodes = useMemo(() => {
+    if (!adaSearchTerm) return adaCodes;
+    const term = adaSearchTerm.toLowerCase();
+    return adaCodes.filter(c =>
+      c?.code?.toLowerCase()?.includes(term) ||
+      c?.title?.toLowerCase()?.includes(term)
+    );
+  }, [adaCodes, adaSearchTerm]);
+
   const filteredProcedures = useMemo(() => {
     return allProcedures?.filter((procedure) => {
       const matchesCategory = filterCategory === 'all' || procedure?.category === filterCategory;
@@ -127,15 +166,63 @@ const TreatmentContentManagementDashboard = () => {
           {/* Filters */}
           <div className="card p-4">
             <div className="flex flex-col sm:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1">
-                <input
-                  type="text"
-                  placeholder="Search treatments..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e?.target?.value)}
-                  className="w-full px-4 py-2 border border-bd rounded-lg bg-bg2 text-t1 focus:border-accent focus:outline-none"
-                />
+              {/* ADA Code Dropdown */}
+              <div className="flex-1 relative" ref={adaDropdownRef}>
+                <div
+                  onClick={() => setAdaDropdownOpen(!adaDropdownOpen)}
+                  className="w-full px-4 py-2 border border-bd rounded-lg bg-bg2 text-t1 cursor-pointer flex items-center justify-between focus-within:border-accent"
+                >
+                  <span className={selectedAdaCode ? 'text-t1' : 'text-t3'}>
+                    {selectedAdaCode
+                      ? `${adaCodes.find(c => c.code === selectedAdaCode)?.code || ''} — ${adaCodes.find(c => c.code === selectedAdaCode)?.title || ''}`
+                      : 'Search ADA codes...'}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-t3 transition-transform ${adaDropdownOpen ? 'rotate-180' : ''}`} />
+                </div>
+                {adaDropdownOpen && (
+                  <div className="absolute z-50 mt-1 w-full bg-bg1 border border-bd rounded-lg shadow-xl max-h-80 overflow-hidden flex flex-col">
+                    <div className="p-2 border-b border-bd">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-t3" />
+                        <input
+                          type="text"
+                          autoFocus
+                          placeholder="Type to filter codes..."
+                          value={adaSearchTerm}
+                          onChange={(e) => setAdaSearchTerm(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="w-full pl-9 pr-3 py-2 bg-bg2 border border-bd rounded-lg text-t1 text-sm focus:border-accent focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                    <div className="overflow-y-auto flex-1">
+                      <button
+                        onClick={() => { setSelectedAdaCode(''); setSearchQuery(''); setAdaSearchTerm(''); setAdaDropdownOpen(false); }}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-bg2 transition-colors ${!selectedAdaCode ? 'bg-accent/10 text-accent font-medium' : 'text-t2'}`}
+                      >
+                        All Treatments
+                      </button>
+                      {filteredAdaCodes.map(c => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedAdaCode(c.code);
+                            setSearchQuery(c.title);
+                            setAdaSearchTerm('');
+                            setAdaDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-bg2 transition-colors flex items-center gap-2 ${selectedAdaCode === c.code ? 'bg-accent/10 text-accent font-medium' : 'text-t1'}`}
+                        >
+                          <span className="font-mono text-xs text-accent bg-accent/10 px-1.5 py-0.5 rounded">{c.code}</span>
+                          <span className="truncate">{c.title}</span>
+                        </button>
+                      ))}
+                      {filteredAdaCodes.length === 0 && (
+                        <div className="px-4 py-6 text-center text-t3 text-sm">No ADA codes match your search</div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Category Filter */}
@@ -168,7 +255,7 @@ const TreatmentContentManagementDashboard = () => {
             </div>
 
             {/* Active Filters Display */}
-            {(filterCategory !== 'all' || searchQuery) && (
+            {(filterCategory !== 'all' || selectedAdaCode) && (
               <div className="flex flex-wrap gap-2 mt-4">
                 {filterCategory !== 'all' && (
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent/10 text-accent">
@@ -181,11 +268,11 @@ const TreatmentContentManagementDashboard = () => {
                     </button>
                   </span>
                 )}
-                {searchQuery && (
+                {selectedAdaCode && (
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-success/10 text-success">
-                    Search: {searchQuery}
+                    {selectedAdaCode} — {adaCodes.find(c => c.code === selectedAdaCode)?.title}
                     <button
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => { setSelectedAdaCode(''); setSearchQuery(''); }}
                       className="ml-2 hover:brightness-110"
                     >
                       <X className="w-4 h-4" />
