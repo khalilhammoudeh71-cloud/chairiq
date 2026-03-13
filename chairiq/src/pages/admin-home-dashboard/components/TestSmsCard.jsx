@@ -1,26 +1,15 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { MessageSquare, Send, CheckCircle, AlertCircle, X } from 'lucide-react';
 import Card from '../../../components/ui/Card';
 import { supabase } from '../../../lib/supabase';
+import { useToast } from '../../../hooks/useToast';
 
 export default function TestSmsCard() {
   const [phone, setPhone] = useState('');
   const [link, setLink] = useState('');
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
-  const [toasts, setToasts] = useState([]);
-
-  const showToast = useCallback((message, type = 'info') => {
-    const id = Date.now();
-    setToasts(prev => [...prev, { id, message, type }]);
-    setTimeout(() => {
-      setToasts(prev => prev.filter(t => t.id !== id));
-    }, type === 'error' ? 7000 : 5000);
-  }, []);
-
-  const dismissToast = useCallback((id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  }, []);
+  const { showToast, toasts, removeToast } = useToast();
 
   const handleSendTest = async () => {
     if (!phone) return;
@@ -123,7 +112,7 @@ export default function TestSmsCard() {
           {toasts.map(toast => (
             <div
               key={toast.id}
-              className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium animate-in slide-in-from-right transition-all ${
+              className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${
                 toast.type === 'success'
                   ? 'bg-success text-white'
                   : toast.type === 'error'
@@ -134,7 +123,7 @@ export default function TestSmsCard() {
               {toast.type === 'success' && <CheckCircle size={16} className="shrink-0" />}
               {toast.type === 'error' && <AlertCircle size={16} className="shrink-0" />}
               <span>{toast.message}</span>
-              <button onClick={() => dismissToast(toast.id)} className="ml-2 shrink-0 opacity-70 hover:opacity-100">
+              <button onClick={() => removeToast(toast.id)} className="ml-2 shrink-0 opacity-70 hover:opacity-100">
                 <X size={14} />
               </button>
             </div>
