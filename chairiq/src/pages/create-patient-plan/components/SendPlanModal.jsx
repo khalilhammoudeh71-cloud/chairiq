@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Mail, MessageSquare, Send } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
 export default function SendPlanModal({ isOpen, onClose, planLink, patientPhone, patientEmail, onSend }) {
-  const [method, setMethod] = useState(patientEmail ? 'email' : 'sms');
-  const [recipient, setRecipient] = useState(method === 'sms' ? (patientPhone || '') : (patientEmail || ''));
+  const [method, setMethod] = useState('sms');
+  const [recipient, setRecipient] = useState('');
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const defaultMethod = patientEmail ? 'email' : 'sms';
+      setMethod(defaultMethod);
+      setRecipient(defaultMethod === 'sms' ? (patientPhone || '') : (patientEmail || ''));
+      setSending(false);
+    }
+  }, [isOpen, patientPhone, patientEmail]);
 
   if (!isOpen) return null;
 

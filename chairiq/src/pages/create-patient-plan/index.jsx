@@ -752,9 +752,9 @@ export default function CreatePatientPlan() {
       body: JSON.stringify(body),
     });
     const data = await res.json();
+    setDeliveryHistoryKey(prev => prev + 1);
     if (data?.ok) {
       showToast(`${method === 'sms' ? 'SMS' : 'Email'} sent successfully!`, 'success');
-      setDeliveryHistoryKey(prev => prev + 1);
     } else {
       showToast(data?.error || `Failed to send ${method}`, 'error');
       throw new Error(data?.error);
