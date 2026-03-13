@@ -20,6 +20,8 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import AddProcedureDrawer from './components/AddProcedureDrawer';
 import ProcedureTableRow from './components/ProcedureTableRow';
 import CanonicalMappingGuide from './components/CanonicalMappingGuide';
+import SendPlanModal from './components/SendPlanModal';
+import DeliveryHistory from './components/DeliveryHistory';
 
 export default function CreatePatientPlan() {
   const navigate = useNavigate();
@@ -80,6 +82,10 @@ export default function CreatePatientPlan() {
 
   // Add new state for resending saved plan
   const [resendingSavedPlan, setResendingSavedPlan] = useState(false);
+
+  // Send modal state
+  const [sendModalOpen, setSendModalOpen] = useState(false);
+  const [deliveryHistoryKey, setDeliveryHistoryKey] = useState(0);
 
   // Add helper to extract ADA codes from current procedures
   const getSelectedAdaCodes = () => {
@@ -570,13 +576,14 @@ export default function CreatePatientPlan() {
       const res = await fetch('/api/send-treatment-plan', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ deliveryMethod: 'sms', phone: smsPhone, secureLink }),
+        body: JSON.stringify({ deliveryMethod: 'sms', phone: smsPhone, secureLink, planId: savedPlan?.treatmentPlan?.id, patientId: savedPlan?.patient?.id }),
       });
       const data = await res.json();
 
       if (data?.ok) {
         showToast('SMS sent successfully to patient!', 'success');
         setShowSMSMessage(false);
+        setDeliveryHistoryKey(prev => prev + 1);
       } else {
         showToast(data?.error || 'Failed to send SMS', 'error');
       }
@@ -613,12 +620,15 @@ export default function CreatePatientPlan() {
           email: patientEmail,
           secureLink,
           patientName: savedPlan?.patient?.firstName,
+          planId: savedPlan?.treatmentPlan?.id,
+          patientId: savedPlan?.patient?.id,
         }),
       });
       const data = await res.json();
 
       if (data?.ok) {
         showToast('Email sent successfully!', 'success');
+        setDeliveryHistoryKey(prev => prev + 1);
       } else {
         showToast(data?.error || 'Failed to send email', 'error');
       }
@@ -653,12 +663,13 @@ export default function CreatePatientPlan() {
       const res = await fetch('/api/send-treatment-plan', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ deliveryMethod: 'sms', phone, secureLink }),
+        body: JSON.stringify({ deliveryMethod: 'sms', phone, secureLink, planId: savedPlan?.treatmentPlan?.id, patientId: savedPlan?.patient?.id }),
       });
       const data = await res.json();
 
       if (data?.ok) {
         showToast('SMS retry sent successfully!', 'success');
+        setDeliveryHistoryKey(prev => prev + 1);
         await fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id);
       } else {
         showToast(data?.error || 'Failed to retry SMS', 'error');
@@ -702,12 +713,13 @@ export default function CreatePatientPlan() {
       const res = await fetch('/api/send-treatment-plan', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ deliveryMethod: 'sms', phone, secureLink }),
+        body: JSON.stringify({ deliveryMethod: 'sms', phone, secureLink, planId: savedPlan?.treatmentPlan?.id, patientId: savedPlan?.patient?.id }),
       });
       const data = await res.json();
 
       if (data?.ok) {
         showToast('Treatment plan link resent successfully!', 'success');
+        setDeliveryHistoryKey(prev => prev + 1);
       } else {
         showToast(data?.error || 'Failed to resend link', 'error');
       }
@@ -715,6 +727,37 @@ export default function CreatePatientPlan() {
       showToast(`Error resending link: ${error?.message}`, 'error');
     } finally {
       setResendingSavedPlan(false);
+    }
+  };
+
+  const handleModalSend = async ({ method, recipient, planLink }) => {
+    const headers = { 'Content-Type': 'application/json' };
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      headers['Authorization'] = `Bearer ${session.access_token}`;
+    }
+    const body = {
+      deliveryMethod: method,
+      secureLink: planLink,
+      patientName: savedPlan?.patient?.firstName,
+      planId: savedPlan?.treatmentPlan?.id,
+      patientId: savedPlan?.patient?.id,
+    };
+    if (method === 'sms') body.phone = recipient;
+    if (method === 'email') body.email = recipient;
+
+    const res = await fetch('/api/send-treatment-plan', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data?.ok) {
+      showToast(`${method === 'sms' ? 'SMS' : 'Email'} sent successfully!`, 'success');
+      setDeliveryHistoryKey(prev => prev + 1);
+    } else {
+      showToast(data?.error || `Failed to send ${method}`, 'error');
+      throw new Error(data?.error);
     }
   };
 
@@ -1225,129 +1268,19 @@ export default function CreatePatientPlan() {
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-t2 mb-2 font-semibold text-base">Send via</label>
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="sendMethod"
-                        value="email"
-                        checked={sendMethod === 'email'}
-                        onChange={() => setSendMethod('email')}
-                        className="accent-accent"
-                      />
-                      <Mail size={16} className="text-t2" />
-                      <span className="text-t1">Email</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="sendMethod"
-                        value="sms"
-                        checked={sendMethod === 'sms'}
-                        onChange={() => setSendMethod('sms')}
-                        className="accent-accent"
-                      />
-                      <MessageSquare size={16} className="text-t2" />
-                      <span className="text-t1">SMS</span>
-                    </label>
-                  </div>
-                </div>
-
-                {sendMethod === 'email' && (
-                  <div className="mb-4">
-                    <label className="block text-t2 mb-2 text-sm">Patient Email</label>
-                    <div className="flex gap-2 items-center">
-                      <input
-                        type="email"
-                        value={patientEmail}
-                        onChange={(e) => setPatientEmail(e.target.value)}
-                        placeholder="patient@email.com"
-                        className="input-field flex-1"
-                      />
-                      <button
-                        onClick={handleSendEmail}
-                        disabled={sendingEmail || !patientEmail}
-                        className="btn-primary bg-success hover:bg-success/90 py-2.5 px-5 flex items-center gap-2"
-                      >
-                        <Mail size={18} />
-                        {sendingEmail ? 'Sending...' : 'Send Email'}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {sendMethod === 'sms' && (
-                  <div className="mb-4">
-                    <label className="block text-t2 mb-2 text-sm">Patient Phone Number</label>
-                    <div className="flex gap-2 items-center">
-                      <input
-                        type="tel"
-                        value={smsPhoneNumber || savedPlan?.patient?.phone || ''}
-                        onChange={(e) => setSmsPhoneNumber(e.target.value)}
-                        placeholder="+1 (210) 555-1234"
-                        className="input-field flex-1"
-                      />
-                      <button
-                        onClick={handleSendSMS}
-                        disabled={sendingSMS}
-                        className="btn-primary bg-success hover:bg-success/90 py-2.5 px-5 flex items-center gap-2"
-                      >
-                        <MessageSquare size={18} />
-                        {sendingSMS ? 'Sending...' : 'Send SMS'}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <button
-                    onClick={handleResendSavedPlanLink}
-                    disabled={resendingSavedPlan}
-                    className="btn-primary bg-accent hover:bg-accent-hover py-3 flex items-center justify-center gap-2"
-                  >
-                    <Send size={20} />
-                    {resendingSavedPlan ? 'Resending...' : 'Resend Link'}
-                  </button>
-
-                  <button
-                    onClick={handleGenerateSMS}
-                    className="btn-secondary py-3 flex items-center justify-center gap-2"
-                  >
-                    <Copy size={20} />
-                    View/Copy Message
-                  </button>
-                </div>
+                <button
+                  onClick={() => setSendModalOpen(true)}
+                  className="btn-primary w-full py-3 flex items-center justify-center gap-2 text-lg"
+                >
+                  <Send size={20} />
+                  Send Treatment Plan
+                </button>
               </div>
 
-              {showSMSMessage && (
-                <div className="card bg-accent/10 border-accent">
-                  <h3 className="text-xl font-bold text-accent mb-4">Message Preview</h3>
-                  <p className="text-t2 mb-2 text-base">
-                    Message that will be included with the plan link:
-                  </p>
-                  <div className="mb-4">
-                    <textarea
-                      readOnly
-                      value={patientPlanService?.generateSMSMessage(
-                        savedPlan?.patient?.firstName,
-                        savedPlan?.treatmentPlan?.practiceName,
-                        shareToken || savedPlan?.treatmentPlan?.publicToken
-                      )}
-                      className="input-field w-full"
-                      rows="3"
-                    />
-                  </div>
-                  <button
-                    onClick={copySMSMessage}
-                    className="btn-primary w-full py-3 flex items-center justify-center gap-2"
-                  >
-                    <Copy size={20} />
-                    Copy Message
-                  </button>
-                </div>
-              )}
+              <DeliveryHistory
+                key={deliveryHistoryKey}
+                planId={savedPlan?.treatmentPlan?.id}
+              />
             </div>
           )}
         </div>
@@ -1467,6 +1400,17 @@ export default function CreatePatientPlan() {
         isMobile={isMobile}
         addedProcedures={procedures}
       />
+
+      {savedPlan && (
+        <SendPlanModal
+          isOpen={sendModalOpen}
+          onClose={() => setSendModalOpen(false)}
+          planLink={`${window.location?.origin}/p/${shareToken || savedPlan?.treatmentPlan?.publicToken}`}
+          patientPhone={smsPhoneNumber || savedPlan?.patient?.phone || ''}
+          patientEmail={patientEmail || savedPlan?.patient?.email || ''}
+          onSend={handleModalSend}
+        />
+      )}
     </div>
   );
 }

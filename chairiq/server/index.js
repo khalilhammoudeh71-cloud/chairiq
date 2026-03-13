@@ -100,58 +100,122 @@ async function start() {
     }
   });
 
-  app.post('/api/send-treatment-plan', requireAuth, async (req, res) => {
+  async function logMessageSend({ planId, patientId, method, destination, messagePreview, status, providerResponse }) {
+    if (!supabaseUrl || !supabaseServiceKey) return;
     try {
-      const { deliveryMethod, phone, email, secureLink, patientName } = req.body;
+      const sb = createClient(supabaseUrl, supabaseServiceKey);
+      await sb.from('message_logs').insert({
+        plan_id: planId,
+        patient_id: patientId || null,
+        method,
+        destination,
+        message_preview: messagePreview || null,
+        status,
+        provider_response: providerResponse ? JSON.stringify(providerResponse) : null,
+      });
+    } catch (logErr) {
+      console.error('[API] Failed to log message send:', logErr.message);
+    }
+  }
 
-      if (!deliveryMethod || !['sms', 'email'].includes(deliveryMethod)) {
-        return res.status(400).json({ ok: false, error: 'Invalid deliveryMethod. Use "sms" or "email".' });
+  app.post('/api/send-treatment-plan', requireAuth, async (req, res) => {
+    const { deliveryMethod, phone, email, secureLink, patientName, planId, patientId } = req.body;
+
+    if (!deliveryMethod || !['sms', 'email'].includes(deliveryMethod)) {
+      return res.status(400).json({ ok: false, error: 'Invalid deliveryMethod. Use "sms" or "email".' });
+    }
+
+    if (!secureLink) {
+      return res.status(400).json({ ok: false, error: 'secureLink is required.' });
+    }
+
+    if (deliveryMethod === 'sms') {
+      if (!phone) {
+        return res.status(400).json({ ok: false, error: 'Phone number is required for SMS delivery.' });
       }
-
-      if (!secureLink) {
-        return res.status(400).json({ ok: false, error: 'secureLink is required.' });
+      const phoneDigits = phone.replace(/\D/g, '');
+      if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+        return res.status(400).json({ ok: false, error: 'Invalid phone number. Please enter a valid number.' });
       }
-
-      if (deliveryMethod === 'sms') {
-        if (!phone) {
-          return res.status(400).json({ ok: false, error: 'Phone number is required for SMS delivery.' });
-        }
-        const phoneDigits = phone.replace(/\D/g, '');
-        if (phoneDigits.length < 10 || phoneDigits.length > 15) {
-          return res.status(400).json({ ok: false, error: 'Invalid phone number. Please enter a valid number.' });
-        }
-        await sendTreatmentPlanSMS(phone, secureLink);
+      const smsPreview = `ChairIQ: Your dental treatment plan is ready. View it here: ${secureLink}`;
+      try {
+        const result = await sendTreatmentPlanSMS(phone, secureLink);
+        await logMessageSend({ planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'sent', providerResponse: result });
         return res.json({ ok: true, method: 'sms' });
+      } catch (err) {
+        console.error('[API] send-treatment-plan SMS error:', err.message);
+        await logMessageSend({ planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'failed', providerResponse: { error: err.message } });
+        const smsMsg = err.message?.includes('Telnyx') || err.message?.includes('phone')
+          ? err.message
+          : 'Failed to send SMS. Please try again later.';
+        return res.status(err.message?.includes('Telnyx') ? 502 : 500).json({ ok: false, error: smsMsg });
       }
+    }
 
-      if (deliveryMethod === 'email') {
-        if (!email) {
-          return res.status(400).json({ ok: false, error: 'Email address is required for email delivery.' });
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          return res.status(400).json({ ok: false, error: 'Invalid email address.' });
-        }
+    if (deliveryMethod === 'email') {
+      if (!email) {
+        return res.status(400).json({ ok: false, error: 'Email address is required for email delivery.' });
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ ok: false, error: 'Invalid email address.' });
+      }
+      const emailPreview = `Subject: Your ChairIQ Treatment Plan\nYour dental treatment plan is ready for review. View it here: ${secureLink}`;
+      try {
         const { html, text } = buildTreatmentPlanEmail(secureLink, patientName);
-        await sendEmail({
+        const result = await sendEmail({
           to: email,
           subject: 'Your ChairIQ Treatment Plan',
           html,
           text,
         });
+        await logMessageSend({ planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'sent', providerResponse: { messageId: result?.messageId } });
         return res.json({ ok: true, method: 'email' });
+      } catch (err) {
+        console.error('[API] send-treatment-plan email error:', err.message);
+        await logMessageSend({ planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'failed', providerResponse: { error: err.message } });
+        const userMessage = smtpErrorToUserMessage(err);
+        return res.status(500).json({ ok: false, error: userMessage });
       }
+    }
+  });
+
+  app.get('/api/message-logs/:planId', requireAuth, async (req, res) => {
+    try {
+      const { planId } = req.params;
+      if (!planId) {
+        return res.status(400).json({ ok: false, error: 'planId is required.' });
+      }
+      if (!supabaseUrl || !supabaseServiceKey) {
+        return res.status(500).json({ ok: false, error: 'Supabase not configured.' });
+      }
+      const sb = createClient(supabaseUrl, supabaseServiceKey);
+
+      const { data: plan, error: planErr } = await sb
+        .from('treatment_plans')
+        .select('id, user_id')
+        .eq('id', planId)
+        .single();
+      if (planErr || !plan) {
+        return res.status(404).json({ ok: false, error: 'Treatment plan not found.' });
+      }
+      if (plan.user_id && plan.user_id !== req.user.id) {
+        return res.status(403).json({ ok: false, error: 'Not authorized to view logs for this plan.' });
+      }
+
+      const { data, error } = await sb
+        .from('message_logs')
+        .select('*')
+        .eq('plan_id', planId)
+        .order('created_at', { ascending: false });
+      if (error) {
+        console.error('[API] message-logs query error:', error.message);
+        return res.status(500).json({ ok: false, error: 'Failed to fetch message logs.' });
+      }
+      return res.json({ ok: true, logs: data || [] });
     } catch (err) {
-      console.error('[API] send-treatment-plan error:', err.message);
-      const isSms = req.body?.deliveryMethod === 'sms';
-      if (isSms) {
-        const smsMsg = err.message?.includes('Telnyx') || err.message?.includes('phone')
-          ? err.message
-          : 'Failed to send SMS. Please try again later.';
-        return res.status(isSms && err.message?.includes('Telnyx') ? 502 : 500).json({ ok: false, error: smsMsg });
-      }
-      const userMessage = smtpErrorToUserMessage(err);
-      res.status(500).json({ ok: false, error: userMessage });
+      console.error('[API] message-logs error:', err.message);
+      res.status(500).json({ ok: false, error: 'Failed to fetch message logs.' });
     }
   });
 
