@@ -100,13 +100,22 @@ async function start() {
     }
   });
 
-  async function logMessageSend({ planId, patientId, method, destination, messagePreview, status, providerResponse }) {
-    if (!supabaseUrl || !supabaseServiceKey || !planId) return;
+  function getAuthenticatedSupabase(userToken) {
+    return createClient(supabaseUrl, supabaseServiceKey, {
+      global: { headers: { Authorization: `Bearer ${userToken}` } },
+    });
+  }
+
+  async function logMessageSend({ userToken, userId, planId, patientId, method, destination, messagePreview, status, providerResponse }) {
+    if (!supabaseUrl || !supabaseServiceKey || !planId || !userId) return;
     try {
-      const sb = createClient(supabaseUrl, supabaseServiceKey);
+      const sb = userToken
+        ? getAuthenticatedSupabase(userToken)
+        : createClient(supabaseUrl, supabaseServiceKey);
       const { error } = await sb.from('message_logs').insert({
         plan_id: planId,
         patient_id: patientId || null,
+        created_by: userId,
         method,
         destination,
         message_preview: messagePreview || null,
@@ -123,6 +132,8 @@ async function start() {
 
   app.post('/api/send-treatment-plan', requireAuth, async (req, res) => {
     const { deliveryMethod, phone, email, secureLink, patientName, planId, patientId } = req.body;
+    const userToken = req.headers.authorization?.split(' ')[1];
+    const userId = req.user.id;
 
     if (!deliveryMethod || !['sms', 'email'].includes(deliveryMethod)) {
       return res.status(400).json({ ok: false, error: 'Invalid deliveryMethod. Use "sms" or "email".' });
@@ -143,11 +154,11 @@ async function start() {
       const smsPreview = `ChairIQ: Your dental treatment plan is ready. View it here: ${secureLink}`;
       try {
         const result = await sendTreatmentPlanSMS(phone, secureLink);
-        await logMessageSend({ planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'sent', providerResponse: result });
+        await logMessageSend({ userToken, userId, planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'sent', providerResponse: result });
         return res.json({ ok: true, method: 'sms' });
       } catch (err) {
         console.error('[API] send-treatment-plan SMS error:', err.message);
-        await logMessageSend({ planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'failed', providerResponse: { error: err.message } });
+        await logMessageSend({ userToken, userId, planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'failed', providerResponse: { error: err.message } });
         const smsMsg = err.message?.includes('Telnyx') || err.message?.includes('phone')
           ? err.message
           : 'Failed to send SMS. Please try again later.';
@@ -172,11 +183,11 @@ async function start() {
           html,
           text,
         });
-        await logMessageSend({ planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'sent', providerResponse: { messageId: result?.messageId } });
+        await logMessageSend({ userToken, userId, planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'sent', providerResponse: { messageId: result?.messageId } });
         return res.json({ ok: true, method: 'email' });
       } catch (err) {
         console.error('[API] send-treatment-plan email error:', err.message);
-        await logMessageSend({ planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'failed', providerResponse: { error: err.message } });
+        await logMessageSend({ userToken, userId, planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'failed', providerResponse: { error: err.message } });
         const userMessage = smtpErrorToUserMessage(err);
         return res.status(500).json({ ok: false, error: userMessage });
       }
@@ -192,7 +203,8 @@ async function start() {
       if (!supabaseUrl || !supabaseServiceKey) {
         return res.status(500).json({ ok: false, error: 'Supabase not configured.' });
       }
-      const sb = createClient(supabaseUrl, supabaseServiceKey);
+      const userToken = req.headers.authorization?.split(' ')[1];
+      const sb = getAuthenticatedSupabase(userToken);
       const { data, error } = await sb
         .from('message_logs')
         .select('*')

@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS public.message_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID REFERENCES public.patients(id) ON DELETE SET NULL,
     plan_id UUID NOT NULL REFERENCES public.treatment_plans(id) ON DELETE CASCADE,
+    created_by UUID NOT NULL,
     method TEXT NOT NULL CHECK (method IN ('sms', 'email')),
     destination TEXT NOT NULL,
     message_preview TEXT,
@@ -12,12 +13,18 @@ CREATE TABLE IF NOT EXISTS public.message_logs (
 
 CREATE INDEX idx_message_logs_plan_id ON public.message_logs(plan_id);
 CREATE INDEX idx_message_logs_created_at ON public.message_logs(created_at DESC);
+CREATE INDEX idx_message_logs_created_by ON public.message_logs(created_by);
 
 ALTER TABLE public.message_logs ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "allow_all_access_message_logs"
+CREATE POLICY "Users can insert their own message logs"
     ON public.message_logs
-    FOR ALL
-    TO public
-    USING (true)
-    WITH CHECK (true);
+    FOR INSERT
+    TO authenticated
+    WITH CHECK (created_by = auth.uid());
+
+CREATE POLICY "Users can read their own message logs"
+    ON public.message_logs
+    FOR SELECT
+    TO authenticated
+    USING (created_by = auth.uid());
