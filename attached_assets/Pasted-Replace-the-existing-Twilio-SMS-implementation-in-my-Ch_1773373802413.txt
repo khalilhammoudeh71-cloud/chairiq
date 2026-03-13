@@ -1,0 +1,81 @@
+Replace the existing Twilio SMS implementation in my ChairIQ app with Telnyx and make the SMS flow work end-to-end.
+
+Use these environment variables from Replit Secrets:
+- TELNYX_API_KEY
+- TELNYX_FROM_NUMBER
+
+TELNYX_FROM_NUMBER is:
++12107501768
+
+Requirements:
+
+1) Remove Twilio dependency from the SMS sending logic.
+
+2) Create a backend Telnyx SMS utility that sends a POST request to:
+https://api.telnyx.com/v2/messages
+
+Headers:
+Authorization: Bearer ${process.env.TELNYX_API_KEY}
+Content-Type: application/json
+
+Body:
+{
+  "from": process.env.TELNYX_FROM_NUMBER,
+  "to": patientPhoneNumber,
+  "text": `ChairIQ: Your dental treatment plan is ready. View it securely here: ${secureLink}`
+}
+
+3) Create a backend function:
+sendTreatmentPlanSMS(phone, secureLink)
+
+4) Create or update a unified backend endpoint:
+POST /api/send-treatment-plan
+
+Request body:
+{
+  "deliveryMethod": "sms" | "email",
+  "phone": "...",
+  "email": "...",
+  "secureLink": "..."
+}
+
+5) Logic:
+- if deliveryMethod === "sms", send through Telnyx
+- if deliveryMethod === "email", keep the existing Zoho email flow
+- return clear success/failure JSON responses
+- log Telnyx API errors in server logs
+
+6) Frontend:
+- In the treatment-plan sending UI, add a delivery method selector:
+  [ ] SMS
+  [ ] Email
+- If SMS is selected, show phone input
+- If Email is selected, show email input
+- Submit to the unified backend endpoint
+
+7) Validation:
+- Require a valid phone number for SMS
+- Require a valid email for Email
+- Require a non-empty secureLink
+- Show user-friendly success/error messages
+
+8) Security:
+- TELNYX_API_KEY must only be used server-side
+- Do not expose API keys in frontend code
+- Keep secure treatment plan links intact
+
+9) Also add a simple test endpoint:
+POST /api/test-sms
+Body:
+{
+  "phone": "...",
+  "link": "..."
+}
+
+This endpoint should send a test SMS through Telnyx so I can verify it works.
+
+10) Show me exactly:
+- which files were changed
+- the new Telnyx SMS function
+- the updated backend endpoint
+- the updated frontend send UI
