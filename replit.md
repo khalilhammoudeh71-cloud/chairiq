@@ -69,6 +69,7 @@ Dentists can upload patient-specific images (X-rays, intraoral photos) with cust
 - **Supabase**: For user authentication, database management (PostgreSQL), and storage (for treatment images).
 - **Google Gemini AI**: Used for content generation services.
 - **OpenAI**: Integrated via Replit AI Integrations for various AI functionalities including chat, TTS, content generation, and personalization.
+- **Telnyx**: For SMS delivery of treatment plan links via `/api/send-treatment-plan` and `/api/test-sms` endpoints. Server-side only (`server/sms.js`). Env vars: `TELNYX_API_KEY`, `TELNYX_FROM_NUMBER`. Replaces the previous dead Twilio path.
 - **Nodemailer**: For sending emails via SMTP (configured with Zoho SMTP).
 - **D3.js/Recharts**: For data visualization on analytics dashboards.
 - **Framer Motion**: For declarative animations throughout the application.

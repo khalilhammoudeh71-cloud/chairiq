@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmail, buildTreatmentPlanEmail } from './mailer.js';
+import { sendTreatmentPlanSMS } from './sms.js';
 
 const PORT = 5000;
 
@@ -86,15 +87,82 @@ async function start() {
       }
 
       if (method === 'sms') {
-        return res.status(503).json({
-          ok: false,
-          error: 'SMS delivery is coming soon (pending carrier approval). Please use email instead.',
-        });
+        if (!toPhone || !planUrl) {
+          return res.status(400).json({ ok: false, error: 'Missing required fields: toPhone, planUrl' });
+        }
+        await sendTreatmentPlanSMS(toPhone, planUrl);
+        return res.json({ ok: true, method: 'sms' });
       }
     } catch (err) {
       console.error('[API] Notification send error:', err.message);
       const userMessage = smtpErrorToUserMessage(err);
       res.status(500).json({ ok: false, error: userMessage });
+    }
+  });
+
+  app.post('/api/send-treatment-plan', requireAuth, async (req, res) => {
+    try {
+      const { deliveryMethod, phone, email, secureLink, patientName } = req.body;
+
+      if (!deliveryMethod || !['sms', 'email'].includes(deliveryMethod)) {
+        return res.status(400).json({ ok: false, error: 'Invalid deliveryMethod. Use "sms" or "email".' });
+      }
+
+      if (!secureLink) {
+        return res.status(400).json({ ok: false, error: 'secureLink is required.' });
+      }
+
+      if (deliveryMethod === 'sms') {
+        if (!phone) {
+          return res.status(400).json({ ok: false, error: 'Phone number is required for SMS delivery.' });
+        }
+        const phoneDigits = phone.replace(/\D/g, '');
+        if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+          return res.status(400).json({ ok: false, error: 'Invalid phone number. Please enter a valid number.' });
+        }
+        await sendTreatmentPlanSMS(phone, secureLink);
+        return res.json({ ok: true, method: 'sms' });
+      }
+
+      if (deliveryMethod === 'email') {
+        if (!email) {
+          return res.status(400).json({ ok: false, error: 'Email address is required for email delivery.' });
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          return res.status(400).json({ ok: false, error: 'Invalid email address.' });
+        }
+        const { html, text } = buildTreatmentPlanEmail(secureLink, patientName);
+        await sendEmail({
+          to: email,
+          subject: 'Your ChairIQ Treatment Plan',
+          html,
+          text,
+        });
+        return res.json({ ok: true, method: 'email' });
+      }
+    } catch (err) {
+      console.error('[API] send-treatment-plan error:', err.message);
+      if (err.message?.includes('Telnyx')) {
+        return res.status(502).json({ ok: false, error: err.message });
+      }
+      const userMessage = smtpErrorToUserMessage(err);
+      res.status(500).json({ ok: false, error: userMessage });
+    }
+  });
+
+  app.post('/api/test-sms', requireAuth, async (req, res) => {
+    try {
+      const { phone, link } = req.body;
+      if (!phone) {
+        return res.status(400).json({ ok: false, error: 'Phone number is required.' });
+      }
+      const testLink = link || `${req.protocol}://${req.get('host')}/p/test-plan-link`;
+      await sendTreatmentPlanSMS(phone, testLink);
+      return res.json({ ok: true, method: 'sms', message: 'Test SMS sent successfully.' });
+    } catch (err) {
+      console.error('[API] test-sms error:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 

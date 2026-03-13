@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { patientPlanService } from '../../services/patientPlanService';
 import { shareLinkService } from '../../services/shareLinkService';
-import { emailService } from '../../services/emailService';
-import { sendSms, getSmsDeliveryStatus, retrySmsDelivery } from '../../services/twilioService';
+import { getSmsDeliveryStatus } from '../../services/twilioService';
 
 import { useToast } from '../../hooks/useToast';
 import { Plus, Copy, Check, MessageSquare, Send, RefreshCw, Mail, User, Phone, Globe, ClipboardList, SendHorizonal } from 'lucide-react';
@@ -53,6 +52,7 @@ export default function CreatePatientPlan() {
   const [sendMethod, setSendMethod] = useState('email');
   const [patientEmail, setPatientEmail] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
+  const [smsPhoneNumber, setSmsPhoneNumber] = useState('');
   const [smsDeliveryLogs, setSmsDeliveryLogs] = useState([]);
   const [showSmsStatus, setShowSmsStatus] = useState(false);
   const [retryingMessageId, setRetryingMessageId] = useState(null);
@@ -547,21 +547,38 @@ export default function CreatePatientPlan() {
   const handleSendSMS = async () => {
     if (!savedPlan) return;
 
+    const smsPhone = smsPhoneNumber || savedPlan?.patient?.phone;
+    if (!smsPhone) {
+      showToast('Please enter a phone number', 'error');
+      return;
+    }
+    const digits = smsPhone.replace(/\D/g, '');
+    if (digits.length < 10 || digits.length > 15) {
+      showToast('Please enter a valid phone number', 'error');
+      return;
+    }
+
     setSendingSMS(true);
     try {
       const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const result = await sendSms(
-        savedPlan?.patient?.phone,
-        savedPlan?.patient?.firstName,
-        `${window.location?.origin}/p/${token}`,
-        savedPlan?.treatmentPlan?.id
-      );
+      const secureLink = `${window.location?.origin}/p/${token}`;
+      const headers = { 'Content-Type': 'application/json' };
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+      const res = await fetch('/api/send-treatment-plan', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ deliveryMethod: 'sms', phone: smsPhone, secureLink }),
+      });
+      const data = await res.json();
 
-      if (result?.success) {
+      if (data?.ok) {
         showToast('SMS sent successfully to patient!', 'success');
         setShowSMSMessage(false);
       } else {
-        showToast(`Failed to send SMS: ${result?.error}`, 'error');
+        showToast(data?.error || 'Failed to send SMS', 'error');
       }
     } catch (error) {
       showToast(`Error sending SMS: ${error?.message}`, 'error');
@@ -573,21 +590,37 @@ export default function CreatePatientPlan() {
   const handleSendEmail = async () => {
     if (!savedPlan || !patientEmail) return;
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(patientEmail)) {
+      showToast('Please enter a valid email address', 'error');
+      return;
+    }
+
     setSendingEmail(true);
     try {
       const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const planUrl = `${window.location?.origin}/p/${token}`;
-      const result = await emailService.sendNotification({
-        method: 'email',
-        toEmail: patientEmail,
-        patientName: savedPlan?.patient?.firstName,
-        planUrl,
+      const secureLink = `${window.location?.origin}/p/${token}`;
+      const headers = { 'Content-Type': 'application/json' };
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+      const res = await fetch('/api/send-treatment-plan', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          deliveryMethod: 'email',
+          email: patientEmail,
+          secureLink,
+          patientName: savedPlan?.patient?.firstName,
+        }),
       });
+      const data = await res.json();
 
-      if (result?.success) {
+      if (data?.ok) {
         showToast('Email sent successfully!', 'success');
       } else {
-        showToast(result?.error || 'Failed to send email', 'error');
+        showToast(data?.error || 'Failed to send email', 'error');
       }
     } catch (error) {
       showToast(`Error sending email: ${error?.message}`, 'error');
@@ -604,26 +637,35 @@ export default function CreatePatientPlan() {
     }
   };
 
-  // Handle SMS retry
   const handleRetryFailedSms = async (smsLog) => {
     if (!savedPlan) return;
-    
-    setRetryingMessageId(smsLog?.id);
-    
-    const result = await retrySmsDelivery(
-      smsLog?.id,
-      savedPlan?.patient?.phone,
-      savedPlan?.patient?.firstName,
-      `${window.location?.origin}/p/${shareToken || savedPlan?.treatmentPlan?.publicToken}`
-    );
 
-    if (result?.success) {
-      showToast('SMS retry sent successfully!', 'success');
-      await fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id);
-    } else {
-      showToast(result?.error || 'Failed to retry SMS', 'error');
+    setRetryingMessageId(smsLog?.id);
+    try {
+      const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
+      const secureLink = `${window.location?.origin}/p/${token}`;
+      const phone = smsLog?.phone_number || savedPlan?.patient?.phone;
+      const headers = { 'Content-Type': 'application/json' };
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+      const res = await fetch('/api/send-treatment-plan', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ deliveryMethod: 'sms', phone, secureLink }),
+      });
+      const data = await res.json();
+
+      if (data?.ok) {
+        showToast('SMS retry sent successfully!', 'success');
+        await fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id);
+      } else {
+        showToast(data?.error || 'Failed to retry SMS', 'error');
+      }
+    } catch (error) {
+      showToast(`Error retrying SMS: ${error?.message}`, 'error');
     }
-    
     setRetryingMessageId(null);
   };
 
@@ -643,14 +685,31 @@ export default function CreatePatientPlan() {
         setShareToken(linkResult.token);
       }
       const tokenToUse = linkResult?.token || shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const result = await patientPlanService?.resendTreatmentPlanLink(
-        tokenToUse, true
-      );
+      const secureLink = `${window.location?.origin}/p/${tokenToUse}`;
+      const phone = smsPhoneNumber || savedPlan?.patient?.phone;
 
-      if (result?.success) {
+      if (!phone) {
+        showToast('No phone number available to resend SMS', 'error');
+        setResendingSavedPlan(false);
+        return;
+      }
+
+      const headers = { 'Content-Type': 'application/json' };
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+      const res = await fetch('/api/send-treatment-plan', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ deliveryMethod: 'sms', phone, secureLink }),
+      });
+      const data = await res.json();
+
+      if (data?.ok) {
         showToast('Treatment plan link resent successfully!', 'success');
       } else {
-        showToast(result?.userMessage || 'Failed to resend link', 'error');
+        showToast(data?.error || 'Failed to resend link', 'error');
       }
     } catch (error) {
       showToast(`Error resending link: ${error?.message}`, 'error');
@@ -1220,10 +1279,25 @@ export default function CreatePatientPlan() {
                 )}
 
                 {sendMethod === 'sms' && (
-                  <div className="mb-4 p-4 rounded-lg bg-warning/10 border border-warning/30">
-                    <p className="text-warning text-sm font-medium">
-                      SMS coming soon (pending carrier approval)
-                    </p>
+                  <div className="mb-4">
+                    <label className="block text-t2 mb-2 text-sm">Patient Phone Number</label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="tel"
+                        value={smsPhoneNumber || savedPlan?.patient?.phone || ''}
+                        onChange={(e) => setSmsPhoneNumber(e.target.value)}
+                        placeholder="+1 (210) 555-1234"
+                        className="input-field flex-1"
+                      />
+                      <button
+                        onClick={handleSendSMS}
+                        disabled={sendingSMS}
+                        className="btn-primary bg-success hover:bg-success/90 py-2.5 px-5 flex items-center gap-2"
+                      >
+                        <MessageSquare size={18} />
+                        {sendingSMS ? 'Sending...' : 'Send SMS'}
+                      </button>
+                    </div>
                   </div>
                 )}
 
