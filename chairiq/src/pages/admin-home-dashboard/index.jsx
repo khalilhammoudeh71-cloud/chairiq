@@ -13,6 +13,8 @@ import PendingActionsCard from './components/PendingActionsCard';
 import ShortcutsCard from './components/ShortcutsCard';
 import PatientSearchCard from './components/PatientSearchCard';
 import TreatmentDetailsCard from './components/TreatmentDetailsCard';
+import TestEmailCard from './components/TestEmailCard';
+import TestSmsCard from './components/TestSmsCard';
 
 export default function AdminHomeDashboard() {
   const { user } = useAuth();
@@ -181,6 +183,17 @@ export default function AdminHomeDashboard() {
                 <h2 className="text-xl font-bold text-t1 tracking-tight">Quick Actions</h2>
               </div>
               <ShortcutsCard />
+            </section>
+
+            <section>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-1 h-6 rounded-full bg-accent" />
+                <h2 className="text-xl font-bold text-t1 tracking-tight">System Diagnostics</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <TestEmailCard />
+                <TestSmsCard />
+              </div>
             </section>
           </div>
         </PageShell>
