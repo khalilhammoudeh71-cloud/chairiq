@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { MessageSquare, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import Card from '../../../components/ui/Card';
 import { supabase } from '../../../lib/supabase';
-import { useToast } from '../../../hooks/useToast';
 
 export default function TestSmsCard() {
   const [phone, setPhone] = useState('');
   const [link, setLink] = useState('');
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
-  const { showToast } = useToast();
 
   const handleSendTest = async () => {
     if (!phone) return;
@@ -17,7 +15,6 @@ export default function TestSmsCard() {
     const digits = phone.replace(/\D/g, '');
     if (digits.length < 10 || digits.length > 15) {
       setResult({ success: false, error: 'Invalid phone number. Enter 10-15 digits.' });
-      showToast('Invalid phone number', 'error');
       return;
     }
 
@@ -41,15 +38,11 @@ export default function TestSmsCard() {
 
       if (data?.ok) {
         setResult({ success: true });
-        showToast('Test SMS sent!', 'success');
       } else {
         setResult({ success: false, error: data?.error || 'Failed to send test SMS' });
-        showToast(data?.error || 'Failed to send test SMS', 'error');
       }
     } catch (err) {
-      const msg = err?.message || 'Network error — could not reach the server.';
-      setResult({ success: false, error: msg });
-      showToast(msg, 'error');
+      setResult({ success: false, error: err?.message || 'Network error — could not reach the server.' });
     } finally {
       setSending(false);
     }
