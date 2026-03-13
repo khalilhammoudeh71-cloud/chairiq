@@ -6,6 +6,9 @@ function formatPhoneE164(phone) {
   if (cleaned.length === 10) {
     cleaned = '1' + cleaned;
   }
+  if (cleaned.length < 10 || cleaned.length > 15) {
+    throw new Error('Invalid phone number. Must be 10-15 digits.');
+  }
   return '+' + cleaned;
 }
 

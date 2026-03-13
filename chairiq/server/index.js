@@ -143,8 +143,12 @@ async function start() {
       }
     } catch (err) {
       console.error('[API] send-treatment-plan error:', err.message);
-      if (err.message?.includes('Telnyx')) {
-        return res.status(502).json({ ok: false, error: err.message });
+      const isSms = req.body?.deliveryMethod === 'sms';
+      if (isSms) {
+        const smsMsg = err.message?.includes('Telnyx') || err.message?.includes('phone')
+          ? err.message
+          : 'Failed to send SMS. Please try again later.';
+        return res.status(isSms && err.message?.includes('Telnyx') ? 502 : 500).json({ ok: false, error: smsMsg });
       }
       const userMessage = smtpErrorToUserMessage(err);
       res.status(500).json({ ok: false, error: userMessage });
@@ -156,6 +160,10 @@ async function start() {
       const { phone, link } = req.body;
       if (!phone) {
         return res.status(400).json({ ok: false, error: 'Phone number is required.' });
+      }
+      const phoneDigits = phone.replace(/\D/g, '');
+      if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+        return res.status(400).json({ ok: false, error: 'Invalid phone number. Please enter a valid number.' });
       }
       const testLink = link || `${req.protocol}://${req.get('host')}/p/test-plan-link`;
       await sendTreatmentPlanSMS(phone, testLink);
