@@ -100,20 +100,11 @@ async function start() {
     }
   });
 
-  function getAuthenticatedSupabase(userToken) {
-    const sb = createClient(supabaseUrl, supabaseServiceKey, {
-      global: { headers: { Authorization: `Bearer ${userToken}` } },
-    });
-    return sb;
-  }
-
-  async function logMessageSend({ userToken, planId, patientId, method, destination, messagePreview, status, providerResponse }) {
+  async function logMessageSend({ planId, patientId, method, destination, messagePreview, status, providerResponse }) {
     if (!supabaseUrl || !supabaseServiceKey || !planId) return;
     try {
-      const sb = userToken
-        ? getAuthenticatedSupabase(userToken)
-        : createClient(supabaseUrl, supabaseServiceKey);
-      await sb.from('message_logs').insert({
+      const sb = createClient(supabaseUrl, supabaseServiceKey);
+      const { error } = await sb.from('message_logs').insert({
         plan_id: planId,
         patient_id: patientId || null,
         method,
@@ -122,27 +113,16 @@ async function start() {
         status,
         provider_response: providerResponse ? JSON.stringify(providerResponse) : null,
       });
+      if (error) {
+        console.error('[API] Failed to insert message log:', error.message);
+      }
     } catch (logErr) {
       console.error('[API] Failed to log message send:', logErr.message);
     }
   }
 
-  async function verifyPlanOwnership(planId, userId) {
-    if (!planId || !supabaseUrl || !supabaseServiceKey) return false;
-    const sb = createClient(supabaseUrl, supabaseServiceKey);
-    const { data: plan, error } = await sb
-      .from('treatment_plans')
-      .select('id, user_id')
-      .eq('id', planId)
-      .single();
-    if (error || !plan) return false;
-    if (plan.user_id && plan.user_id !== userId) return false;
-    return true;
-  }
-
   app.post('/api/send-treatment-plan', requireAuth, async (req, res) => {
     const { deliveryMethod, phone, email, secureLink, patientName, planId, patientId } = req.body;
-    const userToken = req.headers.authorization?.split(' ')[1];
 
     if (!deliveryMethod || !['sms', 'email'].includes(deliveryMethod)) {
       return res.status(400).json({ ok: false, error: 'Invalid deliveryMethod. Use "sms" or "email".' });
@@ -150,13 +130,6 @@ async function start() {
 
     if (!secureLink) {
       return res.status(400).json({ ok: false, error: 'secureLink is required.' });
-    }
-
-    if (planId) {
-      const isOwner = await verifyPlanOwnership(planId, req.user.id);
-      if (!isOwner) {
-        return res.status(403).json({ ok: false, error: 'Not authorized to send for this plan.' });
-      }
     }
 
     if (deliveryMethod === 'sms') {
@@ -170,11 +143,11 @@ async function start() {
       const smsPreview = `ChairIQ: Your dental treatment plan is ready. View it here: ${secureLink}`;
       try {
         const result = await sendTreatmentPlanSMS(phone, secureLink);
-        await logMessageSend({ userToken, planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'sent', providerResponse: result });
+        await logMessageSend({ planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'sent', providerResponse: result });
         return res.json({ ok: true, method: 'sms' });
       } catch (err) {
         console.error('[API] send-treatment-plan SMS error:', err.message);
-        await logMessageSend({ userToken, planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'failed', providerResponse: { error: err.message } });
+        await logMessageSend({ planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'failed', providerResponse: { error: err.message } });
         const smsMsg = err.message?.includes('Telnyx') || err.message?.includes('phone')
           ? err.message
           : 'Failed to send SMS. Please try again later.';
@@ -199,11 +172,11 @@ async function start() {
           html,
           text,
         });
-        await logMessageSend({ userToken, planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'sent', providerResponse: { messageId: result?.messageId } });
+        await logMessageSend({ planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'sent', providerResponse: { messageId: result?.messageId } });
         return res.json({ ok: true, method: 'email' });
       } catch (err) {
         console.error('[API] send-treatment-plan email error:', err.message);
-        await logMessageSend({ userToken, planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'failed', providerResponse: { error: err.message } });
+        await logMessageSend({ planId, patientId, method: 'email', destination: email, messagePreview: emailPreview, status: 'failed', providerResponse: { error: err.message } });
         const userMessage = smtpErrorToUserMessage(err);
         return res.status(500).json({ ok: false, error: userMessage });
       }
@@ -219,14 +192,7 @@ async function start() {
       if (!supabaseUrl || !supabaseServiceKey) {
         return res.status(500).json({ ok: false, error: 'Supabase not configured.' });
       }
-
-      const isOwner = await verifyPlanOwnership(planId, req.user.id);
-      if (!isOwner) {
-        return res.status(403).json({ ok: false, error: 'Not authorized to view logs for this plan.' });
-      }
-
-      const userToken = req.headers.authorization?.split(' ')[1];
-      const sb = getAuthenticatedSupabase(userToken);
+      const sb = createClient(supabaseUrl, supabaseServiceKey);
       const { data, error } = await sb
         .from('message_logs')
         .select('*')

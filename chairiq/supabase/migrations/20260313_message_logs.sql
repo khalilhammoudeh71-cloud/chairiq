@@ -15,26 +15,9 @@ CREATE INDEX idx_message_logs_created_at ON public.message_logs(created_at DESC)
 
 ALTER TABLE public.message_logs ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can insert message logs for their own plans"
+CREATE POLICY "allow_all_access_message_logs"
     ON public.message_logs
-    FOR INSERT
-    TO authenticated
-    WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.treatment_plans tp
-            WHERE tp.id = message_logs.plan_id
-            AND tp.user_id = auth.uid()
-        )
-    );
-
-CREATE POLICY "Users can read message logs for their own plans"
-    ON public.message_logs
-    FOR SELECT
-    TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.treatment_plans tp
-            WHERE tp.id = message_logs.plan_id
-            AND tp.user_id = auth.uid()
-        )
-    );
+    FOR ALL
+    TO public
+    USING (true)
+    WITH CHECK (true);
