@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Airway Open — Better Sleep</text>
+  <ellipse cx="180" cy="110" rx="50" ry="60" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="2" opacity="0.4"/>
+  <ellipse cx="180" cy="145" rx="38" ry="22" fill="#F4A8B4" stroke="#C96C7A" stroke-width="2"/>
+  <ellipse cx="180" cy="90" rx="22" ry="16" fill="#A8D8F0" stroke="#5B8CCC" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="180" cy="90" r="8" fill="#C8DFF5" opacity="0.9"/>
+  <circle cx="228" cy="100" r="16" fill="#5BAD7A" opacity="0.2"/>
+  <polyline points="220,100 227,107 239,91" fill="none" stroke="#5BAD7A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Airway stays open —</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">restful sleep restored</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">4</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Treatment Plan Discussed</text>
+  <rect x="125" y="60" width="110" height="130" rx="8" fill="white" stroke="#9E9E9E" stroke-width="2"/>
+  <rect x="135" y="75" width="90" height="12" rx="3" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="1"/>
+  <line x1="140" y1="97" x2="220" y2="97" stroke="#E0E0E0" stroke-width="2"/>
+  <line x1="140" y1="111" x2="200" y2="111" stroke="#E0E0E0" stroke-width="2"/>
+  <line x1="140" y1="125" x2="215" y2="125" stroke="#E0E0E0" stroke-width="2"/>
+  <circle cx="210" cy="160" r="18" fill="#5BAD7A" opacity="0.2"/>
+  <polyline points="201,160 209,168 221,151" fill="none" stroke="#5BAD7A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Findings reviewed — custom</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">treatment plan created</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">4</text>
+</svg>

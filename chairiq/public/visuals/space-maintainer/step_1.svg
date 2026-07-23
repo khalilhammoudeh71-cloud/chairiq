@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Early Tooth Loss in Child</text>
+  <rect x="80" y="173" width="200" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M47,165 Q180,151 313,165" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="120" cy="88.1125" rx="22" ry="28.4625" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="112.3" y="117.75" width="15.399999999999999" height="67.25" rx="7.699999999999999" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="120" cy="88.1125" rx="14.08" ry="19.665" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="180" cy="135" rx="28" ry="14" fill="#E0E0E0" stroke="#9E9E9E" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <ellipse cx="240" cy="88.1125" rx="22" ry="28.4625" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="232.3" y="117.75" width="15.399999999999999" height="67.25" rx="7.699999999999999" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="240" cy="88.1125" rx="14.08" ry="19.665" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="180" cy="163" rx="16" ry="10" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Baby tooth lost too early;</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">adult tooth needs space</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

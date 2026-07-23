@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">TMJ Dysfunction Assessment</text>
+  <ellipse cx="160" cy="80" rx="55" ry="45" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="2" opacity="0.5"/>
+  <path d="M120,110 Q150,170 220,180 Q240,150 230,105" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="2"}/>
+  <circle cx="225" cy="108" r="14" fill="#FADADD" stroke="#E05C6B" stroke-width="2.5"/>
+  <line x1="252" y1="85" x2="233" y2="102" stroke="#E05C6B" stroke-width="2"/>
+  <polygon points="233,102 237.11843883790186,91.60584483767624 243.78638743260012,99.05825797292724" fill="#E05C6B"/>
+  <text x="260" y="80" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" font-weight="400" fill="#E05C6B">TMJ</text>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Jaw joint clicking and</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">pain assessed</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Denture Fabricated in Lab</text>
+  <path d="M100,80 Q100,160 180,180 Q260,160 260,80 Q240,60 180,55 Q120,60 100,80" fill="#F4A8B4" stroke="#C96C7A" stroke-width="2"}/>
+  <rect x="115" y="72" width="18" height="26" rx="4" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="137" y="67" width="20" height="30" rx="4" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="160" y="65" width="18" height="32" rx="4" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="182" y="65" width="18" height="32" rx="4" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="203" y="67" width="20" height="30" rx="4" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="227" y="72" width="18" height="26" rx="4" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Denture custom fabricated</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">to match your natural arch</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">2</text>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Denture Delivered — Smile Restored</text>
+  <rect x="90" y="180" width="180" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M54.000000000000014,172 Q180,158 306,172" fill="#7ECBA1" stroke="#4A9A6A" stroke-width="1.5" opacity="0.85"/>
+  <path d="M100,80 Q100,160 180,170 Q260,160 260,80 Q240,60 180,55 Q120,60 100,80" fill="#F4A8B4" stroke="#C96C7A" stroke-width="2"}/>
+  <rect x="118" y="72" width="16" height="24" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="138" y="67" width="18" height="28" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="160" y="65" width="16" height="30" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="184" y="65" width="16" height="30" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="204" y="67" width="18" height="28" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="226" y="72" width="16" height="24" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <circle cx="180" cy="30" r="16" fill="#5BAD7A" opacity="0.2"/>
+  <polyline points="171,30 179,38 191,21" fill="none" stroke="#5BAD7A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Full function and appearance</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">restored</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">4</text>
+</svg>

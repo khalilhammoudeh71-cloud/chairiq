@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Tooth Missing — Implant Plan</text>
+  <rect x="105" y="150" width="150" height="60" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M82,142 Q180,127 278,142" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="180" cy="145" rx="28" ry="14" fill="#E0E0E0" stroke="#9E9E9E" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="230" y1="100" x2="185" y2="142" stroke="#9E9E9E" stroke-width="2"/>
+  <polygon points="185,142 188.89896143062865,131.52154115518553 195.72214393422874,138.83209383761422" fill="#9E9E9E"/>
+  <text x="245" y="98" text-anchor="start" font-family="system-ui,sans-serif" font-size="10" font-weight="400" fill="#9E9E9E">Gap</text>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Missing tooth space</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">assessed for implant</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

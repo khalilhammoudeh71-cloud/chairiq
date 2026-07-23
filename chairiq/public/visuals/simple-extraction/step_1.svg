@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Anesthesia Administration</text>
+  <rect x="110" y="190" width="140" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M89,180 Q180,166 271,180" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="180" cy="77.8375" rx="29" ry="35.8875" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="169.85" y="116.25" width="20.299999999999997" height="83.75" rx="10.149999999999999" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="180" cy="77.8375" rx="18.56" ry="24.795" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="180" cy="81.1" rx="7.54" ry="14.355" fill="#E87B89" stroke="#C0445A" stroke-width="1"/>
+  <rect x="177" y="90.8875" width="6" height="55.824999999999996" rx="3" fill="#E87B89" stroke="#C0445A" stroke-width="1"/>
+  <rect x="208" y="105" width="10" height="40" rx="5" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="1.5"/>
+  <line x1="213" y1="145" x2="213" y2="165" stroke="#5B8CCC" stroke-width="2"/>
+  <polygon points="210,165 216,165 213,173" fill="#5B8CCC"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Local anesthetic injected</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">to numb the area</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

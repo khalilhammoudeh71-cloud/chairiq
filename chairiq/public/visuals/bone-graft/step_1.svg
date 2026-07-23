@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Bone Loss Detected</text>
+  <rect x="105" y="150" width="150" height="30" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M120,150 Q160,125 200,135 Q230,120 245,150" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M75,140 Q180,125 285,140" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="180" cy="145" rx="32" ry="16" fill="#FADADD" stroke="#E05C6B" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="230" y1="110" x2="200" y2="142" stroke="#E05C6B" stroke-width="2"/>
+  <polygon points="200,142 203.19172526811286,131.2849223141925 210.48709730951373,138.12433360300582" fill="#E05C6B"/>
+  <text x="240" y="106" text-anchor="start" font-family="system-ui,sans-serif" font-size="9" font-weight="400" fill="#E05C6B">Defect</text>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Bone defect identified</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">insufficient for implant</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

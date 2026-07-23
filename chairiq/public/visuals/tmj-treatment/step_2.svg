@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Splint/Oral Appliance Fabricated</text>
+  <path d="M100,85 Q100,145 180,160 Q260,145 260,85 Q240,65 180,55 Q120,65 100,85" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="2.5" opacity="0.85"/>
+  <ellipse cx="180" cy="110" rx="65" ry="22" fill="none" stroke="#5B8CCC" stroke-width="1.5" opacity="0.4"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Custom occlusal splint</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">made from dental impressions</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">2</text>
+</svg>

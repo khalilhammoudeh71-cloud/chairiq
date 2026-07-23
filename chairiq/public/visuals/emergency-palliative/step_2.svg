@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Anesthesia & Pain Control</text>
+  <rect x="110" y="188" width="140" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M89,180 Q180,166 271,180" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="180" cy="82.05" rx="30" ry="34.650000000000006" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="169.5" y="119" width="21" height="81" rx="10.5" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="180" cy="82.05" rx="19.2" ry="23.94" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="180" cy="85.2" rx="7.800000000000001" ry="13.86" fill="#CC3344" stroke="#990022" stroke-width="1"/>
+  <rect x="177" y="94.65" width="6" height="53.9" rx="3" fill="#CC3344" stroke="#990022" stroke-width="1"/>
+  <rect x="208" y="100" width="10" height="45" rx="5" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="1.5"/>
+  <polygon points="213,145 209,145 213,158" fill="#5B8CCC"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Local anesthetic injected</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">for immediate pain relief</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">2</text>
+</svg>

@@ -64,7 +64,31 @@ export default function MarkdownContentEditor() {
         data = all?.find(p => p?.id === procedureId);
       }
       if (data) {
-        setFormData(data);
+        setFormData({
+          slug: data.slug ?? '',
+          category: data.category ?? '',
+          titleEn: data.titleEn ?? '',
+          titleEs: data.titleEs ?? '',
+          summaryEn: data.summaryEn ?? '',
+          summaryEs: data.summaryEs ?? '',
+          whyEn: data.whyEn ?? '',
+          whyEs: data.whyEs ?? '',
+          whatIfNotEn: data.whatIfNotEn ?? '',
+          whatIfNotEs: data.whatIfNotEs ?? '',
+          stepsEn: data.stepsEn ?? [],
+          stepsEs: data.stepsEs ?? [],
+          anesthesiaEn: data.anesthesiaEn ?? '',
+          anesthesiaEs: data.anesthesiaEs ?? '',
+          risksEn: data.risksEn ?? '',
+          risksEs: data.risksEs ?? '',
+          aftercareEn: data.aftercareEn ?? '',
+          aftercareEs: data.aftercareEs ?? '',
+          faqsEn: data.faqsEn ?? [],
+          faqsEs: data.faqsEs ?? [],
+          timeEstimate: data.timeEstimate ?? '',
+          visitsEstimate: data.visitsEstimate ?? '',
+          isPublished: data.isPublished ?? false,
+        });
       }
       setError('');
     } catch (err) {

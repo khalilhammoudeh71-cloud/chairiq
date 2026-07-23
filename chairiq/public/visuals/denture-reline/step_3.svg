@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">New Acrylic Added to Base</text>
+  <path d="M100,80 Q180,60 260,80 Q240,125 180,135 Q120,125 100,80" fill="#F4A8B4" stroke="#C96C7A" stroke-width="2"}/>
+  <rect x="125" y="72" width="14" height="22" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="142" y="68" width="16" height="26" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="162" y="66" width="14" height="28" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="184" y="66" width="14" height="28" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="202" y="68" width="16" height="26" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <rect x="221" y="72" width="14" height="22" rx="3" fill="white" stroke="#9E9E9E" stroke-width="1.5"/>
+  <path d="M108,95 Q180,112 252,95" fill="#D4E8C2" stroke="#7BAD55" stroke-width="3" opacity="0.85}"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">New acrylic layer added</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">to denture fitting surface</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">3</text>
+</svg>

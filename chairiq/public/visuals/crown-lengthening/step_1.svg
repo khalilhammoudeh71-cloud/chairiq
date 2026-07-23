@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Insufficient Tooth Exposure</text>
+  <rect x="110" y="195" width="140" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M125,123 Q145,103 170,118 Q190,138 215,118 Q235,103 245,123" fill="#F4A8B4" stroke="#C96C7A" stroke-width="2" opacity="0.9"/>
+  <ellipse cx="180" cy="70.2" rx="30" ry="39.6" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="169.5" y="113" width="21" height="92" rx="10.5" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="180" cy="70.2" rx="19.2" ry="27.36" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="180" cy="73.8" rx="7.800000000000001" ry="15.84" fill="#E87B89" stroke="#C0445A" stroke-width="1"/>
+  <rect x="177" y="84.6" width="6" height="61.599999999999994" rx="3" fill="#E87B89" stroke="#C0445A" stroke-width="1"/>
+  <line x1="220" y1="80" x2="202" y2="95" stroke="#E05C6B" stroke-width="2"/>
+  <polygon points="202,95 206.48129079765135,84.75704960536832 212.88313479429615,92.43926240134208" fill="#E05C6B"/>
+  <text x="230" y="77" text-anchor="start" font-family="system-ui,sans-serif" font-size="9" font-weight="400" fill="#E05C6B">Too little</text>
+  <text x="230" y="87" text-anchor="start" font-family="system-ui,sans-serif" font-size="9" font-weight="400" fill="#E05C6B">exposed</text>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Not enough tooth shows</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">above the gumline</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

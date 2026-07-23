@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Mandibular Advancement Device</text>
+  <path d="M110,85 Q180,65 250,85 L250,110 Q180,125 110,110 Z" fill="#C8DFF5" stroke="#5B8CCC" stroke-width="2" opacity="0.85"/>
+  <path d="M115,140 Q190,123 255,140 L255,165 Q190,180 115,165 Z" fill="#D4E8C2" stroke="#7BAD55" stroke-width="2" opacity="0.85"/>
+  <line x1="125" y1="110" x2="125" y2="140" stroke="#9E9E9E" stroke-width="3"/>
+  <line x1="235" y1="110" x2="245" y2="140" stroke="#9E9E9E" stroke-width="3"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Custom device advances</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">jaw to open the airway</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">3</text>
+</svg>

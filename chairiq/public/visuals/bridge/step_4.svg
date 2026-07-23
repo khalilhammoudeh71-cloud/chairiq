@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Bridge Cemented — Complete</text>
+  <rect x="80" y="185" width="200" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M47,178 Q180,164 313,178" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="120" cy="90" rx="18" ry="26" fill="#F5E6C8" stroke="#C9A96E" stroke-width="2"/>
+  <rect x="110" y="115" width="20" height="70" rx="9" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="240" cy="90" rx="18" ry="26" fill="#F5E6C8" stroke="#C9A96E" stroke-width="2"/>
+  <rect x="230" y="115" width="20" height="70" rx="9" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <path d="M136,75 Q180,65 224,75 L224,115 Q180,130 136,115 Z" fill="#B0C4DE" stroke="#4A6FA5" stroke-width="2"/>
+  <ellipse cx="166" cy="85" rx="6" ry="4" fill="white" opacity="0.3"/>
+  <circle cx="230" cy="80" r="16" fill="#5BAD7A" opacity="0.2"/>
+  <polyline points="222,80 229,87 241,71" fill="none" stroke="#5BAD7A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Bridge permanently cemented —</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">gap restored</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">4</text>
+</svg>

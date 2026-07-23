@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Heavy Calculus Buildup</text>
+  <rect x="80" y="180" width="200" height="38" rx="4" fill="#D4C5A9" stroke="#9E8A6A" stroke-width="1.5"/>
+  <path d="M47,173 Q180,159 313,173" fill="#F4A8B4" stroke="#C96C7A" stroke-width="1.5" opacity="0.85"/>
+  <ellipse cx="125" cy="83.585" rx="22" ry="29.205" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="117.3" y="114.1" width="15.399999999999999" height="68.9" rx="7.699999999999999" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="125" cy="83.585" rx="14.08" ry="20.177999999999997" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="180" cy="79.6875" rx="24" ry="30.937500000000004" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="171.6" y="112.25" width="16.799999999999997" height="72.75" rx="8.399999999999999" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="180" cy="79.6875" rx="15.36" ry="21.375" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <ellipse cx="235" cy="83.585" rx="22" ry="29.205" fill="#DDEEFF" stroke="#8AAFD4" stroke-width="1.5"/>
+  <rect x="227.3" y="114.1" width="15.399999999999999" height="68.9" rx="7.699999999999999" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1.5"/>
+  <ellipse cx="235" cy="83.585" rx="14.08" ry="20.177999999999997" fill="#F5E6C8" stroke="#C9A96E" stroke-width="1"/>
+  <rect x="112" y="148" width="12" height="28}" rx="3" fill="#C8B400" opacity="0.9"/>
+  <rect x="155" y="145" width="12" height="30}" rx="3" fill="#C8B400" opacity="0.9"/>
+  <rect x="205" y="145" width="12" height="30}" rx="3" fill="#C8B400" opacity="0.9"/>
+  <rect x="238" y="148" width="12" height="28}" rx="3" fill="#C8B400" opacity="0.9"/>
+  <text x="180" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Years of buildup prevent</text>
+  <text x="180" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">proper periodontal exam</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">1</text>
+</svg>

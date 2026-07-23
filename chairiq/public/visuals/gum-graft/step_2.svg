@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="360" height="260">
+  <rect width="360" height="260" fill="#F8F9FC" rx="8"/>
+  <rect x="0" y="0" width="360" height="28" fill="#5B8CCC" opacity="0.12" rx="0"/>
+  <text x="180" y="19" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#5B8CCC">Donor Tissue Harvested</text>
+  <path d="M110,60 Q180,40 250,60 Q250,110 180,125 Q110,110 110,60" fill="#F4A8B4" stroke="#C96C7A" stroke-width="2"}/>
+  <rect x="152" y="72" width="56" height="22}" rx="4" fill="#FFD166" stroke="#E6A000" stroke-width="2" opacity="0.8"/>
+  <line x1="180" y1="135" x2="180" y2="160" stroke="#9E9E9E" stroke-width="2"/>
+  <polygon points="180,160 175,150 185,150" fill="#9E9E9E"/>
+  <text x="180" y="55" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="400" fill="#1A2A3A">Palate</text>
+  <text x="180" y="230" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">Small strip of tissue</text>
+  <text x="180" y="245" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="400" fill="#1A2A3A">taken from roof of mouth</text>
+  <circle cx="26" cy="26" r="12" fill="#5B8CCC" opacity="0.9"/>
+  <text x="26" y="31" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="white">2</text>
+</svg>
