@@ -53,8 +53,16 @@ export default function MarkdownContentEditor() {
   const loadProcedure = async () => {
     try {
       setLoading(true);
-      const data = (await procedureLibraryService?.getBySlug(procedureId)) || 
-                   (await procedureLibraryService?.getAll())?.find(p => p?.id === procedureId);
+      let data;
+      try {
+        data = await procedureLibraryService?.getBySlug(procedureId);
+      } catch (_) {
+        // procedureId is a UUID, not a slug — fall through to ID lookup
+      }
+      if (!data) {
+        const all = await procedureLibraryService?.getAll();
+        data = all?.find(p => p?.id === procedureId);
+      }
       if (data) {
         setFormData(data);
       }
