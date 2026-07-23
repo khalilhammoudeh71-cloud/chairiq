@@ -680,7 +680,7 @@ export default function ProcedureLibraryManagement() {
                       const completeness = getContentCompleteness(procedure);
                       const hasSpanish = !!(procedure?.titleEs && procedure?.summaryEs);
                       return (
-                        <tr key={procedure?.id} className="hover:bg-bg1 transition-colors">
+                        <tr key={procedure?.id} className="hover:bg-bg1 transition-colors cursor-pointer" onClick={() => handleEdit(procedure)}>
                           <td className="px-6 py-4">
                             <div className="text-t1 font-medium">{procedure?.titleEn || 'Untitled'}</div>
                             <div className="text-t3 text-sm font-mono">{procedure?.slug}</div>
@@ -721,7 +721,7 @@ export default function ProcedureLibraryManagement() {
                               )}
                             </div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
                             <button
                               onClick={() => handleTogglePublish(procedure)}
                               className="flex items-center gap-1.5 cursor-pointer"
@@ -740,7 +740,7 @@ export default function ProcedureLibraryManagement() {
                               )}
                             </button>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
                             <div className="flex items-center justify-end gap-2">
                               <button
                                 onClick={() => handleEdit(procedure)}
