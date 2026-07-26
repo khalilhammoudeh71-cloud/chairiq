@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { procedureLibraryService } from '../../services/procedureLibraryService';
 import DentistNavigation from '../../components/DentistNavigation';
+import { supabase } from '../../lib/supabase';
 
 export default function MarkdownContentEditor() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function MarkdownContentEditor() {
   const [success, setSuccess] = useState('');
   const [language, setLanguage] = useState('en');
   const [previewMode, setPreviewMode] = useState(false);
+  const [stepVisuals, setStepVisuals] = useState([]);
 
   const [formData, setFormData] = useState({
     slug: '',
@@ -89,6 +91,17 @@ export default function MarkdownContentEditor() {
           visitsEstimate: data.visitsEstimate ?? '',
           isPublished: data.isPublished ?? false,
         });
+
+        // Load step visuals from procedure_visuals table
+        const canonicalSlug = data.canonicalSlug || data.slug;
+        if (canonicalSlug) {
+          const { data: visRows } = await supabase
+            .from('procedure_visuals')
+            .select('*')
+            .eq('canonical_slug', canonicalSlug)
+            .order('sort_order', { ascending: true });
+          setStepVisuals(visRows || []);
+        }
       }
       setError('');
     } catch (err) {
@@ -267,12 +280,43 @@ export default function MarkdownContentEditor() {
               {formData?.[getFieldKey('steps')]?.length > 0 && (
                 <div>
                   <h2>Procedure Steps</h2>
-                  {formData?.[getFieldKey('steps')]?.map((step, i) => (
-                    <div key={i}>
-                      <h3>{step?.stepTitle}</h3>
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{step?.stepBody}</ReactMarkdown>
-                    </div>
-                  ))}
+                  {formData?.[getFieldKey('steps')]?.map((step, i) => {
+                    const visual = stepVisuals[i];
+                    return (
+                      <div key={i} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                        {visual && (
+                          <div style={{ flexShrink: 0 }}>
+                            <img
+                              src={visual.image_url}
+                              alt={language === 'en' ? visual.alt_text_en : visual.alt_text_es}
+                              style={{ width: 200, height: 'auto', borderRadius: 8, border: '1px solid #e2e8f0' }}
+                            />
+                          </div>
+                        )}
+                        <div style={{ flex: 1, minWidth: 200 }}>
+                          <h3>{step?.stepTitle}</h3>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>{step?.stepBody}</ReactMarkdown>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              {stepVisuals?.length > 0 && formData?.[getFieldKey('steps')]?.length === 0 && (
+                <div>
+                  <h2>Procedure Steps</h2>
+                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    {stepVisuals.map((vis, i) => (
+                      <div key={i} style={{ textAlign: 'center' }}>
+                        <img
+                          src={vis.image_url}
+                          alt={language === 'en' ? vis.alt_text_en : vis.alt_text_es}
+                          style={{ width: 180, height: 'auto', borderRadius: 8, border: '1px solid #e2e8f0' }}
+                        />
+                        <p style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>Step {i + 1}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
               
