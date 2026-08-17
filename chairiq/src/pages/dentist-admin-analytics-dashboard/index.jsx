@@ -271,22 +271,22 @@ export default function DentistAdminAnalyticsDashboard() {
 
   const statColorMap = {
     blue: {
-      border: 'border-l-blue-500',
-      iconBg: 'bg-blue-500/10',
-      iconBorder: 'border-blue-500/20',
-      iconText: 'text-blue-500',
+      border: 'border-l-accent',
+      iconBg: 'bg-accent/10',
+      iconBorder: 'border-accent/20',
+      iconText: 'text-accent',
     },
     green: {
-      border: 'border-l-emerald-500',
-      iconBg: 'bg-emerald-500/10',
-      iconBorder: 'border-emerald-500/20',
-      iconText: 'text-emerald-500',
+      border: 'border-l-success',
+      iconBg: 'bg-success/10',
+      iconBorder: 'border-success/20',
+      iconText: 'text-success',
     },
     amber: {
-      border: 'border-l-amber-500',
-      iconBg: 'bg-amber-500/10',
-      iconBorder: 'border-amber-500/20',
-      iconText: 'text-amber-500',
+      border: 'border-l-warning',
+      iconBg: 'bg-warning/10',
+      iconBorder: 'border-warning/20',
+      iconText: 'text-warning',
     },
     accent: {
       border: 'border-l-accent',
@@ -296,7 +296,7 @@ export default function DentistAdminAnalyticsDashboard() {
     },
   };
 
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const COLORS = ['#22d3e0', '#34d399', '#f2b63c', '#f26d6d', '#59e2ec'];
 
   if (loading) {
     return (
@@ -318,7 +318,7 @@ export default function DentistAdminAnalyticsDashboard() {
           <p className="text-t2 text-center mb-4">{error}</p>
           <button
             onClick={loadAnalyticsData}
-            className="w-full bg-accent text-t1 px-6 py-3 rounded-lg font-medium hover:bg-accent2 transition-colors"
+            className="btn-primary w-full"
           >
             Retry
           </button>
@@ -469,11 +469,11 @@ export default function DentistAdminAnalyticsDashboard() {
                               <button
                                 onClick={() => handleResendLink(patient?.publicToken, patient?.patientName)}
                                 disabled={resendingToken === patient?.publicToken}
-                                className="flex items-center gap-1.5 bg-accent text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-accent/30 bg-accent/10 text-accent hover:bg-accent/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {resendingToken === patient?.publicToken ? (
                                   <>
-                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-white"></div>
+                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-current"></div>
                                     <span>Sending...</span>
                                   </>
                                 ) : (
@@ -489,12 +489,11 @@ export default function DentistAdminAnalyticsDashboard() {
                                   setEmailInput('');
                                 }}
                                 disabled={resendingEmailToken === patient?.publicToken}
-                                className="flex items-center gap-1.5 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                style={{ backgroundColor: '#2D7D46' }}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-success/30 bg-success/10 text-success hover:bg-success/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {resendingEmailToken === patient?.publicToken ? (
                                   <>
-                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-white"></div>
+                                    <div className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-t-transparent border-current"></div>
                                     <span>Sending...</span>
                                   </>
                                 ) : (
@@ -539,8 +538,7 @@ export default function DentistAdminAnalyticsDashboard() {
                                 <button
                                   onClick={() => handleResendViaEmail(patient?.publicToken, patient?.patientName, emailInput)}
                                   disabled={!emailInput || resendingEmailToken === patient?.publicToken}
-                                  className="flex items-center gap-1.5 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                  style={{ backgroundColor: '#2D7D46' }}
+                                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border border-success/30 bg-success/10 text-success hover:bg-success/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                   <Send size={14} />
                                   <span>Send</span>
@@ -574,30 +572,30 @@ export default function DentistAdminAnalyticsDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
+                <div className="w-1 h-6 bg-accent rounded-full"></div>
                 <h3 className="text-t1 font-semibold text-lg">Engagement Trends</h3>
               </div>
               {engagementTrends?.length > 0 ? (
                 <div className="bg-bg0/50 rounded-lg border border-bd/50 p-4">
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={engagementTrends}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-                      <XAxis dataKey="date" stroke="#9aa6c4" fontSize={12} />
-                      <YAxis stroke="#9aa6c4" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(94,217,234,0.08)" />
+                      <XAxis dataKey="date" stroke="#5b6d76" fontSize={12} />
+                      <YAxis stroke="#5b6d76" fontSize={12} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: '#17213a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#f5f7fb' }}
+                        contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '10px', color: 'var(--t1)' }}
                       />
                       <Legend />
-                      <Line type="monotone" dataKey="planViews" stroke="#3b82f6" strokeWidth={2} name="Plan Views" />
-                      <Line type="monotone" dataKey="procedureViews" stroke="#22c55e" strokeWidth={2} name="Procedure Views" />
-                      <Line type="monotone" dataKey="completions" stroke="#f59e0b" strokeWidth={2} name="Completions" />
+                      <Line type="monotone" dataKey="planViews" stroke="#22d3e0" strokeWidth={2} dot={false} name="Plan Views" />
+                      <Line type="monotone" dataKey="procedureViews" stroke="#34d399" strokeWidth={2} dot={false} name="Procedure Views" />
+                      <Line type="monotone" dataKey="completions" stroke="#f2b63c" strokeWidth={2} dot={false} name="Completions" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
               ) : (
                 <div className="bg-bg0/50 rounded-lg border border-dashed border-bd p-6 flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-3">
-                    <TrendingUp size={22} className="text-blue-500/60" />
+                  <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center mb-3">
+                    <TrendingUp size={22} className="text-accent/60" />
                   </div>
                   <p className="text-t2 font-medium">No engagement data yet</p>
                   <p className="text-t3 text-sm mt-1 text-center max-w-xs">Trends will appear as patients interact with their treatment plans</p>
@@ -606,27 +604,27 @@ export default function DentistAdminAnalyticsDashboard() {
             </Card>
             <Card>
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
+                <div className="w-1 h-6 bg-success rounded-full"></div>
                 <h3 className="text-t1 font-semibold text-lg">Completion Rates</h3>
               </div>
               {procedureAnalytics?.length > 0 ? (
                 <div className="bg-bg0/50 rounded-lg border border-bd/50 p-4">
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={procedureAnalytics?.slice(0, 5)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-                      <XAxis dataKey="procedureName" stroke="#9aa6c4" fontSize={12} />
-                      <YAxis stroke="#9aa6c4" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(94,217,234,0.08)" />
+                      <XAxis dataKey="procedureName" stroke="#5b6d76" fontSize={12} />
+                      <YAxis stroke="#5b6d76" fontSize={12} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: '#17213a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#f5f7fb' }}
+                        contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '10px', color: 'var(--t1)' }}
                       />
-                      <Bar dataKey="completionRate" fill="#10b981" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="completionRate" fill="#22d3e0" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               ) : (
                 <div className="bg-bg0/50 rounded-lg border border-dashed border-bd p-6 flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-3">
-                    <BarChart3 size={22} className="text-emerald-500/60" />
+                  <div className="w-12 h-12 rounded-full bg-success/10 border border-success/20 flex items-center justify-center mb-3">
+                    <BarChart3 size={22} className="text-success/60" />
                   </div>
                   <p className="text-t2 font-medium">No completion data yet</p>
                   <p className="text-t3 text-sm mt-1 text-center max-w-xs">Completion rates will display once patients begin viewing procedures</p>

@@ -7,50 +7,52 @@
 @layer base {
   :root {
     /* ═══════════════════════════════════════════
-       LIGHT MODE — Expensive, Calm, Intentional
+       LIGHT MODE — Clinical Porcelain + Cyan
+       Harmonized with the ChairIQ cyan brand
        ═══════════════════════════════════════════ */
 
-    /* Surface layers — barely-there differences, depth through spacing */
-    --bg0: #ffffff;
-    --bg1: #fafbfc;
-    --bg2: #f5f6f8;
-    --bg3: #eef0f3;
+    /* Surface layers — cool porcelain, faint cyan cast */
+    --bg0: #f6f9fa;
+    --bg1: #ffffff;
+    --bg2: #eef4f5;
+    --bg3: #e2ebed;
 
-    /* Text hierarchy — softer contrast, not harsh black */
-    --t1: #1a1f36;
-    --t2: #525f7f;
-    --t3: #8898aa;
+    /* Text hierarchy — deep slate-teal, not black */
+    --t1: #0e1b20;
+    --t2: #46606b;
+    --t3: #566d79;
 
-    /* Borders — whisper-thin, almost invisible */
-    --bd: rgba(0, 0, 0, 0.06);
+    /* Borders — cyan-tinted hairlines */
+    --bd: rgba(10, 80, 95, 0.12);
 
-    /* Accent — confident blue, used sparingly */
-    --accent: #2563eb;
-    --accent2: #1d4ed8;
-    --accent-soft: rgba(37, 99, 235, 0.05);
-    --accent-hover: rgba(37, 99, 235, 0.06);
+    /* Accent — deep clinical cyan (readable on light) */
+    --accent: #0797ab;
+    --accent2: #067c8d;
+    --accent-soft: rgba(7, 151, 171, 0.08);
+    --accent-hover: rgba(7, 151, 171, 0.12);
+    --accent-ink: #04262b;
 
-    /* Status — clear, distinguishable */
-    --success: #059669;
-    --warning: #d97706;
-    --danger: #dc2626;
+    /* Status */
+    --success: #047857;
+    --warning: #8a5200;
+    --danger: #d64545;
 
-    /* Shadows — soft, diffused, barely noticeable */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05), 0 0 1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.06);
-    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.04);
-    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.03);
+    /* Shadows — soft, cool */
+    --shadow-xs: 0 1px 2px rgba(14, 27, 32, 0.04);
+    --shadow-card: 0 2px 8px rgba(14, 27, 32, 0.05), 0 0 1px rgba(14, 27, 32, 0.08);
+    --shadow-md: 0 4px 16px rgba(14, 27, 32, 0.07), 0 0 1px rgba(14, 27, 32, 0.08);
+    --shadow-lg: 0 8px 32px rgba(14, 27, 32, 0.09), 0 0 1px rgba(14, 27, 32, 0.08);
+    --shadow-button: 0 1px 3px rgba(14, 27, 32, 0.06);
+    --shadow-input: 0 1px 2px rgba(14, 27, 32, 0.04);
 
     /* Focus ring */
-    --ring: rgba(37, 99, 235, 0.4);
-    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    --ring: rgba(7, 151, 171, 0.45);
+    --focus-ring: 0 0 0 3px rgba(7, 151, 171, 0.15);
 
     /* Overlay */
-    --overlay: rgba(15, 23, 42, 0.4);
+    --overlay: rgba(5, 12, 15, 0.45);
 
-    /* Spacing scale — generous */
+    /* Spacing scale */
     --spacing-xs: 0.375rem;
     --spacing-sm: 0.75rem;
     --spacing-md: 1.25rem;
@@ -58,7 +60,7 @@
     --spacing-xl: 2.5rem;
     --spacing-2xl: 4rem;
 
-    /* Radius — softer, rounded */
+    /* Radius */
     --radius-sm: 0.5rem;
     --radius-md: 0.625rem;
     --radius-lg: 1rem;
@@ -68,53 +70,55 @@
     --logo-size-mobile: 2rem;
     --brand-text-size: 1.25rem;
     --brand-text-size-mobile: 1.125rem;
-    --brand-letter-spacing: 0.04em;
+    --brand-letter-spacing: 0.02em;
     --logo-gap: 0.75rem;
   }
 
   /* ═══════════════════════════════════════════
-     DARK MODE — Deep Charcoal, Warm, Restful
+     DARK MODE — Obsidian Instrument Panel
+     Near-black surfaces, electric cyan, quiet glow
      ═══════════════════════════════════════════ */
   .dark {
-    /* Surface layers — warm charcoal, no blue cast, tight progression */
-    --bg0: #111215;
-    --bg1: #1a1b1f;
-    --bg2: #222328;
-    --bg3: #2c2d33;
+    /* Surface layers — deep obsidian with a whisper of teal */
+    --bg0: #05080a;
+    --bg1: #0b1013;
+    --bg2: #111820;
+    --bg3: #1a232c;
 
-    /* Text hierarchy — warm off-white, easy on eyes for long sessions */
-    --t1: #e3e4e8;
-    --t2: #8b8f9a;
-    --t3: #5c5f69;
+    /* Text hierarchy — cool porcelain white */
+    --t1: #edf4f6;
+    --t2: #93a6ae;
+    --t3: #7f929e;
 
-    /* Borders — soft dividers, barely perceptible */
-    --bd: rgba(255, 255, 255, 0.07);
+    /* Borders — cyan-tinted hairlines, the mockup signature */
+    --bd: rgba(94, 217, 234, 0.12);
 
-    /* Accent — desaturated blue, calm not neon */
-    --accent: #6b8aee;
-    --accent2: #5a78d8;
-    --accent-soft: rgba(107, 138, 238, 0.08);
-    --accent-hover: rgba(107, 138, 238, 0.12);
+    /* Accent — electric cyan */
+    --accent: #22d3e0;
+    --accent2: #59e2ec;
+    --accent-soft: rgba(34, 211, 224, 0.10);
+    --accent-hover: rgba(34, 211, 224, 0.16);
+    --accent-ink: #04262b;
 
-    /* Status — muted, legible, not alarming */
-    --success: #3ecf8e;
-    --warning: #e0a54a;
-    --danger: #e06060;
+    /* Status — luminous but calm on obsidian */
+    --success: #34d399;
+    --warning: #f2b63c;
+    --danger: #f26d6d;
 
-    /* Shadows — near-invisible, layer separation through bg steps */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.24), 0 0 1px rgba(255, 255, 255, 0.03);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.03);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 255, 255, 0.04);
-    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.25);
-    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.2);
+    /* Shadows — deep drops with faint cyan halo for cards */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(94, 217, 234, 0.05);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(94, 217, 234, 0.06);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(34, 211, 224, 0.05);
+    --shadow-button: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-input: 0 1px 2px rgba(0, 0, 0, 0.35);
 
-    /* Focus ring — subtle, accent-tinted */
-    --ring: rgba(107, 138, 238, 0.4);
-    --focus-ring: 0 0 0 3px rgba(107, 138, 238, 0.12);
+    /* Focus ring — cyan */
+    --ring: rgba(34, 211, 224, 0.5);
+    --focus-ring: 0 0 0 3px rgba(34, 211, 224, 0.16);
 
     /* Overlay */
-    --overlay: rgba(0, 0, 0, 0.65);
+    --overlay: rgba(2, 4, 6, 0.72);
   }
 
   /* Responsive logo sizing */
@@ -144,7 +148,7 @@
   }
 
   /* ═══════════════════════════════
-     TYPOGRAPHY — Confident, Spacious, Readable
+     TYPOGRAPHY
      ═══════════════════════════════ */
 
   h1 {
@@ -223,7 +227,7 @@
   }
 
   input, textarea, select {
-    @apply bg-bg0 text-t1 placeholder:text-t3;
+    @apply bg-bg1 text-t1 placeholder:text-t3;
     border: 1px solid var(--bd);
     border-radius: var(--radius-md);
     font-size: 0.9375rem;
@@ -249,7 +253,7 @@
   code {
     font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
     font-size: 0.875em;
-    @apply bg-bg2 text-accent2;
+    @apply bg-bg2 text-accent;
     padding: 0.125rem 0.5rem;
     border-radius: var(--radius-sm);
   }
@@ -263,17 +267,22 @@
 
 @layer components {
   /* ═══════════════════════════════
-     BUTTONS — Enterprise, Solid, Restrained
+     BUTTONS — Cyan primary reads dark text (mockup style)
      ═══════════════════════════════ */
   .btn-primary {
-    @apply bg-accent text-white px-6 py-3 font-medium;
+    @apply bg-accent px-6 py-3 font-semibold;
+    color: #04262b;
     border-radius: var(--radius-md);
     border: none;
-    transition: filter 0.15s ease;
+    transition: filter 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .dark .btn-primary {
+    box-shadow: 0 0 18px rgba(34, 211, 224, 0.22);
   }
 
   .btn-primary:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.08);
   }
 
   .btn-primary:active {
@@ -288,17 +297,20 @@
   .btn-primary:disabled {
     @apply opacity-40 cursor-not-allowed;
     filter: none;
+    box-shadow: none;
   }
 
   .btn-secondary {
-    @apply bg-bg0 text-t1 px-6 py-3 font-medium;
-    border: 1px solid var(--bd);
+    @apply bg-transparent px-6 py-3 font-medium;
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
     border-radius: var(--radius-md);
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
   }
 
   .btn-secondary:hover {
-    @apply bg-bg2;
+    background: var(--accent-soft);
+    border-color: var(--accent);
   }
 
   .btn-secondary:focus-visible {
@@ -326,10 +338,10 @@
   }
 
   /* ═══════════════════════════════
-     CARDS — Layered through shadow, not borders
+     CARDS — Panels a step above the void
      ═══════════════════════════════ */
   .card {
-    @apply bg-bg0;
+    @apply bg-bg1;
     padding: 2rem;
     border: 1px solid var(--bd);
     border-radius: var(--radius-lg);
@@ -337,16 +349,17 @@
   }
 
   .card-hover {
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
   }
 
   .card-hover:hover {
     box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--accent) 30%, transparent);
     transform: translateY(-2px);
   }
 
   /* ═══════════════════════════════
-     LAYOUT — Generous whitespace
+     LAYOUT
      ═══════════════════════════════ */
   .page-container {
     @apply bg-bg0 min-h-screen;
@@ -366,42 +379,37 @@
   }
 
   /* ═══════════════════════════════
-     BADGES — Soft, understated
+     BADGES — Outlined pills (mockup style)
      ═══════════════════════════════ */
   .badge-immediate {
-    @apply px-3 py-1.5 text-xs font-medium;
-    border-radius: var(--radius-sm);
-    background: rgba(220, 38, 38, 0.06);
+    @apply px-3 py-1.5 text-xs font-semibold;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
     color: var(--danger);
   }
 
-  .dark .badge-immediate {
-    background: rgba(239, 68, 68, 0.1);
-  }
-
   .badge-soon {
-    @apply px-3 py-1.5 text-xs font-medium;
-    border-radius: var(--radius-sm);
-    background: rgba(217, 119, 6, 0.06);
+    @apply px-3 py-1.5 text-xs font-semibold;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--warning) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
     color: var(--warning);
   }
 
-  .dark .badge-soon {
-    background: rgba(245, 158, 11, 0.1);
-  }
-
   .badge-future {
-    @apply px-3 py-1.5 text-xs font-medium;
-    border-radius: var(--radius-sm);
+    @apply px-3 py-1.5 text-xs font-semibold;
+    border-radius: 999px;
     background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
     color: var(--accent);
   }
 
   /* ═══════════════════════════════
-     INPUTS — Open, airy
+     INPUTS
      ═══════════════════════════════ */
   .input-field {
-    @apply bg-bg0 text-t1 px-4 py-3;
+    @apply bg-bg1 text-t1 px-4 py-3;
     border: 1px solid var(--bd);
     border-radius: var(--radius-md);
     font-size: 0.9375rem;
@@ -411,8 +419,7 @@
 
   .input-field:focus {
     @apply border-accent outline-none;
-    border-width: 2px;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), var(--focus-ring);
+    box-shadow: var(--focus-ring);
   }
 
   /* ═══════════════════════════════
@@ -452,7 +459,7 @@
   }
 
   /* ═══════════════════════════════
-     DIVIDER — Almost invisible
+     DIVIDER
      ═══════════════════════════════ */
   .divider {
     border: none;
@@ -461,7 +468,7 @@
   }
 
   /* ═══════════════════════════════
-     MODALS & OVERLAYS — Calm backdrop
+     MODALS & OVERLAYS
      ═══════════════════════════════ */
   .overlay {
     @apply fixed inset-0 z-40;
@@ -471,7 +478,7 @@
   }
 
   .modal-content {
-    @apply bg-bg0;
+    @apply bg-bg1;
     border: 1px solid var(--bd);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -479,18 +486,18 @@
   }
 
   /* ═══════════════════════════════
-     TABLES — Airy, minimal lines
+     TABLES
      ═══════════════════════════════ */
   .table-header {
     @apply text-t3 font-medium uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     font-size: 0.6875rem;
     padding: 1rem 1.25rem;
     background: transparent;
   }
 
   .table-row {
-    @apply bg-bg0;
+    @apply bg-transparent;
     border-bottom: 1px solid var(--bd);
     transition: background-color 0.1s ease;
   }
@@ -535,11 +542,29 @@
   .transition-smooth {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  /* Cyan glow accents — for primary CTAs and highlighted panels */
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(34, 211, 224, 0.25);
+  }
+
+  .ring-accent-soft {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   CONTRAST GUARD — electric cyan needs dark ink.
+   Any legacy `bg-accent text-white` combo gets
+   readable dark text in dark mode automatically.
+   ═══════════════════════════════════════════ */
+.bg-accent.text-white {
+  color: #04262b;
 }
 
 /* Hero primary CTA — static, no transitions */
 .hero-cta-primary {
-  box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.06);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 20px rgba(34,211,224,0.3);
 }
 .hero-cta-primary:hover {
   filter: brightness(1.1);
@@ -547,14 +572,11 @@
 
 /* ═══════════════════════════════════════════
    HERO — Full-bleed dental slideshow
-   Covers entire hero section as background.
-   8s per slide, 1.4s crossfade.
-   Left-heavy dark overlay for text readability.
    ═══════════════════════════════════════════ */
 
 .hero-section {
   min-height: 70vh;
-  background: #0a0c12;
+  background: #04070a;
 }
 
 .hero-content-wrap {
@@ -593,18 +615,18 @@
   background:
     linear-gradient(
       90deg,
-      rgba(10,12,18,0.88) 0%,
-      rgba(10,12,18,0.82) 22%,
-      rgba(10,12,18,0.55) 50%,
-      rgba(10,12,18,0.25) 75%,
-      rgba(10,12,18,0.15) 100%
+      rgba(4,7,10,0.90) 0%,
+      rgba(4,7,10,0.84) 22%,
+      rgba(4,7,10,0.55) 50%,
+      rgba(4,7,10,0.25) 75%,
+      rgba(4,7,10,0.15) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(10,12,18,0.30) 0%,
+      rgba(4,7,10,0.30) 0%,
       transparent 20%,
       transparent 80%,
-      rgba(10,12,18,0.45) 100%
+      rgba(4,7,10,0.45) 100%
     );
 }
 
@@ -614,17 +636,17 @@
     background:
       linear-gradient(
         90deg,
-        rgba(10,12,18,0.90) 0%,
-        rgba(10,12,18,0.84) 25%,
-        rgba(10,12,18,0.50) 58%,
-        rgba(10,12,18,0.22) 100%
+        rgba(4,7,10,0.92) 0%,
+        rgba(4,7,10,0.86) 25%,
+        rgba(4,7,10,0.50) 58%,
+        rgba(4,7,10,0.22) 100%
       ),
       linear-gradient(
         180deg,
-        rgba(10,12,18,0.30) 0%,
+        rgba(4,7,10,0.30) 0%,
         transparent 22%,
         transparent 78%,
-        rgba(10,12,18,0.45) 100%
+        rgba(4,7,10,0.45) 100%
       );
   }
 }
@@ -643,9 +665,9 @@
     background:
       linear-gradient(
         180deg,
-        rgba(10,12,18,0.90) 0%,
-        rgba(10,12,18,0.75) 40%,
-        rgba(10,12,18,0.45) 100%
+        rgba(4,7,10,0.92) 0%,
+        rgba(4,7,10,0.75) 40%,
+        rgba(4,7,10,0.45) 100%
       );
   }
 }

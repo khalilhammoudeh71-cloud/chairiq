@@ -42,7 +42,7 @@ export default function DentistNavigation() {
   const isActivePath = (path) => location?.pathname === path;
 
   return (
-    <nav className="bg-bg2 border-b border-bd sticky top-0 z-50">
+    <nav className="bg-bg1 border-b border-bd sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -59,8 +59,8 @@ export default function DentistNavigation() {
                 onClick={() => navigate(item?.path)}
                 className={`relative flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                   isActivePath(item?.path)
-                    ? 'bg-accent text-t1 font-medium'
-                    : 'text-t2 hover:bg-bg1 hover:text-t1 hover:font-medium'
+                    ? 'bg-accent/10 text-accent font-medium border border-accent/25'
+                    : 'text-t2 hover:bg-bg2 hover:text-t1 hover:font-medium'
                 }`}
               >
                 <item.icon size={20} />
@@ -114,8 +114,8 @@ export default function DentistNavigation() {
                 }}
                 className={`relative w-full flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActivePath(item?.path)
-                    ? 'bg-accent text-t1 font-medium'
-                    : 'text-t2 hover:bg-bg1 hover:text-t1 hover:font-medium'
+                    ? 'bg-accent/10 text-accent font-medium border border-accent/25'
+                    : 'text-t2 hover:bg-bg2 hover:text-t1 hover:font-medium'
                 }`}
               >
                 {isActivePath(item?.path) && (

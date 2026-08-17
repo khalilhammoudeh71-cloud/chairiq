@@ -34,7 +34,7 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-bg0">
-      <header className="sticky top-0 z-50 border-b" style={{ background: '#0a0c12', borderColor: 'rgba(255,255,255,0.06)' }}>
+      <header className="sticky top-0 z-50 border-b" style={{ background: '#04070a', borderColor: 'rgba(94,217,234,0.10)' }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img
@@ -49,13 +49,13 @@ const Landing = () => {
               }}
             />
             <span
-              className="font-semibold text-white"
+              className="font-bold"
               style={{
                 fontSize: 'var(--brand-text-size, 1.25rem)',
-                letterSpacing: 'var(--brand-letter-spacing, 0.04em)',
+                letterSpacing: 'var(--brand-letter-spacing, 0.02em)',
                 lineHeight: 1
               }}>
-              ChairIQ
+              <span className="text-white">Chair</span><span style={{ color: '#22d3e0' }}>IQ</span>
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -248,7 +248,7 @@ const Landing = () => {
                   borderRadius: '6px'
                 }}
               />
-              <span className="font-semibold text-t1 text-sm">ChairIQ</span>
+              <span className="font-semibold text-sm"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></span>
             </div>
             <div className="flex gap-6 text-t3 text-sm">
               <button onClick={() => navigate('/privacy-policy')} className="hover:text-t1 transition-colors">

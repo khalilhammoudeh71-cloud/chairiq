@@ -18,6 +18,7 @@ module.exports = {
         bd: 'var(--bd)',
         accent: 'var(--accent)',
         accent2: 'var(--accent2)',
+        'accent-foreground': 'var(--accent-ink)',
         success: 'var(--success)',
         warning: 'var(--warning)',
         danger: 'var(--danger)',

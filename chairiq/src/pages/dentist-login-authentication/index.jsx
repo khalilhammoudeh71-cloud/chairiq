@@ -69,12 +69,12 @@ export default function DentistLoginAuthentication() {
     <div className="min-h-screen flex">
       <div
         className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #0c0e14 0%, #1a1d2e 50%, #0c0e14 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #04070a 0%, #0d161c 50%, #04070a 100%)' }}
       >
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+            backgroundImage: 'radial-gradient(circle at 1px 1px, #22d3e0 1px, transparent 0)',
             backgroundSize: '40px 40px'
           }}
         />
@@ -97,14 +97,16 @@ export default function DentistLoginAuthentication() {
             className="w-20 h-20 rounded-2xl mb-8"
           />
 
-          <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">ChairIQ</h2>
-          <p className="text-lg text-gray-300 leading-relaxed mb-8">
+          <h2 className="text-4xl font-bold mb-4 tracking-tight">
+            <span className="text-white">Chair</span><span style={{ color: '#22d3e0' }}>IQ</span>
+          </h2>
+          <p className="text-lg leading-relaxed mb-8" style={{ color: 'rgba(237,244,246,0.8)' }}>
             Treatment plans patients actually read
           </p>
 
-          <div className="w-16 h-px bg-gray-600 mb-8" />
+          <div className="w-16 h-px mb-8" style={{ background: 'rgba(94,217,234,0.25)' }} />
 
-          <div className="space-y-4 text-sm text-gray-400">
+          <div className="space-y-4 text-sm" style={{ color: 'rgba(147,166,174,0.9)' }}>
             <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" style={{ background: 'var(--accent)' }} />
               <span>Visual step-by-step treatment education</span>
@@ -120,7 +122,7 @@ export default function DentistLoginAuthentication() {
           </div>
         </div>
 
-        <div className="absolute bottom-8 text-gray-500 text-xs tracking-wide">
+        <div className="absolute bottom-8 text-xs tracking-wide" style={{ color: 'rgba(91,109,118,0.9)' }}>
           Powered by ChairIQ
         </div>
       </div>
@@ -133,7 +135,7 @@ export default function DentistLoginAuthentication() {
               alt="ChairIQ"
               className="w-14 h-14 rounded-xl mb-4 inline-block"
             />
-            <h1 className="text-2xl font-bold text-t1">ChairIQ</h1>
+            <h1 className="text-2xl font-bold"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></h1>
           </div>
 
           <div className="mb-8">

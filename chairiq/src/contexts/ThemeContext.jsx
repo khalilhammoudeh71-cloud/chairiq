@@ -11,8 +11,17 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('system');
-  const [resolvedTheme, setResolvedTheme] = useState('light');
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme && ['light', 'dark', 'system']?.includes(storedTheme)) {
+        return storedTheme;
+      }
+    }
+    // New visitors default to dark — the ChairIQ signature theme
+    return 'dark';
+  });
+  const [resolvedTheme, setResolvedTheme] = useState('dark');
 
   // Detect system preference
   const getSystemTheme = () => {
@@ -28,7 +37,8 @@ export const ThemeProvider = ({ children }) => {
     if (storedTheme && ['light', 'dark', 'system']?.includes(storedTheme)) {
       setTheme(storedTheme);
     } else {
-      setTheme('system');
+      // New visitors default to dark — the ChairIQ signature theme
+      setTheme('dark');
     }
   }, []);
 

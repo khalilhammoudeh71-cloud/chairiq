@@ -23,7 +23,7 @@ html {
   top: -40px;
   left: 0;
   background: var(--accent);
-  color: white;
+  color: #04262b;
   padding: 8px;
   text-decoration: none;
   z-index: 100;
@@ -43,12 +43,13 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg1);
+  background: var(--bg0);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--bg3);
   border-radius: 4px;
+  border: 2px solid var(--bg0);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -56,12 +57,12 @@ html {
 }
 
 /* ═══════════════════════════════
-   SELECTION
+   SELECTION — cyan wash
    ═══════════════════════════════ */
 
 ::selection {
-  background-color: var(--accent);
-  color: white;
+  background-color: rgba(34, 211, 224, 0.35);
+  color: inherit;
 }
 
 /* ═══════════════════════════════
@@ -78,14 +79,18 @@ html {
 }
 
 /* ═══════════════════════════════
-   GLASS MORPHISM
+   GLASS MORPHISM — obsidian glass with cyan hairline
    ═══════════════════════════════ */
 
 .glass {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(17, 24, 32, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--bd);
+}
+
+:root:not(.dark) .glass {
+  background: rgba(255, 255, 255, 0.65);
 }
 
 /* ═══════════════════════════════

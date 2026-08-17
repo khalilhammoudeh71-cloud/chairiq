@@ -4,22 +4,22 @@ import Icon from '../../../components/AppIcon';
 
 const colorMap = {
   blue: {
-    border: 'border-l-blue-500',
-    iconBg: 'bg-blue-500/10',
-    iconBorder: 'border-blue-500/20',
-    iconText: 'text-blue-500',
+    border: 'border-l-accent',
+    iconBg: 'bg-accent/10',
+    iconBorder: 'border-accent/20',
+    iconText: 'text-accent',
   },
   green: {
-    border: 'border-l-emerald-500',
-    iconBg: 'bg-emerald-500/10',
-    iconBorder: 'border-emerald-500/20',
-    iconText: 'text-emerald-500',
+    border: 'border-l-success',
+    iconBg: 'bg-success/10',
+    iconBorder: 'border-success/20',
+    iconText: 'text-success',
   },
   amber: {
-    border: 'border-l-amber-500',
-    iconBg: 'bg-amber-500/10',
-    iconBorder: 'border-amber-500/20',
-    iconText: 'text-amber-500',
+    border: 'border-l-warning',
+    iconBg: 'bg-warning/10',
+    iconBorder: 'border-warning/20',
+    iconText: 'text-warning',
   },
   accent: {
     border: 'border-l-accent',
