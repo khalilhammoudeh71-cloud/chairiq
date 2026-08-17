@@ -50,3 +50,7 @@ publicDir = "chairiq/build"
 [[deployment.rewrites]]
 from = "/*"
 to = "/index.html"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 180000
