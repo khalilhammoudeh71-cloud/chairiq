@@ -151,7 +151,7 @@ async function start() {
       if (phoneDigits.length < 10 || phoneDigits.length > 15) {
         return res.status(400).json({ ok: false, error: 'Invalid phone number. Please enter a valid number.' });
       }
-      const smsPreview = `ChairIQ: Your dental treatment plan is ready. View it here: ${secureLink}`;
+      const smsPreview = `Khalil Hammoudeh PLLC: Your dental treatment plan is ready. View it securely here: ${secureLink} Reply STOP to opt out.`;
       try {
         const result = await sendTreatmentPlanSMS(phone, secureLink);
         await logMessageSend({ userToken, userId, planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'sent', providerResponse: result });
@@ -159,10 +159,10 @@ async function start() {
       } catch (err) {
         console.error('[API] send-treatment-plan SMS error:', err.message);
         await logMessageSend({ userToken, userId, planId, patientId, method: 'sms', destination: phone, messagePreview: smsPreview, status: 'failed', providerResponse: { error: err.message } });
-        const smsMsg = err.message?.includes('Telnyx') || err.message?.includes('phone')
+        const smsMsg = err.message?.includes('SMS error') || err.message?.includes('phone')
           ? err.message
           : 'Failed to send SMS. Please try again later.';
-        return res.status(err.message?.includes('Telnyx') ? 502 : 500).json({ ok: false, error: smsMsg });
+        return res.status(err.message?.includes('SMS error') ? 502 : 500).json({ ok: false, error: smsMsg });
       }
     }
 

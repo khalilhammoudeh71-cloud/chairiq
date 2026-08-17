@@ -64,7 +64,7 @@ export default function TestSmsCard() {
           <h2 className="text-xl font-bold text-t1">SMS Delivery Test</h2>
         </div>
         <p className="text-t2 text-sm mb-4">
-          Send a test SMS to verify your Telnyx configuration is working correctly.
+          Send a test SMS to verify your Twilio configuration is working correctly.
         </p>
         <div className="space-y-3">
           <div className="flex gap-2 items-center">
