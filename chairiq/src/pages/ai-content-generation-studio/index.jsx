@@ -287,7 +287,7 @@ const AIContentGenerationStudio = () => {
                 onClick={() => setShowBatchView(!showBatchView)}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   showBatchView
-                    ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                    ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                 }`}
               >
                 <Layers className="w-4 h-4" />
@@ -299,7 +299,7 @@ const AIContentGenerationStudio = () => {
                   disabled={!selectedProcedure}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                     selectedProcedure
-                      ? 'bg-success text-white hover:brightness-110' : 'bg-bg2 text-t3 cursor-not-allowed'
+                      ? 'bg-success text-accent-foreground hover:brightness-110' : 'bg-bg2 text-t3 cursor-not-allowed'
                   }`}
                 >
                   <Save className="w-4 h-4" />
@@ -374,7 +374,7 @@ const AIContentGenerationStudio = () => {
                       <button
                         onClick={() => setLanguage('en')}
                         className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
-                          language === 'en' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                          language === 'en' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                         }`}
                       >
                         English
@@ -382,7 +382,7 @@ const AIContentGenerationStudio = () => {
                       <button
                         onClick={() => setLanguage('es')}
                         className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
-                          language === 'es' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                          language === 'es' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                         }`}
                       >
                         Spanish
@@ -444,7 +444,7 @@ const AIContentGenerationStudio = () => {
                     disabled={isGenerating?.all || !selectedProcedure || !clinicalSpecs?.trim()}
                     className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
                       isGenerating?.all || !selectedProcedure || !clinicalSpecs?.trim()
-                        ? 'bg-bg2 text-t3 cursor-not-allowed' : 'bg-accent text-white hover:brightness-110 shadow-md'
+                        ? 'bg-bg2 text-t3 cursor-not-allowed' : 'bg-accent text-accent-foreground hover:brightness-110 shadow-md'
                     }`}
                   >
                     <Wand2 className="w-5 h-5" />

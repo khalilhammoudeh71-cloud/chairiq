@@ -182,7 +182,7 @@ const BatchJobDetails = () => {
                         handleApplyContent(item?.id);
                       }}
                       disabled={isApplying}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-success text-white rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-success text-accent-foreground rounded-lg text-sm font-medium hover:brightness-110 transition-colors disabled:opacity-50"
                     >
                       <Save className="w-4 h-4" />
                       Apply to Library

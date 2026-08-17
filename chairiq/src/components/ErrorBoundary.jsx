@@ -38,9 +38,9 @@ class ErrorBoundary extends React.Component {
                 onClick={() => {
                   window.location.href = "/";
                 }}
-                className="bg-accent hover:brightness-110 text-white font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
+                className="bg-accent hover:brightness-110 text-accent-foreground font-medium py-2 px-4 rounded flex items-center gap-2 transition-colors duration-200 shadow-sm"
               >
-                <Icon name="ArrowLeft" size={18} color="#fff" />
+                <Icon name="ArrowLeft" size={18} />
                 Back
               </button>
             </div>

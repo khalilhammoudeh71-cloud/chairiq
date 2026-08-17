@@ -195,7 +195,7 @@ const PatientChatAssistant = ({ procedure, language = 'en' }) => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed top-6 right-6 bg-accent text-white rounded-full p-4 shadow-lg z-50 flex items-center gap-2 group hover:brightness-110"
+          className="fixed top-6 right-6 bg-accent text-accent-foreground rounded-full p-4 shadow-lg z-50 flex items-center gap-2 group hover:brightness-110"
           aria-label={isEnglish ? 'Open AI chat assistant' : 'Abrir asistente de chat AI'}
         >
           <MessageCircle className="w-6 h-6" />
@@ -208,7 +208,7 @@ const PatientChatAssistant = ({ procedure, language = 'en' }) => {
 
       {isOpen && (
         <div className="fixed top-20 right-6 w-96 max-w-[calc(100vw-3rem)] h-[600px] bg-bg0 rounded-2xl shadow-lg flex flex-col z-50 border border-bd">
-          <div className="bg-accent text-white p-4 rounded-t-2xl flex items-center justify-between">
+          <div className="bg-accent text-accent-foreground p-4 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5" />
               <div>
@@ -260,7 +260,7 @@ const PatientChatAssistant = ({ procedure, language = 'en' }) => {
                   </button>
                   <button
                     onClick={handleNewConversation}
-                    className="px-3 py-2 bg-accent hover:brightness-110 text-white text-xs rounded-lg transition-colors font-medium"
+                    className="px-3 py-2 bg-accent hover:brightness-110 text-accent-foreground text-xs rounded-lg transition-colors font-medium"
                   >
                     {isEnglish ? 'New Chat' : 'Nuevo Chat'}
                   </button>
@@ -320,7 +320,7 @@ const PatientChatAssistant = ({ procedure, language = 'en' }) => {
                   >
                     <div
                       className={`max-w-[80%] rounded-2xl p-3 ${
-                        message?.role === 'user' ?' bg-accent text-white' :'bg-bg2 text-t1 shadow-md border border-bd'
+                        message?.role === 'user' ?' bg-accent text-accent-foreground' :'bg-bg2 text-t1 shadow-md border border-bd'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap break-words">
@@ -409,7 +409,7 @@ const PatientChatAssistant = ({ procedure, language = 'en' }) => {
                   <button
                     type="submit"
                     disabled={!inputMessage?.trim() || isStreaming}
-                    className="bg-accent text-white p-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110"
+                    className="bg-accent text-accent-foreground p-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110"
                     aria-label={isEnglish ? 'Send message' : 'Enviar mensaje'}
                   >
                     {isStreaming ? (

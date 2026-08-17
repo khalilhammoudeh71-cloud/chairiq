@@ -37,7 +37,7 @@ const FilterTabs = ({ activeFilter, onFilterChange, language }) => {
           onClick={() => onFilterChange(filter?.id)}
           className={`flex items-center gap-3 px-6 py-4 rounded-lg font-medium text-base whitespace-nowrap transition-all duration-200 focus:border-accent focus:outline-none ${
             activeFilter === filter?.id
-              ? 'bg-accent text-white border border-accent' :'bg-bg2 text-t3 border border-bd hover:border-accent/40 hover:brightness-110'
+              ? 'bg-accent text-accent-foreground border border-accent' :'bg-bg2 text-t3 border border-bd hover:border-accent/40 hover:brightness-110'
           }`}
           aria-pressed={activeFilter === filter?.id}
         >

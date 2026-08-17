@@ -48,7 +48,7 @@ const ContextualNavigation = ({
             onClick={handlePrevious}
             iconName="ChevronLeft"
             iconPosition="left"
-            className="flex-1 sm:flex-none min-w-[140px] bg-accent hover:brightness-110 text-white"
+            className="flex-1 sm:flex-none min-w-[140px] bg-accent hover:brightness-110 text-accent-foreground"
           >
             {previousLabel}
           </Button>
@@ -63,7 +63,7 @@ const ContextualNavigation = ({
             onClick={handleNext}
             iconName="ChevronRight"
             iconPosition="right"
-            className="flex-1 sm:flex-none min-w-[140px] bg-accent hover:brightness-110 text-white"
+            className="flex-1 sm:flex-none min-w-[140px] bg-accent hover:brightness-110 text-accent-foreground"
           >
             {nextLabel}
           </Button>

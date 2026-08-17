@@ -67,7 +67,7 @@ const PreviewModal = ({ procedure, formData, language, onClose }) => {
                   {formData?.steps?.map((step, index) => (
                     <div key={index} className="bg-bg3 rounded-lg p-4 border border-bd">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="flex items-center justify-center w-8 h-8 bg-accent text-white rounded-full font-semibold text-sm">
+                        <span className="flex items-center justify-center w-8 h-8 bg-accent text-accent-foreground rounded-full font-semibold text-sm">
                           {index + 1}
                         </span>
                         <h4 className="text-t1 font-medium">
@@ -127,7 +127,7 @@ const PreviewModal = ({ procedure, formData, language, onClose }) => {
           <div className="p-6 border-t border-bd">
             <button
               onClick={onClose}
-              className="w-full px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors font-medium"
+              className="w-full px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors font-medium"
             >
               Close Preview
             </button>

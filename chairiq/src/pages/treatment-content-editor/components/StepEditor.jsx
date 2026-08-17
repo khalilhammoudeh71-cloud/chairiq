@@ -71,7 +71,7 @@ const StepEditor = ({ steps, language, onUpdate }) => {
         </div>
         <button
           onClick={handleAddStep}
-          className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add Step
@@ -82,7 +82,7 @@ const StepEditor = ({ steps, language, onUpdate }) => {
           <p className="text-t3 mb-4">No steps added yet</p>
           <button
             onClick={handleAddStep}
-            className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+            className="px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
           >
             Add First Step
           </button>

@@ -213,7 +213,7 @@ export default function LearningSummaryCard({ procedureId }) {
 
                 <button
                   onClick={loadSummary}
-                  className="w-full py-3 px-4 rounded-xl bg-accent hover:brightness-110 text-white font-semibold flex items-center justify-center gap-2 shadow-md"
+                  className="w-full py-3 px-4 rounded-xl bg-accent hover:brightness-110 text-accent-foreground font-semibold flex items-center justify-center gap-2 shadow-md"
                 >
                   <RefreshCw className="w-5 h-5" />
                   Regenerate Summary

@@ -55,31 +55,19 @@ const ProcedureTimeline = ({ steps = [], currentStep = -1, language = 'EN' }) =>
           const isActive = index === currentStep;
           const isCompleted = index < currentStep;
 
+          let pillClass = 'flex items-center gap-2 px-4 py-2.5 rounded-full border transition-all ease-out';
+          if (isActive) {
+            pillClass += ' bg-accent-soft border-accent/40 text-accent';
+          } else if (isCompleted) {
+            pillClass += ' bg-success/15 border-success/30 text-success';
+          } else {
+            pillClass += ' bg-bg2 border-bd text-t3';
+          }
+
           return (
             <React.Fragment key={step?.key || index}>
               {/* Step Pill with CSS transitions */}
-              <button
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border"
-                style={{
-                  ...(isActive
-                    ? {
-                        backgroundColor: 'rgba(107, 124, 232, 0.2)',
-                        borderColor: 'rgba(107, 124, 232, 0.4)',
-                        color: '#8b9aec'
-                      }
-                    : isCompleted
-                    ? {
-                        backgroundColor: 'rgba(34, 197, 94, 0.15)',
-                        borderColor: 'rgba(34, 197, 94, 0.3)',
-                        color: '#4ade80'
-                      }
-                    : {
-                        backgroundColor: 'rgba(255,255,255,0.05)',
-                        borderColor: 'rgba(255,255,255,0.08)',
-                        color: '#9ca3af'
-                      })
-                }}
-              >
+              <button className={pillClass}>
                 <StepIcon size={16} />
                 <span className="text-sm font-medium whitespace-nowrap">
                   {step?.label}
@@ -88,13 +76,8 @@ const ProcedureTimeline = ({ steps = [], currentStep = -1, language = 'EN' }) =>
               {/* Connector Line with transition */}
               {index < timelineSteps?.length - 1 && (
                 <div
-                  className="h-0.5 w-8 transition-all ease-out"
-                  style={{
-                    transitionDuration: '250ms',
-                    backgroundColor: isCompleted
-                      ? 'rgba(34, 197, 94, 0.3)'
-                      : 'rgba(255,255,255,0.08)'
-                  }}
+                  className={`h-0.5 w-8 transition-all ease-out ${isCompleted ? 'bg-success/30' : 'bg-bd'}`}
+                  style={{ transitionDuration: '250ms' }}
                 />
               )}
             </React.Fragment>

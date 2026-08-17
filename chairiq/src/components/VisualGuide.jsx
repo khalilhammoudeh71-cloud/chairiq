@@ -316,7 +316,7 @@ const VisualGuide = ({ steps = [], language = 'en' }) => {
               )}
               <button
                 onClick={handleCloseModal}
-                className="px-6 py-2 bg-success hover:brightness-110 text-white rounded transition-colors font-medium"
+                className="px-6 py-2 bg-success hover:brightness-110 text-accent-foreground rounded transition-colors font-medium"
               >
                 {language === 'en' ? 'Close' : 'Cerrar'}
               </button>

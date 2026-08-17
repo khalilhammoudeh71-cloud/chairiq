@@ -84,7 +84,7 @@ const EnhancedPatientProcedureDetail = () => {
           </p>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors mx-auto"
+            className="flex items-center space-x-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors mx-auto"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Go Back</span>
@@ -112,7 +112,7 @@ const EnhancedPatientProcedureDetail = () => {
             <button
               onClick={() => setLanguage('EN')}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                language === 'EN' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                language === 'EN' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
               }`}
             >
               English
@@ -120,7 +120,7 @@ const EnhancedPatientProcedureDetail = () => {
             <button
               onClick={() => setLanguage('ES')}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                language === 'ES' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                language === 'ES' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
               }`}
             >
               Español

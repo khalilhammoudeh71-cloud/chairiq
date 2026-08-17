@@ -326,7 +326,7 @@ export default function AddProcedureDrawer({
                       onClick={() => setExpandedItemIndex(expandedItemIndex === idx ? null : idx)}
                     >
                       <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-white">{idx + 1}</span>
+                        <span className="text-xs font-bold text-accent-foreground">{idx + 1}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-t1 text-sm font-medium truncate">{item.procedureName}</p>
@@ -355,7 +355,7 @@ export default function AddProcedureDrawer({
               <div className="p-3 border-t border-bd flex-shrink-0">
                 <button
                   onClick={handleAddAllToPlan}
-                  className="w-full px-4 py-2.5 bg-accent hover:brightness-110 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
+                  className="w-full px-4 py-2.5 bg-accent hover:brightness-110 text-accent-foreground font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
                 >
                   <Plus size={16} />
                   Add {selectedItems.length} to Plan
@@ -389,7 +389,7 @@ export default function AddProcedureDrawer({
                 <button
                   onClick={() => setSelectionMethod('code')}
                   className={`px-3 md:px-4 py-2.5 md:py-3 rounded-lg font-semibold text-sm transition-colors ${
-                    selectionMethod === 'code' ?'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
+                    selectionMethod === 'code' ?'bg-accent text-accent-foreground' :'bg-bg2 text-t2 hover:bg-bg3'
                   }`}
                 >
                   ADA Code
@@ -397,7 +397,7 @@ export default function AddProcedureDrawer({
                 <button
                   onClick={() => setSelectionMethod('manual')}
                   className={`px-3 md:px-4 py-2.5 md:py-3 rounded-lg font-semibold text-sm transition-colors ${
-                    selectionMethod === 'manual' ?'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
+                    selectionMethod === 'manual' ?'bg-accent text-accent-foreground' :'bg-bg2 text-t2 hover:bg-bg3'
                   }`}
                 >
                   Manual Entry
@@ -410,7 +410,7 @@ export default function AddProcedureDrawer({
                 <button
                   onClick={() => setActiveTab('all')}
                   className={`px-3 md:px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                    activeTab === 'all' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                    activeTab === 'all' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                   }`}
                 >
                   All
@@ -418,7 +418,7 @@ export default function AddProcedureDrawer({
                 <button
                   onClick={() => setActiveTab('favorites')}
                   className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                    activeTab === 'favorites' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                    activeTab === 'favorites' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                   }`}
                 >
                   <Star size={14} />
@@ -427,7 +427,7 @@ export default function AddProcedureDrawer({
                 <button
                   onClick={() => setActiveTab('recents')}
                   className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                    activeTab === 'recents' ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                    activeTab === 'recents' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                   }`}
                 >
                   <Clock size={14} />
@@ -472,7 +472,7 @@ export default function AddProcedureDrawer({
                                 ? 'bg-accent border-accent'
                                 : 'border-bd bg-bg1'
                             }`}>
-                              {isSelected && <Check size={12} className="text-white" />}
+                              {isSelected && <Check size={12} className="text-accent-foreground" />}
                             </div>
                             <ProcedureThumb
                               canonicalSlug={item?.canonicalSlug}
@@ -551,7 +551,7 @@ export default function AddProcedureDrawer({
                       }]);
                       setSearchTerm('');
                     }}
-                    className="px-4 py-2 bg-accent text-white font-semibold rounded-lg hover:brightness-110 transition-colors"
+                    className="px-4 py-2 bg-accent text-accent-foreground font-semibold rounded-lg hover:brightness-110 transition-colors"
                   >
                     <Plus size={20} />
                   </button>
@@ -605,7 +605,7 @@ export default function AddProcedureDrawer({
                                 onClick={() => toggleToothNumber(expandedItemIndex, toothNum)}
                                 className={`px-2 py-1.5 rounded text-xs font-semibold transition-all ${
                                   isToothSel
-                                    ? 'bg-accent text-white' : 'bg-bg2 text-t2 hover:bg-bg3'
+                                    ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
                                 }`}
                               >
                                 {toothNum}
@@ -682,7 +682,7 @@ export default function AddProcedureDrawer({
                               <button
                                 type="button"
                                 onClick={() => handleRemoveImage(expandedItemIndex, imgIdx)}
-                                className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-danger text-white rounded-full flex items-center justify-center"
+                                className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-danger text-white rounded-full flex items-center justify-center text-[10px]"
                               >
                                 <X size={10} />
                               </button>
@@ -717,7 +717,7 @@ export default function AddProcedureDrawer({
                 disabled={selectedItems.length === 0}
                 className={`flex-1 px-4 md:px-6 py-3 font-bold rounded-xl transition-colors flex items-center justify-center gap-2 ${
                   selectedItems.length > 0
-                    ? 'bg-accent hover:brightness-110 text-white'
+                    ? 'bg-accent hover:brightness-110 text-accent-foreground'
                     : 'bg-bg3 text-t3 cursor-not-allowed'
                 }`}
               >

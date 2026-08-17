@@ -47,7 +47,7 @@ export default function ThemeToggle() {
                   onClick={() => handleThemeSelect(themeOption?.value)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     theme === themeOption?.value
-                      ? 'bg-accent text-white' :'text-t2 hover:bg-bg1 hover:text-t1'
+                      ? 'bg-accent text-accent-foreground' :'text-t2 hover:bg-bg1 hover:text-t1'
                   }`}
                 >
                   <Icon size={18} />

@@ -13,8 +13,8 @@ export default function PatientImageGallery({ images = [], language = 'EN' }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <Camera size={20} style={{ color: '#8b9aec' }} />
-        <h4 className="text-lg font-medium" style={{ color: '#e8e9ed' }}>
+        <Camera size={20} className="text-accent" />
+        <h4 className="text-lg font-medium text-t1">
           {title}
         </h4>
       </div>
@@ -28,11 +28,7 @@ export default function PatientImageGallery({ images = [], language = 'EN' }) {
         {images.map((img, idx) => (
           <div
             key={idx}
-            className="rounded-xl overflow-hidden"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.08)'
-            }}
+            className="rounded-xl overflow-hidden bg-bg2 border border-bd"
           >
             <div
               className="cursor-pointer"
@@ -41,13 +37,13 @@ export default function PatientImageGallery({ images = [], language = 'EN' }) {
               <img
                 src={img.imageUrl}
                 alt={img.note || (language === 'ES' ? 'Imagen del paciente' : 'Patient image')}
-                className="w-full h-auto object-contain"
-                style={{ maxHeight: '300px', backgroundColor: 'rgba(0,0,0,0.2)' }}
+                className="w-full h-auto object-contain bg-bg3"
+                style={{ maxHeight: '300px' }}
               />
             </div>
             {img.note && (
               <div className="p-3">
-                <p className="text-sm leading-relaxed" style={{ color: '#b0b3ba' }}>
+                <p className="text-sm leading-relaxed text-t2">
                   {img.note}
                 </p>
               </div>
@@ -58,16 +54,14 @@ export default function PatientImageGallery({ images = [], language = 'EN' }) {
 
       {expandedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 overlay"
           onClick={() => setExpandedImage(null)}
         >
           <button
             onClick={() => setExpandedImage(null)}
-            className="absolute top-4 right-4 p-2 rounded-full"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+            className="absolute top-4 right-4 p-2 rounded-full bg-bg2 border border-bd hover:bg-bg3 transition-colors"
           >
-            <X size={24} style={{ color: '#e8e9ed' }} />
+            <X size={24} className="text-t1" />
           </button>
           <div className="max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
             <img
@@ -77,7 +71,7 @@ export default function PatientImageGallery({ images = [], language = 'EN' }) {
               style={{ maxHeight: '80vh' }}
             />
             {expandedImage.note && (
-              <p className="text-center mt-4 text-base" style={{ color: '#b0b3ba' }}>
+              <p className="text-center mt-4 text-base text-t2">
                 {expandedImage.note}
               </p>
             )}

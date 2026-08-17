@@ -74,7 +74,7 @@ const TreatmentCard = ({ procedure, onViewContent, languageFilter }) => {
         <div className="flex gap-2">
           <button
             onClick={() => onViewContent(procedure)}
-            className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+            className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
           >
             <Eye className="w-4 h-4" />
             <span>View Content</span>

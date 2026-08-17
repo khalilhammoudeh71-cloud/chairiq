@@ -62,7 +62,7 @@ export default function SendPlanModal({ isOpen, onClose, planLink, patientPhone,
                 className={cn(
                   'flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all border',
                   method === 'sms'
-                    ? 'bg-accent text-white border-accent shadow-md'
+                    ? 'bg-accent text-accent-foreground border-accent shadow-md'
                     : 'bg-bg2 text-t2 border-bd hover:bg-bg3'
                 )}
               >
@@ -74,7 +74,7 @@ export default function SendPlanModal({ isOpen, onClose, planLink, patientPhone,
                 className={cn(
                   'flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm transition-all border',
                   method === 'email'
-                    ? 'bg-accent text-white border-accent shadow-md'
+                    ? 'bg-accent text-accent-foreground border-accent shadow-md'
                     : 'bg-bg2 text-t2 border-bd hover:bg-bg3'
                 )}
               >
@@ -140,7 +140,7 @@ export default function SendPlanModal({ isOpen, onClose, planLink, patientPhone,
             disabled={sending || !recipient.trim()}
             className={cn(
               'flex-1 py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all',
-              'bg-accent text-white hover:bg-accent-hover',
+              'bg-accent text-accent-foreground hover:bg-accent-hover',
               (sending || !recipient.trim()) && 'opacity-50 cursor-not-allowed'
             )}
           >

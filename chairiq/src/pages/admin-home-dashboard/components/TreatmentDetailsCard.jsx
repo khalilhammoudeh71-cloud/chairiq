@@ -227,7 +227,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleModifyPlan(plan?.id)}
-                        className="px-4 py-2 bg-accent hover:brightness-110 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+                        className="px-4 py-2 bg-accent hover:brightness-110 text-accent-foreground rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                         title="Modify treatment plan by adding or removing procedures"
                       >
                         <Edit className="w-4 h-4" />
@@ -242,7 +242,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
                         >
                           {resending ? (
                             <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent-foreground"></div>
                               Sending...
                             </>
                           ) : (

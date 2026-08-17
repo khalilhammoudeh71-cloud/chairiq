@@ -40,7 +40,7 @@ const ContentGenerationPanel = ({
               disabled={isGenerating}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                 isGenerating
-                  ? 'bg-bg2 text-t3 cursor-not-allowed' :'bg-accent text-white hover:brightness-110'
+                  ? 'bg-bg2 text-t3 cursor-not-allowed' :'bg-accent text-accent-foreground hover:brightness-110'
               }`}
             >
               {isGenerating ? (

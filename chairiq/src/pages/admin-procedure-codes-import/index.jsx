@@ -121,7 +121,7 @@ export default function AdminProcedureCodesImport() {
                 />
                 <label
                   htmlFor="csv-upload"
-                  className="flex items-center gap-2 px-6 py-3 bg-accent hover:brightness-110 text-white font-semibold rounded-xl cursor-pointer transition-colors shadow-md"
+                  className="flex items-center gap-2 px-6 py-3 bg-accent hover:brightness-110 text-accent-foreground font-semibold rounded-xl cursor-pointer transition-colors shadow-md"
                 >
                   <FileText size={20} />
                   Select CSV File

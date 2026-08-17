@@ -161,7 +161,7 @@ const ImageManager = ({ images, onUpdate, procedureName, procedureSlug }) => {
             </p>
             <button
               onClick={() => fileInputRef?.current?.click()}
-              className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+              className="px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
             >
               Select Images
             </button>

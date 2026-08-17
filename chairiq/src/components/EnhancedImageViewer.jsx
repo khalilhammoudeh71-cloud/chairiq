@@ -372,7 +372,7 @@ const EnhancedImageViewer = ({
               iconName="Columns2"
               iconPosition="left"
               className={comparisonMode 
-                ? 'bg-success hover:brightness-110 text-white border-0' :'text-t3 hover:text-t1 border-bd hover:border-bd bg-bg2/50 hover:bg-bg2/80'
+                ? 'bg-success hover:brightness-110 text-accent-foreground border-0' :'text-t3 hover:text-t1 border-bd hover:border-bd bg-bg2/50 hover:bg-bg2/80'
               }
             >
               {language === 'en' ? 'Compare' : 'Comparar'}

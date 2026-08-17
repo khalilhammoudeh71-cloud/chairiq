@@ -1249,7 +1249,7 @@ export default function CreatePatientPlan() {
               loading && "opacity-60 cursor-not-allowed"
             )}
           >
-            {loading && <LoadingSpinner size="sm" variant="accent" className="text-white" />}
+            {loading && <LoadingSpinner size="sm" variant="accent" />}
             {loading ? 'Saving Plan...' : 'Save Plan'}
           </button>
 
@@ -1270,7 +1270,7 @@ export default function CreatePatientPlan() {
                     <div className="relative">
                       <button
                         onClick={copyPatientLink}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${linkCopied ? 'bg-success text-white' : 'btn-primary'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${linkCopied ? 'bg-success text-accent-foreground' : 'btn-primary'}`}
                       >
                         {linkCopied ? <Check size={20} /> : <Copy size={20} />}
                         {linkCopied ? 'Copied!' : 'Copy'}
@@ -1389,7 +1389,7 @@ export default function CreatePatientPlan() {
                       >
                         {retryingMessageId === log?.id ? (
                           <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent-foreground"></div>
                             Retrying...
                           </>
                         ) : (

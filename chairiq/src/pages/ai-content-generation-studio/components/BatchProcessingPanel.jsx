@@ -86,7 +86,7 @@ const BatchProcessingPanel = ({
     return (
       <button
         onClick={() => setShowBatchPanel(true)}
-        className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg font-medium hover:brightness-110 transition-all shadow-md"
+        className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg font-medium hover:brightness-110 transition-all shadow-md"
       >
         <Layers className="w-5 h-5" />
         Batch Process Multiple Procedures
@@ -97,7 +97,7 @@ const BatchProcessingPanel = ({
   return (
     <div className="fixed inset-0 bg-[var(--overlay)] flex items-center justify-center z-50 p-4">
       <div className="bg-bg1 rounded-xl shadow-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="bg-accent text-white p-6 flex items-center justify-between">
+        <div className="bg-accent text-accent-foreground p-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Layers className="w-6 h-6" />
             <h2 className="text-xl font-bold">Batch Content Generation</h2>
@@ -319,7 +319,7 @@ const BatchProcessingPanel = ({
               disabled={selectedProcedures?.length === 0 || isCreating}
               className={`inline-flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-all ${
                 selectedProcedures?.length === 0 || isCreating
-                  ? 'bg-bg3 text-t3 cursor-not-allowed' :'bg-accent text-white hover:brightness-110 shadow-md'
+                  ? 'bg-bg3 text-t3 cursor-not-allowed' :'bg-accent text-accent-foreground hover:brightness-110 shadow-md'
               }`}
             >
               <Play className="w-4 h-4" />

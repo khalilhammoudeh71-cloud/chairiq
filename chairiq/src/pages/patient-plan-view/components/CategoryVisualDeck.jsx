@@ -18,14 +18,8 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
   // If NO visuals at all for this procedure, show friendly placeholder
   if (!hasAnyVisuals) {
     return (
-      <div 
-        className="rounded-xl p-6 text-center"
-        style={{ 
-          backgroundColor: 'rgba(107, 124, 232, 0.05)', 
-          border: '1px solid rgba(107, 124, 232, 0.1)' 
-        }}
-      >
-        <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
+      <div className="rounded-xl p-6 text-center bg-accent-soft border border-accent/10">
+        <p className="text-t2 text-sm">
           {language === 'EN' ? 'Visuals coming soon for this procedure' : 'Las imágenes estarán disponibles pronto'}
         </p>
       </div>
@@ -62,8 +56,8 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
   useEffect(() => {
     if (!currentStep) return;
 
-    const shouldGenerateDescription = 
-      !currentStep?.visual?.image_url || 
+    const shouldGenerateDescription =
+      !currentStep?.visual?.image_url ||
       imageLoadStatus?.[currentStep?.step_id] === 'error';
 
     if (shouldGenerateDescription && !aiDescriptions?.[currentStep?.step_id] && !loadingDescriptions?.[currentStep?.step_id]) {
@@ -83,18 +77,11 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
   }, [currentStep, imageLoadStatus, canonicalSlug, language, aiDescriptions, loadingDescriptions]);
 
   const handleImageLoad = (stepId) => {
-    setImageLoadStatus(prev => ({
-      ...prev,
-      [stepId]: 'loaded'
-    }));
+    setImageLoadStatus(prev => ({ ...prev, [stepId]: 'loaded' }));
   };
 
   const handleImageError = (stepId, imageUrl) => {
-    setImageLoadStatus(prev => ({
-      ...prev,
-      [stepId]: 'error'
-    }));
-    
+    setImageLoadStatus(prev => ({ ...prev, [stepId]: 'error' }));
     console.error(`🚨 [IMAGE ERROR] Failed to load image for step ${stepId}:`, {
       image_url: imageUrl,
       canonical_slug: canonicalSlug,
@@ -125,13 +112,9 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
   return (
     <div className="space-y-4">
       {/* Visual Carousel */}
-      <div 
-        className="relative rounded-2xl overflow-hidden"
-        style={{ 
-          backgroundColor: 'rgba(255,255,255,0.03)', 
-          border: '1px solid rgba(255,255,255,0.08)',
-          minHeight: '300px'
-        }}
+      <div
+        className="relative rounded-2xl overflow-hidden bg-bg2 border border-bd"
+        style={{ minHeight: '300px' }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -144,37 +127,21 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
           >
             {/* AI-Generated Visual Description */}
             {showAiDescription && (
-              <div 
-                className="absolute inset-0 flex flex-col items-center justify-center p-8"
-                style={{ 
-                  background: 'linear-gradient(135deg, rgba(107, 124, 232, 0.08) 0%, rgba(139, 154, 236, 0.05) 100%)',
-                  backdropFilter: 'blur(8px)'
-                }}
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-accent-soft backdrop-blur-sm"
               >
                 <div className="max-w-2xl text-center space-y-4">
                   {/* AI Icon */}
-                  <div 
-                    className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4"
-                    style={{ 
-                      backgroundColor: 'rgba(107, 124, 232, 0.15)',
-                      border: '2px solid rgba(107, 124, 232, 0.3)'
-                    }}
-                  >
-                    <Sparkles size={32} style={{ color: '#8b9aec' }} />
+                  <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 bg-accent-soft border-2 border-accent/30">
+                    <Sparkles size={32} className="text-accent" />
                   </div>
 
                   {/* Loading State */}
                   {isLoadingDescription && (
                     <div className="space-y-3">
-                      <div 
-                        className="h-8 w-8 border-4 rounded-full animate-spin mx-auto"
-                        style={{ 
-                          borderColor: 'rgba(107, 124, 232, 0.3)', 
-                          borderTopColor: '#6b7ce8' 
-                        }}
-                      />
-                      <p className="text-sm" style={{ color: '#9ca3af' }}>
-                        {language === 'EN' ?'Generating visual description...' :'Generando descripción visual...'}
+                      <div className="h-8 w-8 border-4 border-accent/30 border-t-accent rounded-full animate-spin mx-auto" />
+                      <p className="text-sm text-t2">
+                        {language === 'EN' ? 'Generating visual description...' : 'Generando descripción visual...'}
                       </p>
                     </div>
                   )}
@@ -182,32 +149,25 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
                   {/* AI Description Content */}
                   {!isLoadingDescription && aiDescription && (
                     <>
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3"
-                        style={{ backgroundColor: 'rgba(107, 124, 232, 0.1)' }}
-                      >
-                        <Sparkles size={14} style={{ color: '#8b9aec' }} />
-                        <span className="text-xs font-medium" style={{ color: '#8b9aec' }}>
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 bg-accent-soft">
+                        <Sparkles size={14} className="text-accent" />
+                        <span className="text-xs font-medium text-accent">
                           {language === 'EN' ? 'AI-Generated Visual Description' : 'Descripción Visual Generada por IA'}
                         </span>
                       </div>
-                      
-                      <h4 className="text-xl font-medium mb-3" style={{ color: '#e8e9ed' }}>
+
+                      <h4 className="text-xl font-medium mb-3 text-t1">
                         {currentStep?.title}
                       </h4>
-                      
-                      <div 
-                        className="text-base leading-relaxed p-6 rounded-xl"
-                        style={{ 
-                          color: '#b0b3ba',
-                          backgroundColor: 'rgba(255,255,255,0.03)',
-                          border: '1px solid rgba(107, 124, 232, 0.2)'
-                        }}
-                      >
+
+                      <div className="text-base leading-relaxed p-6 rounded-xl text-t2 bg-bg1 border border-accent/20">
                         {aiDescription}
                       </div>
 
-                      <p className="text-xs mt-4" style={{ color: '#6b7280' }}>
-                        {language === 'EN' ?'This description helps you visualize what patients typically see during this step.' :'Esta descripción te ayuda a visualizar lo que los pacientes suelen ver durante este paso.'}
+                      <p className="text-xs mt-4 text-t3">
+                        {language === 'EN'
+                          ? 'This description helps you visualize what patients typically see during this step.'
+                          : 'Esta descripción te ayuda a visualizar lo que los pacientes suelen ver durante este paso.'}
                       </p>
                     </>
                   )}
@@ -220,17 +180,8 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
               <>
                 {/* Loading State */}
                 {loadStatus === 'loading' && (
-                  <div 
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                  >
-                    <div 
-                      className="h-8 w-8 border-4 rounded-full animate-spin"
-                      style={{ 
-                        borderColor: 'rgba(107, 124, 232, 0.3)', 
-                        borderTopColor: '#6b7ce8' 
-                      }}
-                    />
+                  <div className="absolute inset-0 flex items-center justify-center bg-bg3/50">
+                    <div className="h-8 w-8 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
                   </div>
                 )}
 
@@ -245,13 +196,8 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
                 />
 
                 {/* Step Title Overlay */}
-                <div 
-                  className="absolute bottom-0 left-0 right-0 p-4"
-                  style={{ 
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' 
-                  }}
-                >
-                  <h4 className="text-lg font-medium" style={{ color: '#e8e9ed' }}>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                  <h4 className="text-lg font-medium text-white">
                     {currentStep?.title}
                   </h4>
                 </div>
@@ -266,45 +212,22 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
             <button
               onClick={goToPrevious}
               disabled={currentStepIndex === 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{ 
-                backgroundColor: 'rgba(0,0,0,0.5)', 
-                backdropFilter: 'blur(4px)' 
-              }}
-              onMouseEnter={(e) => {
-                if (currentStepIndex !== 0) {
-                  e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.7)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)';
-              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-black/50 hover:bg-black/70 backdrop-blur-sm"
             >
-              <ChevronLeft size={24} style={{ color: '#e8e9ed' }} />
+              <ChevronLeft size={24} className="text-white" />
             </button>
 
             <button
               onClick={goToNext}
               disabled={currentStepIndex === stepsWithVisuals?.length - 1}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-              style={{ 
-                backgroundColor: 'rgba(0,0,0,0.5)', 
-                backdropFilter: 'blur(4px)' 
-              }}
-              onMouseEnter={(e) => {
-                if (currentStepIndex !== stepsWithVisuals?.length - 1) {
-                  e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.7)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)';
-              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-black/50 hover:bg-black/70 backdrop-blur-sm"
             >
-              <ChevronRight size={24} style={{ color: '#e8e9ed' }} />
+              <ChevronRight size={24} className="text-white" />
             </button>
           </>
         )}
       </div>
+
       {/* Step Dots Navigation */}
       {stepsWithVisuals?.length > 1 && (
         <div className="flex justify-center gap-2">
@@ -312,50 +235,32 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
             <button
               key={step?.step_id}
               onClick={() => setCurrentStepIndex(idx)}
-              className="w-3 h-3 rounded-full transition-all"
-              style={{
-                backgroundColor: idx === currentStepIndex 
-                  ? '#6b7ce8' :'rgba(107, 124, 232, 0.3)'
-              }}
+              className={`w-3 h-3 rounded-full transition-all ${
+                idx === currentStepIndex ? 'bg-accent' : 'bg-accent/30'
+              }`}
               aria-label={`Go to step ${idx + 1}`}
             />
           ))}
         </div>
       )}
+
+      {/* Debug panel */}
       {new URLSearchParams(window.location.search).get('debug') === '1' && currentStep && (
-        <div 
-          className="rounded-xl p-4 text-xs font-mono"
-          style={{ 
-            backgroundColor: 'rgba(59, 130, 246, 0.05)', 
-            border: '1px solid rgba(59, 130, 246, 0.1)' 
-          }}
-        >
-          <div style={{ color: '#93c5fd', marginBottom: '8px', fontWeight: 'bold' }}>
-            Visual Debug
-          </div>
-          <div style={{ color: '#9ca3af', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px' }}>
+        <div className="rounded-xl p-4 text-xs font-mono bg-accent-soft border border-accent/10">
+          <div className="text-accent font-bold mb-2">Visual Debug</div>
+          <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-t3">
             <span>canonical_slug:</span>
-            <span style={{ color: '#e8e9ed' }}>{canonicalSlug || 'N/A'}</span>
-            
+            <span className="text-t1">{canonicalSlug || 'N/A'}</span>
             <span>step_id:</span>
-            <span style={{ color: '#e8e9ed' }}>{currentStep?.step_id}</span>
-            
+            <span className="text-t1">{currentStep?.step_id}</span>
             <span>visuals_found:</span>
-            <span style={{ color: '#e8e9ed' }}>{stepsWithVisuals?.length}</span>
-            
+            <span className="text-t1">{stepsWithVisuals?.length}</span>
             <span>load_status:</span>
-            <span style={{ 
-              color: loadStatus === 'loaded' ? '#10b981' : loadStatus === 'error' ? '#ef4444' : '#fbbf24' 
-            }}>
+            <span className={loadStatus === 'loaded' ? 'text-success' : loadStatus === 'error' ? 'text-danger' : 'text-warning'}>
               {loadStatus}
             </span>
-            
             <span>image_url:</span>
-            <span style={{ 
-              color: '#e8e9ed', 
-              wordBreak: 'break-all',
-              fontSize: '10px' 
-            }}>
+            <span className="text-t1 break-all text-[10px]">
               {displayImageUrl?.substring(0, 100)}
             </span>
           </div>

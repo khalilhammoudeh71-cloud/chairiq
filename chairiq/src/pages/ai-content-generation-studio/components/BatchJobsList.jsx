@@ -100,7 +100,7 @@ const BatchJobsList = ({
               onClick={() => setSelectedFilter(filter?.key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 selectedFilter === filter?.key
-                  ? 'bg-accent text-white' :'bg-bg2 text-t2 hover:bg-bg3'
+                  ? 'bg-accent text-accent-foreground' :'bg-bg2 text-t2 hover:bg-bg3'
               }`}
             >
               {filter?.label} ({statusCounts?.[filter?.key] || 0})

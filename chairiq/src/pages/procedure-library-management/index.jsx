@@ -527,7 +527,7 @@ export default function ProcedureLibraryManagement() {
                   <div className="flex items-end gap-2">
                     <button
                       onClick={() => { setShowVisualUpload(!showVisualUpload); setUploadResult(null); }}
-                      className="flex items-center gap-1.5 px-4 py-2.5 bg-accent text-white rounded-lg hover:brightness-110 transition-all text-sm font-medium"
+                      className="flex items-center gap-1.5 px-4 py-2.5 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-all text-sm font-medium"
                     >
                       {showVisualUpload ? <X className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
                       {showVisualUpload ? 'Close' : 'Upload Visual'}
@@ -629,7 +629,7 @@ export default function ProcedureLibraryManagement() {
                   <button
                     onClick={handleVisualUpload}
                     disabled={!uploadFile || isUploading}
-                    className="flex items-center gap-2 px-5 py-2 bg-accent text-white rounded-lg hover:brightness-110 disabled:opacity-50 transition-all text-sm font-medium"
+                    className="flex items-center gap-2 px-5 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110 disabled:opacity-50 transition-all text-sm font-medium"
                   >
                     {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                     {isUploading ? 'Uploading...' : 'Upload & Save'}

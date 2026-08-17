@@ -20,21 +20,21 @@ function VisualsDebugPanel({ planData }) {
   const projectRef = supabaseUrl.replace('https://', '').split('.')[0];
 
   return (
-    <div style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: '12px', padding: '16px', marginBottom: '24px', fontFamily: 'monospace', fontSize: '12px', color: '#93c5fd' }}>
-      <div style={{ fontWeight: 'bold', marginBottom: '12px', fontSize: '14px' }}>Visuals Debug Panel</div>
-      <div style={{ marginBottom: '8px' }}>
-        <span style={{ color: '#9ca3af' }}>Supabase Project Ref: </span>
-        <span style={{ color: '#e8e9ed' }}>{projectRef}</span>
+    <div className="bg-accent-soft border border-accent/25 rounded-xl p-4 mb-6 font-mono text-xs text-t2">
+      <div className="font-bold mb-3 text-sm text-t1">Visuals Debug Panel</div>
+      <div className="mb-2">
+        <span className="text-t3">Supabase Project Ref: </span>
+        <span className="text-t1">{projectRef}</span>
       </div>
-      <div style={{ marginBottom: '8px' }}>
-        <span style={{ color: '#9ca3af' }}>Env Vars: </span>
-        <span style={{ color: supabaseUrl !== 'NOT SET' ? '#10b981' : '#ef4444' }}>VITE_SUPABASE_URL={supabaseUrl !== 'NOT SET' ? 'SET' : 'MISSING'}</span>
+      <div className="mb-2">
+        <span className="text-t3">Env Vars: </span>
+        <span className={supabaseUrl !== 'NOT SET' ? 'text-success' : 'text-danger'}>VITE_SUPABASE_URL={supabaseUrl !== 'NOT SET' ? 'SET' : 'MISSING'}</span>
         {', '}
-        <span style={{ color: import.meta.env?.VITE_SUPABASE_ANON_KEY ? '#10b981' : '#ef4444' }}>VITE_SUPABASE_ANON_KEY={import.meta.env?.VITE_SUPABASE_ANON_KEY ? 'SET' : 'MISSING'}</span>
+        <span className={import.meta.env?.VITE_SUPABASE_ANON_KEY ? 'text-success' : 'text-danger'}>VITE_SUPABASE_ANON_KEY={import.meta.env?.VITE_SUPABASE_ANON_KEY ? 'SET' : 'MISSING'}</span>
       </div>
-      <div style={{ marginBottom: '12px' }}>
-        <span style={{ color: '#9ca3af' }}>Route: </span>
-        <span style={{ color: '#e8e9ed' }}>/p/{planData?.treatmentPlan?.publicToken || window.location.pathname}</span>
+      <div className="mb-3">
+        <span className="text-t3">Route: </span>
+        <span className="text-t1">/p/{planData?.treatmentPlan?.publicToken || window.location.pathname}</span>
       </div>
       {planData?.procedures?.map((proc, i) => {
         const lang = planData?.patient?.preferredLanguage || 'EN';
@@ -43,31 +43,31 @@ function VisualsDebugPanel({ planData }) {
         const firstVisual = visualSteps[0];
 
         return (
-          <div key={proc?.id || i} style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '12px', marginBottom: '8px' }}>
-            <div style={{ color: '#fbbf24', fontWeight: 'bold', marginBottom: '4px' }}>{proc?.procedureName}</div>
-            <div><span style={{ color: '#9ca3af' }}>procedure_id: </span><span style={{ color: '#e8e9ed' }}>{proc?.id || 'N/A'}</span></div>
-            <div><span style={{ color: '#9ca3af' }}>canonical_slug: </span><span style={{ color: '#e8e9ed' }}>{proc?.canonicalSlug || 'N/A'}</span></div>
-            <div><span style={{ color: '#9ca3af' }}>ada_code: </span><span style={{ color: '#e8e9ed' }}>{proc?.adaCode || 'N/A'}</span></div>
-            <div><span style={{ color: '#9ca3af' }}>total_steps: </span><span style={{ color: '#e8e9ed' }}>{content.length}</span></div>
-            <div><span style={{ color: '#9ca3af' }}>visuals_count: </span><span style={{ color: visualSteps.length > 0 ? '#10b981' : '#ef4444' }}>{visualSteps.length}</span></div>
+          <div key={proc?.id || i} className="bg-bg2 rounded-lg p-3 mb-2">
+            <div className="text-warning font-bold mb-1">{proc?.procedureName}</div>
+            <div><span className="text-t3">procedure_id: </span><span className="text-t1">{proc?.id || 'N/A'}</span></div>
+            <div><span className="text-t3">canonical_slug: </span><span className="text-t1">{proc?.canonicalSlug || 'N/A'}</span></div>
+            <div><span className="text-t3">ada_code: </span><span className="text-t1">{proc?.adaCode || 'N/A'}</span></div>
+            <div><span className="text-t3">total_steps: </span><span className="text-t1">{content.length}</span></div>
+            <div><span className="text-t3">visuals_count: </span><span className={visualSteps.length > 0 ? 'text-success' : 'text-danger'}>{visualSteps.length}</span></div>
             {visualSteps.length === 0 && (
-              <div style={{ color: '#ef4444', marginTop: '4px' }}>No visuals found. Query used canonical_slug="{proc?.canonicalSlug || 'N/A'}"</div>
+              <div className="text-danger mt-1">No visuals found. Query used canonical_slug="{proc?.canonicalSlug || 'N/A'}"</div>
             )}
             {visualSteps.length === 0 && content.length > 0 && (
-              <div style={{ color: '#fbbf24', marginTop: '4px', fontSize: '11px' }}>Possible causes: RLS blocking anon SELECT on procedure_visuals, or no visuals uploaded for this canonical_slug.</div>
+              <div className="text-warning mt-1 text-[11px]">Possible causes: RLS blocking anon SELECT on procedure_visuals, or no visuals uploaded for this canonical_slug.</div>
             )}
             {firstVisual && (() => {
               const url = firstVisual?.visual?.image_url || '';
-              const urlType = url.includes('supabase.co/storage') 
-                ? (url.includes('/object/public/') ? 'supabase-public' : 'supabase-private') 
+              const urlType = url.includes('supabase.co/storage')
+                ? (url.includes('/object/public/') ? 'supabase-public' : 'supabase-private')
                 : (url ? 'external' : 'none');
               return (
-                <div style={{ marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '4px' }}>
-                  <div style={{ color: '#9ca3af', marginBottom: '2px' }}>First visual:</div>
-                  <div><span style={{ color: '#9ca3af' }}>step_id: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.step_id || 'N/A'}</span></div>
-                  <div><span style={{ color: '#9ca3af' }}>title: </span><span style={{ color: '#e8e9ed' }}>{firstVisual?.title || 'N/A'}</span></div>
-                  <div><span style={{ color: '#9ca3af' }}>url_type: </span><span style={{ color: urlType === 'supabase-public' ? '#10b981' : urlType === 'supabase-private' ? '#fbbf24' : '#93c5fd' }}>{urlType}</span></div>
-                  <div style={{ wordBreak: 'break-all' }}><span style={{ color: '#9ca3af' }}>image_url: </span><span style={{ color: '#e8e9ed', fontSize: '10px' }}>{url || 'null'}</span></div>
+                <div className="mt-1 border-t border-bd pt-1">
+                  <div className="text-t3 mb-0.5">First visual:</div>
+                  <div><span className="text-t3">step_id: </span><span className="text-t1">{firstVisual?.step_id || 'N/A'}</span></div>
+                  <div><span className="text-t3">title: </span><span className="text-t1">{firstVisual?.title || 'N/A'}</span></div>
+                  <div><span className="text-t3">url_type: </span><span className={urlType === 'supabase-public' ? 'text-success' : urlType === 'supabase-private' ? 'text-warning' : 'text-accent'}>{urlType}</span></div>
+                  <div className="break-all"><span className="text-t3">image_url: </span><span className="text-t1 text-[10px]">{url || 'null'}</span></div>
                 </div>
               );
             })()}
@@ -195,8 +195,7 @@ export default function PatientPlanView() {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xl" 
-          style={{ color: '#e8e9ed' }}
+          className="text-xl text-t1"
         >
           Loading your treatment plan...
         </motion.div>
@@ -206,27 +205,26 @@ export default function PatientPlanView() {
 
   if (linkStatus === 'invalid') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-bg0">
         <div className="max-w-md w-full text-center">
           <div className="flex items-center justify-center gap-2.5 mb-10">
-            <ShieldX size={28} style={{ color: '#6B8AEE' }} />
-            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+            <ShieldX size={28} className="text-accent" />
+            <span className="text-lg font-semibold tracking-tight text-t1">ChairIQ</span>
           </div>
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="rounded-2xl p-8 mb-8"
-            style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', backdropFilter: 'blur(12px)' }}
+            className="rounded-2xl p-8 mb-8 bg-danger/5 border border-danger/15 backdrop-blur-sm"
           >
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
-              <ShieldX size={32} style={{ color: '#fca5a5' }} />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-danger/10">
+              <ShieldX size={32} className="text-danger" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-3" style={{ color: '#e8e9ed' }}>Link Invalid</h2>
-            <p className="text-base leading-relaxed mb-6" style={{ color: '#9ca3af' }}>This treatment plan link is not valid. Please contact your dental provider for a new link.</p>
-            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-            <p className="text-sm" style={{ color: '#6b7280' }}>Contact your dental office for assistance</p>
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-3 text-t1">Link Invalid</h2>
+            <p className="text-base leading-relaxed mb-6 text-t2">This treatment plan link is not valid. Please contact your dental provider for a new link.</p>
+            <div className="w-12 h-px mx-auto mb-6 bg-bd" />
+            <p className="text-sm text-t3">Contact your dental office for assistance</p>
           </motion.div>
-          <p className="text-xs" style={{ color: '#4b5563' }}>Powered by ChairIQ</p>
+          <p className="text-xs text-t3">Powered by ChairIQ</p>
         </div>
       </div>
     );
@@ -234,27 +232,26 @@ export default function PatientPlanView() {
 
   if (linkStatus === 'expired') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-bg0">
         <div className="max-w-md w-full text-center">
           <div className="flex items-center justify-center gap-2.5 mb-10">
-            <TimerOff size={28} style={{ color: '#6B8AEE' }} />
-            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+            <TimerOff size={28} className="text-accent" />
+            <span className="text-lg font-semibold tracking-tight text-t1">ChairIQ</span>
           </div>
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="rounded-2xl p-8 mb-8"
-            style={{ backgroundColor: 'rgba(251, 191, 36, 0.06)', border: '1px solid rgba(251, 191, 36, 0.15)', backdropFilter: 'blur(12px)' }}
+            className="rounded-2xl p-8 mb-8 bg-warning/5 border border-warning/15 backdrop-blur-sm"
           >
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)' }}>
-              <TimerOff size={32} style={{ color: '#fbbf24' }} />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-warning/10">
+              <TimerOff size={32} className="text-warning" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-3" style={{ color: '#e8e9ed' }}>Link Expired</h2>
-            <p className="text-base leading-relaxed mb-6" style={{ color: '#9ca3af' }}>This treatment plan link has expired. Please contact your dental provider to request a new link.</p>
-            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-            <p className="text-sm" style={{ color: '#6b7280' }}>Contact your dental office for assistance</p>
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-3 text-t1">Link Expired</h2>
+            <p className="text-base leading-relaxed mb-6 text-t2">This treatment plan link has expired. Please contact your dental provider to request a new link.</p>
+            <div className="w-12 h-px mx-auto mb-6 bg-bd" />
+            <p className="text-sm text-t3">Contact your dental office for assistance</p>
           </motion.div>
-          <p className="text-xs" style={{ color: '#4b5563' }}>Powered by ChairIQ</p>
+          <p className="text-xs text-t3">Powered by ChairIQ</p>
         </div>
       </div>
     );
@@ -262,27 +259,26 @@ export default function PatientPlanView() {
 
   if (error || !planData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: 'linear-gradient(165deg, #0c0e14 0%, #151825 50%, #1a1f2e 100%)' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-bg0">
         <div className="max-w-md w-full text-center">
           <div className="flex items-center justify-center gap-2.5 mb-10">
-            <AlertCircle size={28} style={{ color: '#6B8AEE' }} />
-            <span className="text-lg font-semibold tracking-tight" style={{ color: '#e8e9ed' }}>ChairIQ</span>
+            <AlertCircle size={28} className="text-accent" />
+            <span className="text-lg font-semibold tracking-tight text-t1">ChairIQ</span>
           </div>
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="rounded-2xl p-8 mb-8"
-            style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', backdropFilter: 'blur(12px)' }}
+            className="rounded-2xl p-8 mb-8 bg-danger/5 border border-danger/15 backdrop-blur-sm"
           >
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
-              <AlertCircle size={32} style={{ color: '#fca5a5' }} />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-danger/10">
+              <AlertCircle size={32} className="text-danger" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-3" style={{ color: '#e8e9ed' }}>Plan Not Found</h2>
-            <p className="text-base leading-relaxed mb-6" style={{ color: '#9ca3af' }}>{error || 'The treatment plan you are looking for does not exist.'}</p>
-            <div className="w-12 h-px mx-auto mb-6" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-            <p className="text-sm" style={{ color: '#6b7280' }}>Contact your dental office for assistance</p>
+            <h2 className="text-2xl sm:text-3xl font-semibold mb-3 text-t1">Plan Not Found</h2>
+            <p className="text-base leading-relaxed mb-6 text-t2">{error || 'The treatment plan you are looking for does not exist.'}</p>
+            <div className="w-12 h-px mx-auto mb-6 bg-bd" />
+            <p className="text-sm text-t3">Contact your dental office for assistance</p>
           </motion.div>
-          <p className="text-xs" style={{ color: '#4b5563' }}>Powered by ChairIQ</p>
+          <p className="text-xs text-t3">Powered by ChairIQ</p>
         </div>
       </div>
     );
@@ -351,12 +347,8 @@ export default function PatientPlanView() {
     return (
       <div
         key={procedure?.id}
-        className="rounded-2xl overflow-hidden transition-all ease-out"
-        style={{ 
-          backgroundColor: 'rgba(255,255,255,0.03)', 
-          border: '1px solid rgba(255,255,255,0.08)',
-          transitionDuration: '300ms'
-        }}
+        className="rounded-2xl overflow-hidden transition-all ease-out bg-bg1 border border-bd"
+        style={{ transitionDuration: '300ms' }}
       >
         {/* Card Header - Always Visible */}
         <div className="p-6">
@@ -370,22 +362,21 @@ export default function PatientPlanView() {
                   className="!w-14 !h-9"
                   glow={false}
                 />
-                <h3 className="text-2xl font-medium" style={{ color: '#e8e9ed', fontWeight: 500 }}>
+                <h3 className="text-2xl font-medium text-t1">
                   {procedure?.procedureName}
                 </h3>
                 {procedure?.toothNumbers && (
                   <motion.span 
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
-                    className="px-3 py-1 rounded-full text-sm font-semibold" 
-                    style={{ backgroundColor: 'rgba(96, 165, 250, 0.2)', color: '#93c5fd', border: '1px solid rgba(96, 165, 250, 0.3)' }}
+                    className="px-3 py-1 rounded-full text-sm font-semibold bg-accent/15 text-accent border border-accent/30"
                   >
                     {procedure?.toothNumbers}
                   </motion.span>
                 )}
               </div>
               {procedure?.adaCode && (
-                <p style={{ color: '#9ca3af' }}>{t?.adaCode}: {procedure?.adaCode}</p>
+                <p className="text-t2">{t?.adaCode}: {procedure?.adaCode}</p>
               )}
             </div>
             <span className={`px-4 py-2 rounded-xl border font-semibold ${getPriorityColor(procedure?.priority)}`}>
@@ -408,8 +399,8 @@ export default function PatientPlanView() {
               animate={{ opacity: 1 }}
               className="flex items-center gap-2 mb-3"
             >
-              <Clock size={18} style={{ color: '#9ca3af' }} />
-              <span style={{ color: '#b0b3ba' }}>{t?.estimatedTime}: {procedure?.estTime}</span>
+              <Clock size={18} className="text-t3" />
+              <span className="text-t2">{t?.estimatedTime}: {procedure?.estTime}</span>
             </motion.div>
           )}
 
@@ -417,31 +408,17 @@ export default function PatientPlanView() {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="rounded-xl p-4 mb-4" 
-              style={{ backgroundColor: 'rgba(107, 124, 232, 0.1)', border: '1px solid rgba(107, 124, 232, 0.2)' }}
+              className="rounded-xl p-4 mb-4 bg-accent-soft border border-accent/20"
             >
-              <p style={{ color: '#b0b3ba' }}>{procedure?.notesForPatient}</p>
+              <p className="text-t2">{procedure?.notesForPatient}</p>
             </motion.div>
           )}
 
           {/* Expand/Collapse Button */}
           <button
             onClick={() => toggleProcedureExpand(procedure?.id)}
-            className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl w-full justify-center transition-all ease-out"
-            style={{ 
-              backgroundColor: 'rgba(107, 124, 232, 0.15)', 
-              color: '#8b9aec', 
-              border: '1px solid rgba(107, 124, 232, 0.25)',
-              transitionDuration: '200ms'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.backgroundColor = 'rgba(107, 124, 232, 0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.backgroundColor = 'rgba(107, 124, 232, 0.15)';
-            }}
+            className="flex items-center gap-2 px-6 py-3 font-semibold rounded-xl w-full justify-center transition-all ease-out bg-accent-soft text-accent border border-accent/25 hover:bg-accent-hover"
+            style={{ transitionDuration: '200ms' }}
           >
             {isExpanded ? (
               <>
@@ -460,9 +437,7 @@ export default function PatientPlanView() {
         {isExpanded && (
           <div
             className="overflow-hidden transition-all ease-out"
-            style={{
-              transitionDuration: '300ms'
-            }}
+            style={{ transitionDuration: '300ms' }}
           >
             <div className="px-6 pb-6 space-y-6">
               {procedure?.patientImages?.length > 0 && (
@@ -489,11 +464,8 @@ export default function PatientPlanView() {
               )}
 
               {procedure?.library?.disclaimer && (
-                <div 
-                  className="rounded-lg p-4"
-                  style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.2)' }}
-                >
-                  <p className="text-sm" style={{ color: '#fbbf24' }}>
+                <div className="rounded-lg p-4 bg-warning/10 border border-warning/20">
+                  <p className="text-sm text-warning">
                     {procedure?.library?.disclaimer}
                   </p>
                 </div>
@@ -510,42 +482,29 @@ export default function PatientPlanView() {
       <div className="max-w-5xl mx-auto">
         <VisualsDebugPanel planData={planData} />
         {/* Header with iOS-style language toggle */}
-        <div 
-          className="rounded-2xl p-8 mb-8 transition-all ease-out" 
-          style={{ 
-            backgroundColor: 'rgba(255,255,255,0.03)', 
-            border: '1px solid rgba(255,255,255,0.08)',
-            transitionDuration: '300ms'
-          }}
-        >
+        <div className="rounded-2xl p-8 mb-8 transition-all ease-out bg-bg1 border border-bd" style={{ transitionDuration: '300ms' }}>
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h1 className="text-4xl font-medium mb-2" style={{ color: '#e8e9ed', fontWeight: 500 }}>
+              <h1 className="text-4xl font-medium mb-2 text-t1">
                 {t?.welcome}, {planData?.patient?.firstName} {planData?.patient?.lastName}
               </h1>
-              <p className="text-lg" style={{ color: '#b0b3ba' }}>
+              <p className="text-lg text-t2">
                 {t?.yourTreatmentPlan} {t?.from} {planData?.treatmentPlan?.practiceName}
               </p>
-              <p className="text-sm mt-2" style={{ color: '#9ca3af' }}>
+              <p className="text-sm mt-2 text-t3">
                 {planData?.treatmentPlan?.dentistName}
               </p>
             </div>
             
             {/* iOS-style Language Toggle */}
-            <div 
-              className="flex rounded-lg p-1" 
-              style={{ 
-                backgroundColor: 'rgba(255,255,255,0.05)', 
-                border: '1px solid rgba(255,255,255,0.08)' 
-              }}
-            >
+            <div className="flex rounded-lg p-1 bg-bg2 border border-bd">
               <button
                 onClick={() => setCurrentLanguage('EN')}
                 className="px-4 py-2 rounded-md font-medium text-sm transition-all ease-out"
                 style={{
                   ...(currentLanguage === 'EN' 
-                    ? { backgroundColor: 'rgba(107, 124, 232, 0.2)', color: '#8b9aec' }
-                    : { backgroundColor: 'transparent', color: '#9ca3af' }),
+                    ? { backgroundColor: 'var(--accent-soft)', color: 'var(--accent)' }
+                    : { backgroundColor: 'transparent', color: 'var(--t2)' }),
                   transitionDuration: '200ms'
                 }}
               >
@@ -556,8 +515,8 @@ export default function PatientPlanView() {
                 className="px-4 py-2 rounded-md font-medium text-sm transition-all ease-out"
                 style={{
                   ...(currentLanguage === 'ES' 
-                    ? { backgroundColor: 'rgba(107, 124, 232, 0.2)', color: '#8b9aec' }
-                    : { backgroundColor: 'transparent', color: '#9ca3af' }),
+                    ? { backgroundColor: 'var(--accent-soft)', color: 'var(--accent)' }
+                    : { backgroundColor: 'transparent', color: 'var(--t2)' }),
                   transitionDuration: '200ms'
                 }}
               >
@@ -572,9 +531,9 @@ export default function PatientPlanView() {
             transition={{ delay: 0.2 }}
             className="flex items-center gap-4 mt-6"
           >
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl" style={{ backgroundColor: 'rgba(107, 124, 232, 0.15)', border: '1px solid rgba(107, 124, 232, 0.25)' }}>
-              <Calendar size={20} style={{ color: '#8b9aec' }} />
-              <span className="font-medium" style={{ color: '#8b9aec' }}>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-soft border border-accent/25">
+              <Calendar size={20} className="text-accent" />
+              <span className="font-medium text-accent">
                 {t?.totalProcedures}: {planData?.procedures?.length}
               </span>
             </div>
@@ -584,39 +543,24 @@ export default function PatientPlanView() {
         {/* Expand All / Collapse All + Jump to Section */}
         {planData?.procedures?.length >= 3 && (
           <div 
-            className="sticky top-0 z-10 rounded-xl p-3 mb-6 flex flex-wrap items-center gap-3"
-            style={{ 
-              backgroundColor: 'rgba(21, 24, 37, 0.95)', 
-              border: '1px solid rgba(255,255,255,0.08)',
-              backdropFilter: 'blur(12px)'
-            }}
+            className="sticky top-0 z-10 rounded-xl p-3 mb-6 flex flex-wrap items-center gap-3 bg-bg1 border border-bd backdrop-blur-md"
           >
             <button
               onClick={toggleExpandAll}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ease-out"
-              style={{ 
-                backgroundColor: 'rgba(107, 124, 232, 0.15)', 
-                color: '#8b9aec', 
-                border: '1px solid rgba(107, 124, 232, 0.25)',
-                transitionDuration: '200ms'
-              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ease-out bg-accent-soft text-accent border border-accent/25 hover:bg-accent-hover"
+              style={{ transitionDuration: '200ms' }}
             >
               {allExpanded ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
               {allExpanded ? t?.collapseAll : t?.expandAll}
             </button>
 
-            <div className="h-5 w-px" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+            <div className="h-5 w-px bg-bd" />
 
             {proceduresByPriority?.Immediate?.length > 0 && (
               <button
                 onClick={() => scrollToSection('priority-immediate')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out"
-                style={{ 
-                  backgroundColor: 'rgba(239, 68, 68, 0.1)', 
-                  color: '#fca5a5', 
-                  border: '1px solid rgba(239, 68, 68, 0.2)',
-                  transitionDuration: '200ms'
-                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out bg-danger/10 text-danger border border-danger/20 hover:bg-danger/15"
+                style={{ transitionDuration: '200ms' }}
               >
                 <AlertCircle size={14} />
                 {t?.immediate}
@@ -625,13 +569,8 @@ export default function PatientPlanView() {
             {proceduresByPriority?.Soon?.length > 0 && (
               <button
                 onClick={() => scrollToSection('priority-soon')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out"
-                style={{ 
-                  backgroundColor: 'rgba(251, 191, 36, 0.1)', 
-                  color: '#fbbf24', 
-                  border: '1px solid rgba(251, 191, 36, 0.2)',
-                  transitionDuration: '200ms'
-                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out bg-warning/10 text-warning border border-warning/20 hover:bg-warning/15"
+                style={{ transitionDuration: '200ms' }}
               >
                 <Clock size={14} />
                 {t?.soon}
@@ -640,13 +579,8 @@ export default function PatientPlanView() {
             {proceduresByPriority?.Future?.length > 0 && (
               <button
                 onClick={() => scrollToSection('priority-future')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out"
-                style={{ 
-                  backgroundColor: 'rgba(107, 124, 232, 0.1)', 
-                  color: '#8b9aec', 
-                  border: '1px solid rgba(107, 124, 232, 0.2)',
-                  transitionDuration: '200ms'
-                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ease-out bg-accent/10 text-accent border border-accent/20 hover:bg-accent/15"
+                style={{ transitionDuration: '200ms' }}
               >
                 <Calendar size={14} />
                 {t?.future}
@@ -659,13 +593,8 @@ export default function PatientPlanView() {
           <div className="mb-6 flex items-center">
             <button
               onClick={toggleExpandAll}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ease-out"
-              style={{ 
-                backgroundColor: 'rgba(107, 124, 232, 0.15)', 
-                color: '#8b9aec', 
-                border: '1px solid rgba(107, 124, 232, 0.25)',
-                transitionDuration: '200ms'
-              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ease-out bg-accent-soft text-accent border border-accent/25 hover:bg-accent-hover"
+              style={{ transitionDuration: '200ms' }}
             >
               {allExpanded ? <ChevronsDownUp size={16} /> : <ChevronsUpDown size={16} />}
               {allExpanded ? t?.collapseAll : t?.expandAll}
@@ -684,8 +613,8 @@ export default function PatientPlanView() {
             style={{ scrollMarginTop: '80px' }}
           >
             <div className="flex items-center gap-3 mb-4">
-              <AlertCircle size={28} style={{ color: '#fca5a5' }} />
-              <h2 className="text-3xl font-medium" style={{ color: '#e8e9ed', fontWeight: 500 }}>{t?.immediate}</h2>
+              <AlertCircle size={28} className="text-danger" />
+              <h2 className="text-3xl font-medium text-t1">{t?.immediate}</h2>
             </div>
             <div className="space-y-4">
               {proceduresByPriority?.Immediate?.map((procedure) => renderProcedureCard(procedure))}
@@ -702,7 +631,7 @@ export default function PatientPlanView() {
             id="priority-soon"
             style={{ scrollMarginTop: '80px' }}
           >
-            <h2 className="text-3xl font-medium mb-4" style={{ color: '#e8e9ed', fontWeight: 500 }}>{t?.soon}</h2>
+            <h2 className="text-3xl font-medium mb-4 text-t1">{t?.soon}</h2>
             <div className="space-y-4">
               {proceduresByPriority?.Soon?.map((procedure) => renderProcedureCard(procedure))}
             </div>
@@ -718,7 +647,7 @@ export default function PatientPlanView() {
             id="priority-future"
             style={{ scrollMarginTop: '80px' }}
           >
-            <h2 className="text-3xl font-medium mb-4" style={{ color: '#e8e9ed', fontWeight: 500 }}>{t?.future}</h2>
+            <h2 className="text-3xl font-medium mb-4 text-t1">{t?.future}</h2>
             <div className="space-y-4">
               {proceduresByPriority?.Future?.map((procedure) => renderProcedureCard(procedure))}
             </div>

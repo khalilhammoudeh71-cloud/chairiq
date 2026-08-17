@@ -3,8 +3,8 @@ import React from 'react';
 const PatientContent = ({ sections = [], language = 'EN' }) => {
   if (!sections || sections?.length === 0) {
     return (
-      <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(234, 179, 8, 0.1)', border: '1px solid rgba(234, 179, 8, 0.2)' }}>
-        <p className="text-sm" style={{ color: '#fbbf24' }}>
+      <div className="rounded-xl p-4 bg-warning/10 border border-warning/20">
+        <p className="text-sm text-warning">
           {language === 'EN' ? 'Content unavailable' : 'Contenido no disponible'}
         </p>
       </div>
@@ -19,34 +19,33 @@ const PatientContent = ({ sections = [], language = 'EN' }) => {
         return (
           <div key={section?.step_id || index} className="space-y-3">
             {section?.title && (
-              <h3 className="text-xl font-medium" style={{ color: '#e8e9ed', fontWeight: 500 }}>
+              <h3 className="text-xl font-medium text-t1">
                 {section?.title}
               </h3>
             )}
 
             {bodyText && (
               <div 
-                className="text-base leading-relaxed" 
-                style={{ color: '#b0b3ba' }}
+                className="text-base leading-relaxed text-t2"
                 dangerouslySetInnerHTML={{ __html: bodyText }}
               />
             )}
 
             {section?.whatYouMayFeel && (
-              <div className="rounded-lg p-3" style={{ backgroundColor: 'rgba(107, 124, 232, 0.06)', border: '1px solid rgba(107, 124, 232, 0.12)' }}>
-                <p className="text-sm font-medium mb-1" style={{ color: '#8b9aec' }}>
+              <div className="rounded-lg p-3 bg-accent-soft border border-accent/12">
+                <p className="text-sm font-medium mb-1 text-accent">
                   {language === 'EN' ? 'What you may feel' : 'Lo que puede sentir'}
                 </p>
-                <p className="text-sm" style={{ color: '#b0b3ba' }}>{section?.whatYouMayFeel}</p>
+                <p className="text-sm text-t2">{section?.whatYouMayFeel}</p>
               </div>
             )}
 
             {section?.whyItMatters && (
-              <div className="rounded-lg p-3" style={{ backgroundColor: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.12)' }}>
-                <p className="text-sm font-medium mb-1" style={{ color: '#10b981' }}>
+              <div className="rounded-lg p-3 bg-success/8 border border-success/12">
+                <p className="text-sm font-medium mb-1 text-success">
                   {language === 'EN' ? 'Why it matters' : 'Por qué es importante'}
                 </p>
-                <p className="text-sm" style={{ color: '#b0b3ba' }}>{section?.whyItMatters}</p>
+                <p className="text-sm text-t2">{section?.whyItMatters}</p>
               </div>
             )}
 
@@ -54,8 +53,8 @@ const PatientContent = ({ sections = [], language = 'EN' }) => {
               <ul className="space-y-2 ml-4">
                 {section?.bullets?.map((bullet, bulletIndex) => (
                   <li key={bulletIndex} className="flex items-start gap-2">
-                    <span style={{ color: '#8b9aec', marginTop: '0.25rem' }}>•</span>
-                    <span style={{ color: '#b0b3ba', lineHeight: '1.6' }}>{bullet}</span>
+                    <span className="text-accent mt-1">•</span>
+                    <span className="text-t2 leading-relaxed">{bullet}</span>
                   </li>
                 ))}
               </ul>
@@ -66,22 +65,18 @@ const PatientContent = ({ sections = [], language = 'EN' }) => {
                 {section?.steps?.map((step, stepIndex) => (
                   <li key={stepIndex} className="flex gap-3">
                     <span 
-                      className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-semibold text-xs"
-                      style={{ backgroundColor: 'rgba(107, 124, 232, 0.2)', color: '#8b9aec' }}
+                      className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-semibold text-xs bg-accent-soft text-accent"
                     >
                       {stepIndex + 1}
                     </span>
-                    <span style={{ color: '#b0b3ba', lineHeight: '1.6' }}>{step}</span>
+                    <span className="text-t2 leading-relaxed">{step}</span>
                   </li>
                 ))}
               </ol>
             )}
 
             {index < sections?.length - 1 && (
-              <div 
-                className="h-px w-full" 
-                style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} 
-              />
+              <div className="h-px w-full bg-bd" />
             )}
           </div>
         );

@@ -67,7 +67,7 @@ const Landing = () => {
             </button>
             <button
               onClick={() => navigate('/signup')}
-              className="px-5 py-2.5 bg-accent text-white rounded-md hover:brightness-110 font-medium transition-all text-sm">
+              className="px-5 py-2.5 bg-accent text-accent-foreground rounded-md hover:brightness-110 font-medium transition-all text-sm">
               Request Access
             </button>
           </div>
@@ -93,7 +93,7 @@ const Landing = () => {
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => navigate('/signup')}
-                className="hero-cta-primary px-8 py-3.5 bg-accent text-white text-[15px] rounded-lg font-semibold inline-flex items-center gap-2">
+                className="hero-cta-primary px-8 py-3.5 bg-accent text-accent-foreground text-[15px] rounded-lg font-semibold inline-flex items-center gap-2">
                 Request Access
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -226,7 +226,7 @@ const Landing = () => {
           </p>
           <button
             onClick={() => navigate('/signup')}
-            className="px-8 py-3 bg-accent text-white text-sm rounded-md hover:brightness-110 font-medium transition-all inline-flex items-center gap-2">
+            className="px-8 py-3 bg-accent text-accent-foreground text-sm rounded-md hover:brightness-110 font-medium transition-all inline-flex items-center gap-2">
             Request Access
             <ArrowRight className="w-4 h-4" />
           </button>

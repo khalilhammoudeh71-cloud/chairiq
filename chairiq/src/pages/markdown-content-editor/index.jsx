@@ -219,7 +219,7 @@ export default function MarkdownContentEditor() {
               </button>
               <button
                 onClick={() => setPreviewMode(!previewMode)}
-                className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110"
+                className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110"
               >
                 <Eye className="w-5 h-5" />
                 {previewMode ? 'Edit' : 'Preview'}
@@ -235,7 +235,7 @@ export default function MarkdownContentEditor() {
               <button
                 onClick={() => handleSave(true)}
                 disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-lg hover:brightness-110 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110 disabled:opacity-50"
               >
                 <Save className="w-5 h-5" />
                 Publish
@@ -514,7 +514,7 @@ export default function MarkdownContentEditor() {
                 <h2 className="text-xl font-bold text-t1">Procedure Steps</h2>
                 <button
                   onClick={addStep}
-                  className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-lg hover:brightness-110"
+                  className="flex items-center gap-2 px-4 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110"
                 >
                   <Plus className="w-4 h-4" />
                   Add Step
@@ -562,7 +562,7 @@ export default function MarkdownContentEditor() {
                 <h2 className="text-xl font-bold text-t1">FAQs</h2>
                 <button
                   onClick={addFaq}
-                  className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-lg hover:brightness-110"
+                  className="flex items-center gap-2 px-4 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110"
                 >
                   <Plus className="w-4 h-4" />
                   Add FAQ

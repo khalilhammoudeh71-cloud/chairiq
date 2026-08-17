@@ -122,7 +122,7 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
                 <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => handleViewPlan(plan?.publicToken)}
-                    className="px-3 py-1.5 text-sm font-medium rounded-lg bg-accent text-white hover:bg-accent/90 transition-all duration-200 flex items-center gap-1.5"
+                    className="px-3 py-1.5 text-sm font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200 flex items-center gap-1.5"
                   >
                     <Eye size={14} />
                     View

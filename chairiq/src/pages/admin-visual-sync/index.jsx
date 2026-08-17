@@ -475,7 +475,7 @@ export default function AdminVisualSync() {
           <button
             onClick={syncAllProcedures}
             disabled={isSyncing}
-            className="flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-lg hover:brightness-110 disabled:opacity-50 transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 bg-accent text-accent-foreground rounded-lg hover:brightness-110 disabled:opacity-50 transition-all"
           >
             {isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
             {isSyncing ? 'Syncing...' : 'Sync All'}
@@ -508,7 +508,7 @@ export default function AdminVisualSync() {
             </span>
             <button
               onClick={() => { setShowUploadPanel(p => !p); setUploadResult(null); }}
-              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-sm bg-accent text-white rounded-lg hover:brightness-110 transition-all"
+              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-sm bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-all"
             >
               {showUploadPanel ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               {showUploadPanel ? 'Close' : 'Upload Image'}
@@ -650,7 +650,7 @@ export default function AdminVisualSync() {
               <button
                 onClick={handleCustomUpload}
                 disabled={!uploadFile || !uploadProcedure || isUploading}
-                className="flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-lg hover:brightness-110 disabled:opacity-50 transition-all text-sm font-medium"
+                className="flex items-center gap-2 px-5 py-2.5 bg-accent text-accent-foreground rounded-lg hover:brightness-110 disabled:opacity-50 transition-all text-sm font-medium"
               >
                 {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 {isUploading ? 'Uploading...' : 'Upload & Save'}
@@ -701,7 +701,7 @@ export default function AdminVisualSync() {
                       onClick={() => setCoverageFilter(f.key)}
                       className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
                         coverageFilter === f.key
-                          ? f.key === 'missing' ? 'bg-warning text-bg0' : f.key === 'has' ? 'bg-success text-bg0' : 'bg-accent text-white'
+                          ? f.key === 'missing' ? 'bg-warning text-bg0' : f.key === 'has' ? 'bg-success text-bg0' : 'bg-accent text-accent-foreground'
                           : 'text-t2 hover:bg-bg3'
                       }`}
                     >
@@ -746,7 +746,7 @@ export default function AdminVisualSync() {
                     </div>
                     <button
                       onClick={() => handleUploadForSlug(item.slug)}
-                      className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 text-xs bg-accent text-white rounded-lg hover:brightness-110 transition-all"
+                      className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1.5 text-xs bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-all"
                     >
                       <Upload className="w-3 h-3" />
                       Upload

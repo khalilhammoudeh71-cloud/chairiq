@@ -113,7 +113,7 @@ const TreatmentContentManagementDashboard = () => {
             </div>
             <button
               onClick={() => navigate('/dentist-admin-analytics-dashboard')}
-              className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
             >
               <BarChart3 className="w-5 h-5" />
               <span>View Analytics</span>

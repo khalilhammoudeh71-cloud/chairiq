@@ -122,7 +122,7 @@ const TreatmentContentEditor = () => {
             <p className="text-t3 mb-6">The requested procedure could not be found.</p>
             <button
               onClick={() => navigate('/treatment-content-management-dashboard')}
-              className="px-6 py-3 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+              className="px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
             >
               Back to Dashboard
             </button>
@@ -159,7 +159,7 @@ const TreatmentContentEditor = () => {
               <button
                 onClick={() => setLanguage('en')}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  language === 'en' ?'bg-accent text-white' :'text-t3 hover:text-t1'
+                  language === 'en' ?'bg-accent text-accent-foreground' :'text-t3 hover:text-t1'
                 }`}
               >
                 English
@@ -167,7 +167,7 @@ const TreatmentContentEditor = () => {
               <button
                 onClick={() => setLanguage('es')}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  language === 'es' ?'bg-accent text-white' :'text-t3 hover:text-t1'
+                  language === 'es' ?'bg-accent text-accent-foreground' :'text-t3 hover:text-t1'
                 }`}
               >
                 Español
@@ -187,12 +187,12 @@ const TreatmentContentEditor = () => {
               disabled={!hasUnsavedChanges || isSaving}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${
                 hasUnsavedChanges && !isSaving
-                  ? 'bg-accent text-white hover:brightness-110' :'bg-bg2 text-t3 cursor-not-allowed'
+                  ? 'bg-accent text-accent-foreground hover:brightness-110' :'bg-bg2 text-t3 cursor-not-allowed'
               }`}
             >
               {isSaving ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-accent-foreground border-t-transparent rounded-full animate-spin" />
                   Saving...
                 </>
               ) : (
@@ -235,7 +235,7 @@ const TreatmentContentEditor = () => {
                     }}
                     className={`w-full text-left p-3 rounded-lg transition-colors ${
                       proc?.id === selectedProcedure?.id
-                        ? 'bg-accent text-white' :'bg-bg2 text-t3 hover:bg-bg3'
+                        ? 'bg-accent text-accent-foreground' :'bg-bg2 text-t3 hover:bg-bg3'
                     }`}
                   >
                     <div className="font-medium text-sm">{proc?.name}</div>

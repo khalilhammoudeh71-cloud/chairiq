@@ -486,7 +486,7 @@ const AdaCodeManagementDashboard = () => {
             <div className="flex gap-2">
               <button
                 onClick={handleRunAudit}
-                className="flex items-center gap-2 px-4 py-2 bg-warning text-white rounded-lg hover:brightness-110 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-warning text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
               >
                 <Shield className="h-5 w-5" />
                 Run Audit
@@ -494,7 +494,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
               >
                 <Plus className="h-5 w-5" />
                 Add Code
@@ -502,7 +502,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-lg hover:brightness-110 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
               >
                 <Download className="h-5 w-5" />
                 Export
@@ -510,7 +510,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={() => setShowBulkImport(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
               >
                 <Upload className="h-5 w-5" />
                 Import
@@ -762,7 +762,7 @@ const AdaCodeManagementDashboard = () => {
               <button
                 onClick={handleAddCode}
                 disabled={!formData?.code || !formData?.description}
-                className="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 bg-accent text-accent-foreground px-4 py-2 rounded-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Add Code
               </button>
@@ -815,7 +815,7 @@ const AdaCodeManagementDashboard = () => {
                 />
                 <button
                   onClick={() => fileInputRef?.current?.click()}
-                  className="bg-accent text-white px-6 py-2 rounded-lg hover:brightness-110 transition-colors"
+                  className="bg-accent text-accent-foreground px-6 py-2 rounded-lg hover:brightness-110 transition-colors"
                 >
                   Select CSV File
                 </button>
@@ -1073,7 +1073,7 @@ const AdaCodeManagementDashboard = () => {
                   <div className="flex justify-end gap-3 pt-4 border-t">
                     <button
                       onClick={handleExportAuditResults}
-                      className="flex items-center gap-2 px-6 py-2 bg-success text-white rounded-lg hover:brightness-110 transition-colors"
+                      className="flex items-center gap-2 px-6 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
                     >
                       <Download className="h-5 w-5" />
                       Export Audit Report
