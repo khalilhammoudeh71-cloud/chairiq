@@ -53,7 +53,7 @@ export default function PatientSearchCard({ onPatientSelect }) {
 
   return (
     <Card>
-      <h2 className="text-2xl font-bold text-t1 mb-6">Patient Search</h2>
+      <h2 className="text-base font-semibold text-t1 mb-4">Patient Search</h2>
       <div className="space-y-4">
         <Input
           type="search"
@@ -94,8 +94,10 @@ export default function PatientSearchCard({ onPatientSelect }) {
         )}
 
         {!loading && !error && searchResults?.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-bd rounded-xl bg-bg1/50">
-            <Search className="w-10 h-10 text-t3 mb-3" />
+          <div className="relative overflow-hidden flex flex-col items-center justify-center py-10 border border-bd rounded-xl bg-bg2/40 panel-glow">
+            <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/25 flex items-center justify-center mb-3">
+              <Search className="w-5 h-5 text-accent" />
+            </div>
             <p className="text-t2 text-sm font-medium">
               {searchQuery?.length > 0 ? 'No patients found' : 'Search for a patient to view their treatment details'}
             </p>

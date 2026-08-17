@@ -109,20 +109,26 @@ export default function AdminHomeDashboard() {
         
         <PageShell>
           {/* Welcome Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-semibold text-t1 mb-2 tracking-tight">
-              Welcome back, {user?.user_metadata?.full_name || 'Doctor'}!
-            </h1>
-            <p className="text-t2 text-lg">{getCurrentDate()}</p>
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="section-label mb-1.5">{getCurrentDate()}</p>
+              <h1 className="text-2xl font-bold text-t1 tracking-tight mb-0">
+                Welcome back, {user?.user_metadata?.full_name || 'Doctor'}
+              </h1>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+              <span className="text-xs font-medium text-t2">Practice overview</span>
+            </div>
           </div>
 
-          <div className="space-y-10">
+          <div className="space-y-8">
             <section>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 rounded-full bg-accent" />
-                <h2 className="text-xl font-bold text-t1 tracking-tight">Key Metrics</h2>
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-1 h-4 rounded-full bg-accent shadow-[0_0_8px_rgba(34,211,224,0.5)]" />
+                <h2 className="text-[0.9375rem] font-semibold text-t1 tracking-tight mb-0">Key Metrics</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                   title="Active Patients"
                   value={stats?.totalPatients}
@@ -153,9 +159,9 @@ export default function AdminHomeDashboard() {
             </section>
 
             <section>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 rounded-full bg-accent" />
-                <h2 className="text-xl font-bold text-t1 tracking-tight">Patient Lookup</h2>
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-1 h-4 rounded-full bg-accent shadow-[0_0_8px_rgba(34,211,224,0.5)]" />
+                <h2 className="text-[0.9375rem] font-semibold text-t1 tracking-tight mb-0">Patient Lookup</h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <PatientSearchCard onPatientSelect={handlePatientSelect} />
@@ -167,9 +173,9 @@ export default function AdminHomeDashboard() {
             </section>
 
             <section>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 rounded-full bg-accent" />
-                <h2 className="text-xl font-bold text-t1 tracking-tight">Plans & Actions</h2>
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-1 h-4 rounded-full bg-accent shadow-[0_0_8px_rgba(34,211,224,0.5)]" />
+                <h2 className="text-[0.9375rem] font-semibold text-t1 tracking-tight mb-0">Plans & Actions</h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentPlansCard plans={recentPlans} onRefresh={fetchDashboardData} />
@@ -178,17 +184,17 @@ export default function AdminHomeDashboard() {
             </section>
 
             <section>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 rounded-full bg-accent" />
-                <h2 className="text-xl font-bold text-t1 tracking-tight">Quick Actions</h2>
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-1 h-4 rounded-full bg-accent shadow-[0_0_8px_rgba(34,211,224,0.5)]" />
+                <h2 className="text-[0.9375rem] font-semibold text-t1 tracking-tight mb-0">Quick Actions</h2>
               </div>
               <ShortcutsCard />
             </section>
 
             <section>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-1 h-6 rounded-full bg-accent" />
-                <h2 className="text-xl font-bold text-t1 tracking-tight">System Diagnostics</h2>
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-1 h-4 rounded-full bg-accent shadow-[0_0_8px_rgba(34,211,224,0.5)]" />
+                <h2 className="text-[0.9375rem] font-semibold text-t1 tracking-tight mb-0">System Diagnostics</h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TestEmailCard />

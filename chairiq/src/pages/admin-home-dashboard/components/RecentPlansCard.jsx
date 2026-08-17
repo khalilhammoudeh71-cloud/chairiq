@@ -90,7 +90,7 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
   if (!plans || plans?.length === 0) {
     return (
       <Card>
-        <h2 className="text-2xl font-bold text-t1 mb-6">Recent Patient Plans</h2>
+        <h2 className="text-base font-semibold text-t1 mb-4">Recent Patient Plans</h2>
         <div className="text-center py-8 text-t2">
           <p>No patient plans created yet.</p>
         </div>
@@ -101,7 +101,7 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
   return (
     <>
       <Card>
-        <h2 className="text-2xl font-bold text-t1 mb-6">Recent Patient Plans</h2>
+        <h2 className="text-base font-semibold text-t1 mb-4">Recent Patient Plans</h2>
         <div className="space-y-4">
           {plans?.map((plan) => (
             <Card

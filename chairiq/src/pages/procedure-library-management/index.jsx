@@ -382,34 +382,39 @@ export default function ProcedureLibraryManagement() {
 
       <div className="min-h-screen bg-bg0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-7">
             <div>
-              <h1 className="text-3xl font-bold text-t1 mb-1">Procedure Library</h1>
-              <p className="text-t2">Manage bilingual educational content for patient treatment plans</p>
+              <p className="section-label mb-1.5">Content Library</p>
+              <h1 className="text-2xl font-bold text-t1 mb-1 tracking-tight">Procedure Library</h1>
+              <p className="text-t2 text-sm mb-0">Manage bilingual educational content for patient treatment plans</p>
             </div>
             <ButtonPrimary onClick={handleCreateNew}>
-              <Plus className="mr-2" size={20} />
+              <Plus className="mr-2" size={18} />
               Add Procedure
             </ButtonPrimary>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card className="p-4 text-center">
-              <p className="text-3xl font-bold text-t1">{stats.total}</p>
-              <p className="text-sm text-t2">Total Procedures</p>
-            </Card>
-            <Card className="p-4 text-center">
-              <p className="text-3xl font-bold text-success">{stats.published}</p>
-              <p className="text-sm text-t2">Published</p>
-            </Card>
-            <Card className="p-4 text-center">
-              <p className="text-3xl font-bold text-warning">{stats.draft}</p>
-              <p className="text-sm text-t2">Drafts</p>
-            </Card>
-            <Card className="p-4 text-center">
-              <p className="text-3xl font-bold text-accent">{stats.complete}</p>
-              <p className="text-sm text-t2">Fully Complete</p>
-            </Card>
+            {[
+              { label: 'Total Procedures', value: stats.total, icon: BookOpen, cls: 'text-accent', chip: 'bg-accent/10 border-accent/25', bar: 'bg-accent' },
+              { label: 'Published', value: stats.published, icon: CheckCircle, cls: 'text-success', chip: 'bg-success/10 border-success/25', bar: 'bg-success' },
+              { label: 'Drafts', value: stats.draft, icon: Edit, cls: 'text-warning', chip: 'bg-warning/10 border-warning/25', bar: 'bg-warning' },
+              { label: 'Fully Complete', value: stats.complete, icon: Check, cls: 'text-accent', chip: 'bg-accent/10 border-accent/25', bar: 'bg-accent' },
+            ].map((s) => {
+              const SIcon = s.icon;
+              return (
+                <div key={s.label} className="relative overflow-hidden bg-bg1 border border-bd rounded-xl p-4 panel-glow hover:border-accent/30 transition-colors">
+                  <div className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full ${s.bar} opacity-70`} />
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="section-label">{s.label}</p>
+                    <div className={`p-1.5 rounded-md border ${s.chip}`}>
+                      <SIcon size={13} className={s.cls} />
+                    </div>
+                  </div>
+                  <p className="text-[1.625rem] leading-none font-bold text-t1 tracking-tight tnum">{s.value}</p>
+                </div>
+              );
+            })}
           </div>
 
           {error && (
@@ -658,19 +663,19 @@ export default function ProcedureLibraryManagement() {
                 <table className="w-full">
                   <thead className="border-b border-bd">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-t2 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left section-label">
                         Procedure
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-t2 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left section-label">
                         Category
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-t2 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left section-label">
                         Content
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-t2 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left section-label">
                         Status
                       </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-t2 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-right section-label">
                         Actions
                       </th>
                     </tr>
@@ -680,13 +685,20 @@ export default function ProcedureLibraryManagement() {
                       const completeness = getContentCompleteness(procedure);
                       const hasSpanish = !!(procedure?.titleEs && procedure?.summaryEs);
                       return (
-                        <tr key={procedure?.id} className="hover:bg-bg1 transition-colors cursor-pointer" onClick={() => handleEdit(procedure)}>
+                        <tr key={procedure?.id} className="group hover:bg-accent/[0.04] transition-colors cursor-pointer relative" onClick={() => handleEdit(procedure)}>
                           <td className="px-6 py-4">
-                            <div className="text-t1 font-medium">{procedure?.titleEn || 'Untitled'}</div>
-                            <div className="text-t3 text-sm font-mono">{procedure?.slug}</div>
-                            {hasSpanish && (
-                              <div className="text-t3 text-xs mt-0.5">{procedure?.titleEs}</div>
-                            )}
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0 text-accent text-xs font-bold group-hover:border-accent/40 transition-colors">
+                                {(procedure?.titleEn || 'P').slice(0, 2).toUpperCase()}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="text-t1 font-medium text-sm truncate">{procedure?.titleEn || 'Untitled'}</div>
+                                <div className="text-t3 text-xs font-mono truncate">{procedure?.slug}</div>
+                                {hasSpanish && (
+                                  <div className="text-t3 text-xs mt-0.5 truncate">{procedure?.titleEs}</div>
+                                )}
+                              </div>
+                            </div>
                           </td>
                           <td className="px-6 py-4">
                             <Badge variant="neutral">
@@ -695,16 +707,17 @@ export default function ProcedureLibraryManagement() {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              <div className="w-20 h-2 bg-bg3 rounded-full overflow-hidden">
+                              <div className="w-24 h-1.5 bg-bg3 rounded-full overflow-hidden">
                                 <div
                                   className="h-full rounded-full transition-all"
                                   style={{
                                     width: `${completeness}%`,
                                     backgroundColor: completeness === 100 ? 'var(--success)' : completeness >= 50 ? 'var(--warning)' : 'var(--danger)',
+                                    boxShadow: completeness === 100 ? '0 0 8px rgba(52,211,153,0.5)' : 'none',
                                   }}
                                 />
                               </div>
-                              <span className="text-xs text-t3">{completeness}%</span>
+                              <span className="text-xs text-t3 tnum">{completeness}%</span>
                             </div>
                             <div className="flex gap-1 mt-1">
                               {hasSpanish && (

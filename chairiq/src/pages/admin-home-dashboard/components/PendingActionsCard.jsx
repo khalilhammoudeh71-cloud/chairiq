@@ -33,7 +33,7 @@ export default function PendingActionsCard({ actions = [] }) {
   if (!actions || actions?.length === 0) {
     return (
       <Card>
-        <h2 className="text-2xl font-bold text-t1 mb-6">Pending Actions</h2>
+        <h2 className="text-base font-semibold text-t1 mb-4">Pending Actions</h2>
         <div className="text-center py-8 text-t2">
           <p>All caught up! No pending actions.</p>
         </div>
@@ -43,7 +43,7 @@ export default function PendingActionsCard({ actions = [] }) {
 
   return (
     <Card>
-      <h2 className="text-2xl font-bold text-t1 mb-6">Pending Actions</h2>
+      <h2 className="text-base font-semibold text-t1 mb-4">Pending Actions</h2>
       <div className="space-y-4">
         {actions?.map((action) => (
           <Card

@@ -143,65 +143,75 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
-    line-height: 1.65;
+    font-size: 0.9375rem;
+    line-height: 1.6;
     letter-spacing: -0.011em;
+  }
+
+  /* Ambient depth — faint cyan aurora at the top of every dark screen */
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 90% 42% at 50% -8%, rgba(34, 211, 224, 0.07), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 88% 0%, rgba(52, 211, 153, 0.03), transparent 70%);
+    background-attachment: fixed;
   }
 
   /* ═══════════════════════════════
      TYPOGRAPHY
      ═══════════════════════════════ */
 
+  /* Compact, confident scale — matches the density of the mockups */
   h1 {
     @apply text-t1;
-    font-size: 2.5rem;
+    font-size: 1.625rem;
     font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.12;
-    margin-bottom: 2rem;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
   }
 
   h2 {
     @apply text-t1;
-    font-size: 1.875rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
   }
 
   h3 {
     @apply text-t1;
-    font-size: 1.375rem;
+    font-size: 1.0625rem;
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.3;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.625rem;
   }
 
   h4 {
     @apply text-t1;
-    font-size: 1.125rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.35;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   h5, h6 {
     @apply text-t1;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0;
     line-height: 1.4;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   p {
     @apply text-t2;
     font-weight: 400;
-    font-size: 0.9375rem;
-    line-height: 1.75;
-    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
   }
 
   a {
@@ -342,7 +352,7 @@
      ═══════════════════════════════ */
   .card {
     @apply bg-bg1;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid var(--bd);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
@@ -541,6 +551,38 @@
 @layer utilities {
   .transition-smooth {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Tabular numerals — data columns, KPIs, currency */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1, 'cv05' 1;
+  }
+
+  /* Uppercase micro section label — mockup signature */
+  .section-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--t3);
+  }
+
+  /* Panel with a faint cyan glow bleeding from the top edge */
+  .panel-glow {
+    position: relative;
+    background-image: radial-gradient(ellipse 70% 60% at 50% -20%, rgba(34, 211, 224, 0.07), transparent 70%);
+  }
+
+  .panel-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 224, 0.35), transparent);
+    pointer-events: none;
   }
 
   /* Cyan glow accents — for primary CTAs and highlighted panels */

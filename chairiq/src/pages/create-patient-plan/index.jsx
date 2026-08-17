@@ -902,11 +902,20 @@ export default function CreatePatientPlan() {
       <DentistNavigation />
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="card mb-8">
-          <h1 className="text-4xl font-bold text-t1 mb-2">Create Patient Plan</h1>
-          <p className="text-t2 text-lg">Create and share visual treatment plans with patients</p>
+        <div className="card panel-glow relative overflow-hidden mb-6 !py-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="section-label mb-1">Plan Builder</p>
+              <h1 className="text-xl font-bold text-t1 tracking-tight mb-0.5">Create Patient Plan</h1>
+              <p className="text-t2 text-sm mb-0">Create and share visual treatment plans with patients</p>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              <span className="text-xs font-medium text-t2 tnum">Step {getCurrentStep()} of {stepIndicatorItems.length}</span>
+            </div>
+          </div>
 
-          <div className="flex items-center justify-between mt-6 pt-5 border-t border-bd">
+          <div className="flex items-center justify-between mt-5 pt-4 border-t border-bd">
             {stepIndicatorItems.map((step, idx) => {
               const currentStep = getCurrentStep();
               const stepNum = idx + 1;
@@ -920,19 +929,24 @@ export default function CreatePatientPlan() {
                   <div className="flex flex-col items-center gap-1.5 flex-1">
                     <div
                       className={cn(
-                        'w-9 h-9 rounded-full flex items-center justify-center transition-colors',
-                        isActive && 'bg-accent text-white',
-                        isCompleted && 'bg-accent/20 text-accent',
-                        isFuture && 'bg-bg3 text-t3'
+                        'relative w-9 h-9 rounded-full flex items-center justify-center transition-all border',
+                        isActive && 'bg-accent/15 text-accent border-accent shadow-[0_0_16px_rgba(34,211,224,0.35)]',
+                        isCompleted && 'bg-accent/10 text-accent border-accent/40',
+                        isFuture && 'bg-bg2 text-t3 border-bd'
                       )}
                     >
-                      {isCompleted ? <Check size={18} /> : <StepIcon size={18} />}
+                      {isCompleted ? <Check size={16} /> : <StepIcon size={16} />}
+                      <span className={cn(
+                        'absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center tnum',
+                        isActive || isCompleted ? 'bg-accent text-[#04262b]' : 'bg-bg3 text-t3'
+                      )}>
+                        {stepNum}
+                      </span>
                     </div>
                     <span
                       className={cn(
-                        'text-xs font-semibold transition-colors',
-                        isActive && 'text-accent',
-                        isCompleted && 'text-accent',
+                        'text-[11px] font-semibold tracking-wide transition-colors',
+                        (isActive || isCompleted) && 'text-accent',
                         isFuture && 'text-t3'
                       )}
                     >
@@ -942,8 +956,10 @@ export default function CreatePatientPlan() {
                   {idx < stepIndicatorItems.length - 1 && (
                     <div
                       className={cn(
-                        'h-0.5 flex-1 -mt-5 mx-1 rounded-full transition-colors',
-                        stepNum < currentStep ? 'bg-accent' : 'bg-bg3'
+                        'h-px flex-1 -mt-5 mx-1 rounded-full transition-colors',
+                        stepNum < currentStep
+                          ? 'bg-gradient-to-r from-accent/70 via-accent/40 to-accent/70'
+                          : 'bg-bd'
                       )}
                     />
                   )}
@@ -956,12 +972,12 @@ export default function CreatePatientPlan() {
         {/* Patient Information Section */}
         <div className="card mb-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-8 bg-accent rounded-full"></div>
-            <h2 className="text-2xl font-bold text-t1">Patient Information</h2>
+            <div className="w-1 h-5 bg-accent rounded-full shadow-[0_0_8px_rgba(34,211,224,0.5)]"></div>
+            <h2 className="text-base font-semibold text-t1 mb-0">Patient Information</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <User size={16} className="text-accent" />
                 First Name *
               </label>
@@ -974,7 +990,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <User size={16} className="text-accent" />
                 Last Name *
               </label>
@@ -987,7 +1003,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <Phone size={16} className="text-accent" />
                 Phone Number *
               </label>
@@ -1000,7 +1016,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <Mail size={16} className="text-accent" />
                 Email
               </label>
@@ -1016,7 +1032,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <Globe size={16} className="text-accent" />
                 Preferred Language
               </label>
@@ -1035,12 +1051,12 @@ export default function CreatePatientPlan() {
         {/* Plan Information Section */}
         <div className="card mb-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-8 bg-accent rounded-full"></div>
-            <h2 className="text-2xl font-bold text-t1">Plan Information</h2>
+            <div className="w-1 h-5 bg-accent rounded-full shadow-[0_0_8px_rgba(34,211,224,0.5)]"></div>
+            <h2 className="text-base font-semibold text-t1">Plan Information</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <User size={16} className="text-accent" />
                 Dentist Name *
               </label>
@@ -1053,7 +1069,7 @@ export default function CreatePatientPlan() {
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-t2 mb-2 font-semibold text-base">
+              <label className="flex items-center gap-2 text-t2 mb-1.5 font-semibold text-sm">
                 <Globe size={16} className="text-accent" />
                 Practice Name *
               </label>
@@ -1074,7 +1090,7 @@ export default function CreatePatientPlan() {
         {/* Redesigned Procedures Section */}
         <div className="card mb-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-t1">Added Procedures</h2>
+            <h2 className="text-base font-semibold text-t1 mb-0">Added Procedures</h2>
             
             <div className="flex flex-wrap items-center gap-3">
               {/* Priority Filter Tabs */}
@@ -1243,7 +1259,7 @@ export default function CreatePatientPlan() {
                 <h3 className="text-xl font-bold text-success mb-4">Plan Saved Successfully!</h3>
                 
                 <div className="mb-4">
-                  <label className="block text-t2 mb-2 font-semibold text-base">Patient Link</label>
+                  <label className="block text-t2 mb-1.5 font-semibold text-sm">Patient Link</label>
                   <div className="flex gap-2 items-center">
                     <input
                       type="text"
@@ -1291,7 +1307,7 @@ export default function CreatePatientPlan() {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <MessageSquare className="w-6 h-6 text-accent" />
-                <h2 className="text-2xl font-bold text-t1">SMS Delivery Status</h2>
+                <h2 className="text-base font-semibold text-t1">SMS Delivery Status</h2>
               </div>
               <button
                 onClick={() => fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id)}

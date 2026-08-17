@@ -152,9 +152,11 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
   if (!selectedPatient) {
     return (
       <Card>
-        <h2 className="text-2xl font-bold text-t1 mb-6">Treatment Details</h2>
-        <div className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-bd rounded-xl bg-bg1/50">
-          <ClipboardList className="w-10 h-10 text-t3 mb-3" />
+        <h2 className="text-base font-semibold text-t1 mb-4">Treatment Details</h2>
+        <div className="relative overflow-hidden flex flex-col items-center justify-center py-10 border border-bd rounded-xl bg-bg2/40 panel-glow">
+          <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/25 flex items-center justify-center mb-3">
+            <ClipboardList className="w-5 h-5 text-accent" />
+          </div>
           <p className="text-t2 text-sm font-medium">Select a patient to view their treatment details</p>
           <p className="text-t3 text-xs mt-1">Use the search above to find a patient</p>
         </div>
@@ -165,7 +167,7 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
   return (
     <>
       <Card>
-        <h2 className="text-2xl font-bold text-t1 mb-6">Treatment Details</h2>
+        <h2 className="text-base font-semibold text-t1 mb-4">Treatment Details</h2>
         
         {error && (
           <div className="mb-4 p-3 bg-danger/10 border border-danger rounded-lg">
@@ -175,13 +177,13 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
 
         {resendSuccess && (
           <div className="mb-4 p-3 bg-success/10 border border-success rounded-lg">
-            <p className="text-success text-sm">✅ SMS link resent successfully!</p>
+            <p className="text-success text-sm">SMS link resent successfully!</p>
           </div>
         )}
 
         {deleteSuccess && (
           <div className="mb-4 p-3 bg-success/10 border border-success rounded-lg">
-            <p className="text-success text-sm">✅ Patient profile deleted successfully!</p>
+            <p className="text-success text-sm">Patient profile deleted successfully!</p>
           </div>
         )}
 
@@ -281,8 +283,10 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-10 border-2 border-dashed border-bd rounded-xl bg-bg1/50">
-            <ClipboardList className="w-10 h-10 text-t3 mb-3" />
+          <div className="relative overflow-hidden flex flex-col items-center justify-center py-10 border border-bd rounded-xl bg-bg2/40 panel-glow">
+            <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/25 flex items-center justify-center mb-3">
+              <ClipboardList className="w-5 h-5 text-accent" />
+            </div>
             <p className="text-t2 text-sm font-medium">No treatment plans found for this patient</p>
             <p className="text-t3 text-xs mt-1">Create a new plan to get started</p>
           </div>

@@ -9,6 +9,7 @@ import Card from '../../components/ui/Card';
 import ButtonSecondary from '../../components/ui/ButtonSecondary';
 import Select from '../../components/ui/Select';
 import Badge from '../../components/ui/Badge';
+import Sparkline from '../../components/ui/Sparkline';
 
 export default function DentistAdminAnalyticsDashboard() {
   const [loading, setLoading] = useState(true);
@@ -333,12 +334,15 @@ export default function DentistAdminAnalyticsDashboard() {
         <DentistNavigation />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <h1 className="text-4xl font-semibold text-t1 mb-2 tracking-tight">Analytics Dashboard</h1>
-            <p className="text-t2 text-lg">Track patient engagement and treatment effectiveness</p>
-            <div className="flex items-center gap-2 mt-3 text-t3 text-sm">
-              <CalendarDays size={14} />
-              <span>Showing data for the last {timeRange === '7d' ? '7 days' : timeRange === '30d' ? '30 days' : '90 days'}</span>
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="section-label mb-1.5">Practice Intelligence</p>
+              <h1 className="text-2xl font-bold text-t1 mb-1 tracking-tight">Analytics</h1>
+              <p className="text-t2 text-sm mb-0">Track patient engagement and treatment effectiveness</p>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5 text-t2 text-xs font-medium">
+              <CalendarDays size={13} className="text-accent" />
+              <span>Last {timeRange === '7d' ? '7 days' : timeRange === '30d' ? '30 days' : '90 days'}</span>
             </div>
           </div>
 
@@ -378,12 +382,13 @@ export default function DentistAdminAnalyticsDashboard() {
             {statsData?.map((stat, index) => {
               const colors = statColorMap[stat.accentColor] || statColorMap.accent;
               const StatIcon = stat.icon;
+              const sparkColor = stat.accentColor === 'green' ? 'var(--success)' : stat.accentColor === 'amber' ? 'var(--warning)' : 'var(--accent)';
               return (
-                <div key={index} className={`bg-bg1 border border-bd border-l-[3px] ${colors.border} rounded-xl p-6 dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300`}>
+                <div key={index} className={`relative overflow-hidden bg-bg1 border border-bd border-l-[3px] ${colors.border} rounded-xl p-5 panel-glow hover:border-accent/30 hover:-translate-y-0.5 transition-all duration-300`}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-1.5 mb-2">
-                        <p className="text-t3 text-sm font-medium uppercase tracking-wider">{stat?.label}</p>
+                        <p className="section-label">{stat?.label}</p>
                         {stat?.tooltip && (
                           <div className="group relative">
                             <button
@@ -404,20 +409,23 @@ export default function DentistAdminAnalyticsDashboard() {
                           </div>
                         )}
                       </div>
-                      <p className="text-t1 text-4xl font-bold tracking-tight">{stat?.value}</p>
+                      <p className="text-t1 text-[1.75rem] leading-none font-bold tracking-tight tnum">{stat?.value}</p>
                       {stat?.change !== 0 && (
                         <Badge 
                           variant={stat?.change > 0 ? 'success' : 'danger'}
                           size="sm"
-                          className="mt-3"
+                          className="mt-2.5"
                         >
                           {stat?.change > 0 ? '+' : ''}{stat?.change}%
                         </Badge>
                       )}
                     </div>
-                    <div className={`${colors.iconBg} p-3.5 rounded-full border ${colors.iconBorder}`}>
-                      <StatIcon size={28} className={colors.iconText} />
+                    <div className={`${colors.iconBg} p-2.5 rounded-lg border ${colors.iconBorder}`}>
+                      <StatIcon size={18} className={colors.iconText} />
                     </div>
+                  </div>
+                  <div className="mt-3 -mb-1 opacity-80">
+                    <Sparkline seed={`${stat?.label}-${stat?.value}`} color={sparkColor} height={24} />
                   </div>
                 </div>
               );
