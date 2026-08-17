@@ -587,9 +587,9 @@ export default function DentistAdminAnalyticsDashboard() {
                 <div className="bg-bg0/50 rounded-lg border border-bd/50 p-4">
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={engagementTrends}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(94,217,234,0.08)" />
-                      <XAxis dataKey="date" stroke="#5b6d76" fontSize={12} />
-                      <YAxis stroke="#5b6d76" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--bd)" />
+                      <XAxis dataKey="date" stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
+                      <YAxis stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
                       <Tooltip 
                         contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '10px', color: 'var(--t1)' }}
                       />
@@ -619,9 +619,9 @@ export default function DentistAdminAnalyticsDashboard() {
                 <div className="bg-bg0/50 rounded-lg border border-bd/50 p-4">
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={procedureAnalytics?.slice(0, 5)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(94,217,234,0.08)" />
-                      <XAxis dataKey="procedureName" stroke="#5b6d76" fontSize={12} />
-                      <YAxis stroke="#5b6d76" fontSize={12} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--bd)" />
+                      <XAxis dataKey="procedureName" stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
+                      <YAxis stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
                       <Tooltip 
                         contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '10px', color: 'var(--t1)' }}
                       />
