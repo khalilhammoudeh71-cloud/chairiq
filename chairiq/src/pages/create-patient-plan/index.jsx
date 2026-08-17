@@ -1270,7 +1270,7 @@ export default function CreatePatientPlan() {
                     <div className="relative">
                       <button
                         onClick={copyPatientLink}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${linkCopied ? 'bg-success text-accent-foreground' : 'btn-primary'}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${linkCopied ? 'bg-success text-white dark:text-accent-foreground' : 'btn-primary'}`}
                       >
                         {linkCopied ? <Check size={20} /> : <Copy size={20} />}
                         {linkCopied ? 'Copied!' : 'Copy'}

@@ -114,7 +114,7 @@ export default function TestSmsCard() {
               key={toast.id}
               className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${
                 toast.type === 'success'
-                  ? 'bg-success text-accent-foreground'
+                  ? 'bg-success text-white dark:text-accent-foreground'
                   : toast.type === 'error'
                   ? 'bg-danger text-white'
                   : 'bg-bg2 text-t1 border border-bd'

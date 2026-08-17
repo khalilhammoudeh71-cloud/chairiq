@@ -108,7 +108,7 @@ const AccessibilityControls = ({ language = 'en' }) => {
               onClick={() => handleFontSizeChange(size)}
               className={`px-3 py-1.5 text-sm rounded border-2 ${
                 fontSize === size
-                  ? 'bg-success text-accent-foreground border-success' :'bg-bg2/60 text-t3 border-bd/50 hover:border-success/60 hover:bg-bg3/60'
+                  ? 'bg-success text-white dark:text-accent-foreground border-success' :'bg-bg2/60 text-t3 border-bd/50 hover:border-success/60 hover:bg-bg3/60'
               }`}
               aria-pressed={fontSize === size}
             >

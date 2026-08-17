@@ -299,7 +299,7 @@ const AIContentGenerationStudio = () => {
                   disabled={!selectedProcedure}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                     selectedProcedure
-                      ? 'bg-success text-accent-foreground hover:brightness-110' : 'bg-bg2 text-t3 cursor-not-allowed'
+                      ? 'bg-success text-white dark:text-accent-foreground hover:brightness-110' : 'bg-bg2 text-t3 cursor-not-allowed'
                   }`}
                 >
                   <Save className="w-4 h-4" />

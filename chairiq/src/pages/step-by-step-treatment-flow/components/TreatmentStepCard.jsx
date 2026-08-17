@@ -25,8 +25,8 @@ const TreatmentStepCard = ({
         {isPersonalized && (
           <div className="absolute top-4 right-4 px-3 py-1 bg-accent rounded-full shadow-md">
             <div className="flex items-center gap-1.5">
-              <Icon name="Sparkles" size={14} className="text-white" />
-              <span className="text-xs font-semibold text-white">
+              <Icon name="Sparkles" size={14} className="text-accent-foreground" />
+              <span className="text-xs font-semibold text-accent-foreground">
                 {currentLanguage === 'en' ? 'AI Personalized' : 'Personalizado IA'}
               </span>
             </div>

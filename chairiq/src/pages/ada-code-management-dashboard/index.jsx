@@ -486,7 +486,7 @@ const AdaCodeManagementDashboard = () => {
             <div className="flex gap-2">
               <button
                 onClick={handleRunAudit}
-                className="flex items-center gap-2 px-4 py-2 bg-warning text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-warning text-white dark:text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
               >
                 <Shield className="h-5 w-5" />
                 Run Audit
@@ -502,7 +502,7 @@ const AdaCodeManagementDashboard = () => {
 
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-2 px-4 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-success text-white dark:text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
               >
                 <Download className="h-5 w-5" />
                 Export
@@ -1073,7 +1073,7 @@ const AdaCodeManagementDashboard = () => {
                   <div className="flex justify-end gap-3 pt-4 border-t">
                     <button
                       onClick={handleExportAuditResults}
-                      className="flex items-center gap-2 px-6 py-2 bg-success text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
+                      className="flex items-center gap-2 px-6 py-2 bg-success text-white dark:text-accent-foreground rounded-lg hover:brightness-110 transition-colors"
                     >
                       <Download className="h-5 w-5" />
                       Export Audit Report
