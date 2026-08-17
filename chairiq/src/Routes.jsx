@@ -53,6 +53,7 @@ function ProjectRoutes() {
           <Route path="/terms-of-service" element={<Terms />} />
           <Route path="/sms" element={<SmsDisclosure />} />
           <Route path="/sms-consent" element={<SmsConsent />} />
+          <Route path="/consent" element={<SmsConsent />} />
           {/* Authentication Routes - /dentist-login-authentication redirects to /login */}
           <Route path="/dentist-login-authentication" element={<Navigate to="/login" replace />} />
           <Route path="/access-denied" element={<AccessDenied />} />
