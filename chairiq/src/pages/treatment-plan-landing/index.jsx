@@ -7,6 +7,7 @@ import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
 import { patientPlanService } from '../../services/patientPlanService';
 import { useAuth } from '../../contexts/AuthContext';
+import ProcedureThumb from '../../components/ProcedureThumb';
 
 const heroSlides = [
   '/assets/images/hero-slide-1.png',
@@ -601,18 +602,13 @@ const TreatmentPlanLanding = () => {
                         >
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-4 min-w-0">
-                              <span 
-                                className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
-                                style={{
-                                  backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(74,111,165,0.15)',
-                                }}
-                              >
-                                <Icon 
-                                  name={iconName} 
-                                  size={16} 
-                                  style={{ color: isSelected ? '#ffffff' : '#6B8AEE' }} 
-                                />
-                              </span>
+                              <ProcedureThumb
+                                canonicalSlug={procedure?.canonicalSlug}
+                                name={title}
+                                size="sm"
+                                className="!w-14 !h-9"
+                                glow={false}
+                              />
                               <div className="min-w-0">
                                 <h3 
                                   className="text-base sm:text-lg font-medium leading-snug truncate"

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Clock } from 'lucide-react';
 import EnhancedImageViewer from '../../../components/EnhancedImageViewer';
+import ProcedureThumb from '../../../components/ProcedureThumb';
 
 const ProcedureHero = ({ procedure, language = 'en' }) => {
   const [showEnhancedViewer, setShowEnhancedViewer] = useState(false);
@@ -21,6 +22,19 @@ const ProcedureHero = ({ procedure, language = 'en' }) => {
   return (
     <>
       <div className="relative">
+        {!procedure?.heroImage && (
+          <figure className="relative w-full rounded-2xl overflow-hidden mb-12 border border-accent/20">
+            <ProcedureThumb
+              canonicalSlug={procedure?.canonicalSlug}
+              slug={procedure?.slug}
+              name={procedure?.name_en}
+              alt={name || ''}
+              size="hero"
+              glow={false}
+              className="!rounded-none !border-0"
+            />
+          </figure>
+        )}
         {procedure?.heroImage && (
           <figure className="relative w-full h-80 md:h-96 rounded-2xl overflow-hidden mb-12 border border-bd">
             <div 

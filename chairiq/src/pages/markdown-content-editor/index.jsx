@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import { procedureLibraryService } from '../../services/procedureLibraryService';
 import DentistNavigation from '../../components/DentistNavigation';
 import { supabase } from '../../lib/supabase';
+import ProcedureThumb from '../../components/ProcedureThumb';
 
 export default function MarkdownContentEditor() {
   const navigate = useNavigate();
@@ -241,9 +242,21 @@ export default function MarkdownContentEditor() {
               </button>
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-t1">
-            {mode === 'create' ? 'Create New Procedure' : 'Edit Procedure'}
-          </h1>
+          <div className="flex items-center gap-3">
+            {mode !== 'create' && (
+              <ProcedureThumb
+                canonicalSlug={formData?.canonicalSlug}
+                slug={formData?.slug}
+                name={formData?.title_en || formData?.titleEn}
+                size="md"
+                className="!w-20 !h-12"
+                glow={false}
+              />
+            )}
+            <h1 className="text-2xl font-bold text-t1 mb-0">
+              {mode === 'create' ? 'Create New Procedure' : 'Edit Procedure'}
+            </h1>
+          </div>
         </div>
 
         {error && (

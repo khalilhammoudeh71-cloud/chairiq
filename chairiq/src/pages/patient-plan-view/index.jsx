@@ -10,6 +10,7 @@ import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
 import PatientImageGallery from './components/PatientImageGallery';
+import ProcedureThumb from '../../components/ProcedureThumb';
 
 function VisualsDebugPanel({ planData }) {
   const params = new URLSearchParams(window.location.search);
@@ -362,6 +363,13 @@ export default function PatientPlanView() {
           <div className="flex justify-between items-start mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
+                <ProcedureThumb
+                  canonicalSlug={procedure?.canonicalSlug}
+                  name={procedure?.procedureName}
+                  size="sm"
+                  className="!w-14 !h-9"
+                  glow={false}
+                />
                 <h3 className="text-2xl font-medium" style={{ color: '#e8e9ed', fontWeight: 500 }}>
                   {procedure?.procedureName}
                 </h3>

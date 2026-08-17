@@ -688,9 +688,14 @@ export default function ProcedureLibraryManagement() {
                         <tr key={procedure?.id} className="group hover:bg-accent/[0.04] transition-colors cursor-pointer relative" onClick={() => handleEdit(procedure)}>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0 text-accent text-xs font-bold group-hover:border-accent/40 transition-colors">
-                                {(procedure?.titleEn || 'P').slice(0, 2).toUpperCase()}
-                              </div>
+                              <ProcedureThumb
+                                canonicalSlug={procedure?.canonicalSlug}
+                                slug={procedure?.slug}
+                                name={procedure?.titleEn}
+                                alt=""
+                                size="md"
+                                className="!w-16 !h-10"
+                              />
                               <div className="min-w-0">
                                 <div className="text-t1 font-medium text-sm truncate">{procedure?.titleEn || 'Untitled'}</div>
                                 <div className="text-t3 text-xs font-mono truncate">{procedure?.slug}</div>

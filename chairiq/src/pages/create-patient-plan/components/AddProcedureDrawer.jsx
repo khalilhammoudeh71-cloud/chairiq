@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Search, Star, Clock, ImagePlus, Camera, Check, ChevronDown, ChevronUp, ClipboardList, Trash2, Plus } from 'lucide-react';
 import { procedureCodesService } from '../../../services/procedureCodesService';
 import { supabase } from '../../../lib/supabase';
+import ProcedureThumb from '../../../components/ProcedureThumb';
 
 export default function AddProcedureDrawer({ 
   isOpen, 
@@ -473,6 +474,13 @@ export default function AddProcedureDrawer({
                             }`}>
                               {isSelected && <Check size={12} className="text-white" />}
                             </div>
+                            <ProcedureThumb
+                              canonicalSlug={item?.canonicalSlug}
+                              name={item?.title}
+                              size="xs"
+                              className="!w-11 !h-7"
+                              glow={false}
+                            />
                             <div className="min-w-0">
                               <span className="font-bold text-accent">{item?.code}</span>
                               <span className={`ml-2 text-sm ${isSelected ? 'text-t1 font-semibold' : 'text-t2'}`}>{item?.title}</span>

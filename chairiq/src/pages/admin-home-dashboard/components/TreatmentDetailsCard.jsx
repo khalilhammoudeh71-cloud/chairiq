@@ -6,6 +6,7 @@ import Card from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
 import DeletePatientModal from './DeletePatientModal';
+import ProcedureThumb from '../../../components/ProcedureThumb';
 
 
 export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted }) {
@@ -260,7 +261,16 @@ export default function TreatmentDetailsCard({ selectedPatient, onPatientDeleted
                     <div className="space-y-2 mt-3 pt-3 border-t border-bd">
                       {plan?.procedures?.slice(0, 3)?.map((proc) => (
                         <div key={proc?.id} className="flex items-center justify-between text-sm">
-                          <span className="text-t2">{proc?.procedureName}</span>
+                          <span className="flex items-center gap-2 text-t2">
+                            <ProcedureThumb
+                              canonicalSlug={proc?.canonicalSlug}
+                              name={proc?.procedureName}
+                              size="xs"
+                              className="!w-9 !h-6"
+                              glow={false}
+                            />
+                            {proc?.procedureName}
+                          </span>
                           <Badge
                             variant={
                               proc?.priority === 'Urgent' ? 'danger'

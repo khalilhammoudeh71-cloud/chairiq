@@ -2,6 +2,7 @@ import React from 'react';
 import { Trash2, GripVertical, Camera } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import ProcedureThumb from '../../../components/ProcedureThumb';
 
 export default function ProcedureTableRow({ 
   procedure, 
@@ -78,7 +79,14 @@ export default function ProcedureTableRow({
 
         {/* Treatment Title */}
         <td className="px-4 py-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 group">
+            <ProcedureThumb
+              canonicalSlug={procedure?.canonicalSlug}
+              slug={procedure?.slug}
+              name={procedure?.displayTitle || procedure?.procedureName}
+              size="sm"
+              className="!w-12 !h-8"
+            />
             <span className="text-t1 font-medium">
               {procedure?.displayTitle || procedure?.procedureName || '-'}
             </span>
@@ -162,9 +170,18 @@ export default function ProcedureTableRow({
                 </span>
               )}
             </div>
-            <p className="text-t1 font-semibold">
-              {procedure?.displayTitle || procedure?.procedureName || '-'}
-            </p>
+            <div className="flex items-center gap-2.5">
+              <ProcedureThumb
+                canonicalSlug={procedure?.canonicalSlug}
+                slug={procedure?.slug}
+                name={procedure?.displayTitle || procedure?.procedureName}
+                size="sm"
+                className="!w-12 !h-8"
+              />
+              <p className="text-t1 font-semibold mb-0">
+                {procedure?.displayTitle || procedure?.procedureName || '-'}
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">

@@ -7,6 +7,7 @@ import ProcedureExplanation from '../individual-procedure-detail/components/Proc
 import WhyThisTreatment from '../individual-procedure-detail/components/WhyThisTreatment';
 import WhatToExpect from '../individual-procedure-detail/components/WhatToExpect';
 import VisualGallery from '../individual-procedure-detail/components/VisualGallery';
+import ProcedureThumb from '../../components/ProcedureThumb';
 
 const EnhancedPatientProcedureDetail = () => {
   const { slug } = useParams();
@@ -129,6 +130,23 @@ const EnhancedPatientProcedureDetail = () => {
       </div>
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Hero Section */}
+        {!content?.visuals?.heroKey && (
+          <div className="relative mb-8 overflow-hidden rounded-2xl border border-accent/20">
+            <ProcedureThumb
+              canonicalSlug={procedure?.canonicalSlug}
+              slug={procedure?.slug}
+              name={procedure?.titleEn}
+              alt={content?.title || ''}
+              size="hero"
+              glow={false}
+              className="!rounded-none !border-0"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[rgba(4,7,10,0.85)] via-transparent to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-0 tracking-tight">{content?.title}</h1>
+            </div>
+          </div>
+        )}
         {content?.visuals?.heroKey && (
           <ProcedureHero
             procedure={procedure}
