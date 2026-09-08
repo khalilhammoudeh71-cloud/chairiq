@@ -1,5 +1,10 @@
 # SPA Routing Configuration for Custom Domain
 
+For the current Vercel migration, use [VERCEL-MIGRATION.md](./VERCEL-MIGRATION.md).
+The Netlify/Apache and domain examples below are historical static-only guidance;
+they do not describe the current Express-backed app. The actual Vite output is
+`build`, and private server credentials must never receive a `VITE_` prefix.
+
 This project is configured to work with Single Page Application (SPA) routing across multiple hosting platforms.
 
 ## Deployment Files Created
@@ -10,7 +15,7 @@ This project is configured to work with Single Page Application (SPA) routing ac
 - Optimized caching for static assets
 
 ### 2. **Vercel** (`vercel.json`)
-- Rewrites all routes to `index.html`
+- Routes APIs and patient-token exchanges to Express before static/SPA handling
 - Security headers configured
 - Asset caching enabled
 
@@ -27,10 +32,12 @@ This project is configured to work with Single Page Application (SPA) routing ac
 4. The `_redirects` file in `public/` will be copied to `dist/` automatically
 
 ### If deployed on Vercel:
-1. Ensure `vercel.json` is in the root directory
+1. Set the project Root Directory to `chairiq`, which contains `vercel.json`
 2. Framework preset: Vite
-3. Build command: `npm run build`
-4. Output directory: `dist`
+3. Install command: `npm ci`; build command: `npm run build`
+4. Output directory: `build`
+5. Follow `VERCEL-MIGRATION.md` for the backend and Phase 2 limitations; do not
+   use a global SPA-only rewrite or deploy without separate approval
 
 ### If deployed on Apache/cPanel:
 1. Upload the contents of `dist/` folder after building
