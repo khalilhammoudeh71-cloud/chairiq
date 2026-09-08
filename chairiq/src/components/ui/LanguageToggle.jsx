@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../ui/Button';
+import { trackEvent } from '../../utils/analytics';
 
 
 const LanguageToggle = ({ className = '' }) => {
@@ -16,6 +17,10 @@ const LanguageToggle = ({ className = '' }) => {
     const newLanguage = currentLanguage === 'en' ? 'es' : 'en';
     setCurrentLanguage(newLanguage);
     localStorage.setItem('chairiq-language', newLanguage);
+    trackEvent('language_changed', {
+      language: newLanguage,
+      location: 'global_toggle',
+    });
     
     const event = new CustomEvent('languageChange', { detail: { language: newLanguage } });
     window.dispatchEvent(event);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { patientPlanService } from '../../services/patientPlanService';
-import { shareLinkService } from '../../services/shareLinkService';
+import { shareLinkService, buildPatientPlanUrl } from '../../services/shareLinkService';
 import { getSmsDeliveryStatus } from '../../services/twilioService';
 
 import { useToast } from '../../hooks/useToast';
@@ -11,6 +11,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import { supabase } from '../../lib/supabase';
 import { procedureCodesService } from '../../services/procedureCodesService';
 import { procedureLibraryService } from '../../services/procedureLibraryService';
+import { trackEvent } from '../../utils/analytics';
 
 // Fixed import path - cn utility is in utils folder, not lib folder
 import { cn } from '../../utils/cn';
@@ -475,6 +476,12 @@ export default function CreatePatientPlan() {
         setShareToken(linkResult.token);
       }
 
+      trackEvent('plan_created', {
+        language: patientInfo?.preferredLanguage || 'EN',
+        procedure_count: procedures?.length || 0,
+        image_upload_failures: result?.imageUploadFailures || 0,
+      });
+
       if (result?.imageUploadFailures > 0) {
         showToast(`Plan saved, but ${result.imageUploadFailures} patient image(s) failed to upload. The plan is still valid.`, 'warning');
       } else {
@@ -524,7 +531,7 @@ export default function CreatePatientPlan() {
   const copyPatientLink = async () => {
     if (!savedPlan) return;
     const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-    const link = `${window.location?.origin}/p/${token}`;
+    const link = buildPatientPlanUrl(token);
     const success = await safeCopy(link);
     if (success) {
       setLinkCopied(true);
@@ -567,7 +574,7 @@ export default function CreatePatientPlan() {
     setSendingSMS(true);
     try {
       const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const secureLink = `${window.location?.origin}/p/${token}`;
+      const secureLink = buildPatientPlanUrl(token);
       const headers = { 'Content-Type': 'application/json' };
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.access_token) {
@@ -581,13 +588,16 @@ export default function CreatePatientPlan() {
       const data = await res.json();
 
       if (data?.ok) {
+        trackEvent('plan_delivery', { channel: 'sms', outcome: 'success', location: 'plan_page' });
         showToast('SMS sent successfully to patient!', 'success');
         setShowSMSMessage(false);
         setDeliveryHistoryKey(prev => prev + 1);
       } else {
+        trackEvent('plan_delivery', { channel: 'sms', outcome: 'failed', location: 'plan_page' });
         showToast(data?.error || 'Failed to send SMS', 'error');
       }
     } catch (error) {
+      trackEvent('plan_delivery', { channel: 'sms', outcome: 'failed', location: 'plan_page' });
       showToast(`Error sending SMS: ${error?.message}`, 'error');
     } finally {
       setSendingSMS(false);
@@ -606,7 +616,7 @@ export default function CreatePatientPlan() {
     setSendingEmail(true);
     try {
       const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const secureLink = `${window.location?.origin}/p/${token}`;
+      const secureLink = buildPatientPlanUrl(token);
       const headers = { 'Content-Type': 'application/json' };
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.access_token) {
@@ -627,12 +637,15 @@ export default function CreatePatientPlan() {
       const data = await res.json();
 
       if (data?.ok) {
+        trackEvent('plan_delivery', { channel: 'email', outcome: 'success', location: 'plan_page' });
         showToast('Email sent successfully!', 'success');
         setDeliveryHistoryKey(prev => prev + 1);
       } else {
+        trackEvent('plan_delivery', { channel: 'email', outcome: 'failed', location: 'plan_page' });
         showToast(data?.error || 'Failed to send email', 'error');
       }
     } catch (error) {
+      trackEvent('plan_delivery', { channel: 'email', outcome: 'failed', location: 'plan_page' });
       showToast(`Error sending email: ${error?.message}`, 'error');
     } finally {
       setSendingEmail(false);
@@ -653,7 +666,7 @@ export default function CreatePatientPlan() {
     setRetryingMessageId(smsLog?.id);
     try {
       const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const secureLink = `${window.location?.origin}/p/${token}`;
+      const secureLink = buildPatientPlanUrl(token);
       const phone = smsLog?.phone_number || savedPlan?.patient?.phone;
       const headers = { 'Content-Type': 'application/json' };
       const { data: { session } } = await supabase.auth.getSession();
@@ -668,13 +681,16 @@ export default function CreatePatientPlan() {
       const data = await res.json();
 
       if (data?.ok) {
+        trackEvent('plan_delivery', { channel: 'sms', outcome: 'success', location: 'retry' });
         showToast('SMS retry sent successfully!', 'success');
         setDeliveryHistoryKey(prev => prev + 1);
         await fetchSmsDeliveryStatus(savedPlan?.treatmentPlan?.id);
       } else {
+        trackEvent('plan_delivery', { channel: 'sms', outcome: 'failed', location: 'retry' });
         showToast(data?.error || 'Failed to retry SMS', 'error');
       }
     } catch (error) {
+      trackEvent('plan_delivery', { channel: 'sms', outcome: 'failed', location: 'retry' });
       showToast(`Error retrying SMS: ${error?.message}`, 'error');
     }
     setRetryingMessageId(null);
@@ -696,7 +712,7 @@ export default function CreatePatientPlan() {
         setShareToken(linkResult.token);
       }
       const tokenToUse = linkResult?.token || shareToken || savedPlan?.treatmentPlan?.publicToken;
-      const secureLink = `${window.location?.origin}/p/${tokenToUse}`;
+      const secureLink = buildPatientPlanUrl(tokenToUse);
       const phone = smsPhoneNumber || savedPlan?.patient?.phone;
 
       if (!phone) {
@@ -718,12 +734,15 @@ export default function CreatePatientPlan() {
       const data = await res.json();
 
       if (data?.ok) {
+        trackEvent('plan_delivery', { channel: 'sms', outcome: 'success', location: 'resend' });
         showToast('Treatment plan link resent successfully!', 'success');
         setDeliveryHistoryKey(prev => prev + 1);
       } else {
+        trackEvent('plan_delivery', { channel: 'sms', outcome: 'failed', location: 'resend' });
         showToast(data?.error || 'Failed to resend link', 'error');
       }
     } catch (error) {
+      trackEvent('plan_delivery', { channel: 'sms', outcome: 'failed', location: 'resend' });
       showToast(`Error resending link: ${error?.message}`, 'error');
     } finally {
       setResendingSavedPlan(false);
@@ -731,33 +750,40 @@ export default function CreatePatientPlan() {
   };
 
   const handleModalSend = async ({ method, recipient, planLink }) => {
-    const headers = { 'Content-Type': 'application/json' };
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.access_token) {
-      headers['Authorization'] = `Bearer ${session.access_token}`;
-    }
-    const body = {
-      deliveryMethod: method,
-      secureLink: planLink,
-      patientName: savedPlan?.patient?.firstName,
-      planId: savedPlan?.treatmentPlan?.id,
-      patientId: savedPlan?.patient?.id,
-    };
-    if (method === 'sms') body.phone = recipient;
-    if (method === 'email') body.email = recipient;
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+      const body = {
+        deliveryMethod: method,
+        secureLink: planLink,
+        patientName: savedPlan?.patient?.firstName,
+        planId: savedPlan?.treatmentPlan?.id,
+        patientId: savedPlan?.patient?.id,
+      };
+      if (method === 'sms') body.phone = recipient;
+      if (method === 'email') body.email = recipient;
 
-    const res = await fetch('/api/send-treatment-plan', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    setDeliveryHistoryKey(prev => prev + 1);
-    if (data?.ok) {
-      showToast(`${method === 'sms' ? 'SMS' : 'Email'} sent successfully!`, 'success');
-    } else {
+      const res = await fetch('/api/send-treatment-plan', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      setDeliveryHistoryKey(prev => prev + 1);
+      if (data?.ok) {
+        trackEvent('plan_delivery', { channel: method, outcome: 'success', location: 'send_modal' });
+        showToast(`${method === 'sms' ? 'SMS' : 'Email'} sent successfully!`, 'success');
+        return;
+      }
+
       showToast(data?.error || `Failed to send ${method}`, 'error');
       throw new Error(data?.error);
+    } catch (error) {
+      trackEvent('plan_delivery', { channel: method, outcome: 'failed', location: 'send_modal' });
+      throw error;
     }
   };
 
@@ -903,7 +929,21 @@ export default function CreatePatientPlan() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="card panel-glow relative overflow-hidden mb-6 !py-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="absolute top-0 bottom-14 right-0 w-1/3 hidden lg:flex items-center justify-end gap-3 pr-40 pointer-events-none select-none" aria-hidden="true">
+            <div className="absolute inset-0 bg-gradient-to-r from-bg1 via-bg1/60 to-transparent z-10" />
+            {['filling', 'extraction'].map((slug, i) => (
+              <img
+                key={slug}
+                src={`/visuals/${slug}/thumb.jpg`}
+                alt=""
+                loading="lazy"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                className="w-32 h-20 object-cover rounded-xl border border-accent/20 shadow-lg"
+                style={{ transform: `translateY(${i % 2 === 0 ? '-4px' : '8px'}) rotate(${(i - 0.5) * 4}deg)`, opacity: 0.75 - i * 0.15 }}
+              />
+            ))}
+          </div>
+          <div className="relative z-20 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="section-label mb-1">Plan Builder</p>
               <h1 className="text-xl font-bold text-t1 tracking-tight mb-0.5">Create Patient Plan</h1>
@@ -1264,7 +1304,7 @@ export default function CreatePatientPlan() {
                     <input
                       type="text"
                       readOnly
-                      value={`${window.location?.origin}/p/${shareToken || savedPlan?.treatmentPlan?.publicToken}`}
+                      value={buildPatientPlanUrl(shareToken || savedPlan?.treatmentPlan?.publicToken)}
                       className="input-field flex-1"
                     />
                     <div className="relative">
@@ -1421,7 +1461,7 @@ export default function CreatePatientPlan() {
         <SendPlanModal
           isOpen={sendModalOpen}
           onClose={() => setSendModalOpen(false)}
-          planLink={`${window.location?.origin}/p/${shareToken || savedPlan?.treatmentPlan?.publicToken}`}
+          planLink={buildPatientPlanUrl(shareToken || savedPlan?.treatmentPlan?.publicToken)}
           patientPhone={smsPhoneNumber || savedPlan?.patient?.phone || ''}
           patientEmail={patientEmail || savedPlan?.patient?.email || ''}
           onSend={handleModalSend}

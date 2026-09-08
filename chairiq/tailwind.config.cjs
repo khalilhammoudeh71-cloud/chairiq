@@ -49,7 +49,9 @@ module.exports = {
         '2xl': 'var(--spacing-2xl)',
       },
       fontFamily: {
-        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'sans-serif'],
+        'sans': ['Instrument Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica Neue', 'sans-serif'],
+        'display': ['Space Grotesk', 'Instrument Sans', 'sans-serif'],
+        'mono': ['JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'monospace'],
       },
       fontSize: {
         'display': ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.025em', fontWeight: '700' }],

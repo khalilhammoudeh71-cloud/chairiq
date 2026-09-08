@@ -1,19 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { generateVisualDescription } from '../../../services/visualDescriptionService';
+import { trackEvent } from '../../../utils/analytics';
 
-export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
+export default function CategoryVisualDeck({ steps, language, canonicalSlug, routeAlias }) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [imageLoadStatus, setImageLoadStatus] = useState({});
   const [aiDescriptions, setAiDescriptions] = useState({});
   const [loadingDescriptions, setLoadingDescriptions] = useState({});
+  const initialViewTracked = useRef(false);
 
   // ✅ FIX: Filter steps that have visuals using step_id matching
   const stepsWithVisuals = steps?.filter(step => step?.visual?.image_url) || [];
 
   // ✅ FIX: Show per-step "Visual coming soon" message for steps without visuals
   const hasAnyVisuals = stepsWithVisuals?.length > 0;
+
+  useEffect(() => {
+    if (!hasAnyVisuals || initialViewTracked.current) return;
+    initialViewTracked.current = true;
+    trackEvent('procedure_visual_viewed', {
+      step_number: 1,
+      direction: 'initial',
+    }, routeAlias ? { routeAlias } : undefined);
+  }, [hasAnyVisuals, routeAlias]);
 
   // If NO visuals at all for this procedure, show friendly placeholder
   if (!hasAnyVisuals) {
@@ -91,12 +102,20 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
 
   const goToNext = () => {
     if (currentStepIndex < stepsWithVisuals?.length - 1) {
+      trackEvent('procedure_visual_viewed', {
+        step_number: currentStepIndex + 2,
+        direction: 'next',
+      }, routeAlias ? { routeAlias } : undefined);
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
   const goToPrevious = () => {
     if (currentStepIndex > 0) {
+      trackEvent('procedure_visual_viewed', {
+        step_number: currentStepIndex,
+        direction: 'previous',
+      }, routeAlias ? { routeAlias } : undefined);
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
@@ -234,7 +253,14 @@ export default function CategoryVisualDeck({ steps, language, canonicalSlug }) {
           {stepsWithVisuals?.map((step, idx) => (
             <button
               key={step?.step_id}
-              onClick={() => setCurrentStepIndex(idx)}
+              onClick={() => {
+                if (idx === currentStepIndex) return;
+                trackEvent('procedure_visual_viewed', {
+                  step_number: idx + 1,
+                  direction: 'direct',
+                }, routeAlias ? { routeAlias } : undefined);
+                setCurrentStepIndex(idx);
+              }}
               className={`w-3 h-3 rounded-full transition-all ${
                 idx === currentStepIndex ? 'bg-accent' : 'bg-accent/30'
               }`}

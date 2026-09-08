@@ -97,7 +97,7 @@ export default function DentistLoginAuthentication() {
             className="w-20 h-20 rounded-2xl mb-8"
           />
 
-          <h2 className="text-4xl font-bold mb-4 tracking-tight">
+          <h2 className="font-display text-4xl font-bold mb-4 tracking-tight">
             <span className="text-white">Chair</span><span style={{ color: '#22d3e0' }}>IQ</span>
           </h2>
           <p className="text-lg leading-relaxed mb-8" style={{ color: 'rgba(237,244,246,0.8)' }}>

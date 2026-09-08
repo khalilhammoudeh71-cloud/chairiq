@@ -42,53 +42,57 @@ export default function DentistNavigation() {
   const isActivePath = (path) => location?.pathname === path;
 
   return (
-    <nav className="bg-bg1 border-b border-bd sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="nav-glass sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-8">
+        <div className="flex justify-between items-center h-14 gap-2">
           {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="ChairIQ" className="w-9 h-9 rounded-lg" />
-            <h1 className="text-2xl font-bold tracking-wide"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></h1>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <img src="/logo.png" alt="ChairIQ" className="w-8 h-8 rounded-lg" />
+            <h1 className="font-display text-xl font-bold tracking-tight mb-0 whitespace-nowrap">
+              <span className="text-t1">Chair</span><span className="text-accent">IQ</span>
+            </h1>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-2">
-            {navigationItems?.map((item) => (
-              <button
-                key={item?.path}
-                onClick={() => navigate(item?.path)}
-                className={`relative flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                  isActivePath(item?.path)
-                    ? 'bg-accent/10 text-accent font-medium border border-accent/25'
-                    : 'text-t2 hover:bg-bg2 hover:text-t1 hover:font-medium'
-                }`}
-              >
-                <item.icon size={20} />
-                {item?.name}
-                {isActivePath(item?.path) && (
-                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full" />
-                )}
-              </button>
-            ))}
-            
+          <div className="hidden md:flex items-center gap-0.5 lg:gap-1 min-w-0 h-full">
+            {navigationItems?.map((item) => {
+              const active = isActivePath(item?.path);
+              return (
+                <button
+                  key={item?.path}
+                  onClick={() => navigate(item?.path)}
+                  data-active={active}
+                  className={`nav-tab flex items-center gap-1.5 px-2.5 lg:px-3.5 h-full transition-colors ${
+                    active
+                      ? 'text-accent'
+                      : 'text-t2 hover:text-t1'
+                  }`}
+                >
+                  <item.icon size={15} className={active ? 'text-accent' : 'text-t3'} />
+                  {item?.name}
+                </button>
+              );
+            })}
+
             {/* Theme Toggle */}
-            <div className="ml-2 pl-4 border-l border-bd">
+            <div className="ml-1.5 pl-2.5 lg:pl-3.5 border-l border-bd flex-shrink-0">
               <ThemeToggle />
             </div>
-            
+
             {/* User Info & Logout */}
-            <div className="flex items-center gap-4 ml-2 pl-4 border-l border-bd">
+            <div className="flex items-center gap-3 ml-1.5 pl-2.5 lg:pl-3.5 border-l border-bd flex-shrink-0">
               {user?.email && (
-                <span className="text-t3 text-sm hidden lg:block">
+                <span className="text-t3 text-xs hidden xl:block max-w-[180px] truncate">
                   {user?.email}
                 </span>
               )}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 bg-danger/10 hover:bg-danger/20 text-danger rounded-lg border border-danger/20"
+                title="Logout"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-t3 hover:text-danger hover:bg-danger/10 rounded-lg border border-transparent hover:border-danger/20 transition-colors text-[0.8125rem] font-medium whitespace-nowrap"
               >
-                <LogOut size={20} />
-                Logout
+                <LogOut size={15} />
+                <span className="hidden lg:inline">Logout</span>
               </button>
             </div>
           </div>

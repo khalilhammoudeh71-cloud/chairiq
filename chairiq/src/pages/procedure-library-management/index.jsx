@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Trash2, Search, Copy, Eye, EyeOff, CheckCircle, AlertCircle, BookOpen, Upload, Image as ImageIcon, ChevronDown, Loader2, Check, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Copy, Eye, EyeOff, CheckCircle, AlertCircle, BookOpen, Upload, Image as ImageIcon, ChevronDown, Loader2, Check, X, MonitorSmartphone } from 'lucide-react';
 import { procedureLibraryService } from '../../services/procedureLibraryService';
 import { procedureCodesService } from '../../services/procedureCodesService';
 import { adaCodeMappingService } from '../../services/adaCodeMappingService';
 import { supabase } from '../../lib/supabase';
 import DentistNavigation from '../../components/DentistNavigation';
+import ProcedureThumb from '../../components/ProcedureThumb';
 import Card from '../../components/ui/Card';
 import ButtonPrimary from '../../components/ui/ButtonPrimary';
 import ButtonSecondary from '../../components/ui/ButtonSecondary';
 import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
 import Badge from '../../components/ui/Badge';
+import { trackEvent } from '../../utils/analytics';
 
 const ALL_CATEGORIES = [
   { value: 'all', label: 'All Categories' },
@@ -127,6 +129,18 @@ export default function ProcedureLibraryManagement() {
     navigate('/markdown-content-editor', { state: { mode: 'edit', procedureId: procedure?.id } });
   };
 
+  const handlePreviewAsPatient = (procedure) => {
+    const slug = procedure?.canonicalSlug || procedure?.slug;
+    if (!slug) {
+      setError('This procedure has no slug to preview');
+      return;
+    }
+    trackEvent('patient_preview_opened', {
+      location: 'procedure_library',
+    });
+    navigate(`/preview-patient-page/${encodeURIComponent(slug)}`);
+  };
+
   const handleDuplicate = async (procedure) => {
     try {
       const newSlug = `${procedure?.slug}-copy-${Date.now()}`;
@@ -142,6 +156,10 @@ export default function ProcedureLibraryManagement() {
     try {
       await procedureLibraryService?.update(procedure?.id, {
         isPublished: !procedure?.isPublished
+      });
+      trackEvent('procedure_publish_changed', {
+        published: !procedure?.isPublished,
+        location: 'procedure_library',
       });
       setSuccess(`${procedure?.titleEn} ${procedure?.isPublished ? 'unpublished' : 'published'}`);
       await loadProcedures();
@@ -329,6 +347,11 @@ export default function ProcedureLibraryManagement() {
         }, { onConflict: 'canonical_slug,step_key' });
       if (upsertError) throw upsertError;
 
+      trackEvent('step_image_uploaded', {
+        step_key: uploadStepKey,
+        location: 'ada_visual_upload',
+      });
+
       const slugNote = canonicalSlug !== selectedAdaCode ? ` (mapped to "${canonicalSlug}")` : '';
       setUploadResult({ success: true, message: `Image uploaded successfully${slugNote}` });
       setUploadFile(null);
@@ -382,16 +405,32 @@ export default function ProcedureLibraryManagement() {
 
       <div className="min-h-screen bg-bg0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-wrap items-end justify-between gap-3 mb-7">
-            <div>
-              <p className="section-label mb-1.5">Content Library</p>
-              <h1 className="text-2xl font-bold text-t1 mb-1 tracking-tight">Procedure Library</h1>
-              <p className="text-t2 text-sm mb-0">Manage bilingual educational content for patient treatment plans</p>
+          <div className="relative overflow-hidden rounded-2xl border border-bd bg-bg1 panel-glow mb-7">
+            <div className="absolute inset-y-0 right-0 w-1/2 hidden md:flex items-center justify-end gap-3 pr-6 pointer-events-none select-none" aria-hidden="true">
+              <div className="absolute inset-0 bg-gradient-to-r from-bg1 via-bg1/70 to-transparent z-10" />
+              {['root-canal', 'veneer', 'bridge'].map((slug, i) => (
+                <img
+                  key={slug}
+                  src={`/visuals/${slug}/thumb.jpg`}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  className="w-36 h-24 object-cover rounded-xl border border-accent/20 shadow-lg"
+                  style={{ transform: `translateY(${i % 2 === 0 ? '-6px' : '10px'}) rotate(${(i - 1) * 3}deg)`, opacity: 0.85 - i * 0.12 }}
+                />
+              ))}
             </div>
-            <ButtonPrimary onClick={handleCreateNew}>
-              <Plus className="mr-2" size={18} />
-              Add Procedure
-            </ButtonPrimary>
+            <div className="relative z-20 p-6 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="section-label mb-1.5">Content Library</p>
+                <h1 className="text-2xl font-bold text-t1 mb-1 tracking-tight">Procedure Library</h1>
+                <p className="text-t2 text-sm mb-0">Manage bilingual educational content for patient treatment plans</p>
+              </div>
+              <ButtonPrimary onClick={handleCreateNew}>
+                <Plus className="mr-2" size={18} />
+                Add Procedure
+              </ButtonPrimary>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -760,6 +799,13 @@ export default function ProcedureLibraryManagement() {
                           </td>
                           <td className="px-6 py-4" onClick={e => e.stopPropagation()}>
                             <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => handlePreviewAsPatient(procedure)}
+                                className="p-2 text-t2 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors"
+                                title="Preview as patient"
+                              >
+                                <MonitorSmartphone size={16} />
+                              </button>
                               <button
                                 onClick={() => handleEdit(procedure)}
                                 className="p-2 text-t2 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors"

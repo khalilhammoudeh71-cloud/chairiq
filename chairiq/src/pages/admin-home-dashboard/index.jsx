@@ -108,17 +108,34 @@ export default function AdminHomeDashboard() {
         <DentistNavigation />
         
         <PageShell>
-          {/* Welcome Header */}
-          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="section-label mb-1.5">{getCurrentDate()}</p>
-              <h1 className="text-2xl font-bold text-t1 tracking-tight mb-0">
-                Welcome back, {user?.user_metadata?.full_name || 'Doctor'}
-              </h1>
+          {/* Welcome Header — hero band with ambient imagery */}
+          <div className="relative overflow-hidden rounded-2xl border border-bd bg-bg1 panel-glow mb-7">
+            <div className="absolute inset-y-0 right-0 w-1/2 hidden md:flex items-center justify-end gap-3 pr-6 pointer-events-none select-none" aria-hidden="true">
+              <div className="absolute inset-0 bg-gradient-to-r from-bg1 via-bg1/70 to-transparent z-10" />
+              {['implant', 'crown', 'whitening'].map((slug, i) => (
+                <img
+                  key={slug}
+                  src={`/visuals/${slug}/thumb.jpg`}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  className="w-36 h-24 object-cover rounded-xl border border-accent/20 shadow-lg"
+                  style={{ transform: `translateY(${i % 2 === 0 ? '-6px' : '10px'}) rotate(${(i - 1) * 3}deg)`, opacity: 0.85 - i * 0.12 }}
+                />
+              ))}
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5">
-              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-              <span className="text-xs font-medium text-t2">Practice overview</span>
+            <div className="relative z-20 p-6 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="section-label mb-1.5">{getCurrentDate()}</p>
+                <h1 className="text-2xl font-bold text-t1 tracking-tight mb-1">
+                  Welcome back, {user?.user_metadata?.full_name || 'Doctor'}
+                </h1>
+                <p className="text-t3 text-sm mb-0">Your practice at a glance — plans, patients, and engagement.</p>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5">
+                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                <span className="text-xs font-medium text-t2">Practice overview</span>
+              </div>
             </div>
           </div>
 

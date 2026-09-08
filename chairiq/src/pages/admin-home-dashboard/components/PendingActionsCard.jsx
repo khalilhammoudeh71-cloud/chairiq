@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import ButtonPrimary from '../../../components/ui/ButtonPrimary';
+import { storePatientPlanToken } from '../../../services/shareLinkService';
 
 export default function PendingActionsCard({ actions = [] }) {
   const navigate = useNavigate();
@@ -26,7 +27,8 @@ export default function PendingActionsCard({ actions = [] }) {
 
   const handleActionClick = (action) => {
     if (action?.publicToken) {
-      navigate(`/p/${action?.publicToken}`);
+      storePatientPlanToken(action.publicToken);
+      navigate('/p');
     }
   };
 

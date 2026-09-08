@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AlertCircle, ArrowLeft, Languages } from 'lucide-react';
+import { AlertCircle, ArrowLeft, Languages, ShieldCheck } from 'lucide-react';
 import procedureLibraryService from '../../services/procedureLibraryService';
 import ProcedureHero from '../individual-procedure-detail/components/ProcedureHero';
 import ProcedureExplanation from '../individual-procedure-detail/components/ProcedureExplanation';
@@ -63,9 +63,9 @@ const EnhancedPatientProcedureDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-bg0 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4"></div>
-          <p className="text-t2">Loading procedure details...</p>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+          <p className="text-t3 text-sm">Loading procedure details…</p>
         </div>
       </div>
     );
@@ -73,22 +73,30 @@ const EnhancedPatientProcedureDetail = () => {
 
   if (error || !procedure) {
     return (
-      <div className="min-h-screen bg-bg0 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-6">
-          <AlertCircle className="w-16 h-16 text-danger mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-t1 mb-2">
-            Procedure Not Found
-          </h2>
-          <p className="text-t2 mb-6">
-            We could not find the procedure you are looking for. It may have been removed or the link is incorrect.
-          </p>
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:brightness-110 transition-colors mx-auto"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Go Back</span>
-          </button>
+      <div className="min-h-screen bg-bg0 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="flex items-center justify-center gap-2.5 mb-10">
+            <ShieldCheck size={26} className="text-accent" />
+            <span className="text-lg font-semibold tracking-tight text-t1">ChairIQ</span>
+          </div>
+          <div className="card rounded-2xl p-8 mb-8 bg-danger/5 border border-danger/15">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-danger/10">
+              <AlertCircle size={32} className="text-danger" />
+            </div>
+            <h2 className="text-2xl font-semibold mb-3 text-t1">Procedure Not Found</h2>
+            <p className="text-t2 mb-6 leading-relaxed">
+              We could not find the procedure you are looking for. It may have been removed or the link is incorrect.
+            </p>
+            <button
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-accent transition-all hover:brightness-105"
+              style={{ color: 'var(--accent-ink)' }}
+            >
+              <ArrowLeft size={18} />
+              Go Back
+            </button>
+          </div>
+          <p className="text-xs text-t3">Powered by ChairIQ</p>
         </div>
       </div>
     );
@@ -96,38 +104,54 @@ const EnhancedPatientProcedureDetail = () => {
 
   return (
     <div className="min-h-screen bg-bg0">
-      {/* Language Toggle */}
-      <div className="bg-bg1 border-b border-bd">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 text-t2 hover:text-t1 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back</span>
-          </button>
+      {/* Top Nav */}
+      <div className="bg-bg1 border-b border-bd shadow-sm sticky top-0 z-20">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+          {/* Left: Logo + back */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-1.5 text-t3 hover:text-t1 transition-colors text-sm font-medium"
+            >
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">Back</span>
+            </button>
+            <div className="h-4 w-px bg-bd hidden sm:block" />
+            <div className="hidden sm:flex items-center gap-2">
+              <ShieldCheck size={18} className="text-accent" />
+              <span className="text-sm font-semibold text-t1 tracking-tight">ChairIQ</span>
+            </div>
+          </div>
 
-          <div className="flex items-center space-x-2">
-            <Languages className="w-5 h-5 text-t2" />
-            <button
-              onClick={() => setLanguage('EN')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                language === 'EN' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
-              }`}
-            >
-              English
-            </button>
-            <button
-              onClick={() => setLanguage('ES')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                language === 'ES' ? 'bg-accent text-accent-foreground' : 'bg-bg2 text-t2 hover:bg-bg3'
-              }`}
-            >
-              Español
-            </button>
+          {/* Right: Language toggle */}
+          <div className="flex items-center gap-2">
+            <Languages size={16} className="text-t3" />
+            <div className="flex rounded-lg overflow-hidden border border-bd bg-bg2 p-0.5 gap-0.5">
+              <button
+                onClick={() => setLanguage('EN')}
+                className="px-3 py-1.5 rounded-md font-medium text-sm transition-all"
+                style={language === 'EN'
+                  ? { backgroundColor: 'var(--accent)', color: 'var(--accent-ink)' }
+                  : { backgroundColor: 'transparent', color: 'var(--t2)' }
+                }
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage('ES')}
+                className="px-3 py-1.5 rounded-md font-medium text-sm transition-all"
+                style={language === 'ES'
+                  ? { backgroundColor: 'var(--accent)', color: 'var(--accent-ink)' }
+                  : { backgroundColor: 'transparent', color: 'var(--t2)' }
+                }
+              >
+                ES
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Hero Section */}
         {!content?.visuals?.heroKey && (
@@ -158,8 +182,26 @@ const EnhancedPatientProcedureDetail = () => {
           />
         )}
 
+        {/* Quick-facts strip */}
+        {(content?.timeEstimate || content?.visitsEstimate) && (
+          <div className="flex flex-wrap gap-3 mb-8 -mt-2">
+            {content?.timeEstimate && (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-soft border border-accent/20 text-sm">
+                <span className="text-accent font-semibold">{language === 'EN' ? 'Duration' : 'Duración'}:</span>
+                <span className="text-t1">{content.timeEstimate}</span>
+              </div>
+            )}
+            {content?.visitsEstimate && (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-soft border border-accent/20 text-sm">
+                <span className="text-accent font-semibold">{language === 'EN' ? 'Visits' : 'Visitas'}:</span>
+                <span className="text-t1">{content.visitsEstimate}</span>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Main Content */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {content?.why && (
             <WhyThisTreatment
               content={content?.why}
@@ -228,6 +270,11 @@ const EnhancedPatientProcedureDetail = () => {
               currentLanguage={language}
             />
           )}
+        </div>
+
+        {/* Footer */}
+        <div className="mt-16 pt-8 border-t border-bd text-center">
+          <p className="text-xs text-t3">Powered by ChairIQ</p>
         </div>
       </div>
     </div>

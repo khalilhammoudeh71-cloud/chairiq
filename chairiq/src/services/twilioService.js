@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { buildPatientPlanUrl } from './shareLinkService';
 
 /**
  * Service for Twilio SMS integration via Supabase Edge Functions
@@ -196,7 +197,7 @@ class TwilioService {
    */
   async sendTreatmentPlanSMS(patientPhone, patientFirstName, practiceName, publicToken) {
     try {
-      const patientLink = `${window?.location?.origin}/p/${publicToken}`;
+      const patientLink = buildPatientPlanUrl(publicToken);
 
       const message = `Your dental treatment plan is ready for review. View it here: ${patientLink} Reply STOP to opt out.`;
 

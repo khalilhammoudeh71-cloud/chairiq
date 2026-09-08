@@ -1,9 +1,10 @@
 import { supabase } from '../lib/supabase';
 import { twilioService } from './twilioService';
 import { procedureEducationGeneratorService } from './procedureEducationGeneratorService';
-import { normalizeProcedureKey } from '../utils/procedureNormalization';
+import { normalizeProcedureKey, getAdaCodesForCanonicalKey, getDisplayNameForCanonicalKey } from '../utils/procedureNormalization';
 import proceduresLibrary from '../data/procedures';
 import storageService from './storageService';
+import { buildPatientPlanUrl } from './shareLinkService';
 
 const DENTAL_SYNONYMS = {
   clean: ['cleaning', 'clean', 'remove', 'removing'],
@@ -605,7 +606,7 @@ export const patientPlanService = {
     }
   },
 
-  async _enrichPlanData(plan) {
+  async _enrichPlanData(plan, options = {}) {
       const patientLanguage = plan?.patients?.preferred_language || 'EN';
 
       const CANONICAL_TO_VISUAL_SLUG = {
@@ -636,13 +637,16 @@ export const patientPlanService = {
         resolvedProcedures?.map(async (proc) => {
           const canonicalKey = proc?.resolvedCanonicalSlug;
 
-          // Fetch education content with AI fallback (NEVER returns null)
-          const educationContent = await this.getEducationForPlanItem({
-            ada_code: proc?.ada_code,
-            procedure_name: proc?.procedure_name || proc?.display_title,
-            canonicalKey: canonicalKey,
-            language: patientLanguage
-          });
+          // Fetch education content with AI fallback (NEVER returns null).
+          // options.educationBySlug lets staff preview inject a library row's
+          // content directly (e.g. unpublished drafts) without side effects.
+          const educationContent = options?.educationBySlug?.[canonicalKey]
+            || await this.getEducationForPlanItem({
+              ada_code: proc?.ada_code,
+              procedure_name: proc?.procedure_name || proc?.display_title,
+              canonicalKey: canonicalKey,
+              language: patientLanguage
+            });
 
           // Convert education object to UI-compatible format
           const uiContent = {
@@ -893,8 +897,12 @@ export const patientPlanService = {
               [`aftercare${altLangSuffix}`]: aftercareText,
               [`whatIfNot${langSuffix}`]: whatIfNotText,
               [`whatIfNot${altLangSuffix}`]: whatIfNotText,
-              [`faqs${langSuffix}`]: null,
-              [`faqs${altLangSuffix}`]: null,
+              [`faqs${langSuffix}`]: patientLanguage === 'ES' ? (educationContent?.faqs_es || null) : (educationContent?.faqs_en || null),
+              [`faqs${altLangSuffix}`]: patientLanguage === 'ES' ? (educationContent?.faqs_en || null) : (educationContent?.faqs_es || null),
+              [`risks${langSuffix}`]: patientLanguage === 'ES' ? (educationContent?.risks_es || null) : (educationContent?.risks_en || null),
+              [`risks${altLangSuffix}`]: patientLanguage === 'ES' ? (educationContent?.risks_en || null) : (educationContent?.risks_es || null),
+              [`anesthesia${langSuffix}`]: patientLanguage === 'ES' ? (educationContent?.anesthesia_es || null) : (educationContent?.anesthesia_en || null),
+              [`anesthesia${altLangSuffix}`]: patientLanguage === 'ES' ? (educationContent?.anesthesia_en || null) : (educationContent?.anesthesia_es || null),
               whatThisIs: educationContent?.whatThisIs,
               whyRecommendedBullets: educationContent?.whyRecommendedBullets || [],
               aftercareBullets: educationContent?.aftercareBullets || [],
@@ -956,6 +964,127 @@ export const patientPlanService = {
       return {
         success: false,
         error: error?.message || 'Failed to load treatment plan',
+        errorDetails: error
+      };
+    }
+  },
+
+  /**
+   * Build an enriched single-procedure "plan" for staff preview.
+   * Runs through the same enrichment pipeline as real patient plans so the
+   * preview stays exact. Resolution mirrors the patient path precisely:
+   * a row matched by canonical_slug AND is_published=true is byte-identical
+   * to what getEducationForPlanItem returns for patients. Rows that patients
+   * CANNOT resolve (drafts, or published rows missing a canonical_slug
+   * mapping) are still shown to staff but flagged as not patient-visible.
+   * Content is always injected directly, so preview never triggers the AI
+   * generation path (which persists library rows). No row at all fails closed.
+   * @param {string} rawSlug - Canonical slug (or library slug) of the procedure
+   * @returns {Promise<Object>} Enriched plan data plus a `preview` metadata block
+   */
+  async getPreviewPlanForSlug(rawSlug) {
+    try {
+      // Fail closed on missing/garbage slugs — the preview must NEVER fall
+      // through to the AI-generation path, which persists library rows.
+      const requestedSlug = String(rawSlug || '')?.trim()?.toLowerCase();
+      if (!requestedSlug || !/^[a-z0-9_-]+$/?.test(requestedSlug)) {
+        return { success: false, error: 'Invalid procedure slug for preview' };
+      }
+
+      // 1) Patient-exact lookup: same query getEducationForPlanItem runs
+      //    (canonical_slug match, published only).
+      const { data: patientRow, error: patientRowError } = await supabase
+        ?.from('procedure_library')
+        ?.select('*')
+        ?.eq('canonical_slug', requestedSlug)
+        ?.eq('is_published', true)
+        ?.maybeSingle();
+
+      if (patientRowError && import.meta.env?.DEV) {
+        console.error('🔍 [DEV] Error fetching patient-path library row for preview:', patientRowError);
+      }
+
+      let library = patientRow || null;
+      let patientExact = !!patientRow;
+
+      // 2) Staff-visibility fallback: drafts or rows only reachable by their
+      //    library slug (e.g. missing canonical_slug). Patients would NOT see
+      //    these — the banner flags that clearly.
+      if (!library) {
+        const { data: staffRows, error: staffRowError } = await supabase
+          ?.from('procedure_library')
+          ?.select('*')
+          ?.or(`canonical_slug.eq.${requestedSlug},slug.eq.${requestedSlug}`)
+          ?.limit(1);
+        if (staffRowError && import.meta.env?.DEV) {
+          console.error('🔍 [DEV] Error fetching library row for preview:', staffRowError);
+        }
+        library = staffRows?.[0] || null;
+      }
+
+      if (!library) {
+        return {
+          success: false,
+          error: `No Content Library entry found for "${requestedSlug}". Patients receive AI-generated content the first time they view a procedure without a library entry — add it to the Content Library to preview it.`
+        };
+      }
+
+      const canonicalKey = library?.canonical_slug || normalizeProcedureKey({ canonical_slug: requestedSlug });
+      const displayName = library?.title_en || getDisplayNameForCanonicalKey(canonicalKey, 'EN');
+      const adaCode = getAdaCodesForCanonicalKey(canonicalKey)?.[0] || null;
+
+      const syntheticPlan = {
+        dentist_name: 'Dr. Sample Dentist',
+        practice_name: 'Preview Practice',
+        created_at: new Date()?.toISOString(),
+        patients: {
+          first_name: 'Sample',
+          last_name: 'Patient',
+          phone: null,
+          preferred_language: 'EN'
+        },
+        plan_procedures: [{
+          id: `preview-${canonicalKey}`,
+          procedure_name: displayName,
+          procedure_slug: canonicalKey,
+          display_title: displayName,
+          ada_code: adaCode,
+          tooth_numbers: null,
+          canonical_slug: canonicalKey,
+          priority: 'Soon',
+          est_time: library?.time_estimate || null,
+          notes_for_patient: null,
+          sort_order: 0
+        }]
+      };
+
+      // Always inject the library row's content: identical to the published
+      // patient path, and guarantees preview never triggers AI generation.
+      const options = {
+        educationBySlug: {
+          [canonicalKey]: this._convertLibraryToEducationObject(library, 'EN', canonicalKey)
+        }
+      };
+
+      const enriched = await this._enrichPlanData(syntheticPlan, options);
+
+      return {
+        ...enriched,
+        preview: {
+          slug: canonicalKey,
+          hasLibraryRow: true,
+          isPublished: !!library?.is_published,
+          // true only when this content is byte-identical to the patient path
+          patientExact,
+          // published but not resolvable by patients (missing canonical mapping)
+          missingCanonicalMapping: !!library?.is_published && !patientExact
+        }
+      };
+    } catch (error) {
+      console.error('Error building preview plan:', error);
+      return {
+        success: false,
+        error: error?.message || 'Failed to build preview',
         errorDetails: error
       };
     }
@@ -1050,6 +1179,13 @@ export const patientPlanService = {
       steps: convertedSteps,
       aftercareBullets: this._extractBullets(isEnglish ? library?.aftercare_en : library?.aftercare_es),
       redFlagsBullets: this._extractBullets(isEnglish ? library?.what_if_not_en : library?.what_if_not_es),
+      // Preserve both language variants so _enrichPlanData can map them correctly
+      faqs_en: library?.faqs_en || null,
+      faqs_es: library?.faqs_es || null,
+      risks_en: library?.risks_en || null,
+      risks_es: library?.risks_es || null,
+      anesthesia_en: library?.anesthesia_en || null,
+      anesthesia_es: library?.anesthesia_es || null,
       disclaimer: language === 'EN' ?'This is general education about dental procedures, not medical advice. Consult your dentist for personalized treatment recommendations.' :'Esta es educación general sobre procedimientos dentales, no consejo médico. Consulte a su dentista para recomendaciones de tratamiento personalizadas.',
       canonicalKey
     };
@@ -1175,7 +1311,7 @@ export const patientPlanService = {
    * @returns {string} SMS message text
    */
   generateSMSMessage(firstName, practiceName, publicToken) {
-    const planUrl = `${window.location?.origin}/p/${publicToken}`;
+    const planUrl = buildPatientPlanUrl(publicToken);
     return `Your dental treatment plan is ready for review. Tap to view: ${planUrl} Reply STOP to opt out.`;
   },
 
@@ -1262,7 +1398,7 @@ export const patientPlanService = {
       }
 
       if (planId) {
-        const patientLink = `${window?.location?.origin}/p/${token}`;
+        const patientLink = buildPatientPlanUrl(token);
         const messageContent = `Your dental treatment plan is ready for review. View it here: ${patientLink} Reply STOP to opt out.`;
 
         await supabase?.from('sms_messages')?.insert({

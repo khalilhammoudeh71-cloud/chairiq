@@ -1,0 +1,3 @@
+- [Production env vars](production-env-vars.md) — chairiq/.env is gitignored; server-needed vars must be Replit env vars/secrets or they vanish in the autoscale container. Also: how to verify live sends safely.
+- [Procedure visuals pipeline](procedure-visuals-pipeline.md) — patient step diagrams come only from the procedure_visuals table + storage bucket; static step SVGs are dead; hero row must be filtered from index-aligned steps.
+- [Patient-link analytics privacy](patient-link-analytics-privacy.md) — bearer tokens must leave the document URL before the app or published analytics tracker loads.

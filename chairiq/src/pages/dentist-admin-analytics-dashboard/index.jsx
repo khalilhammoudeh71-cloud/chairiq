@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { patientAnalyticsService } from '../../services/patientAnalyticsService';
 import { patientPlanService } from '../../services/patientPlanService';
 import { emailService } from '../../services/emailService';
+import { buildPatientPlanUrl } from '../../services/shareLinkService';
 import { AlertTriangle, Download, Send, Copy, Mail, MessageSquare, Users, FileText, TrendingUp, BarChart3, Info, CalendarDays } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import DentistNavigation from '../../components/DentistNavigation';
 import Card from '../../components/ui/Card';
 import ButtonSecondary from '../../components/ui/ButtonSecondary';
@@ -83,7 +84,7 @@ export default function DentistAdminAnalyticsDashboard() {
   const handleCopyLink = async (publicToken, patientName) => {
     try {
       setCopyingToken(publicToken);
-      const link = `${window.location?.origin}/treatment-plan-landing?token=${publicToken}`;
+      const link = buildPatientPlanUrl(publicToken);
       
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(link);
@@ -196,7 +197,7 @@ export default function DentistAdminAnalyticsDashboard() {
       setSuccessMessages({});
       setErrorMessage('');
 
-      const planUrl = `${window?.location?.origin}/treatment-plan-landing?token=${publicToken}`;
+      const planUrl = buildPatientPlanUrl(publicToken);
       const result = await emailService.sendNotification({
         method: 'email',
         toEmail: email,
@@ -334,15 +335,31 @@ export default function DentistAdminAnalyticsDashboard() {
         <DentistNavigation />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="section-label mb-1.5">Practice Intelligence</p>
-              <h1 className="text-2xl font-bold text-t1 mb-1 tracking-tight">Analytics</h1>
-              <p className="text-t2 text-sm mb-0">Track patient engagement and treatment effectiveness</p>
+          <div className="relative overflow-hidden rounded-2xl border border-bd bg-bg1 panel-glow mb-7">
+            <div className="absolute inset-y-0 right-0 w-1/2 hidden md:flex items-center justify-end gap-3 pr-6 pointer-events-none select-none" aria-hidden="true">
+              <div className="absolute inset-0 bg-gradient-to-r from-bg1 via-bg1/70 to-transparent z-10" />
+              {['orthodontics', 'cleaning', 'exam'].map((slug, i) => (
+                <img
+                  key={slug}
+                  src={`/visuals/${slug}/thumb.jpg`}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  className="w-36 h-24 object-cover rounded-xl border border-accent/20 shadow-lg"
+                  style={{ transform: `translateY(${i % 2 === 0 ? '-6px' : '10px'}) rotate(${(i - 1) * 3}deg)`, opacity: 0.85 - i * 0.12 }}
+                />
+              ))}
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5 text-t2 text-xs font-medium">
-              <CalendarDays size={13} className="text-accent" />
-              <span>Last {timeRange === '7d' ? '7 days' : timeRange === '30d' ? '30 days' : '90 days'}</span>
+            <div className="relative z-20 p-6 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="section-label mb-1.5">Practice Intelligence</p>
+                <h1 className="text-2xl font-bold text-t1 mb-1 tracking-tight">Analytics</h1>
+                <p className="text-t2 text-sm mb-0">Track patient engagement and treatment effectiveness</p>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5 text-t2 text-xs font-medium">
+                <CalendarDays size={13} className="text-accent" />
+                <span>Last {timeRange === '7d' ? '7 days' : timeRange === '30d' ? '30 days' : '90 days'}</span>
+              </div>
             </div>
           </div>
 
@@ -586,18 +603,34 @@ export default function DentistAdminAnalyticsDashboard() {
               {engagementTrends?.length > 0 ? (
                 <div className="bg-bg0/50 rounded-lg border border-bd/50 p-4">
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={engagementTrends}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--bd)" />
-                      <XAxis dataKey="date" stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
-                      <YAxis stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
+                    <AreaChart data={engagementTrends}>
+                      <defs>
+                        <linearGradient id="gradViews" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.28} />
+                          <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="gradProc" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--success)" stopOpacity={0.22} />
+                          <stop offset="100%" stopColor="var(--success)" stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="gradComp" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--warning)" stopOpacity={0.18} />
+                          <stop offset="100%" stopColor="var(--warning)" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="2 6" stroke="var(--bd)" vertical={false} />
+                      <XAxis dataKey="date" stroke="transparent" tickLine={false} axisLine={false} tick={{ fill: 'var(--t3)', fontSize: 11, fontFamily: 'JetBrains Mono' }} dy={6} />
+                      <YAxis stroke="transparent" tickLine={false} axisLine={false} tick={{ fill: 'var(--t3)', fontSize: 11, fontFamily: 'JetBrains Mono' }} width={34} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '10px', color: 'var(--t1)' }}
+                        cursor={{ stroke: 'var(--accent)', strokeOpacity: 0.35, strokeDasharray: '3 3' }}
+                        contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '12px', color: 'var(--t1)', boxShadow: 'var(--shadow-lg)', fontSize: 12.5 }}
+                        labelStyle={{ color: 'var(--t3)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}
                       />
-                      <Legend />
-                      <Line type="monotone" dataKey="planViews" stroke="#22d3e0" strokeWidth={2} dot={false} name="Plan Views" />
-                      <Line type="monotone" dataKey="procedureViews" stroke="#34d399" strokeWidth={2} dot={false} name="Procedure Views" />
-                      <Line type="monotone" dataKey="completions" stroke="#f2b63c" strokeWidth={2} dot={false} name="Completions" />
-                    </LineChart>
+                      <Legend iconType="plainline" wrapperStyle={{ fontSize: 12, color: 'var(--t3)' }} />
+                      <Area type="monotone" dataKey="planViews" stroke="var(--accent)" strokeWidth={2.25} fill="url(#gradViews)" dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Plan Views" />
+                      <Area type="monotone" dataKey="procedureViews" stroke="var(--success)" strokeWidth={2} fill="url(#gradProc)" dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Procedure Views" />
+                      <Area type="monotone" dataKey="completions" stroke="var(--warning)" strokeWidth={2} fill="url(#gradComp)" dot={false} activeDot={{ r: 4, strokeWidth: 0 }} name="Completions" />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
               ) : (
@@ -618,14 +651,22 @@ export default function DentistAdminAnalyticsDashboard() {
               {procedureAnalytics?.length > 0 ? (
                 <div className="bg-bg0/50 rounded-lg border border-bd/50 p-4">
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={procedureAnalytics?.slice(0, 5)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--bd)" />
-                      <XAxis dataKey="procedureName" stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
-                      <YAxis stroke="var(--bd)" tick={{ fill: 'var(--t3)', fontSize: 12 }} />
+                    <BarChart data={procedureAnalytics?.slice(0, 5)} barSize={26}>
+                      <defs>
+                        <linearGradient id="gradBar" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.95} />
+                          <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.35} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="2 6" stroke="var(--bd)" vertical={false} />
+                      <XAxis dataKey="procedureName" stroke="transparent" tickLine={false} axisLine={false} tick={{ fill: 'var(--t3)', fontSize: 11 }} dy={6} />
+                      <YAxis stroke="transparent" tickLine={false} axisLine={false} tick={{ fill: 'var(--t3)', fontSize: 11, fontFamily: 'JetBrains Mono' }} width={34} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '10px', color: 'var(--t1)' }}
+                        cursor={{ fill: 'var(--accent-soft)' }}
+                        contentStyle={{ backgroundColor: 'var(--bg2)', border: '1px solid var(--bd)', borderRadius: '12px', color: 'var(--t1)', boxShadow: 'var(--shadow-lg)', fontSize: 12.5 }}
+                        labelStyle={{ color: 'var(--t3)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}
                       />
-                      <Bar dataKey="completionRate" fill="#22d3e0" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="completionRate" fill="url(#gradBar)" radius={[6, 6, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

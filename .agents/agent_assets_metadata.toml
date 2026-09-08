@@ -1,0 +1,37 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "pH3Ju0VWCmrXCOooZ7IN8"
+uri = "file://docs/visuals-handoff/shot-list.md"
+type = "text"
+title = "Shot list for the 3D artist / illustrator"
+description = "45 images across your 10 most important procedures — each one matched to the exact step titles patients see, with anatomy and style requirements."
+
+[[outputs]]
+id = "F5nUGVxA5Jcg35osNuR_N"
+uri = "file://docs/visuals-handoff/sourcing-guide.md"
+type = "text"
+title = "Sourcing guide — updated for Freepik Premium"
+description = "Freepik Premium is now the chosen approach, with the reasons it won, the libraries passed on, the search-download-approve-upload workflow, and the 3D-model/illustrator routes kept as fallbacks for gaps."
+
+[[outputs]]
+id = "Jw2A9dSZSO4x4S8bFraOO"
+uri = "file://attached_assets/library_previews/freepik-samples.png"
+type = "image"
+title = "Freepik — dental implant search results"
+description = "What ~$12/month unlimited downloads gets you. Several accurate cross-sections here (implant procedure steps, labeled tooth anatomy) mixed with marketing-style graphics."
+
+[[outputs]]
+id = "S8R73sSeZZH_Uisg3xSeb"
+uri = "file://attached_assets/library_previews/envato-tooth.png"
+type = "image"
+title = "Envato Elements — tooth cross-section search results"
+description = "~$17/month unlimited. Mostly cartoon/mascot style — weaker fit for accurate patient education."
+
+[[outputs]]
+id = "-5KaXVVlEVrUshNrcFreN"
+uri = "file://attached_assets/library_previews/sciepro-tooth.png"
+type = "image"
+title = "SciePro — search results for 'tooth'"
+description = "Medically verified quality is very high, but the search surfaced general anatomy (hearts, brains, lungs) rather than dental content — their dental coverage looks thin."

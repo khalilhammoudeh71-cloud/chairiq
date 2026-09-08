@@ -1,10 +1,12 @@
+import 'dotenv/config';
 import express from 'express';
-import { createServer as createViteServer } from 'vite';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmail, buildTreatmentPlanEmail } from './mailer.js';
 import { sendTreatmentPlanSMS } from './sms.js';
 
-const PORT = 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseServiceKey = process.env.VITE_SUPABASE_ANON_KEY;
@@ -240,12 +242,43 @@ async function start() {
     }
   });
 
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
+  // Exchange path-based bearer tokens for a short-lived same-site cookie, then
+  // redirect before the SPA or analytics tracker loads.
+  app.get('/p/:publicToken', (req, res) => {
+    if (!/^[A-Za-z0-9_-]{8,128}$/.test(req.params.publicToken || '')) {
+      return res.status(400).send('Invalid patient plan link.');
+    }
+    const isSecure = req.secure || req.get('x-forwarded-proto') === 'https';
+    res.cookie('chairiq_plan_token', req.params.publicToken || '', {
+      maxAge: 5 * 60 * 1000,
+      path: '/p',
+      sameSite: 'lax',
+      secure: isSecure,
+      httpOnly: false,
+    });
+    res.redirect(302, '/p');
   });
 
-  app.use(vite.middlewares);
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.REPLIT_DEPLOYMENT === '1';
+
+  if (isProduction) {
+    // Serve the pre-built SPA (vite build output) — no Vite dev server in production.
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const buildDir = path.resolve(__dirname, '..', 'build');
+    app.use(express.static(buildDir));
+    // SPA fallback for deep links like /consent (but not /api/*).
+    app.get(/^\/(?!api\/).*/, (_req, res) => {
+      res.sendFile(path.join(buildDir, 'index.html'));
+    });
+    console.log(`[Server] Production mode: serving static files from ${buildDir}`);
+  } else {
+    const { createServer: createViteServer } = await import('vite');
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'spa',
+    });
+    app.use(vite.middlewares);
+  }
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[Server] Running on http://0.0.0.0:${PORT}`);

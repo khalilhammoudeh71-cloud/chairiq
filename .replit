@@ -43,14 +43,16 @@ localPort = 24678
 externalPort = 3000
 
 [deployment]
-deploymentTarget = "static"
+deploymentTarget = "autoscale"
 build = ["bash", "-c", "cd chairiq && npm install && npm run build"]
-publicDir = "chairiq/build"
-
-[[deployment.rewrites]]
-from = "/*"
-to = "/index.html"
+run = ["bash", "-c", "cd chairiq && npm run start"]
 
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 180000
+
+[userenv]
+
+[userenv.shared]
+VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqZnNqb2tpcmpsZHBqam9paHh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5NzgyMTIsImV4cCI6MjA4MjU1NDIxMn0.SrR9vcRjGAZP-kWe6dyrskgdSeUgDDVEhPc_xvLhjI4"
+VITE_SUPABASE_URL = "https://ijfsjokirjldpjjoihxu.supabase.co"

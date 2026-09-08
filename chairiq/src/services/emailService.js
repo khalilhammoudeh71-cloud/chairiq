@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { buildPatientPlanUrl } from './shareLinkService';
 
 async function getAuthHeaders() {
   const headers = { 'Content-Type': 'application/json' };
@@ -41,7 +42,7 @@ export const emailService = {
       method: 'email',
       toEmail,
       patientName: 'Test Patient',
-      planUrl: `${window.location.origin}/p/sample-test-token-12345`,
+      planUrl: buildPatientPlanUrl('sample-test-token-12345'),
     });
   },
 };

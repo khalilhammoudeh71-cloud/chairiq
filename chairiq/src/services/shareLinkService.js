@@ -1,5 +1,39 @@
 import { supabase } from '../lib/supabase';
 
+const PATIENT_PLAN_TOKEN_STORAGE_KEY = 'chairiq_patient_plan_token';
+const PATIENT_PLAN_TOKEN_COOKIE = 'chairiq_plan_token';
+
+export function buildPatientPlanPath(token) {
+  return `/p/${encodeURIComponent(token || '')}`;
+}
+
+export function buildPatientPlanUrl(token, origin = window.location?.origin) {
+  return `${origin}${buildPatientPlanPath(token)}`;
+}
+
+export function storePatientPlanToken(token) {
+  if (typeof window === 'undefined' || !token) return;
+  window.sessionStorage?.setItem(PATIENT_PLAN_TOKEN_STORAGE_KEY, token);
+}
+
+export function consumePatientPlanToken() {
+  if (typeof window === 'undefined') return null;
+
+  const cookiePrefix = `${PATIENT_PLAN_TOKEN_COOKIE}=`;
+  const tokenCookie = document.cookie
+    ?.split('; ')
+    ?.find((cookie) => cookie.startsWith(cookiePrefix));
+  if (!tokenCookie) {
+    return window.sessionStorage?.getItem(PATIENT_PLAN_TOKEN_STORAGE_KEY);
+  }
+
+  const token = decodeURIComponent(tokenCookie.slice(cookiePrefix.length));
+  storePatientPlanToken(token);
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `${PATIENT_PLAN_TOKEN_COOKIE}=; Max-Age=0; Path=/p; SameSite=Lax${secure}`;
+  return token;
+}
+
 function generateToken(length = 48) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const array = new Uint8Array(length);
@@ -99,6 +133,6 @@ export const shareLinkService = {
   },
 
   getShareUrl(token) {
-    return `${window.location?.origin}/p/${token}`;
+    return buildPatientPlanUrl(token);
   }
 };

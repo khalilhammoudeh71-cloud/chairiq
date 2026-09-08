@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Save, Eye, Languages, Plus, X } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Languages, Plus, X, Upload, Loader2, MonitorSmartphone, Image as ImageIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { procedureLibraryService } from '../../services/procedureLibraryService';
 import DentistNavigation from '../../components/DentistNavigation';
 import { supabase } from '../../lib/supabase';
 import ProcedureThumb from '../../components/ProcedureThumb';
+import storageService from '../../services/storageService';
+import { trackEvent } from '../../utils/analytics';
 
 export default function MarkdownContentEditor() {
   const navigate = useNavigate();
@@ -20,6 +22,9 @@ export default function MarkdownContentEditor() {
   const [language, setLanguage] = useState('en');
   const [previewMode, setPreviewMode] = useState(false);
   const [stepVisuals, setStepVisuals] = useState([]);
+  const [visualSlug, setVisualSlug] = useState(null);
+  const [uploadingKey, setUploadingKey] = useState(null);
+  const [visualMessage, setVisualMessage] = useState(null);
 
   const [formData, setFormData] = useState({
     slug: '',
@@ -95,13 +100,9 @@ export default function MarkdownContentEditor() {
 
         // Load step visuals from procedure_visuals table
         const canonicalSlug = data.canonicalSlug || data.slug;
+        setVisualSlug(canonicalSlug || null);
         if (canonicalSlug) {
-          const { data: visRows } = await supabase
-            .from('procedure_visuals')
-            .select('*')
-            .eq('canonical_slug', canonicalSlug)
-            .order('sort_order', { ascending: true });
-          setStepVisuals(visRows || []);
+          await reloadVisuals(canonicalSlug);
         }
       }
       setError('');
@@ -109,6 +110,38 @@ export default function MarkdownContentEditor() {
       setError(err?.message || 'Failed to load procedure');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const reloadVisuals = async (slug = visualSlug) => {
+    if (!slug || !supabase) return;
+    const { data: visRows } = await supabase
+      .from('procedure_visuals')
+      .select('*')
+      .eq('canonical_slug', slug)
+      .order('sort_order', { ascending: true });
+    setStepVisuals(visRows || []);
+  };
+
+  const handleVisualUpload = async (stepKey, file, sortOrder, stepTitle) => {
+    if (!file || !visualSlug) return;
+    setUploadingKey(stepKey);
+    setVisualMessage(null);
+    try {
+      await storageService.uploadVisualAndCreateRecord(visualSlug, stepKey, file, sortOrder, {
+        altTextEn: stepTitle || undefined,
+      });
+      trackEvent('step_image_uploaded', {
+        step_key: stepKey,
+        location: 'content_editor',
+      });
+      await reloadVisuals();
+      setVisualMessage({ success: true, text: `Image for ${stepKey === 'hero' ? 'hero' : stepKey.replace('_', ' ')} updated. Patients see it immediately — check it with "Preview as patient".` });
+    } catch (err) {
+      console.error('Visual upload failed:', err);
+      setVisualMessage({ success: false, text: err?.message || 'Upload failed' });
+    } finally {
+      setUploadingKey(null);
     }
   };
 
@@ -125,6 +158,17 @@ export default function MarkdownContentEditor() {
       } else {
         await procedureLibraryService?.update(procedureId, dataToSave);
         setSuccess('Procedure updated successfully!');
+      }
+
+      trackEvent('procedure_saved', {
+        mode,
+        published: publish,
+      });
+      if (formData?.isPublished !== publish) {
+        trackEvent('procedure_publish_changed', {
+          published: publish,
+          location: 'content_editor',
+        });
       }
 
       setTimeout(() => navigate('/procedure-library-management'), 1500);
@@ -294,7 +338,7 @@ export default function MarkdownContentEditor() {
                 <div>
                   <h2>Procedure Steps</h2>
                   {formData?.[getFieldKey('steps')]?.map((step, i) => {
-                    const visual = stepVisuals[i];
+                    const visual = stepVisuals.find(v => v?.step_key === `step_${i + 1}`);
                     return (
                       <div key={i} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
                         {visual && (
@@ -319,14 +363,14 @@ export default function MarkdownContentEditor() {
                 <div>
                   <h2>Procedure Steps</h2>
                   <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                    {stepVisuals.map((vis, i) => (
-                      <div key={i} style={{ textAlign: 'center' }}>
+                    {stepVisuals.filter(v => v?.step_key !== 'hero').map((vis, i) => (
+                      <div key={vis?.step_key || i} style={{ textAlign: 'center' }}>
                         <img
                           src={vis.image_url}
                           alt={language === 'en' ? vis.alt_text_en : vis.alt_text_es}
                           style={{ width: 180, height: 'auto', borderRadius: 8, border: '1px solid #e2e8f0' }}
                         />
-                        <p style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>Step {i + 1}</p>
+                        <p style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>{vis?.step_key === `step_${i + 1}` ? `Step ${i + 1}` : (vis?.step_key || `Step ${i + 1}`).replace('step_', 'Step ')}</p>
                       </div>
                     ))}
                   </div>
@@ -557,6 +601,81 @@ export default function MarkdownContentEditor() {
                 ))}
               </div>
             </div>
+            {mode === 'edit' && (
+              <div className="bg-bg1 rounded-xl shadow-sm p-6">
+                <div className="flex items-center justify-between mb-1">
+                  <h2 className="text-xl font-bold text-t1">Step Images</h2>
+                  {visualSlug && (
+                    <button
+                      onClick={() => navigate(`/preview-patient-page/${encodeURIComponent(visualSlug)}`)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-bg0 text-t1 border border-bd hover:bg-bg2 transition-colors"
+                    >
+                      <MonitorSmartphone size={14} />
+                      Preview as patient
+                    </button>
+                  )}
+                </div>
+                <p className="text-t3 text-sm mb-4">
+                  Upload a replacement image for any step below (e.g. an anatomically accurate render). It replaces what patients see for that step immediately — no publishing needed.
+                </p>
+                {!visualSlug ? (
+                  <p className="text-t3 text-sm">Save the procedure first, then reopen it to manage step images.</p>
+                ) : (
+                  <>
+                    {visualMessage && (
+                      <div className={`rounded-lg p-3 mb-4 text-sm ${visualMessage.success ? 'bg-success/10 text-success border border-success/20' : 'bg-danger/10 text-danger border border-danger/20'}`}>
+                        {visualMessage.text}
+                      </div>
+                    )}
+                    <div className="space-y-3">
+                      {[
+                        { stepKey: 'hero', sortOrder: 0, label: 'Hero image (top of patient page)', title: formData?.titleEn },
+                        ...(formData?.stepsEn || []).map((step, i) => ({
+                          stepKey: `step_${i + 1}`,
+                          sortOrder: i + 1,
+                          label: `Step ${i + 1}: ${step?.stepTitle || step?.title || 'Untitled'}`,
+                          title: step?.stepTitle || step?.title,
+                        })),
+                      ].map(({ stepKey, sortOrder, label, title }) => {
+                        const visual = stepVisuals.find(v => v?.step_key === stepKey);
+                        const cacheBuster = visual?.updated_at ? `?v=${new Date(visual.updated_at).getTime()}` : '';
+                        const isUploading = uploadingKey === stepKey;
+                        return (
+                          <div key={stepKey} className="flex items-center gap-4 border border-bd rounded-lg p-3">
+                            <div className="w-24 h-16 rounded-lg overflow-hidden bg-bg0 border border-bd flex items-center justify-center flex-shrink-0">
+                              {visual?.image_url ? (
+                                <img src={`${visual.image_url}${cacheBuster}`} alt={visual?.alt_text_en || label} className="w-full h-full object-cover" />
+                              ) : (
+                                <ImageIcon size={20} className="text-t3" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-t1 text-sm font-medium truncate">{label}</p>
+                              <p className="text-t3 text-xs">{visual ? 'Current image shown to patients' : 'No image yet for this step'}</p>
+                            </div>
+                            <label className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border transition-colors cursor-pointer flex-shrink-0 ${isUploading ? 'bg-bg2 text-t3 border-bd cursor-wait' : 'bg-accent/10 text-accent border-accent/25 hover:bg-accent/20'}`}>
+                              {isUploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                              {visual ? 'Replace' : 'Upload'}
+                              <input
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp,image/gif"
+                                className="hidden"
+                                disabled={isUploading || uploadingKey !== null}
+                                onChange={(e) => {
+                                  const file = e?.target?.files?.[0];
+                                  e.target.value = '';
+                                  if (file) handleVisualUpload(stepKey, file, sortOrder, title);
+                                }}
+                              />
+                            </label>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
             <div className="bg-bg1 rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-t1">FAQs</h2>

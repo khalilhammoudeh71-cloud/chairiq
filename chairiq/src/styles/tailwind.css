@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -139,7 +137,7 @@
 
   body {
     @apply bg-bg0 text-t1;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
@@ -163,15 +161,17 @@
   /* Compact, confident scale — matches the density of the mockups */
   h1 {
     @apply text-t1;
+    font-family: 'Space Grotesk', 'Instrument Sans', sans-serif;
     font-size: 1.625rem;
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     line-height: 1.2;
     margin-bottom: 0.75rem;
   }
 
   h2 {
     @apply text-t1;
+    font-family: 'Space Grotesk', 'Instrument Sans', sans-serif;
     font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -181,6 +181,7 @@
 
   h3 {
     @apply text-t1;
+    font-family: 'Space Grotesk', 'Instrument Sans', sans-serif;
     font-size: 1.0625rem;
     font-weight: 600;
     letter-spacing: -0.015em;
@@ -190,6 +191,7 @@
 
   h4 {
     @apply text-t1;
+    font-family: 'Space Grotesk', 'Instrument Sans', sans-serif;
     font-size: 0.9375rem;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -234,6 +236,12 @@
   button {
     @apply duration-150;
     cursor: pointer;
+    transition: transform 0.12s ease, filter 0.15s ease, background-color 0.15s ease,
+      border-color 0.15s ease, color 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  button:active:not(:disabled) {
+    transform: scale(0.985);
   }
 
   input, textarea, select {
@@ -247,7 +255,11 @@
 
   input:focus, textarea:focus, select:focus {
     @apply border-accent outline-none;
-    box-shadow: var(--focus-ring);
+    box-shadow: var(--focus-ring), 0 0 18px color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  input:hover:not(:focus), textarea:hover:not(:focus), select:hover:not(:focus) {
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--bd));
   }
 
   label {
@@ -261,7 +273,7 @@
   }
 
   code {
-    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
     font-size: 0.875em;
     @apply bg-bg2 text-accent;
     padding: 0.125rem 0.5rem;
@@ -356,6 +368,7 @@
     border: 1px solid var(--bd);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
+    transition: border-color 0.2s ease, box-shadow 0.25s ease;
   }
 
   .card-hover {
@@ -514,6 +527,7 @@
 
   .table-row:hover {
     @apply bg-bg2;
+    box-shadow: inset 2px 0 0 var(--accent);
   }
 
   .table-cell {
@@ -555,15 +569,17 @@
 
   /* Tabular numerals — data columns, KPIs, currency */
   .tnum {
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
     font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum' 1, 'cv05' 1;
+    letter-spacing: -0.03em;
   }
 
   /* Uppercase micro section label — mockup signature */
   .section-label {
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 0.6875rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--t3);
   }
@@ -593,6 +609,55 @@
 
   .ring-accent-soft {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  .font-display {
+    font-family: 'Space Grotesk', 'Instrument Sans', sans-serif;
+  }
+
+  /* Frosted instrument-panel top bar */
+  .nav-glass {
+    background: color-mix(in srgb, var(--bg1) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    border-bottom: 1px solid var(--bd);
+  }
+
+  .dark .nav-glass {
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 6%, transparent), 0 8px 32px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Nav tab — single line, underline glow when active */
+  .nav-tab {
+    position: relative;
+    white-space: nowrap;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-tab::after {
+    content: '';
+    position: absolute;
+    left: 0.875rem;
+    right: 0.875rem;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transform: scaleX(0.4);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .nav-tab[data-active='true']::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .dark .nav-tab[data-active='true'] {
+    text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 45%, transparent);
   }
 }
 

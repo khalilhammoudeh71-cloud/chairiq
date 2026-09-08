@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { patientPlanService } from '../../services/patientPlanService';
-import { shareLinkService } from '../../services/shareLinkService';
+import { shareLinkService, consumePatientPlanToken } from '../../services/shareLinkService';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 import { useToast } from '../../hooks/useToast';
-import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, ShieldX, TimerOff, ChevronsUpDown, ChevronsDownUp } from 'lucide-react';
+import { Clock, AlertCircle, Calendar, ChevronDown, ChevronUp, ShieldX, TimerOff, ChevronsUpDown, ChevronsDownUp, ShieldCheck, Eye, ArrowLeft } from 'lucide-react';
 import PatientContent from './components/PatientContent';
 import ProcedureTimeline from './components/ProcedureTimeline';
 import CategoryVisualDeck from './components/CategoryVisualDeck';
 import PatientImageGallery from './components/PatientImageGallery';
 import ProcedureThumb from '../../components/ProcedureThumb';
+import { trackEvent } from '../../utils/analytics';
 
 function VisualsDebugPanel({ planData }) {
   const params = new URLSearchParams(window.location.search);
@@ -78,10 +80,11 @@ function VisualsDebugPanel({ planData }) {
   );
 }
 
-export default function PatientPlanView() {
-  const { publicToken } = useParams();
+export default function PatientPlanView({ previewMode = false }) {
+  const { procedureSlug } = useParams();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const [planToken] = useState(() => consumePatientPlanToken());
 
   const [planData, setPlanData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -89,24 +92,52 @@ export default function PatientPlanView() {
   const [linkStatus, setLinkStatus] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState('EN');
   const [expandedProcedures, setExpandedProcedures] = useState(new Set());
+  const loadRequestRef = useRef(0);
 
   useEffect(() => {
     loadPlanData();
-  }, [publicToken]);
+  }, [planToken, procedureSlug, previewMode]);
 
   const loadPlanData = async () => {
+    // Guard against stale async completions overwriting newer navigation state
+    const requestId = ++loadRequestRef.current;
+    const isStale = () => loadRequestRef.current !== requestId;
+
     setLoading(true);
     setError('');
     setLinkStatus(null);
+    setPlanData(null);
     try {
-      const validation = await shareLinkService.validateShareLink(publicToken);
-
-      if (validation.valid) {
-        await shareLinkService.incrementViewCount(publicToken);
-        const data = await patientPlanService?.getEnrichedPatientPlanById(validation.link.plan_id);
+      // Staff preview: render the exact patient page for a single procedure,
+      // skipping share-link validation and view counting.
+      if (previewMode) {
+        const data = await patientPlanService?.getPreviewPlanForSlug(procedureSlug);
+        if (isStale()) return;
         if (data?.success) {
           setPlanData(data);
           setCurrentLanguage(data?.patient?.preferredLanguage || 'EN');
+          trackEvent('patient_preview_loaded', { outcome: 'success' });
+        } else {
+          setError(data?.error || 'Failed to load preview');
+        }
+        return;
+      }
+
+      const validation = await shareLinkService.validateShareLink(planToken);
+      if (isStale()) return;
+
+      if (validation.valid) {
+        await shareLinkService.incrementViewCount(planToken);
+        const data = await patientPlanService?.getEnrichedPatientPlanById(validation.link.plan_id);
+        if (isStale()) return;
+        if (data?.success) {
+          setPlanData(data);
+          setCurrentLanguage(data?.patient?.preferredLanguage || 'EN');
+          trackEvent('shared_plan_opened', {
+            language: data?.patient?.preferredLanguage || 'EN',
+            procedure_count: data?.procedures?.length || 0,
+            source: 'share_link',
+          }, { routeAlias: '/p/shared' });
           return;
         }
       }
@@ -116,23 +147,37 @@ export default function PatientPlanView() {
         return;
       }
 
-      const fallbackData = await patientPlanService?.getEnrichedPatientPlan(publicToken);
+      const fallbackData = await patientPlanService?.getEnrichedPatientPlan(planToken);
+      if (isStale()) return;
       if (fallbackData?.success) {
         setPlanData(fallbackData);
         setCurrentLanguage(fallbackData?.patient?.preferredLanguage || 'EN');
+        trackEvent('shared_plan_opened', {
+          language: fallbackData?.patient?.preferredLanguage || 'EN',
+          procedure_count: fallbackData?.procedures?.length || 0,
+          source: 'legacy_link',
+        }, { routeAlias: '/p/shared' });
       } else if (validation.reason === 'not_found') {
         setLinkStatus('invalid');
       } else {
         setError(fallbackData?.error || 'Failed to load treatment plan');
       }
     } catch (err) {
+      if (isStale()) return;
       setError(err?.message || 'Failed to load treatment plan');
     } finally {
-      setLoading(false);
+      if (!isStale()) setLoading(false);
     }
   };
 
   const toggleProcedureExpand = (procedureId) => {
+    const willExpand = !expandedProcedures?.has(procedureId);
+    if (willExpand) {
+      trackEvent('procedure_details_opened', {
+        language: currentLanguage,
+        preview: previewMode,
+      }, previewMode ? undefined : { routeAlias: '/p/shared' });
+    }
     setExpandedProcedures((prev) => {
       const newSet = new Set(prev);
       if (newSet?.has(procedureId)) {
@@ -142,6 +187,21 @@ export default function PatientPlanView() {
       }
       return newSet;
     });
+  };
+
+  const changeLanguage = (language) => {
+    if (language === currentLanguage) return;
+    setCurrentLanguage(language);
+    if (previewMode) {
+      trackEvent('language_changed', {
+        language,
+        location: 'patient_preview',
+      });
+    } else {
+      trackEvent('language_changed', {
+        language,
+      }, { routeAlias: '/p/shared' });
+    }
   };
 
   const allProcedureIds = planData?.procedures?.map(p => p?.id) || [];
@@ -192,12 +252,13 @@ export default function PatientPlanView() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg0">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xl text-t1"
+          className="flex flex-col items-center gap-4"
         >
-          Loading your treatment plan...
+          <LoadingSpinner size="lg" />
+          <p className="text-t3 text-sm">Loading your treatment plan…</p>
         </motion.div>
       </div>
     );
@@ -452,6 +513,7 @@ export default function PatientPlanView() {
                   steps={content}
                   language={currentLanguage}
                   canonicalSlug={procedure?.canonicalSlug}
+                  routeAlias={previewMode ? undefined : '/p/shared'}
                 />
               )}
               
@@ -462,6 +524,59 @@ export default function PatientPlanView() {
                   language={currentLanguage}
                 />
               )}
+
+              {/* Anesthesia & Comfort */}
+              {(() => {
+                const langKey = currentLanguage === 'ES' ? 'Es' : 'En';
+                const anesthesia = procedure?.library?.[`anesthesia${langKey}`] || null;
+                return anesthesia ? (
+                  <div className="rounded-xl p-5 bg-bg2 border border-bd">
+                    <h4 className="text-base font-semibold text-accent mb-3">
+                      {currentLanguage === 'ES' ? 'Anestesia y comodidad' : 'Anesthesia & Comfort'}
+                    </h4>
+                    <p className="text-sm leading-relaxed text-t1" style={{ whiteSpace: 'pre-wrap' }}>
+                      {anesthesia}
+                    </p>
+                  </div>
+                ) : null;
+              })()}
+
+              {/* Risks & Considerations */}
+              {(() => {
+                const langKey = currentLanguage === 'ES' ? 'Es' : 'En';
+                const risks = procedure?.library?.[`risks${langKey}`] || null;
+                return risks ? (
+                  <div className="rounded-xl p-5 bg-warning/5 border border-warning/20">
+                    <h4 className="text-base font-semibold text-warning mb-3">
+                      {currentLanguage === 'ES' ? 'Riesgos y consideraciones' : 'Risks & Considerations'}
+                    </h4>
+                    <p className="text-sm leading-relaxed text-t1" style={{ whiteSpace: 'pre-wrap' }}>
+                      {risks}
+                    </p>
+                  </div>
+                ) : null;
+              })()}
+
+              {/* FAQs */}
+              {(() => {
+                const langKey = currentLanguage === 'ES' ? 'Es' : 'En';
+                const faqs = procedure?.library?.[`faqs${langKey}`];
+                return faqs?.length > 0 ? (
+                  <div>
+                    <h4 className="text-base font-semibold text-t1 mb-3">
+                      {currentLanguage === 'ES' ? 'Preguntas frecuentes' : 'Common Questions'}
+                    </h4>
+                    <div className="space-y-3">
+                      {faqs.map((faq, idx) => (
+                        <div key={idx} className="rounded-xl p-4 bg-bg2 border border-bd">
+                          <p className="text-sm font-semibold text-t1 mb-2">{faq?.q}</p>
+                          <p className="text-sm leading-relaxed text-t2">{faq?.a}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
 
               {procedure?.library?.disclaimer && (
                 <div className="rounded-lg p-4 bg-warning/10 border border-warning/20">
@@ -478,67 +593,112 @@ export default function PatientPlanView() {
   };
 
   return (
-    <div className="min-h-screen py-12 px-4 bg-bg0">
-      <div className="max-w-5xl mx-auto">
-        <VisualsDebugPanel planData={planData} />
-        {/* Header with iOS-style language toggle */}
-        <div className="rounded-2xl p-8 mb-8 transition-all ease-out bg-bg1 border border-bd" style={{ transitionDuration: '300ms' }}>
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h1 className="text-4xl font-medium mb-2 text-t1">
-                {t?.welcome}, {planData?.patient?.firstName} {planData?.patient?.lastName}
-              </h1>
-              <p className="text-lg text-t2">
-                {t?.yourTreatmentPlan} {t?.from} {planData?.treatmentPlan?.practiceName}
-              </p>
-              <p className="text-sm mt-2 text-t3">
-                {planData?.treatmentPlan?.dentistName}
-              </p>
-            </div>
-            
-            {/* iOS-style Language Toggle */}
-            <div className="flex rounded-lg p-1 bg-bg2 border border-bd">
+    <div className="min-h-screen bg-bg0">
+      {/* Branded top bar (with staff preview banner when previewing) */}
+      <div className="bg-bg1 border-b border-bd sticky top-0 z-20 shadow-sm">
+        {previewMode && (
+          <div className="bg-warning/10 border-b border-warning/30">
+            <div className="max-w-5xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm min-w-0">
+                <span className="flex items-center gap-1.5 font-semibold text-warning shrink-0">
+                  <Eye size={15} />
+                  Preview mode
+                </span>
+                <span className="text-t2">
+                  {planData?.preview?.patientExact
+                    ? 'This is exactly what patients see for this procedure.'
+                    : planData?.preview?.missingCanonicalMapping
+                      ? 'Published, but missing its canonical mapping — patients currently receive AI-generated content instead of this.'
+                      : 'Draft shown — not published yet, so patients currently receive AI-generated content instead.'}
+                </span>
+              </div>
               <button
-                onClick={() => setCurrentLanguage('EN')}
-                className="px-4 py-2 rounded-md font-medium text-sm transition-all ease-out"
-                style={{
-                  ...(currentLanguage === 'EN' 
-                    ? { backgroundColor: 'var(--accent-soft)', color: 'var(--accent)' }
-                    : { backgroundColor: 'transparent', color: 'var(--t2)' }),
-                  transitionDuration: '200ms'
-                }}
+                onClick={() => navigate('/procedure-library-management')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-bg1 text-t1 border border-bd hover:bg-bg2 shrink-0"
               >
-                EN
-              </button>
-              <button
-                onClick={() => setCurrentLanguage('ES')}
-                className="px-4 py-2 rounded-md font-medium text-sm transition-all ease-out"
-                style={{
-                  ...(currentLanguage === 'ES' 
-                    ? { backgroundColor: 'var(--accent-soft)', color: 'var(--accent)' }
-                    : { backgroundColor: 'transparent', color: 'var(--t2)' }),
-                  transitionDuration: '200ms'
-                }}
-              >
-                ES
+                <ArrowLeft size={14} />
+                Back to Content Library
               </button>
             </div>
           </div>
+        )}
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ShieldCheck size={20} className="text-accent" />
+            <span className="text-sm font-semibold text-t1 tracking-tight">ChairIQ</span>
+          </div>
+          {/* Language toggle in nav */}
+          <div className="flex rounded-lg overflow-hidden border border-bd bg-bg2 p-0.5 gap-0.5">
+            <button
+              onClick={() => changeLanguage('EN')}
+              className="px-3 py-1.5 rounded-md font-medium text-xs transition-all"
+              style={currentLanguage === 'EN'
+                ? { backgroundColor: 'var(--accent)', color: 'var(--accent-ink)' }
+                : { backgroundColor: 'transparent', color: 'var(--t2)' }
+              }
+            >
+              EN
+            </button>
+            <button
+              onClick={() => changeLanguage('ES')}
+              className="px-3 py-1.5 rounded-md font-medium text-xs transition-all"
+              style={currentLanguage === 'ES'
+                ? { backgroundColor: 'var(--accent)', color: 'var(--accent-ink)' }
+                : { backgroundColor: 'transparent', color: 'var(--t2)' }
+              }
+            >
+              ES
+            </button>
+          </div>
+        </div>
+      </div>
 
-          <motion.div 
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <VisualsDebugPanel planData={planData} />
+
+        {/* Hero header card */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          className="rounded-2xl p-8 mb-8 bg-bg1 border border-bd shadow-md overflow-hidden relative"
+        >
+          {/* Subtle accent glow top-right */}
+          <div
+            className="absolute -top-10 -right-10 w-48 h-48 rounded-full pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(34,211,224,0.07) 0%, transparent 70%)' }}
+          />
+          <div className="flex justify-between items-start gap-6 relative">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">
+                {t?.yourTreatmentPlan}
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-semibold mb-1 text-t1 leading-tight">
+                {t?.welcome}, {planData?.patient?.firstName} {planData?.patient?.lastName}
+              </h1>
+              <p className="text-base text-t2 mt-1">
+                {planData?.treatmentPlan?.practiceName}
+                {planData?.treatmentPlan?.dentistName && (
+                  <span className="text-t3"> · {planData?.treatmentPlan?.dentistName}</span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex items-center gap-4 mt-6"
+            transition={{ delay: 0.25 }}
+            className="flex items-center gap-3 mt-6"
           >
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-soft border border-accent/25">
-              <Calendar size={20} className="text-accent" />
-              <span className="font-medium text-accent">
-                {t?.totalProcedures}: {planData?.procedures?.length}
+              <Calendar size={18} className="text-accent" />
+              <span className="font-semibold text-sm text-accent">
+                {planData?.procedures?.length} {t?.totalProcedures?.toLowerCase?.() || t?.totalProcedures}
               </span>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Expand All / Collapse All + Jump to Section */}
         {planData?.procedures?.length >= 3 && (

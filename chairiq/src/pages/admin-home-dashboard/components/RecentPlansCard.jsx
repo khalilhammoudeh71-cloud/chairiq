@@ -6,6 +6,7 @@ import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
 import DeletePatientModal from './DeletePatientModal';
 import { patientSearchService } from '../../../services/patientSearchService';
 import { useToast } from '../../../hooks/useToast';
+import { storePatientPlanToken } from '../../../services/shareLinkService';
 
 export default function RecentPlansCard({ plans = [], onRefresh }) {
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
   };
 
   const handleViewPlan = (publicToken) => {
-    navigate(`/p/${publicToken}`);
+    storePatientPlanToken(publicToken);
+    navigate('/p');
   };
 
   const handleModifyPlan = (planId) => {

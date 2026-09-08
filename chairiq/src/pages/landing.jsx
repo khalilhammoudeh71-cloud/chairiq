@@ -49,7 +49,7 @@ const Landing = () => {
               }}
             />
             <span
-              className="font-bold"
+              className="font-bold font-display tracking-tight"
               style={{
                 fontSize: 'var(--brand-text-size, 1.25rem)',
                 letterSpacing: 'var(--brand-letter-spacing, 0.02em)',
@@ -248,7 +248,7 @@ const Landing = () => {
                   borderRadius: '6px'
                 }}
               />
-              <span className="font-semibold text-sm"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></span>
+              <span className="font-semibold font-display text-sm"><span className="text-t1">Chair</span><span className="text-accent">IQ</span></span>
             </div>
             <div className="flex gap-6 text-t3 text-sm">
               <button onClick={() => navigate('/privacy-policy')} className="hover:text-t1 transition-colors">

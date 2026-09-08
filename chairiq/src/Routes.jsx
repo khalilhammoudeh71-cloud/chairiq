@@ -48,7 +48,7 @@ function ProjectRoutes() {
           <Route path="/procedure-list-overview" element={<ProcedureListOverview />} />
           <Route path="/treatment-completion" element={<TreatmentCompletion />} />
           <Route path="/ada-code-management-dashboard" element={<AdaCodeManagementDashboard />} />
-          <Route path="/p/:publicToken" element={<PatientPlanView />} />
+          <Route path="/p" element={<PatientPlanView />} />
           <Route path="/privacy-policy" element={<Privacy />} />
           <Route path="/terms-of-service" element={<Terms />} />
           <Route path="/sms" element={<SmsDisclosure />} />
@@ -112,6 +112,14 @@ function ProjectRoutes() {
             element={
               <ProtectedRoute>
                 <MarkdownContentEditor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/preview-patient-page/:procedureSlug"
+            element={
+              <ProtectedRoute>
+                <PatientPlanView previewMode />
               </ProtectedRoute>
             }
           />

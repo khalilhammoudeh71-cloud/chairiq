@@ -125,16 +125,6 @@ const getProcedureIcon = (procedure) => {
   return 'Stethoscope';
 };
 
-const listItemShades = [
-  '#1A1F2E',
-  '#1D2233',
-  '#1F2538',
-  '#22283D',
-  '#242B42',
-  '#272E47',
-  '#29314C',
-  '#2C3451',
-];
 
 const TreatmentPlanLanding = () => {
   const [searchParams] = useSearchParams();
@@ -525,36 +515,36 @@ const TreatmentPlanLanding = () => {
 
           {/* OVERVIEW SUMMARY CARD */}
           <section className="mb-16">
-            <h2 
-              className="text-xl sm:text-2xl mb-6 text-t3 font-light"
-            >
+            <h2 className="text-xl sm:text-2xl mb-6 text-t3 font-light">
               {text?.overviewTitle}
             </h2>
-            <div 
-              className="rounded-xl px-8 py-5 flex items-center justify-between" 
-              style={{ 
-                backgroundColor: '#1A1F2E',
-                border: '1px solid #2D3748'
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-2xl sm:text-3xl text-accent font-semibold">
-                  {procedureCount}
-                </span>
-                <span className="text-t3 text-sm sm:text-base">
-                  {text?.proceduresLabel}
-                </span>
+            <div className="card rounded-xl px-8 py-5 flex items-center justify-between gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-accent-soft flex items-center justify-center">
+                  <Icon name="ClipboardList" size={18} style={{ color: 'var(--accent)' }} />
+                </div>
+                <div>
+                  <div className="text-2xl sm:text-3xl text-accent font-semibold leading-none">
+                    {procedureCount}
+                  </div>
+                  <div className="text-t3 text-sm sm:text-base mt-0.5">
+                    {text?.proceduresLabel}
+                  </div>
+                </div>
               </div>
-              <div 
-                style={{ width: '1px', height: '28px', backgroundColor: '#2D3748' }}
-              />
-              <div className="flex items-center gap-2">
-                <span className="text-2xl sm:text-3xl text-accent font-semibold">
-                  {calculateEstimatedVisits()}
-                </span>
-                <span className="text-t3 text-sm sm:text-base">
-                  {text?.visitsLabel}
-                </span>
+              <div className="w-px h-10 bg-bd" />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-accent-soft flex items-center justify-center">
+                  <Icon name="Calendar" size={18} style={{ color: 'var(--accent)' }} />
+                </div>
+                <div>
+                  <div className="text-2xl sm:text-3xl text-accent font-semibold leading-none">
+                    {calculateEstimatedVisits()}
+                  </div>
+                  <div className="text-t3 text-sm sm:text-base mt-0.5">
+                    {text?.visitsLabel}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -569,12 +559,11 @@ const TreatmentPlanLanding = () => {
             
             {procedures?.length > 0 ? (
               <>
-                <div className="rounded-xl overflow-hidden mb-10" style={{ border: '1px solid #2D3748' }}>
+                <div className="rounded-xl overflow-hidden mb-10 border border-bd">
                   {procedures?.map((procedure, procIdx) => {
                     const lang = currentLanguage === 'es' ? 'Es' : 'En';
                     const title = procedure?.library?.[`title${lang}`] || procedure?.displayTitle || procedure?.procedureName || 'Not specified';
                     const isSelected = expandedProcedure === procedure?.id;
-                    const shade = listItemShades[procIdx % listItemShades.length];
                     const iconName = getProcedureIcon(procedure);
 
                     const hasLibraryContent = procedure?.library !== null && procedure?.library !== undefined;
@@ -584,6 +573,8 @@ const TreatmentPlanLanding = () => {
                     const aftercare = procedure?.library?.[`aftercare${lang}`] || null;
                     const whatIfNot = procedure?.library?.[`whatIfNot${lang}`] || null;
                     const faqs = procedure?.library?.[`faqs${lang}`] || null;
+                    const risks = procedure?.library?.[`risks${lang}`] || null;
+                    const anesthesia = procedure?.library?.[`anesthesia${lang}`] || null;
                     const visuals = procedure?.library?.visuals || null;
                     const isFullDetailsVisible = showFullDetails === procedure?.id;
 
@@ -593,8 +584,8 @@ const TreatmentPlanLanding = () => {
                           onClick={() => toggleProcedure(procedure?.id)}
                           className="w-full text-left px-6 py-4 transition-all duration-200 focus:outline-none"
                           style={{
-                            backgroundColor: isSelected ? '#4A6FA5' : shade,
-                            borderBottom: (!isSelected && procIdx < procedures.length - 1) ? '1px solid rgba(45,55,72,0.5)' : 'none',
+                            backgroundColor: isSelected ? 'var(--accent-soft)' : (procIdx % 2 === 0 ? 'var(--bg1)' : 'var(--bg2)'),
+                            borderBottom: procIdx < procedures.length - 1 ? '1px solid var(--bd)' : 'none',
                             minHeight: '44px',
                           }}
                           aria-expanded={isSelected}
@@ -610,26 +601,17 @@ const TreatmentPlanLanding = () => {
                                 glow={false}
                               />
                               <div className="min-w-0">
-                                <h3 
-                                  className="text-base sm:text-lg font-medium leading-snug truncate"
-                                  style={{ color: isSelected ? '#ffffff' : 'var(--t1)' }}
-                                >
+                                <h3 className="text-base sm:text-lg font-medium leading-snug truncate text-t1">
                                   {title}
                                 </h3>
                                 <div className="flex items-center gap-2 mt-0.5">
                                   {procedure?.adaCode && (
-                                    <span 
-                                      className="text-xs font-mono"
-                                      style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
-                                    >
+                                    <span className="text-xs font-mono text-t3">
                                       {procedure?.adaCode}
                                     </span>
                                   )}
                                   {procedure?.toothNumbers && (
-                                    <span 
-                                      className="text-xs"
-                                      style={{ color: isSelected ? 'rgba(255,255,255,0.65)' : 'var(--t3)' }}
-                                    >
+                                    <span className="text-xs text-t3">
                                       {currentLanguage === 'es' ? 'Dientes' : 'Teeth'}: {procedure?.toothNumbers}
                                     </span>
                                   )}
@@ -639,17 +621,16 @@ const TreatmentPlanLanding = () => {
                             <Icon 
                               name={isSelected ? 'ChevronDown' : 'ChevronRight'} 
                               size={18} 
-                              style={{ color: isSelected ? '#ffffff' : 'rgba(74,111,165,0.6)', flexShrink: 0 }} 
+                              style={{ color: isSelected ? 'var(--accent)' : 'var(--t3)', flexShrink: 0 }} 
                             />
                           </div>
                         </button>
 
                         {isSelected && (
                           <div 
-                            className="overflow-hidden animate-slideDown"
+                            className="overflow-hidden animate-slideDown bg-bg2"
                             style={{
-                              backgroundColor: '#1A1F2E',
-                              borderBottom: procIdx < procedures.length - 1 ? '1px solid rgba(45,55,72,0.5)' : 'none',
+                              borderBottom: procIdx < procedures.length - 1 ? '1px solid var(--bd)' : 'none',
                             }}
                           >
                             {visuals?.heroKey && (
@@ -702,12 +683,11 @@ const TreatmentPlanLanding = () => {
 
                               {summary && (
                                 <div>
-                                  <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
+                                  <h4 className="text-2xl sm:text-3xl mb-6 font-semibold text-accent">
                                     {text?.sections?.whatThis}
                                   </h4>
                                   <div
-                                    className="text-base sm:text-lg font-light leading-[1.8]"
-                                    style={{ color: '#ffffff' }}
+                                    className="text-base sm:text-lg font-light leading-[1.8] text-t1"
                                     dangerouslySetInnerHTML={{ __html: summary?.replace(/\n/g, '<br />') }}
                                   />
                                 </div>
@@ -715,7 +695,7 @@ const TreatmentPlanLanding = () => {
 
                               {steps && steps?.length > 0 && (
                                 <div>
-                                  <h4 className="text-2xl sm:text-3xl mb-8 font-semibold" style={{ color: '#F5C542' }}>
+                                  <h4 className="text-2xl sm:text-3xl mb-8 font-semibold text-accent">
                                     {text?.sections?.howItWorks}
                                   </h4>
                                   <div className="space-y-6">
@@ -724,29 +704,19 @@ const TreatmentPlanLanding = () => {
 
                                       return (
                                         <div key={idx}>
-                                          <div
-                                            className="w-full text-left rounded-xl"
-                                            style={{
-                                              backgroundColor: '#232936',
-                                              border: '1px solid #2D3748',
-                                              padding: '1.25rem 1.5rem',
-                                            }}
-                                          >
+                                          <div className="w-full text-left rounded-xl bg-bg3 border border-bd p-5">
                                             <div className="flex items-start gap-4">
                                               <span 
-                                                className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mt-0.5"
-                                                style={{
-                                                  backgroundColor: '#4A6FA5',
-                                                  color: '#ffffff',
-                                                }}
+                                                className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mt-0.5 bg-accent"
+                                                style={{ color: 'var(--accent-ink)' }}
                                               >
                                                 {idx + 1}
                                               </span>
                                               <div className="flex-1 min-w-0">
-                                                <h5 className="text-lg sm:text-xl font-semibold leading-snug" style={{ color: '#F5C542' }}>
+                                                <h5 className="text-lg sm:text-xl font-semibold leading-snug text-accent">
                                                   {step?.title || `${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}`}
                                                 </h5>
-                                                <p className="text-sm sm:text-base font-light leading-relaxed mt-2" style={{ color: '#ffffff' }}>
+                                                <p className="text-sm sm:text-base font-light leading-relaxed mt-2 text-t1">
                                                   {step?.description || step?.content}
                                                 </p>
                                               </div>
@@ -755,14 +725,14 @@ const TreatmentPlanLanding = () => {
 
                                           {hasStepImage && (
                                             <div className="mt-3 mb-2 px-4">
-                                              <div className="flex justify-center rounded-xl overflow-hidden" style={{ backgroundColor: '#0F1218' }}>
+                                              <div className="flex justify-center rounded-xl overflow-hidden bg-bg0">
                                                 <Image
                                                   src={visuals?.stepKeys?.[idx]}
                                                   alt={`${currentLanguage === 'es' ? 'Paso' : 'Step'} ${idx + 1}: ${step?.title || title}`}
                                                   className="rounded-xl"
                                                   style={{ maxWidth: '100%', maxHeight: '360px', objectFit: 'contain' }}
                                                   onError={(e) => {
-                                                    e.target.parentElement.innerHTML = `<div style="padding:2rem;text-align:center;color:#7a8cf5;font-size:0.875rem"><p>${currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p></div>`;
+                                                    e.target.parentElement.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--accent);font-size:0.875rem"><p>${currentLanguage === 'es' ? 'Visual próximamente' : 'Visual coming soon'}</p></div>`;
                                                   }}
                                                 />
                                               </div>
@@ -775,15 +745,14 @@ const TreatmentPlanLanding = () => {
                                 </div>
                               )}
 
-                              {hasLibraryContent && (why || whatIfNot || aftercare || (faqs && faqs?.length > 0)) && (
+                              {hasLibraryContent && (why || whatIfNot || aftercare || risks || anesthesia || (faqs && faqs?.length > 0)) && (
                                 <button
                                   onClick={(e) => toggleFullDetails(procedure?.id, e)}
-                                  className="w-full py-4 px-8 rounded-xl transition-all duration-200 hover:brightness-110 focus:outline-none"
-                                  style={{ 
-                                    backgroundColor: isFullDetailsVisible ? '#2D3748' : '#4A6FA5',
-                                    color: 'white',
-                                    fontSize: '1.125rem',
-                                    fontWeight: 500,
+                                  className="w-full py-4 px-8 rounded-xl transition-all duration-200 focus:outline-none font-medium text-lg"
+                                  style={{
+                                    backgroundColor: isFullDetailsVisible ? 'var(--bg3)' : 'var(--accent)',
+                                    color: isFullDetailsVisible ? 'var(--t1)' : 'var(--accent-ink)',
+                                    border: isFullDetailsVisible ? '1px solid var(--bd)' : 'none',
                                     minHeight: '48px'
                                   }}
                                 >
@@ -809,41 +778,34 @@ const TreatmentPlanLanding = () => {
                                 <div className="space-y-16 pt-6 animate-slideDown">
                                   {why && (
                                     <div>
-                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold text-accent">
                                         {text?.sections?.whyNeed}
                                       </h4>
                                       <div
-                                        className="text-base sm:text-lg font-light leading-[1.8]"
-                                        style={{ color: '#ffffff' }}
+                                        className="text-base sm:text-lg font-light leading-[1.8] text-t1"
                                         dangerouslySetInnerHTML={{ __html: why?.replace(/\n/g, '<br />') }}
                                       />
                                     </div>
                                   )}
 
                                   {(procedure?.library?.timeEstimate || procedure?.library?.visitsEstimate) && (
-                                    <div 
-                                      className="p-8 rounded-xl"
-                                      style={{ 
-                                        backgroundColor: 'rgba(74, 111, 165, 0.1)',
-                                        border: '1px solid rgba(74, 111, 165, 0.2)'
-                                      }}
-                                    >
+                                    <div className="p-8 rounded-xl bg-accent-soft border border-accent/20">
                                       {procedure?.library?.timeEstimate && (
                                         <div className="mb-4">
-                                          <span className="text-lg font-semibold" style={{ color: '#F5C542' }}>
+                                          <span className="text-lg font-semibold text-accent">
                                             {currentLanguage === 'es' ? 'Tiempo: ' : 'Time: '}
                                           </span>
-                                          <span className="text-base" style={{ color: '#ffffff' }}>
+                                          <span className="text-base text-t1">
                                             {procedure?.library?.timeEstimate}
                                           </span>
                                         </div>
                                       )}
                                       {procedure?.library?.visitsEstimate && (
                                         <div>
-                                          <span className="text-lg font-semibold" style={{ color: '#F5C542' }}>
+                                          <span className="text-lg font-semibold text-accent">
                                             {currentLanguage === 'es' ? 'Visitas: ' : 'Visits: '}
                                           </span>
-                                          <span className="text-base" style={{ color: '#ffffff' }}>
+                                          <span className="text-base text-t1">
                                             {procedure?.library?.visitsEstimate}
                                           </span>
                                         </div>
@@ -853,49 +815,71 @@ const TreatmentPlanLanding = () => {
 
                                   {whatIfNot && (
                                     <div>
-                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold text-accent">
                                         {text?.sections?.ifDelay}
                                       </h4>
                                       <div
-                                        className="text-base sm:text-lg font-light leading-[1.8]"
-                                        style={{ color: '#ffffff' }}
+                                        className="text-base sm:text-lg font-light leading-[1.8] text-t1"
                                         dangerouslySetInnerHTML={{ __html: whatIfNot?.replace(/\n/g, '<br />') }}
                                       />
                                     </div>
                                   )}
 
+                                  {anesthesia && (
+                                    <div>
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold text-accent">
+                                        {currentLanguage === 'es' ? 'Anestesia y comodidad' : 'Anesthesia & Comfort'}
+                                      </h4>
+                                      <p
+                                        className="text-base sm:text-lg font-light leading-[1.8] text-t1"
+                                        style={{ whiteSpace: 'pre-wrap' }}
+                                      >
+                                        {anesthesia}
+                                      </p>
+                                    </div>
+                                  )}
+
                                   {aftercare && (
                                     <div>
-                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold" style={{ color: '#F5C542' }}>
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold text-accent">
                                         {text?.sections?.aftercare}
                                       </h4>
                                       <div
-                                        className="text-base sm:text-lg font-light leading-[1.8]"
-                                        style={{ color: '#ffffff' }}
+                                        className="text-base sm:text-lg font-light leading-[1.8] text-t1"
                                         dangerouslySetInnerHTML={{ __html: aftercare?.replace(/\n/g, '<br />') }}
                                       />
                                     </div>
                                   )}
 
+                                  {risks && (
+                                    <div>
+                                      <h4 className="text-2xl sm:text-3xl mb-6 font-semibold text-accent">
+                                        {currentLanguage === 'es' ? 'Riesgos y consideraciones' : 'Risks & Considerations'}
+                                      </h4>
+                                      <p
+                                        className="text-base sm:text-lg font-light leading-[1.8] text-t1"
+                                        style={{ whiteSpace: 'pre-wrap' }}
+                                      >
+                                        {risks}
+                                      </p>
+                                    </div>
+                                  )}
+
                                   {faqs && faqs?.length > 0 && (
                                     <div>
-                                      <h4 className="text-2xl sm:text-3xl mb-10 font-semibold" style={{ color: '#F5C542' }}>
+                                      <h4 className="text-2xl sm:text-3xl mb-10 font-semibold text-accent">
                                         {text?.sections?.faqs}
                                       </h4>
                                       <div className="space-y-8">
                                         {faqs?.map((faq, idx) => (
                                           <div 
                                             key={idx}
-                                            className="p-8 rounded-xl"
-                                            style={{ 
-                                              backgroundColor: '#232936',
-                                              border: '1px solid #2D3748'
-                                            }}
+                                            className="p-8 rounded-xl bg-bg3 border border-bd"
                                           >
-                                            <p className="mb-5 text-lg font-semibold" style={{ color: '#ffffff' }}>
+                                            <p className="mb-5 text-lg font-semibold text-t1">
                                               {faq?.q}
                                             </p>
-                                            <p className="text-base leading-[1.8]" style={{ color: '#ffffff' }}>
+                                            <p className="text-base leading-[1.8] text-t2">
                                               {faq?.a}
                                             </p>
                                           </div>
@@ -914,13 +898,10 @@ const TreatmentPlanLanding = () => {
                 </div>
               </>
             ) : (
-              <div 
-                className="rounded-2xl p-16 text-center"
-                style={{ 
-                  backgroundColor: '#1A1F2E',
-                  border: '1px solid #2D3748'
-                }}
-              >
+              <div className="card rounded-2xl p-16 text-center">
+                <div className="w-14 h-14 rounded-2xl bg-accent-soft flex items-center justify-center mx-auto mb-6">
+                  <Icon name="ClipboardList" size={24} style={{ color: 'var(--accent)' }} />
+                </div>
                 <p className="text-t3 text-xl">
                   {currentLanguage === 'es' ? 'No se encontraron procedimientos en su plan de tratamiento.' : 'No procedures found in your treatment plan.'}
                 </p>

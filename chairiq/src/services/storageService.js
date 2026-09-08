@@ -65,7 +65,7 @@ const storageService = {
     return `${canonicalSlug}/${stepKey}.${extension}`;
   },
 
-  async uploadVisualAndCreateRecord(canonicalSlug, stepKey, file, sortOrder = 0) {
+  async uploadVisualAndCreateRecord(canonicalSlug, stepKey, file, sortOrder = 0, options = {}) {
     if (!supabase) throw new Error('Supabase not initialized');
 
     const ext = file.name?.split('.')?.pop()?.toLowerCase() || 'png';
@@ -73,13 +73,17 @@ const storageService = {
 
     const { publicUrl } = await this.upload(storagePath, file);
 
+    const fallbackAlt = `${canonicalSlug.replace(/-/g, ' ')} - ${stepKey.replace(/_/g, ' ')}`;
+    const altEn = options.altTextEn || fallbackAlt;
+    const altEs = options.altTextEs || options.altTextEn || fallbackAlt;
+
     const record = {
       canonical_slug: canonicalSlug,
       step_key: stepKey,
       image_url: publicUrl,
       sort_order: sortOrder,
-      alt_text_en: `${canonicalSlug.replace(/-/g, ' ')} - ${stepKey.replace(/_/g, ' ')}`,
-      alt_text_es: `${canonicalSlug.replace(/-/g, ' ')} - ${stepKey.replace(/_/g, ' ')}`,
+      alt_text_en: altEn,
+      alt_text_es: altEs,
     };
 
     const { data: existing } = await supabase
@@ -91,9 +95,14 @@ const storageService = {
 
     let result;
     if (existing?.id) {
+      const updates = { image_url: publicUrl, updated_at: new Date().toISOString() };
+      if (options.altTextEn) {
+        updates.alt_text_en = altEn;
+        updates.alt_text_es = altEs;
+      }
       const { data, error } = await supabase
         .from('procedure_visuals')
-        .update({ image_url: publicUrl, updated_at: new Date().toISOString() })
+        .update(updates)
         .eq('id', existing.id)
         .select()
         .single();
