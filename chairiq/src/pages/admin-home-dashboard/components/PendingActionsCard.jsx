@@ -1,13 +1,15 @@
 import React from 'react';
+import { useToast } from '../../../hooks/useToast';
 
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import ButtonPrimary from '../../../components/ui/ButtonPrimary';
-import { storePatientPlanToken } from '../../../services/shareLinkService';
+import { storePatientPlanToken, shareLinkService } from '../../../services/shareLinkService';
 
 export default function PendingActionsCard({ actions = [] }) {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -25,10 +27,13 @@ export default function PendingActionsCard({ actions = [] }) {
     }
   };
 
-  const handleActionClick = (action) => {
-    if (action?.publicToken) {
-      storePatientPlanToken(action.publicToken);
+  const handleActionClick = async (action) => {
+    try {
+      const token = await shareLinkService.requireShareLinkForPlanToken(action?.publicToken);
+      storePatientPlanToken(token);
       navigate('/p');
+    } catch (error) {
+      showToast(error.message || 'Unable to open this plan. Please try again.', 'error');
     }
   };
 
@@ -68,7 +73,7 @@ export default function PendingActionsCard({ actions = [] }) {
                   </Badge>
                 </div>
               </div>
-              <ButtonPrimary size="sm">
+              <ButtonPrimary size="sm" onClick={() => handleActionClick(action)}>
                 Take Action
               </ButtonPrimary>
             </div>

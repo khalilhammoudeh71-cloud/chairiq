@@ -1,6 +1,17 @@
-import { supabase } from '../lib/supabase';
+import { supabase, downloadPatientImage } from '../lib/supabase';
 
 const BUCKET_NAME = 'treatment-images';
+const PATIENT_BUCKET = 'patient-images';
+
+async function imageDataUrl(blob) {
+  if (!['image/png','image/jpeg','image/webp','image/gif'].includes(blob.type) || blob.size > 10485760) {
+    throw new Error('Unsupported patient image');
+  }
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+  return `data:${blob.type};base64,${btoa(binary)}`;
+}
 
 const storageService = {
   getPublicUrl(filePath) {
@@ -128,31 +139,31 @@ const storageService = {
     const validExt = ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext) ? ext : 'png';
     const stepKey = `patient_img_${sortOrder}`;
     const storagePath = `patient-specific/${planProcedureId}/${stepKey}.${validExt}`;
-    const canonicalSlug = `patient-${planProcedureId}`;
 
-    const { publicUrl } = await this.upload(storagePath, file, { upsert: true });
+    const { error: uploadError } = await supabase.storage.from(PATIENT_BUCKET).upload(storagePath, file, { upsert: true, cacheControl: '0', contentType: file.type });
+    if (uploadError) throw uploadError;
 
     const record = {
-      canonical_slug: canonicalSlug,
+      plan_procedure_id: planProcedureId,
       step_key: stepKey,
-      image_url: publicUrl,
+      image_url: storagePath,
       sort_order: sortOrder,
       alt_text_en: note || '',
       alt_text_es: note || '',
     };
 
     const { data: existing } = await supabase
-      .from('procedure_visuals')
+      .from('patient_plan_images')
       .select('id')
-      .eq('canonical_slug', canonicalSlug)
+      .eq('plan_procedure_id', planProcedureId)
       .eq('step_key', stepKey)
       .maybeSingle();
 
     let result;
     if (existing?.id) {
       const { data, error } = await supabase
-        .from('procedure_visuals')
-        .update({ image_url: publicUrl, alt_text_en: note || '', alt_text_es: note || '', updated_at: new Date().toISOString() })
+        .from('patient_plan_images')
+        .update({ image_url: storagePath, alt_text_en: note || '', alt_text_es: note || '' })
         .eq('id', existing.id)
         .select()
         .single();
@@ -160,7 +171,7 @@ const storageService = {
       result = data;
     } else {
       const { data, error } = await supabase
-        .from('procedure_visuals')
+        .from('patient_plan_images')
         .insert(record)
         .select()
         .single();
@@ -168,28 +179,30 @@ const storageService = {
       result = data;
     }
 
-    return { publicUrl, record: result };
+    return { path: storagePath, record: result };
   },
 
-  async fetchPatientImages(planProcedureId) {
+  async fetchPatientImages(planProcedureId, options = {}) {
     if (!supabase) return [];
-
-    const canonicalSlug = `patient-${planProcedureId}`;
-    const { data, error } = await supabase
-      .from('procedure_visuals')
-      .select('*')
-      .eq('canonical_slug', canonicalSlug)
-      .order('sort_order', { ascending: true });
-
-    if (error) {
-      console.error('[StorageService] fetchPatientImages error:', error);
-      return [];
+    // Staff library previews use synthetic IDs and have no patient images.
+    if (!options.token && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(planProcedureId || '')) return [];
+    let rows = options.rows;
+    if (!options.token) {
+      const { data, error } = await supabase.from('patient_plan_images').select('*')
+        .eq('plan_procedure_id', planProcedureId).order('sort_order', { ascending: true });
+      if (error) throw error;
+      rows = data || [];
     }
-
-    return (data || []).map(row => ({
-      imageUrl: row.image_url,
-      note: row.alt_text_en || '',
-      sortOrder: row.sort_order,
+    if (!rows?.length) return [];
+    return Promise.all(rows.map(async row => {
+      // A patient row must reference an object in this procedure's private folder.
+      // Never load an old public URL or arbitrary external URL as a patient image.
+      if (!row.image_url?.startsWith(`patient-specific/${planProcedureId}/`)) throw new Error('Invalid patient image path');
+      const { data, error } = options.token
+        ? { data: await downloadPatientImage(options.token, planProcedureId, row.image_url) }
+        : await supabase.storage.from(PATIENT_BUCKET).download(row.image_url);
+      if (error) throw new Error('Unable to load patient image');
+      return { imageUrl: await imageDataUrl(data), note: row.alt_text_en || '', sortOrder: row.sort_order };
     }));
   },
 

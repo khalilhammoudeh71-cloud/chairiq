@@ -123,44 +123,22 @@ export default function PatientPlanView({ previewMode = false }) {
         return;
       }
 
-      const validation = await shareLinkService.validateShareLink(planToken);
+      const data = await shareLinkService.loadPatientPlan(planToken, patientPlanService);
       if (isStale()) return;
-
-      if (validation.valid) {
-        await shareLinkService.incrementViewCount(planToken);
-        const data = await patientPlanService?.getEnrichedPatientPlanById(validation.link.plan_id);
-        if (isStale()) return;
-        if (data?.success) {
-          setPlanData(data);
-          setCurrentLanguage(data?.patient?.preferredLanguage || 'EN');
-          trackEvent('shared_plan_opened', {
-            language: data?.patient?.preferredLanguage || 'EN',
-            procedure_count: data?.procedures?.length || 0,
-            source: 'share_link',
-          }, { routeAlias: '/p/shared' });
-          return;
-        }
-      }
-
-      if (validation.reason === 'expired') {
-        setLinkStatus('expired');
-        return;
-      }
-
-      const fallbackData = await patientPlanService?.getEnrichedPatientPlan(planToken);
-      if (isStale()) return;
-      if (fallbackData?.success) {
-        setPlanData(fallbackData);
-        setCurrentLanguage(fallbackData?.patient?.preferredLanguage || 'EN');
+      if (data?.success) {
+        setPlanData(data);
+        setCurrentLanguage(data?.patient?.preferredLanguage || 'EN');
         trackEvent('shared_plan_opened', {
-          language: fallbackData?.patient?.preferredLanguage || 'EN',
-          procedure_count: fallbackData?.procedures?.length || 0,
-          source: 'legacy_link',
+          language: data?.patient?.preferredLanguage || 'EN',
+          procedure_count: data?.procedures?.length || 0,
+          source: data.linkSource,
         }, { routeAlias: '/p/shared' });
-      } else if (validation.reason === 'not_found') {
+      } else if (data?.reason === 'expired') {
+        setLinkStatus('expired');
+      } else if (data?.reason === 'not_found') {
         setLinkStatus('invalid');
       } else {
-        setError(fallbackData?.error || 'Failed to load treatment plan');
+        setError(data?.error || 'Failed to load treatment plan');
       }
     } catch (err) {
       if (isStale()) return;

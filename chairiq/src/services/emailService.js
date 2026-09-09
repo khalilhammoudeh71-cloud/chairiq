@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { buildPatientPlanUrl } from './shareLinkService';
+import { shareLinkService } from './shareLinkService';
 
 async function getAuthHeaders() {
   const headers = { 'Content-Type': 'application/json' };
@@ -37,12 +37,19 @@ export const emailService = {
     }
   },
 
-  async sendTestEmail(toEmail) {
+  async sendTestEmail(toEmail, planUrl) {
+    let url;
+    try { url = new URL(planUrl); } catch { return { success: false, error: 'Paste a valid sample-plan link first.' }; }
+    if (url.origin !== window.location.origin || !/^\/p\/[A-Za-z0-9]{48}$/.test(url.pathname) || url.search || url.hash) {
+      return { success: false, error: 'Paste a fresh sample-plan link copied from this site.' };
+    }
+    const validation = await shareLinkService.validateShareLink(url.pathname.slice(3));
+    if (!validation.valid) return { success: false, error: 'This link is invalid or expired. Copy a fresh sample-plan link.' };
     return this.sendNotification({
       method: 'email',
       toEmail,
       patientName: 'Test Patient',
-      planUrl: buildPatientPlanUrl('sample-test-token-12345'),
+      planUrl: url.href,
     });
   },
 };
