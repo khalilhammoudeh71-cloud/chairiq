@@ -50,6 +50,7 @@ export default function CreatePatientPlan() {
   const [loading, setLoading] = useState(false);
   const [savedPlan, setSavedPlan] = useState(null);
   const [shareToken, setShareToken] = useState(null);
+  const [shareLinkError, setShareLinkError] = useState('');
   const [showSMSMessage, setShowSMSMessage] = useState(false);
   const [sendingSMS, setSendingSMS] = useState(false);
   const [sendMethod, setSendMethod] = useState('email');
@@ -458,6 +459,8 @@ export default function CreatePatientPlan() {
 
     console.log('✅ Validation passed, proceeding with save...');
     setLoading(true);
+    setShareToken(null);
+    setShareLinkError('');
     try {
       console.log('📡 Calling patientPlanService.createPatientPlan...');
       const result = await patientPlanService?.createPatientPlan(
@@ -474,6 +477,8 @@ export default function CreatePatientPlan() {
       );
       if (linkResult?.success) {
         setShareToken(linkResult.token);
+      } else {
+        setShareLinkError('Your plan is saved, but its share link could not be created. Retry the link below.');
       }
 
       trackEvent('plan_created', {
@@ -482,7 +487,9 @@ export default function CreatePatientPlan() {
         image_upload_failures: result?.imageUploadFailures || 0,
       });
 
-      if (result?.imageUploadFailures > 0) {
+      if (!linkResult?.success) {
+        showToast('Plan saved, but sharing is unavailable. Retry the share link below.', 'warning');
+      } else if (result?.imageUploadFailures > 0) {
         showToast(`Plan saved, but ${result.imageUploadFailures} patient image(s) failed to upload. The plan is still valid.`, 'warning');
       } else {
         showToast('Patient plan saved successfully!', 'success');
@@ -528,15 +535,35 @@ export default function CreatePatientPlan() {
     }
   };
 
+  const ensureSavedPlanShareToken = async () => {
+    try {
+      if (!savedPlan?.treatmentPlan?.id || !savedPlan?.patient?.id) throw new Error('Save the plan first.');
+      const token = await shareLinkService.requireShareLink(savedPlan.treatmentPlan.id, savedPlan.patient.id, { fresh: true });
+      setShareToken(token);
+      setShareLinkError('');
+      return token;
+    } catch (error) {
+      setShareToken(null);
+      setShareLinkError(error.message);
+      throw error;
+    }
+  };
+
+  const retryShareLink = async () => {
+    try { await ensureSavedPlanShareToken(); }
+    catch (error) { showToast(error.message, 'error'); }
+  };
+
   const copyPatientLink = async () => {
     if (!savedPlan) return;
-    const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-    const link = buildPatientPlanUrl(token);
-    const success = await safeCopy(link);
-    if (success) {
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2500);
-    }
+    try {
+      const token = await ensureSavedPlanShareToken();
+      const success = await safeCopy(buildPatientPlanUrl(token));
+      if (success) {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2500);
+      }
+    } catch (error) { showToast(error.message, 'error'); }
   };
 
   // Generate and show SMS message
@@ -545,16 +572,17 @@ export default function CreatePatientPlan() {
     setShowSMSMessage(true);
   };
 
-  const copySMSMessage = () => {
+  const copySMSMessage = async () => {
     if (!savedPlan) return;
-    const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
-    const message = patientPlanService?.generateSMSMessage(
-      savedPlan?.patient?.firstName,
-      savedPlan?.treatmentPlan?.practiceName,
-      token
-    );
-    safeCopy(message);
-    showToast('SMS message copied to clipboard!', 'success');
+    try {
+      const token = await ensureSavedPlanShareToken();
+      const message = patientPlanService?.generateSMSMessage(
+        savedPlan?.patient?.firstName,
+        savedPlan?.treatmentPlan?.practiceName,
+        token
+      );
+      if (await safeCopy(message)) showToast('SMS message copied to clipboard!', 'success');
+    } catch (error) { showToast(error.message, 'error'); }
   };
 
   const handleSendSMS = async () => {
@@ -573,7 +601,7 @@ export default function CreatePatientPlan() {
 
     setSendingSMS(true);
     try {
-      const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
+      const token = await ensureSavedPlanShareToken();
       const secureLink = buildPatientPlanUrl(token);
       const headers = { 'Content-Type': 'application/json' };
       const { data: { session } } = await supabase.auth.getSession();
@@ -615,7 +643,7 @@ export default function CreatePatientPlan() {
 
     setSendingEmail(true);
     try {
-      const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
+      const token = await ensureSavedPlanShareToken();
       const secureLink = buildPatientPlanUrl(token);
       const headers = { 'Content-Type': 'application/json' };
       const { data: { session } } = await supabase.auth.getSession();
@@ -665,7 +693,7 @@ export default function CreatePatientPlan() {
 
     setRetryingMessageId(smsLog?.id);
     try {
-      const token = shareToken || savedPlan?.treatmentPlan?.publicToken;
+      const token = await ensureSavedPlanShareToken();
       const secureLink = buildPatientPlanUrl(token);
       const phone = smsLog?.phone_number || savedPlan?.patient?.phone;
       const headers = { 'Content-Type': 'application/json' };
@@ -704,14 +732,7 @@ export default function CreatePatientPlan() {
 
     setResendingSavedPlan(true);
     try {
-      const linkResult = await shareLinkService.getOrCreateShareLink(
-        savedPlan?.treatmentPlan?.id,
-        savedPlan?.patient?.id
-      );
-      if (linkResult?.success) {
-        setShareToken(linkResult.token);
-      }
-      const tokenToUse = linkResult?.token || shareToken || savedPlan?.treatmentPlan?.publicToken;
+      const tokenToUse = await ensureSavedPlanShareToken();
       const secureLink = buildPatientPlanUrl(tokenToUse);
       const phone = smsPhoneNumber || savedPlan?.patient?.phone;
 
@@ -749,8 +770,9 @@ export default function CreatePatientPlan() {
     }
   };
 
-  const handleModalSend = async ({ method, recipient, planLink }) => {
+  const handleModalSend = async ({ method, recipient }) => {
     try {
+      const token = await ensureSavedPlanShareToken();
       const headers = { 'Content-Type': 'application/json' };
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.access_token) {
@@ -758,7 +780,7 @@ export default function CreatePatientPlan() {
       }
       const body = {
         deliveryMethod: method,
-        secureLink: planLink,
+        secureLink: buildPatientPlanUrl(token),
         patientName: savedPlan?.patient?.firstName,
         planId: savedPlan?.treatmentPlan?.id,
         patientId: savedPlan?.patient?.id,
@@ -779,10 +801,10 @@ export default function CreatePatientPlan() {
         return;
       }
 
-      showToast(data?.error || `Failed to send ${method}`, 'error');
-      throw new Error(data?.error);
+      throw new Error(data?.error || `Failed to send ${method}`);
     } catch (error) {
       trackEvent('plan_delivery', { channel: method, outcome: 'failed', location: 'send_modal' });
+      showToast(error?.message || 'Unable to share this plan. Please try again.', 'error');
       throw error;
     }
   };
@@ -1300,11 +1322,17 @@ export default function CreatePatientPlan() {
                 
                 <div className="mb-4">
                   <label className="block text-t2 mb-1.5 font-semibold text-sm">Patient Link</label>
+                  {shareLinkError && (
+                    <div role="alert" className="mb-3 text-warning">
+                      <p>{shareLinkError}</p>
+                      <button type="button" onClick={retryShareLink} className="btn-secondary mt-2">Retry share link</button>
+                    </div>
+                  )}
                   <div className="flex gap-2 items-center">
                     <input
                       type="text"
                       readOnly
-                      value={buildPatientPlanUrl(shareToken || savedPlan?.treatmentPlan?.publicToken)}
+                      value={buildPatientPlanUrl(shareToken)}
                       className="input-field flex-1"
                     />
                     <div className="relative">
@@ -1461,7 +1489,7 @@ export default function CreatePatientPlan() {
         <SendPlanModal
           isOpen={sendModalOpen}
           onClose={() => setSendModalOpen(false)}
-          planLink={buildPatientPlanUrl(shareToken || savedPlan?.treatmentPlan?.publicToken)}
+          planLink={buildPatientPlanUrl(shareToken)}
           patientPhone={smsPhoneNumber || savedPlan?.patient?.phone || ''}
           patientEmail={patientEmail || savedPlan?.patient?.email || ''}
           onSend={handleModalSend}

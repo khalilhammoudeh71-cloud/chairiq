@@ -6,7 +6,7 @@ import ModifyTreatmentPlanModal from './ModifyTreatmentPlanModal';
 import DeletePatientModal from './DeletePatientModal';
 import { patientSearchService } from '../../../services/patientSearchService';
 import { useToast } from '../../../hooks/useToast';
-import { storePatientPlanToken } from '../../../services/shareLinkService';
+import { openPatientPlan } from '../../../services/shareLinkService';
 
 export default function RecentPlansCard({ plans = [], onRefresh }) {
   const navigate = useNavigate();
@@ -42,9 +42,9 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
     }
   };
 
-  const handleViewPlan = (publicToken) => {
-    storePatientPlanToken(publicToken);
-    navigate('/p');
+  const handleViewPlan = async (plan) => {
+    try { await openPatientPlan(plan, navigate); }
+    catch (error) { showToast(error.message || 'Unable to open this plan. Please try again.', 'error'); }
   };
 
   const handleModifyPlan = (planId) => {
@@ -111,7 +111,7 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
               padding="p-4"
               hover={true}
               className="bg-bg1 cursor-pointer"
-              onClick={() => handleViewPlan(plan?.publicToken)}
+              onClick={() => handleViewPlan(plan)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -123,7 +123,7 @@ export default function RecentPlansCard({ plans = [], onRefresh }) {
                 </div>
                 <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
-                    onClick={() => handleViewPlan(plan?.publicToken)}
+                    onClick={() => handleViewPlan(plan)}
                     className="px-3 py-1.5 text-sm font-medium rounded-lg bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200 flex items-center gap-1.5"
                   >
                     <Eye size={14} />

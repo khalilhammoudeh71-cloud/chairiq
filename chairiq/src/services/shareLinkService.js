@@ -8,6 +8,7 @@ export function buildPatientPlanPath(token) {
 }
 
 export function buildPatientPlanUrl(token, origin = window.location?.origin) {
+  if (!token) return '';
   return `${origin}${buildPatientPlanPath(token)}`;
 }
 
@@ -42,6 +43,9 @@ function generateToken(length = 48) {
 }
 
 const LINK_EXPIRY_HOURS = 24;
+const LEGACY_TOKEN = /^[A-Za-z0-9_-]{12}$/;
+const SHARE_TOKEN = /^[A-Za-z0-9]{48}$/;
+const VERIFY_ERROR = 'Unable to verify this link. Please try again later.';
 
 export const shareLinkService = {
   async createShareLink(planId, patientId) {
@@ -65,44 +69,53 @@ export const shareLinkService = {
 
       return { success: true, token: data.token, expiresAt: data.expires_at };
     } catch (err) {
-      console.error('Error creating share link:', err);
-      return { success: false, error: err?.message || 'Failed to create share link' };
+      // Do not log a database error object: it may include bearer tokens.
+      console.error('Share-link creation failed', err?.code || 'unavailable');
+      return { success: false, error: 'Unable to create a share link. Please try again later.' };
     }
   },
 
   async validateShareLink(token) {
+    // Legacy plan tokens have a distinct format and intentionally do not expire.
+    // Never reinterpret a failed/expired 48-character share token as a legacy one.
+    if (typeof token === 'string' && LEGACY_TOKEN.test(token)) {
+      return { valid: false, reason: 'legacy' };
+    }
+    if (typeof token !== 'string' || !SHARE_TOKEN.test(token)) {
+      return { valid: false, reason: 'not_found' };
+    }
     try {
-      const { data, error } = await supabase
-        ?.from('plan_share_links')
-        ?.select('token, plan_id, patient_id, expires_at, view_count')
-        ?.eq('token', token)
-        ?.maybeSingle();
-
+      const { data, error } = await supabase.rpc('validate_plan_share_link', { link_token: token });
       if (error) throw error;
-
-      if (!data) {
-        return { valid: false, reason: 'not_found' };
-      }
-
-      const now = new Date();
-      const expiresAt = new Date(data.expires_at);
-      if (now > expiresAt) {
-        return { valid: false, reason: 'expired', link: data };
-      }
-
-      return { valid: true, link: data };
+      if (data?.valid === true && data.link?.plan_id && data.link?.expires_at) return data;
+      if (data?.valid === false && ['expired', 'not_found'].includes(data.reason)) return data;
+      throw new Error('Invalid validation response');
     } catch (err) {
-      console.error('Error validating share link:', err);
-      return { valid: false, reason: 'error', error: err?.message };
+      console.error('Share-link validation failed', err?.code || 'unavailable');
+      return { valid: false, reason: 'error', error: VERIFY_ERROR };
     }
   },
 
   async incrementViewCount(token) {
+    if (typeof token !== 'string' || !SHARE_TOKEN.test(token)) return;
     try {
-      await supabase?.rpc('increment_share_link_view', { link_token: token });
+      const { error } = await supabase.rpc('increment_share_link_view', { link_token: token });
+      if (error) throw error;
     } catch (err) {
-      console.error('Error incrementing view count:', err);
+      console.error('Share-link view count failed', err?.code || 'unavailable');
     }
+  },
+
+  async loadPatientPlan(token, plans) {
+    const validation = await this.validateShareLink(token);
+    if (validation.reason === 'legacy') {
+      const data = await plans.getEnrichedPatientPlan(token);
+      return { ...data, linkSource: 'legacy_link' };
+    }
+    if (!validation.valid) return { success: false, ...validation };
+    const data = await plans.getEnrichedPatientPlan(token);
+    if (data?.success) await this.incrementViewCount(token);
+    return { ...data, linkSource: 'share_link' };
   },
 
   async getExistingValidLink(planId) {
@@ -121,18 +134,47 @@ export const shareLinkService = {
 
       return { token: data.token, expiresAt: data.expires_at };
     } catch (err) {
-      console.error('Error fetching existing share link:', err);
-      return null;
+      console.error('Share-link lookup failed', err?.code || 'unavailable');
+      throw new Error('Unable to retrieve a share link. Please try again later.');
     }
   },
 
   async getOrCreateShareLink(planId, patientId) {
-    const existing = await this.getExistingValidLink(planId);
-    if (existing) return { success: true, ...existing };
-    return await this.createShareLink(planId, patientId);
+    try {
+      const existing = await this.getExistingValidLink(planId);
+      if (existing) return { success: true, ...existing };
+      return await this.createShareLink(planId, patientId);
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  async requireShareLink(planId, patientId, { fresh = false } = {}) {
+    const result = fresh
+      ? await this.createShareLink(planId, patientId)
+      : await this.getOrCreateShareLink(planId, patientId);
+    if (!result?.success || !SHARE_TOKEN.test(result.token || '')) {
+      throw new Error(result?.error || 'Unable to create a share link. Please try again later.');
+    }
+    return result.token;
+  },
+
+  async requireShareLinkForPlanToken(reference) {
+    if (!reference) throw new Error('Treatment plan unavailable');
+    const { data: plan, error } = await supabase.from('treatment_plans')
+      .select('id,patient_id').eq('public_token', reference).maybeSingle();
+    if (error || !plan) throw new Error('Treatment plan unavailable');
+    return this.requireShareLink(plan.id, plan.patient_id, { fresh: true });
   },
 
   getShareUrl(token) {
     return buildPatientPlanUrl(token);
   }
 };
+
+export async function openPatientPlan(plan, navigate) {
+  if (!plan?.id || !plan?.patientId) throw new Error('Unable to identify this plan. Refresh and try again.');
+  const token = await shareLinkService.requireShareLink(plan.id, plan.patientId, { fresh: true });
+  storePatientPlanToken(token);
+  navigate('/p');
+}

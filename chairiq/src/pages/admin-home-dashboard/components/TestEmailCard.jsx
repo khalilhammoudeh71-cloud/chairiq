@@ -5,6 +5,7 @@ import { emailService } from '../../../services/emailService';
 
 export default function TestEmailCard() {
   const [testEmail, setTestEmail] = useState('');
+  const [planLink, setPlanLink] = useState('');
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
 
@@ -14,7 +15,7 @@ export default function TestEmailCard() {
     setSending(true);
     setResult(null);
 
-    const res = await emailService.sendTestEmail(testEmail);
+    const res = await emailService.sendTestEmail(testEmail, planLink);
 
     setResult(res);
     setSending(false);
@@ -42,13 +43,17 @@ export default function TestEmailCard() {
         />
         <button
           onClick={handleSendTest}
-          disabled={sending || !testEmail}
+          disabled={sending || !testEmail || !planLink}
           className="btn-primary py-2.5 px-5 flex items-center gap-2 whitespace-nowrap"
         >
           <Send size={16} />
           {sending ? 'Sending...' : 'Send Test'}
         </button>
       </div>
+      <input type="url" value={planLink} onChange={(e) => { setPlanLink(e.target.value); setResult(null); }}
+        placeholder="Paste sample-plan link from Analytics → Copy"
+        aria-label="Sample-plan link" className="input-field w-full mt-3" />
+      <p className="text-t2 text-xs mt-2">Copy a fresh link from Analytics, then paste it here to test email and plan access.</p>
       {result && (
         <div className={`mt-3 flex items-start gap-2 p-3 rounded-lg text-sm ${
           result.success

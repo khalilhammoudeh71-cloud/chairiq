@@ -25,7 +25,7 @@
       "build",
       "serve"
     ],
-    "warning": "🚨 CRITICAL: DO NOT REMOVE OR MODIFY ABOVE DEPENDENCIES - Required for app functionality"
+    "warning": "\ud83d\udea8 CRITICAL: DO NOT REMOVE OR MODIFY ABOVE DEPENDENCIES - Required for app functionality"
   },
   "dependencies": {
     "@dhiwise/component-tagger": "^1.0.14",
@@ -37,7 +37,7 @@
     "@paper-design/shaders-react": "latest",
     "@radix-ui/react-slot": "^1.2.3",
     "@reduxjs/toolkit": "^2.6.1",
-    "@supabase/supabase-js": "^2.87.1",
+    "@supabase/supabase-js": "2.87.1",
     "@tailwindcss/forms": "^0.5.7",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
@@ -72,7 +72,8 @@
     "start": "node server/index.js",
     "dev:vite": "vite",
     "build": "vite build && cp build/index.html build/404.html",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "node --test server/*.test.js"
   },
   "eslintConfig": {
     "extends": [
@@ -96,6 +97,7 @@
     "esbuild": "^0.25.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.3.14",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/line-clamp": "^0.1.0",
@@ -106,5 +108,8 @@
     "tailwindcss": "3.4.6",
     "vite": "^5.4.21",
     "vite-tsconfig-paths": "3.6.0"
+  },
+  "engines": {
+    "node": "20.x || 24.x"
   }
 }

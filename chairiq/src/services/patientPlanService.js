@@ -4,7 +4,7 @@ import { procedureEducationGeneratorService } from './procedureEducationGenerato
 import { normalizeProcedureKey, getAdaCodesForCanonicalKey, getDisplayNameForCanonicalKey } from '../utils/procedureNormalization';
 import proceduresLibrary from '../data/procedures';
 import storageService from './storageService';
-import { buildPatientPlanUrl } from './shareLinkService';
+import { buildPatientPlanUrl, shareLinkService } from './shareLinkService';
 
 const DENTAL_SYNONYMS = {
   clean: ['cleaning', 'clean', 'remove', 'removing'],
@@ -313,64 +313,9 @@ export const patientPlanService = {
    * @returns {Promise<Object>} Complete plan data
    */
   async getPatientPlanByToken(publicToken) {
-    try {
-      // Get treatment plan with patient info - use maybeSingle() and handle null
-      const { data: plan, error: planError } = await supabase
-        ?.from('treatment_plans')
-        ?.select(`
-          *,
-          patients (*)
-        `)
-        ?.eq('public_token', publicToken)
-        ?.maybeSingle();
-
-      if (planError) {
-        if (import.meta.env?.DEV) {
-          console.error('🔍 [DEV] Error fetching plan by token:', planError);
-        }
-        throw planError;
-      }
-      
-      if (!plan) {
-        throw new Error('Treatment plan not found');
-      }
-
-      // Get procedures for this plan
-      const { data: procedures, error: proceduresError } = await supabase
-        ?.from('plan_procedures')
-        ?.select('*')
-        ?.eq('treatment_plan_id', plan?.id)
-        ?.order('sort_order', { ascending: true });
-
-      if (proceduresError) throw proceduresError;
-
-      // Convert to camelCase
-      return {
-        patient: {
-          firstName: plan?.patients?.first_name,
-          lastName: plan?.patients?.last_name,
-          phone: plan?.patients?.phone,
-          preferredLanguage: plan?.patients?.preferred_language
-        },
-        treatmentPlan: {
-          dentistName: plan?.dentist_name,
-          practiceName: plan?.practice_name,
-          createdAt: plan?.created_at
-        },
-        procedures: procedures?.map(proc => ({
-          id: proc?.id,
-          procedureName: proc?.procedure_name,
-          adaCode: proc?.ada_code,
-          priority: proc?.priority,
-          estTime: proc?.est_time,
-          notesForPatient: proc?.notes_for_patient,
-          sortOrder: proc?.sort_order
-        }))
-      };
-    } catch (error) {
-      console.error('Error fetching patient plan:', error);
-      throw error;
-    }
+    const result = await this.getEnrichedPatientPlan(publicToken);
+    if (!result.success) throw new Error(result.error || 'Treatment plan unavailable');
+    return result;
   },
 
   /**
@@ -562,46 +507,17 @@ export const patientPlanService = {
    */
   async getEnrichedPatientPlan(publicToken) {
     try {
-      const { data: plan, error: planError } = await supabase
-        ?.from('treatment_plans')
-        ?.select(`
-          *,
-          patients (*),
-          plan_procedures (
-            id,
-            procedure_name,
-            procedure_slug,
-            display_title,
-            ada_code,
-            tooth_numbers,
-            canonical_slug,
-            priority,
-            est_time,
-            notes_for_patient,
-            sort_order
-          )
-        `)
-        ?.eq('public_token', publicToken)
-        ?.maybeSingle();
-
-      if (planError) {
-        if (import.meta.env?.DEV) {
-          console.error('🔍 [DEV] Error fetching enriched plan:', planError);
-        }
-        throw planError;
-      }
-      
-      if (!plan) {
-        throw new Error('Treatment plan not found');
-      }
-
-      return await this._enrichPlanData(plan);
+      const { data, error } = await supabase.rpc('get_patient_plan', { link_token: publicToken });
+      if (error) throw error;
+      if (data?.success === false && ['expired', 'not_found'].includes(data.reason)) return data;
+      if (!data?.success || !data.plan) throw new Error('Unable to load treatment plan');
+      return await this._enrichPlanData(data.plan, { token: publicToken });
     } catch (error) {
-      console.error('Error fetching enriched patient plan:', error);
+      console.error('Patient plan fetch failed', error?.code || 'unavailable');
       return {
         success: false,
-        error: error?.message || 'Failed to load treatment plan',
-        errorDetails: error
+        error: 'Unable to load treatment plan. Please try again later.',
+        reason: 'error'
       };
     }
   },
@@ -862,7 +778,7 @@ export const patientPlanService = {
 
           let patientImages = [];
           try {
-            patientImages = await storageService.fetchPatientImages(proc?.id);
+            patientImages = await storageService.fetchPatientImages(proc?.id, options.token ? { token: options.token, rows: proc.patient_images || [] } : {});
           } catch (patientImgError) {
             console.error(`⚠️ Error fetching patient images for ${proc?.id}:`, patientImgError);
           }
@@ -1353,65 +1269,32 @@ export const patientPlanService = {
    */
   async resendTreatmentPlanLink(token, isShareToken = false) {
     try {
-      let planData;
+      let planId;
       if (isShareToken) {
-        const { shareLinkService } = await import('./shareLinkService');
-        const validation = await shareLinkService.validateShareLink(token);
-        if (validation.valid) {
-          planData = await this.getEnrichedPatientPlanById(validation.link.plan_id);
-        }
+        // This is a staff action: RLS must authorize the recorded plan owner.
+        const { data: link, error } = await supabase.from('plan_share_links')
+          .select('plan_id').eq('token', token).maybeSingle();
+        if (error || !link) throw new Error('Treatment plan unavailable');
+        planId = link.plan_id;
       }
-
-      if (!planData?.success) {
-        planData = await this.getEnrichedPatientPlan(token);
-      }
-
-      if (!planData?.success) {
-        throw new Error(planData?.error || 'Failed to load treatment plan data');
-      }
-
-      if (!planData?.patient?.phone) {
-        throw new Error('Patient phone number not found');
-      }
-
-      const smsResult = await twilioService?.sendTreatmentPlanSMS(
-        planData?.patient?.phone,
-        planData?.patient?.firstName,
-        planData?.treatmentPlan?.practiceName,
-        token
+      let query = supabase.from('treatment_plans').select('id,patient_id,practice_name,patients(first_name,phone)');
+      query = isShareToken ? query.eq('id', planId) : query.eq('public_token', token);
+      const { data: plan, error } = await query.maybeSingle();
+      if (error || !plan) throw new Error('Treatment plan unavailable');
+      if (!plan.patients?.phone) throw new Error('Patient phone number not found');
+      const shareToken = await shareLinkService.requireShareLink(plan.id, plan.patient_id, { fresh: true });
+      const smsResult = await twilioService.sendTreatmentPlanSMS(
+        plan.patients.phone, plan.patients.first_name, plan.practice_name, shareToken
       );
-
-      if (!smsResult?.success) {
-        throw new Error(smsResult?.userMessage || smsResult?.error || 'Failed to send SMS');
-      }
-
-      const { data: treatmentPlan, error: planError } = await supabase
-        ?.from('treatment_plans')
-        ?.select('id')
-        ?.eq('public_token', token)
-        ?.maybeSingle();
-
-      const planId = treatmentPlan?.id || planData?.treatmentPlan?.id;
-
-      if (planError && import.meta.env?.DEV) {
-        console.error('🔍 [DEV] Error fetching treatment plan ID:', planError);
-      }
-
-      if (planId) {
-        const patientLink = buildPatientPlanUrl(token);
-        const messageContent = `Your dental treatment plan is ready for review. View it here: ${patientLink} Reply STOP to opt out.`;
-
-        await supabase?.from('sms_messages')?.insert({
-          phone_number: twilioService?.formatPhoneNumber(planData?.patient?.phone),
-          message_content: messageContent,
-          message_type: 'treatment_plan',
-          plan_link_url: patientLink,
-          treatment_plan_id: planId,
-          delivery_status: 'sent',
-          twilio_message_sid: smsResult?.messageSid,
-          sent_at: new Date()?.toISOString()
-        });
-      }
+      if (!smsResult?.success) throw new Error(smsResult?.userMessage || 'Failed to send SMS');
+      const patientLink = buildPatientPlanUrl(shareToken);
+      await supabase.from('sms_messages').insert({
+        phone_number: twilioService.formatPhoneNumber(plan.patients.phone),
+        message_content: `Your dental treatment plan is ready for review. View it here: ${patientLink} Reply STOP to opt out.`,
+        message_type: 'treatment_plan', plan_link_url: patientLink,
+        treatment_plan_id: plan.id, patient_id: plan.patient_id, delivery_status: 'sent',
+        twilio_message_sid: smsResult.messageSid, sent_at: new Date().toISOString()
+      });
 
       return {
         success: true,
@@ -1419,7 +1302,7 @@ export const patientPlanService = {
         data: smsResult
       };
     } catch (error) {
-      console.error('Error resending treatment plan link:', error);
+      console.error('Plan resend failed', error?.code || 'unavailable');
       return {
         success: false,
         error: error?.message || 'Failed to resend treatment plan link',

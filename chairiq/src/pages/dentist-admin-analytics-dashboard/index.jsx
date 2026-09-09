@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { patientAnalyticsService } from '../../services/patientAnalyticsService';
 import { patientPlanService } from '../../services/patientPlanService';
 import { emailService } from '../../services/emailService';
-import { buildPatientPlanUrl } from '../../services/shareLinkService';
+import { buildPatientPlanUrl, shareLinkService } from '../../services/shareLinkService';
 import { AlertTriangle, Download, Send, Copy, Mail, MessageSquare, Users, FileText, TrendingUp, BarChart3, Info, CalendarDays } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import DentistNavigation from '../../components/DentistNavigation';
@@ -84,7 +84,7 @@ export default function DentistAdminAnalyticsDashboard() {
   const handleCopyLink = async (publicToken, patientName) => {
     try {
       setCopyingToken(publicToken);
-      const link = buildPatientPlanUrl(publicToken);
+      const link = buildPatientPlanUrl(await shareLinkService.requireShareLinkForPlanToken(publicToken));
       
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(link);
@@ -197,7 +197,7 @@ export default function DentistAdminAnalyticsDashboard() {
       setSuccessMessages({});
       setErrorMessage('');
 
-      const planUrl = buildPatientPlanUrl(publicToken);
+      const planUrl = buildPatientPlanUrl(await shareLinkService.requireShareLinkForPlanToken(publicToken));
       const result = await emailService.sendNotification({
         method: 'email',
         toEmail: email,
